@@ -54,7 +54,7 @@ export default function Page() {
                 Acreditamos que a inteligência artificial deve ser acessível, segura e escalável. Nossa missão é permitir que empresas construam aplicações, automações e fluxos de decisão de forma inteligente, sem depender de times técnicos ou altos investimentos.
               </p>
               <p className="text-lg text-gray-600">
-                A plataforma da Fluxomind abstrai a complexidade do desenvolvimento com uma engine semântica, automações visuais e uma arquitetura nativamente multitenant. Tudo pensado para acelerar a entrega de valor real com responsabilidade e performance.
+                A plataforma da Fluxomind abstrai a complexidade do desenvolvimento com um motor de inteligência artificial, automações visuais e uma infraestrutura que isola e protege os dados de cada cliente. Tudo pensado para acelerar a entrega de valor real com responsabilidade e performance.
               </p>
             </div>
           </div>
