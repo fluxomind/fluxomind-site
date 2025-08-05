@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
+  // Removido output: 'export' para permitir funcionalidades de servidor como middleware
+  // output: 'export',
 };
 
 export default nextConfig;
