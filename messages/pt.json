@@ -1,0 +1,61 @@
+{
+  "header": {
+    "about": "Sobre",
+    "technology": "Tecnologia",
+    "values": "Valores"
+  },
+  "hero": {
+    "title1": "Evolua com IA.",
+    "title2": "Escale sem limites.",
+    "subtitle1": "A Fluxomind é uma startup brasileira criada para democratizar o uso da inteligência artificial em empresas de qualquer tamanho.",
+    "subtitle2": "Estamos desenvolvendo uma plataforma IA-First, no-code e baseada em metadados — combinando velocidade, arquitetura sólida e simplicidade de uso."
+  },
+  "about": {
+    "title": "Sobre a Fluxomind",
+    "description": "Acreditamos que a inteligência artificial deve ser acessível, segura e escalável. Nossa missão é permitir que empresas construam aplicações, automações e fluxos de decisão de forma inteligente, sem depender de times técnicos ou altos investimentos.",
+    "platform": "A plataforma da Fluxomind abstrai a complexidade do desenvolvimento com um motor de inteligência artificial, automações visuais e uma infraestrutura que isola e protege os dados de cada cliente. Tudo pensado para acelerar a entrega de valor real com responsabilidade e performance."
+  },
+  "mission": {
+    "title": "Missão",
+    "description": "Democratizar o desenvolvimento de software com inteligência artificial — tornando a criação de sistemas acessível a todos."
+  },
+  "vision": {
+    "title": "Visão",
+    "description": "Ser a principal plataforma IA-First da América Latina, referência em acessibilidade, eficiência e impacto empresarial com inteligência artificial."
+  },
+  "values": {
+    "title": "Valores",
+    "list": [
+      "Clareza e arquitetura em primeiro lugar",
+      "Inovação orientada a impacto real",
+      "Responsabilidade com dados e confiança",
+      "Simplicidade que entrega profundidade",
+      "Respeito ao tempo e autonomia dos usuários"
+    ]
+  },
+  "technology": {
+    "title": "Tecnologia IA-First",
+    "description": "Nossa abordagem combina IA generativa, modelagem baseada em metadados e uma experiência de construção visual para que empresas possam criar e evoluir seus próprios sistemas sem depender de desenvolvedores.",
+    "generativeAI": {
+      "title": "IA Generativa",
+      "description": "Tecnologia avançada de inteligência artificial que permite criação automática de conteúdo e soluções personalizadas."
+    },
+    "metadata": {
+      "title": "Metadados",
+      "description": "Modelagem inteligente baseada em metadados que facilita a criação e manutenção de sistemas complexos."
+    },
+    "secureArch": {
+      "title": "Arquitetura Segura",
+      "description": "Cada camada da plataforma foi pensada para ser extensível, segura e pronta para escala empresarial."
+    },
+    "footer": "Desde o fluxo de automações até a forma como dados e layouts são definidos semanticamente, tudo foi projetado para máxima eficiência e facilidade de uso."
+  },
+  "globalFooter": {
+    "copyright": "© {year} Fluxomind — Plataforma IA-First no-code para empresas de qualquer tamanho."
+  },
+  "languageSwitcher": {
+    "label": "Idioma",
+    "en": "English",
+    "pt": "Português"
+  }
+}

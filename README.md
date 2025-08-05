@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Fluxomind - Plataforma IA-First
 
-## Getting Started
+Este repositório contém o código-fonte da homepage institucional da **Fluxomind**, uma startup brasileira em fase de incubação que está desenvolvendo uma plataforma IA-First, no-code e baseada em metadados para democratizar o uso da inteligência artificial em empresas de qualquer porte.
 
-First, run the development server:
+## 📦 Stack Tecnológica
+
+- [Next.js 15 (App Router)](https://nextjs.org)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Vercel](https://vercel.com) (deploy automático via GitHub)
+- [Cloudflare](https://cloudflare.com) (gerenciamento de domínio e DNS)
+- [GitHub](https://github.com/fluxomind/fluxomind-site) (controle de versão)
+
+## 🚀 Desenvolvimento Local
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abra [http://localhost:3000](http://localhost:3000) no navegador para visualizar o projeto localmente.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Estrutura básica
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `app/page.tsx` → Página principal
+- `public/` → Contém imagens SVG e PNG usadas nas seções (ex: hero, about, tech...)
+- `src/components/` → Componentes visuais (opcional/futuro)
+- `vercel.json` → Ignored Build Step configurado para só realizar deploy automático na branch `main`
 
-## Learn More
+## 🔒 Deploy controlado via branch
 
-To learn more about Next.js, take a look at the following resources:
+- `main`: Branch de produção — qualquer push gera deploy automático na Vercel
+- `dev`: Branch de desenvolvimento — deploy automático **desativado** via Ignored Build Step personalizado
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🌐 Links úteis
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- [Homepage publicada](https://www.fluxomind.com)
+- [Vercel Dashboard](https://vercel.com/dashboard)
+- [GitHub Repo](https://github.com/fluxomind/fluxomind-site)
+- [Cloudflare Dashboard](https://dash.cloudflare.com)
 
-## Deploy on Vercel
+## ✨ Missão da Fluxomind
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Democratizar a construção de software com IA para empresas de qualquer tamanho, utilizando tecnologia no-code, metadados e uma arquitetura escalável, segura e eficiente.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📄 License
+
+Este projeto está sob domínio da Fluxomind. Todos os direitos reservados ©.
