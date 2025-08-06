@@ -7,8 +7,11 @@ import { locales } from '../../config/i18n';
 import ptMessages from '../../../messages/pt.json';
 import enMessages from '../../../messages/en.json';
 
+// Define um tipo mais adequado para as mensagens
+type MessageDictionary = Record<string, unknown>;
+
 // Mapeamento de mensagens por locale
-const messages: Record<string, any> = {
+const messages: Record<string, MessageDictionary> = {
   'pt': ptMessages,
   'en': enMessages
 };
@@ -18,10 +21,10 @@ export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
 
-// Interface com tipos específicos
+// Interface com tipos específicos para layout do Next.js 14+
 interface LocaleLayoutProps {
   children: ReactNode;
-  params: { locale?: string } | Record<string, string>;
+  params: Promise<{ locale?: string } | Record<string, string>>;
 }
 
 // Função síncrona para verificar locale

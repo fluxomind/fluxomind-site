@@ -22,8 +22,8 @@ export default async function LocaleLayout({
   let messages;
   try {
     messages = (await import(`../../../messages/${locale}.json`)).default;
-  } catch (_) {
-    // Usar underscore para variável não utilizada
+  } catch {
+    // Sem variável de erro, já que não a utilizamos
     notFound();
   }
 
