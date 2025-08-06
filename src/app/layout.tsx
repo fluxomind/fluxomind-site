@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "FluxoMind - Plataforma IA-First no-code",
-  description: "Solução no-code para empresas de qualquer tamanho criarem workflows inteligentes com inteligência artificial.",
+  title: "FluxoMind - Consultoria em IA",
+  description: "Transformamos ideias em soluções inteligentes através da Inteligência Artificial",
 };
 
 export default function RootLayout({
@@ -23,7 +23,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="pt">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         {children}
       </body>
