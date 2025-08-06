@@ -12,25 +12,24 @@ export function generateStaticParams() {
 
 interface LocaleLayoutProps {
   children: ReactNode;
-  params: Promise<{ locale: string }>;
+  params: { locale: string };
 }
 
-export default async function LocaleLayout({ children, params }: LocaleLayoutProps) {
-  // Aguardar os parâmetros no Next.js 15+
-  const { locale } = await params;
+export default function LocaleLayout({ children, params }: LocaleLayoutProps) {
+  const { locale } = params;
 
   // Validar o locale
   if (!locales.includes(locale)) {
     notFound();
   }
 
-  // Carregar mensagens
+  // Carregar mensagens de forma síncrona
   let messages;
   try {
-    messages = (await import(`../../../messages/${locale}.json`)).default;
+    messages = require(`../../../messages/${locale}.json`);
   } catch (error) {
     console.error('Erro ao carregar mensagens para locale:', locale, error);
-    notFound();
+    messages = require(`../../../messages/pt.json`);
   }
 
   return (
