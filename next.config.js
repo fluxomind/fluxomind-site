@@ -1,9 +1,4 @@
 /** @type {import('next').NextConfig} */
-const withNextIntl = require('next-intl/plugin')(
-  // Este é o arquivo de configuração para internacionalização
-  './i18n.ts'
-);
-
 const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
@@ -13,4 +8,4 @@ const nextConfig = {
   },
 };
 
-module.exports = withNextIntl(nextConfig);
+module.exports = nextConfig;

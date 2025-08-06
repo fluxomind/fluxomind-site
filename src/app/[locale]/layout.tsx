@@ -1,4 +1,3 @@
-import { NextIntlClientProvider } from 'next-intl';
 import { notFound } from 'next/navigation';
 import { ReactNode } from 'react';
 import { Geist, Geist_Mono } from "next/font/google";
@@ -35,21 +34,10 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
     notFound();
   }
 
-  // Carregar mensagens de forma síncrona
-  let messages;
-  try {
-    messages = require(`../../../messages/${locale}.json`);
-  } catch (error) {
-    console.error('Erro ao carregar mensagens para locale:', locale, error);
-    messages = require(`../../../messages/pt.json`);
-  }
-
   return (
     <html lang={locale}>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          {children}
-        </NextIntlClientProvider>
+        {children}
       </body>
     </html>
   );

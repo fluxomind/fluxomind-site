@@ -1,12 +1,12 @@
 'use client';
 
 import { Zap, Target, Heart, Cpu, Shield, Layers } from 'lucide-react';
-import { useTranslations } from 'next-intl';
-import LanguageSwitcher from '../../components/LanguageSwitcher';
 
-export default function Home() {
-  const t = useTranslations();
-  // Removendo variável não utilizada: locale
+interface HomeProps {
+  params: Promise<{ locale: string }>;
+}
+
+export default function Home({ params }: HomeProps) {
   const currentYear = new Date().getFullYear();
 
   return (

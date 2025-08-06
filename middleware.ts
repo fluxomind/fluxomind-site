@@ -1,20 +1,18 @@
-import createMiddleware from 'next-intl/middleware';
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
-export default createMiddleware({
-  // Lista de todos os locales suportados
-  locales: ['pt', 'en'],
-  
-  // Locale padrão usado quando nenhum locale é detectado
-  defaultLocale: 'pt',
-  
-  // Sempre usar o prefixo do locale na URL (mesmo para o padrão)
-  localePrefix: 'always'
-});
+export function middleware(request: NextRequest) {
+  const pathname = request.nextUrl.pathname;
+
+  // Se acessa a raiz /, redireciona para /pt
+  if (pathname === '/') {
+    return NextResponse.redirect(new URL('/pt', request.url));
+  }
+
+  // Para outras rotas, deixa passar normalmente
+  return NextResponse.next();
+}
 
 export const config = {
-  // Aplicar o middleware a todas as rotas exceto:
-  // - API routes
-  // - Arquivos estáticos (_next/static)
-  // - Arquivos na pasta public
-  matcher: ['/((?!api|_next|_vercel|.*\\..*).*)']
+  matcher: ['/((?!_next/static|_next/image|favicon.ico|.*\\.png$).*)']
 };
