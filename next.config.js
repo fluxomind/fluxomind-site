@@ -20,6 +20,16 @@ const nextConfig = {
     // Erros de tipo não vão falhar o build
     ignoreBuildErrors: true,
   },
+  // Adicionar redirecionamento explícito
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/pt',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 module.exports = withNextIntl(nextConfig);

@@ -1,39 +1,21 @@
-import { NextResponse, NextRequest } from 'next/server';
-import { locales, defaultLocale } from './config/i18n';
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
+// Este middleware é o mais simples possível
+// Redireciona somente a raiz para /pt
 export function middleware(request: NextRequest) {
-  // Adicionando logs para depurar em produção
-  console.log('Middleware executado para:', request.nextUrl.pathname);
-  
-  const pathname = request.nextUrl.pathname;
-  
-  // Se for a rota raiz, deixe o page.tsx lidar com o redirecionamento
+  const { pathname } = request.nextUrl;
+
+  // Redireciona apenas a raiz `/`
   if (pathname === '/') {
-    return NextResponse.next();
+    console.log('Middleware redirecionando / para /pt');
+    return NextResponse.redirect(new URL('/pt', request.url));
   }
-  
-  const pathnameHasLocale = locales.some(
-    (locale: string) =>
-      pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
-  );
 
-  // ✅ Se já tem locale, continuar o processamento normalmente
-  if (pathnameHasLocale) return NextResponse.next();
-
-  // Se não tiver locale, redirecionar para o default
-  const locale = defaultLocale;
-  const url = new URL(request.url);
-  url.pathname = `/${locale}${pathname}`;
-  
-  return NextResponse.redirect(url);
+  return NextResponse.next();
 }
 
+// Captura apenas a raiz
 export const config = {
-  // Matcher mais abrangente para capturar todas as rotas necessárias
-  matcher: [
-    // Capture todas as rotas, exceto as que devem ser ignoradas
-    '/((?!api|_next|_vercel|static|public|favicon.ico|.*\\..*|.*\\.json).*)',
-    // Captura explicitamente a rota raiz
-    '/'
-  ],
+  matcher: ['/'],
 };
