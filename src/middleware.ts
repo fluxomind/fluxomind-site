@@ -4,6 +4,8 @@ import { locales, defaultLocale } from './config/i18n';
 export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
+
+  
   const pathnameHasLocale = locales.some(
     (locale: string) =>
       pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
