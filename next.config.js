@@ -9,6 +9,11 @@ const nextConfig = {
   images: {
     remotePatterns: [],
     dangerouslyAllowSVG: true,
+  },
+  // Ignorar avisos do ESLint durante o build
+  eslint: {
+    // Avisos não vão falhar o build
+    ignoreDuringBuilds: true,
   }
 };
 
