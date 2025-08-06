@@ -20,12 +20,18 @@ const nextConfig = {
     // Erros de tipo não vão falhar o build
     ignoreBuildErrors: true,
   },
+  // Configurar páginas de erro
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/pt',
+        permanent: true,
+      },
+    ];
+  },
   // Opções de exportação
-  output: 'standalone',
-  // Tratar erros durante compilação como warnings
-  experimental: {
-    missingSuspenseWithCSRBailout: false
-  }
+  output: 'standalone'
 };
 
 module.exports = withNextIntl(nextConfig);
