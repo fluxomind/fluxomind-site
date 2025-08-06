@@ -57,5 +57,10 @@
     "label": "Language",
     "en": "English",
     "pt": "Português"
+  },
+  "error": {
+    "notFoundTitle": "Page not found",
+    "notFoundDescription": "Sorry, the page you are looking for does not exist or has been moved.",
+    "backToHome": "Back to homepage"
   }
 }

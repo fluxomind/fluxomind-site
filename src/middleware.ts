@@ -16,10 +16,14 @@ export function middleware(request: NextRequest) {
   // Futuramente, poderia detectar o idioma do navegador do usuário
   const locale = defaultLocale;
   
-  // e.g. para `/products` => `/pt/products`
-  return NextResponse.redirect(
-    new URL(`/${locale}${pathname === '/' ? '' : pathname}`, request.url)
-  );
+  // Criar uma nova URL para redirecionamento
+  const url = new URL(request.url);
+  
+  // Definir o caminho com o locale
+  url.pathname = `/${locale}${pathname === '/' ? '' : pathname}`;
+  
+  // Redirecionar para a URL com o locale
+  return NextResponse.redirect(url);
 }
 
 // Configuração de quais rotas o middleware deve processar
@@ -27,6 +31,6 @@ export const config = {
   matcher: [
     // Apenas interceptar caminhos que começam com /
     // e ignorar APIs, arquivos estáticos, imagens, etc.
-    '/((?!api|_next|static|.*\\.ico|logoSVG).*)'
+    '/((?!api|_next|static|.*\\.ico|.*\\.svg|.*\\.png|.*\\.jpg|.*\\.jpeg|public).*)'
   ]
 };
