@@ -32,10 +32,6 @@ const nextConfig = {
       },
     ];
   },
-  // Configurações adicionais para garantir que o middleware funcione corretamente
-  i18n: {
-    localeDetection: false,
-  },
 };
 
 module.exports = withNextIntl(nextConfig);
