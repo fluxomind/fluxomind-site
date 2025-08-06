@@ -4,9 +4,13 @@ import { locales, defaultLocale } from './config/i18n';
 export function middleware(request: NextRequest) {
   // Adicionando logs para depurar em produção
   console.log('Middleware executado para:', request.nextUrl.pathname);
-  console.log('URL completa:', request.url);
   
   const pathname = request.nextUrl.pathname;
+  
+  // Se for a rota raiz, deixe o page.tsx lidar com o redirecionamento
+  if (pathname === '/') {
+    return NextResponse.next();
+  }
   
   const pathnameHasLocale = locales.some(
     (locale: string) =>
@@ -19,7 +23,7 @@ export function middleware(request: NextRequest) {
   // Se não tiver locale, redirecionar para o default
   const locale = defaultLocale;
   const url = new URL(request.url);
-  url.pathname = `/${locale}${pathname === '/' ? '' : pathname}`;
+  url.pathname = `/${locale}${pathname}`;
   
   return NextResponse.redirect(url);
 }
