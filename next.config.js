@@ -26,12 +26,10 @@ const nextConfig = {
       {
         source: '/',
         destination: '/pt',
-        permanent: true,
+        permanent: false,
       },
     ];
   },
-  // Opções de exportação
-  output: 'standalone'
 };
 
 module.exports = withNextIntl(nextConfig);
