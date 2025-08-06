@@ -1,36 +1,20 @@
-import { NextRequest, NextResponse } from 'next/server';
 import createMiddleware from 'next-intl/middleware';
 
-const PUBLIC_FILE = /\.(.*)$/;
-
-export function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
-
-  // Ignora rotas públicas
-  if (
-    pathname.startsWith('/api') ||
-    pathname.startsWith('/_next') ||
-    pathname.startsWith('/_vercel') ||
-    PUBLIC_FILE.test(pathname)
-  ) {
-    return NextResponse.next();
-  }
-
-  // Se está em "/", redirecionar para /pt
-  if (pathname === '/') {
-    const url = request.nextUrl.clone();
-    url.pathname = '/pt';
-    return NextResponse.redirect(url);
-  }
-
-  // Rodar o middleware do next-intl normalmente
-  return createMiddleware({
-    locales: ['pt', 'en'],
-    defaultLocale: 'pt',
-    localePrefix: 'always'
-  })(request);
-}
+export default createMiddleware({
+  // Lista de todos os locales suportados
+  locales: ['pt', 'en'],
+  
+  // Locale padrão usado quando nenhum locale é detectado
+  defaultLocale: 'pt',
+  
+  // Sempre usar o prefixo do locale na URL (mesmo para o padrão)
+  localePrefix: 'always'
+});
 
 export const config = {
+  // Aplicar o middleware a todas as rotas exceto:
+  // - API routes
+  // - Arquivos estáticos (_next/static)
+  // - Arquivos na pasta public
   matcher: ['/((?!api|_next|_vercel|.*\\..*).*)']
 };
