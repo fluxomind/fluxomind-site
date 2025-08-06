@@ -20,15 +20,21 @@ const nextConfig = {
     // Erros de tipo não vão falhar o build
     ignoreBuildErrors: true,
   },
-  // Configurar páginas de erro
+  // Configurar redirecionamento para a página inicial
   async redirects() {
     return [
       {
         source: '/',
         destination: '/pt',
-        permanent: false,
+        permanent: true,
+        // Garante que este redirecionamento tenha prioridade
+        basePath: false,
       },
     ];
+  },
+  // Configurações adicionais para garantir que o middleware funcione corretamente
+  i18n: {
+    localeDetection: false,
   },
 };
 
