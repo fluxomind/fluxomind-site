@@ -11,16 +11,6 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  // Redirecionamento simples da raiz para /pt
-  async redirects() {
-    return [
-      {
-        source: '/',
-        destination: '/pt',
-        permanent: true,
-      },
-    ];
-  },
 };
 
 module.exports = withNextIntl(nextConfig);
