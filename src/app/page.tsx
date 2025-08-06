@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { Zap, Target, Heart, Cpu, Shield, Layers } from 'lucide-react';
 
 export default function Home() {
@@ -12,7 +13,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center">
-              <img src="/logoSVG/logo-light.svg" alt="FluxoMind" className="h-8 w-auto" />
+              <Image src="/logoSVG/logo-light.svg" alt="FluxoMind" width={120} height={32} className="h-8 w-auto" />
             </div>
             <div className="flex items-center space-x-6">
               <nav className="hidden md:flex space-x-8">
@@ -170,7 +171,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">
-              <img src="/logoSVG/logo-dark.svg" alt="FluxoMind" className="h-8 w-auto" />
+              <Image src="/logoSVG/logo-dark.svg" alt="FluxoMind" width={120} height={32} className="h-8 w-auto" />
             </div>
             <div className="text-center md:text-right">
               <p className="text-gray-400">
