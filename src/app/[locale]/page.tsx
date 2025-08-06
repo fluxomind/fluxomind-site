@@ -2,12 +2,11 @@
 
 import { Zap, Target, Heart, Cpu, Shield, Layers } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useLocale } from 'next-intl';
 import LanguageSwitcher from '../../components/LanguageSwitcher';
 
 export default function Home() {
   const t = useTranslations();
-  const locale = useLocale();
+  // Removendo variável não utilizada: locale
   const currentYear = new Date().getFullYear();
 
   return (
