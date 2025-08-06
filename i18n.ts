@@ -1,22 +1,15 @@
 import { getRequestConfig } from 'next-intl/server';
-import { locales, defaultLocale } from './src/config/i18n';
 
-// Configuração para Next-Intl - simplificada e com tratamento de erros
+// Definições de idiomas suportados
+const locales = ['en', 'pt'];
+const defaultLocale = 'pt';
+
 export default getRequestConfig(async ({ locale }) => {
   // Fallback para o locale padrão se não for válido
-  const localeToUse = locale && locales.includes(locale as string) ? locale : defaultLocale;
-  
-  // Carregamento dinâmico das mensagens para o locale com tratamento de erros
-  let messages;
-  try {
-    messages = (await import(`./messages/${localeToUse}.json`)).default;
-  } catch (error) {
-    // Fallback para mensagens padrão em caso de erro
-    messages = (await import(`./messages/${defaultLocale}.json`)).default;
-  }
+  const localeToUse = locale && locales.includes(locale) ? locale : defaultLocale;
   
   return {
     locale: localeToUse,
-    messages
+    messages: (await import(`./messages/${localeToUse}.json`)).default
   };
 });
