@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
 
+// Esta é a página raiz que redireciona para /pt
 export default function RootRedirect() {
-  // Redireciona automaticamente para a versão em português
+  console.log("Página raiz executada - redirecionando para /pt");
   redirect('/pt');
 }
