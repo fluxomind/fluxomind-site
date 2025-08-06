@@ -5,22 +5,13 @@ const withNextIntl = require('next-intl/plugin')(
 );
 
 const nextConfig = {
-  // Configurações para permitir o uso de imagens dos diretórios que têm espaços
-  images: {
-    remotePatterns: [],
-    dangerouslyAllowSVG: true,
-  },
-  // Ignorar avisos do ESLint durante o build
   eslint: {
-    // Avisos não vão falhar o build
     ignoreDuringBuilds: true,
   },
-  // Ignorar erros de tipo durante o build
   typescript: {
-    // Erros de tipo não vão falhar o build
     ignoreBuildErrors: true,
   },
-  // Adicionar redirecionamento explícito
+  // Redirecionamento simples da raiz para /pt
   async redirects() {
     return [
       {
@@ -31,5 +22,3 @@ const nextConfig = {
     ];
   },
 };
-
-module.exports = withNextIntl(nextConfig);
