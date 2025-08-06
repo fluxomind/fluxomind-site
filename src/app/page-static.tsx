@@ -2,11 +2,7 @@
 
 import { Zap, Target, Heart, Cpu, Shield, Layers } from 'lucide-react';
 
-interface HomeProps {
-  params: Promise<{ locale: string }>;
-}
-
-export default function Home({ params }: HomeProps) {
+export default function Home() {
   const currentYear = new Date().getFullYear();
 
   return (
@@ -21,16 +17,15 @@ export default function Home({ params }: HomeProps) {
             <div className="flex items-center space-x-6">
               <nav className="hidden md:flex space-x-8">
                 <a href="#sobre" className="text-gray-600 hover:text-gray-900 transition-colors">
-                  {t('header.about')}
+                  Sobre
                 </a>
                 <a href="#tecnologia" className="text-gray-600 hover:text-gray-900 transition-colors">
-                  {t('header.technology')}
+                  Tecnologia
                 </a>
                 <a href="#valores" className="text-gray-600 hover:text-gray-900 transition-colors">
-                  {t('header.values')}
+                  Valores
                 </a>
               </nav>
-              <LanguageSwitcher />
             </div>
           </div>
         </div>
@@ -38,21 +33,27 @@ export default function Home({ params }: HomeProps) {
 
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-gray-50 to-white overflow-hidden">
-        <div 
-          className="absolute inset-0 opacity-10 bg-blue-100"
-        />
+        <div className="absolute inset-0 opacity-10 bg-blue-100" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
           <div className="text-center">
             <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-              {t('hero.title1')}{' '}
-              <span className="text-blue-600">{t('hero.title2')}</span>
+              Plataforma{' '}
+              <span className="text-blue-600">IA-First</span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-4xl mx-auto leading-relaxed">
-              {t('hero.subtitle1')}
+              Solução no-code para empresas de qualquer tamanho criarem workflows inteligentes
             </p>
             <p className="text-lg text-gray-500 mb-12 max-w-3xl mx-auto">
-              {t('hero.subtitle2')}
+              Automatize processos, tome decisões baseadas em dados e escale sua operação com inteligência artificial integrada
             </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button className="px-8 py-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors">
+                Começar Agora
+              </button>
+              <button className="px-8 py-4 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-colors">
+                Ver Demo
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -62,14 +63,14 @@ export default function Home({ params }: HomeProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-              {t('about.title')}
+              Sobre a FluxoMind
             </h2>
             <div className="max-w-4xl mx-auto">
               <p className="text-lg text-gray-600 mb-6">
-                {t('about.description')}
+                A FluxoMind é uma startup brasileira dedicada a democratizar o acesso à inteligência artificial para empresas de todos os tamanhos. Fundada com a visão de que a IA deve ser acessível, prática e orientada por resultados, desenvolvemos soluções que permitem às organizações automatizar processos complexos sem a necessidade de conhecimento técnico profundo.
               </p>
               <p className="text-lg text-gray-600">
-                {t('about.platform')}
+                Nossa plataforma no-code capacita equipes a criarem workflows inteligentes, integrarem sistemas diversos e tomarem decisões baseadas em dados de forma intuitiva e eficiente.
               </p>
             </div>
           </div>
@@ -85,9 +86,9 @@ export default function Home({ params }: HomeProps) {
               <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
                 <Target className="h-8 w-8 text-blue-600" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">{t('mission.title')}</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Nossa Missão</h3>
               <p className="text-gray-600">
-                {t('mission.description')}
+                Democratizar o acesso à inteligência artificial, capacitando empresas de todos os portes a automatizar processos, otimizar operações e acelerar a inovação através de soluções no-code intuitivas e poderosas.
               </p>
             </div>
 
@@ -96,9 +97,9 @@ export default function Home({ params }: HomeProps) {
               <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
                 <Zap className="h-8 w-8 text-green-600" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">{t('vision.title')}</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Nossa Visão</h3>
               <p className="text-gray-600">
-                {t('vision.description')}
+                Ser a principal plataforma IA-First do Brasil, reconhecida por tornar a inteligência artificial acessível e prática para qualquer organização, independentemente de seu tamanho ou expertise técnica.
               </p>
             </div>
 
@@ -107,11 +108,13 @@ export default function Home({ params }: HomeProps) {
               <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
                 <Heart className="h-8 w-8 text-purple-600" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">{t('values.title')}</h3>
-              <ul className="text-gray-600 space-y-2">
-                {t.raw('values.list').map((item: string, index: number) => (
-                  <li key={index}>• {item}</li>
-                ))}
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Nossos Valores</h3>
+              <ul className="text-gray-600 space-y-2 text-left">
+                <li>• <strong>Acessibilidade:</strong> IA para todos, sem barreiras técnicas</li>
+                <li>• <strong>Inovação:</strong> Tecnologia de ponta com simplicidade</li>
+                <li>• <strong>Transparência:</strong> Processos claros e resultados mensuráveis</li>
+                <li>• <strong>Colaboração:</strong> Crescimento conjunto com nossos clientes</li>
+                <li>• <strong>Excelência:</strong> Qualidade em cada solução entregue</li>
               </ul>
             </div>
           </div>
@@ -123,10 +126,10 @@ export default function Home({ params }: HomeProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-              {t('technology.title')}
+              Tecnologia IA-First
             </h2>
             <p className="text-lg text-gray-600 max-w-4xl mx-auto mb-12">
-              {t('technology.description')}
+              Nossa plataforma é construída com inteligência artificial no centro de tudo. Cada funcionalidade, cada processo e cada decisão é potencializada por IA avançada, mas apresentada de forma simples e intuitiva.
             </p>
           </div>
 
@@ -135,9 +138,9 @@ export default function Home({ params }: HomeProps) {
               <div className="bg-blue-100 w-12 h-12 rounded-lg flex items-center justify-center mb-6">
                 <Cpu className="h-6 w-6 text-blue-600" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">{t('technology.generativeAI.title')}</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">IA Generativa Integrada</h3>
               <p className="text-gray-600">
-                {t('technology.generativeAI.description')}
+                Motores de IA generativa que automatizam a criação de workflows, sugerem otimizações e geram insights acionáveis a partir dos seus dados empresariais.
               </p>
             </div>
 
@@ -145,9 +148,9 @@ export default function Home({ params }: HomeProps) {
               <div className="bg-green-100 w-12 h-12 rounded-lg flex items-center justify-center mb-6">
                 <Layers className="h-6 w-6 text-green-600" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">{t('technology.metadata.title')}</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">Gestão Inteligente de Metadados</h3>
               <p className="text-gray-600">
-                {t('technology.metadata.description')}
+                Sistema avançado que compreende e organiza automaticamente os metadados dos seus processos, permitindo integrações mais inteligentes e análises mais profundas.
               </p>
             </div>
 
@@ -155,16 +158,16 @@ export default function Home({ params }: HomeProps) {
               <div className="bg-purple-100 w-12 h-12 rounded-lg flex items-center justify-center mb-6">
                 <Shield className="h-6 w-6 text-purple-600" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">{t('technology.secureArch.title')}</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">Arquitetura Segura e Escalável</h3>
               <p className="text-gray-600">
-                {t('technology.secureArch.description')}
+                Infraestrutura robusta com segurança enterprise, compliance com regulamentações brasileiras e escalabilidade automática conforme sua empresa cresce.
               </p>
             </div>
           </div>
 
           <div className="mt-12 text-center">
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              {t('technology.footer')}
+              Nossa tecnologia IA-First não apenas automatiza tarefas, mas reimagina completamente como o trabalho é feito, criando oportunidades para inovação e crescimento sustentável.
             </p>
           </div>
         </div>
@@ -179,7 +182,7 @@ export default function Home({ params }: HomeProps) {
             </div>
             <div className="text-center md:text-right">
               <p className="text-gray-400">
-                {t('globalFooter.copyright', { year: currentYear })}
+                © {currentYear} FluxoMind. Todos os direitos reservados.
               </p>
             </div>
           </div>

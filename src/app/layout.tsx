@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Fluxomind",
-  description: "Plataforma IA-First no-code para empresas de qualquer tamanho.",
+  title: "FluxoMind - Plataforma IA-First no-code",
+  description: "Solução no-code para empresas de qualquer tamanho criarem workflows inteligentes com inteligência artificial.",
 };
 
 export default function RootLayout({
