@@ -1,3 +1,3 @@
 // Definições de idiomas suportados
-export const locales = ['en', 'pt'];
-export const defaultLocale = 'pt';
+export const locales = ['en', 'pt'] as const;
+export const defaultLocale = 'pt' as const;
