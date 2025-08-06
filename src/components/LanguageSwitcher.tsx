@@ -1,11 +1,11 @@
 'use client';
 
-import { useTranslations, useLocale } from 'next-intl';
+import { useLocale } from 'next-intl';
 import { useRouter, usePathname } from 'next/navigation';
 import { useState } from 'react';
 
 export default function LanguageSwitcher() {
-  const t = useTranslations('languageSwitcher');
+  // Não precisamos mais da tradução, já que usamos apenas PT e EN diretamente
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();

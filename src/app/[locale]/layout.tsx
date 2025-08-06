@@ -18,14 +18,14 @@ export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
 
-// Interface não usa desestruturação de params
+// Interface com tipos específicos
 interface LocaleLayoutProps {
   children: ReactNode;
-  params: any;
+  params: { locale?: string } | Record<string, string>;
 }
 
 // Função síncrona para verificar locale
-function getLocale(segment: any): string {
+function getLocale(segment: string | undefined): string {
   // Obter valor do segmento de URL
   const localeFromSegment = segment && typeof segment === 'string' ? segment : 'pt';
   return localeFromSegment;
@@ -36,9 +36,17 @@ export default async function LocaleLayout(props: LocaleLayoutProps) {
   // Aguardar params antes de usar
   const awaitedParams = await props.params;
 
-  // Extrair o segmento da URL de forma segura
-  const urlSegments = awaitedParams ? Object.values(awaitedParams) : [];
-  const localeSegment = urlSegments.length > 0 ? urlSegments[0] : 'pt';
+  // Extrair o locale de forma segura
+  let localeSegment: string | undefined;
+  
+  if ('locale' in awaitedParams) {
+    // Se params tem propriedade 'locale' diretamente
+    localeSegment = awaitedParams.locale as string;
+  } else {
+    // Caso contrário tente extrair de Object.values
+    const urlSegments = Object.values(awaitedParams);
+    localeSegment = urlSegments.length > 0 ? urlSegments[0] as string : undefined;
+  }
 
   // Obter locale de forma segura
   const locale = getLocale(localeSegment);
@@ -51,18 +59,9 @@ export default async function LocaleLayout(props: LocaleLayoutProps) {
   // Obter mensagens para o locale
   const localeMessages = messages[locale] || messages['pt'];
 
-  // Ajustar o combo existente para exibir apenas PT e EN sem a palavra Idioma
-  const localeOptions = ['PT', 'EN'];
-
-  // Renderizar o combo ajustado
   return (
     <NextIntlClientProvider locale={locale} messages={localeMessages}>
       {props.children}
-      <select>
-        {localeOptions.map((option) => (
-          <option key={option} value={option.toLowerCase()}>{option}</option>
-        ))}
-      </select>
     </NextIntlClientProvider>
   );
 }
