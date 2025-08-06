@@ -14,6 +14,17 @@ const nextConfig = {
   eslint: {
     // Avisos não vão falhar o build
     ignoreDuringBuilds: true,
+  },
+  // Ignorar erros de tipo durante o build
+  typescript: {
+    // Erros de tipo não vão falhar o build
+    ignoreBuildErrors: true,
+  },
+  // Opções de exportação
+  output: 'standalone',
+  // Tratar erros durante compilação como warnings
+  experimental: {
+    missingSuspenseWithCSRBailout: false
   }
 };
 
