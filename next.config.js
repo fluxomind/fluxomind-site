@@ -20,18 +20,6 @@ const nextConfig = {
     // Erros de tipo não vão falhar o build
     ignoreBuildErrors: true,
   },
-  // Configurar redirecionamento para a página inicial
-  async redirects() {
-    return [
-      {
-        source: '/',
-        destination: '/pt',
-        permanent: true,
-        // Garante que este redirecionamento tenha prioridade
-        basePath: false,
-      },
-    ];
-  },
 };
 
 module.exports = withNextIntl(nextConfig);
