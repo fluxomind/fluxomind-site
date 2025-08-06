@@ -19,11 +19,11 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html>
+    <html lang="pt">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         {children}
       </body>
