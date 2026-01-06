@@ -176,6 +176,14 @@ export default function Home() {
               <p className="text-gray-400">
                 © {currentYear} Fluxomind — Plataforma IA-First no-code para empresas de qualquer tamanho.
               </p>
+              <p className="text-gray-500 text-sm mt-2">
+                FLUXOMIND LTDA — CNPJ: 60.162.547/0001-15
+              </p>
+              <div className="mt-3">
+                <a href="/terms" className="text-gray-400 hover:text-white text-sm transition-colors">
+                  Termos de Uso
+                </a>
+              </div>
             </div>
           </div>
         </div>
