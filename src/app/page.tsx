@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import DemoBuilder from '@/components/DemoBuilder';
+import { PLATFORM_LOGIN, PLATFORM_SIGNUP } from '@/lib/platform';
 
 export default function Home() {
   return (
@@ -20,8 +21,9 @@ export default function Home() {
             <a href="#usos">O que dá pra fazer</a>
             <a href="#seguranca">Segurança</a>
             <a href="#faq">Dúvidas</a>
+            <a href={PLATFORM_LOGIN}>Entrar</a>
           </div>
-          <a className="btn btn-primary nav-cta" href="#comecar">
+          <a className="btn btn-primary nav-cta" href={PLATFORM_SIGNUP}>
             Começar grátis
           </a>
         </div>
@@ -32,7 +34,7 @@ export default function Home() {
         <div className="wrap">
           <div>
             <span className="pill">
-              <span className="lz" /> Operação assistida por IA · beta privado
+              <span className="lz" /> Operação assistida por IA · comece grátis
             </span>
             <h1>
               Monte o sistema da sua operação <span className="g">só conversando.</span>
@@ -42,7 +44,7 @@ export default function Home() {
               e sem esperar a TI. Você descreve o que precisa; a Fluxomind monta e opera com você.
             </p>
             <div className="herocta">
-              <a className="btn btn-primary btn-lg" href="#comecar">
+              <a className="btn btn-primary btn-lg" href={PLATFORM_SIGNUP}>
                 Criar meu sistema grátis
               </a>
               <a className="btn btn-ghost btn-lg" href="#demo">
@@ -74,7 +76,7 @@ export default function Home() {
         </div>
         <div className="wrap">
           <div className="aud">
-            <a href="#comecar" className="audcard">
+            <a href="#demo" className="audcard">
               <div className="ai">🚀</div>
               <h3>Quero resolver agora</h3>
               <div className="role">Gestor / time de operação</div>
@@ -217,7 +219,7 @@ export default function Home() {
             </div>
           </div>
           <div className="center" style={{ marginTop: 44 }}>
-            <a className="btn btn-primary btn-lg" href="#comecar">
+            <a className="btn btn-primary btn-lg" href={PLATFORM_SIGNUP}>
               Montar meu primeiro sistema grátis
             </a>
           </div>
@@ -407,8 +409,9 @@ export default function Home() {
             <div className="qa">
               <h4>Quanto custa?</h4>
               <p>
-                Estamos em beta privado: você começa grátis. Os planos são definidos conforme sua
-                empresa cresce no uso — sem surpresa.
+                Você cria sua conta grátis, sem cartão, com um limite de uso claro — dá pra testar
+                de verdade. Quando precisar de mais, adiciona um cartão e amplia o limite. Você no
+                controle, sem surpresa na fatura.
               </p>
             </div>
           </div>
@@ -427,14 +430,14 @@ export default function Home() {
             compromisso.
           </p>
           <div className="offerbtns">
-            <a className="btn btn-primary btn-lg" href="#demo">
+            <a className="btn btn-primary btn-lg" href={PLATFORM_SIGNUP}>
               Criar meu sistema grátis
             </a>
             <a className="btn btn-ghost btn-lg" href="#">
               Falar com a gente
             </a>
           </div>
-          <div className="scar">⏳ Beta privado — estamos abrindo poucas vagas por mês</div>
+          <div className="scar">✓ Comece grátis, sem cartão — cartão só pra ampliar o limite</div>
         </div>
       </section>
 
