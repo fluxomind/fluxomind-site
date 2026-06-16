@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Fluxomind — para empresas: acelere suas implementações</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--blue:#2B66DD;--sky:#4DABF7;--ink:#0E0F11;--charcoal:#1A1B1E;--slate:#475569;--mute:#6B7280;
+    --line:#E6EAF1;--panel:#F5F8FC;--green:#10B981;--amber:#F59E0B;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:Inter,system-ui,sans-serif;color:#101725;background:#fff;-webkit-font-smoothing:antialiased;line-height:1.6}
+  a{text-decoration:none;color:inherit}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+  .btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:15px;border-radius:12px;padding:14px 24px;cursor:pointer;border:0;transition:.18s}
+  .btn-primary{background:var(--blue);color:#fff;box-shadow:0 10px 26px -8px rgba(43,102,221,.6)}
+  .btn-primary:hover{transform:translateY(-2px)}
+  .btn-ghost{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.25)}
+  .btn-ghost:hover{background:rgba(255,255,255,.12)}
+  .btn-ghost-d{background:transparent;color:var(--blue);border:1.5px solid #cdd8ee}
+  h2{font-size:clamp(27px,3.4vw,38px);font-weight:800;letter-spacing:-.02em;line-height:1.12}
+  h3{font-size:19px;font-weight:700;letter-spacing:-.01em}
+  .kick{color:var(--blue);font-weight:700;letter-spacing:.12em;text-transform:uppercase;font-size:12.5px;margin-bottom:12px}
+  .lead{font-size:18px;color:var(--slate)}
+  .center{text-align:center;max-width:720px;margin:0 auto}
+  section{padding:78px 0}
+
+  nav{position:sticky;top:0;z-index:50;background:rgba(14,15,17,.82);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.08)}
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:62px}
+  .brand{display:flex;align-items:center;gap:10px;color:#fff;font-weight:800;font-size:19px}
+  .brand .dot{width:10px;height:10px;border-radius:50%;background:var(--blue);box-shadow:0 0 14px 2px rgba(43,102,221,.9)}
+  .navlinks{display:flex;gap:22px;align-items:center}
+  .navlinks a{color:#C7CBD1;font-size:14px;font-weight:500}.navlinks a:hover{color:#fff}
+  @media(max-width:960px){.navlinks{display:none}}
+
+  .hero{background:radial-gradient(1000px 480px at 82% -10%,rgba(43,102,221,.36),transparent 60%),var(--ink);color:#fff}
+  .hero .wrap{padding:64px 24px 58px}
+  .back{color:#9aa1ac;font-size:14px;font-weight:500}.back:hover{color:#fff}
+  .pill{display:inline-flex;align-items:center;gap:8px;background:rgba(77,171,247,.12);border:1px solid rgba(77,171,247,.4);color:#bfe0ff;font-size:13px;font-weight:600;padding:7px 14px;border-radius:999px;margin:18px 0 22px}
+  h1{font-size:clamp(32px,4.4vw,52px);line-height:1.07;font-weight:800;letter-spacing:-.025em;max-width:17ch}
+  h1 .g{color:var(--sky)}
+  .hsub{margin-top:18px;font-size:19px;color:#CdD3Dc;max-width:60ch}
+  .herocta{display:flex;gap:13px;margin-top:28px;flex-wrap:wrap}
+  .stat{display:flex;gap:36px;margin-top:36px;flex-wrap:wrap}
+  .stat .s b{display:block;font-size:26px;font-weight:800;color:#fff}
+  .stat .s span{font-size:13.5px;color:#9aa1ac}
+
+  .ways{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:46px}
+  @media(max-width:820px){.ways{grid-template-columns:1fr}}
+  .way{border:1px solid var(--line);border-radius:16px;padding:26px;transition:.18s}
+  .way:hover{border-color:#c7d4ec;transform:translateY(-2px);box-shadow:0 16px 34px -22px rgba(15,23,42,.35)}
+  .way .wi{width:48px;height:48px;border-radius:12px;background:var(--panel);display:grid;place-items:center;font-size:23px;color:var(--blue);margin-bottom:14px}
+  .way h3{font-size:20px}
+  .way .tagm{font-size:13px;color:var(--blue);font-weight:600;margin-top:2px}
+  .way p{color:var(--slate);font-size:15px;margin-top:10px}
+
+  .fit{background:var(--charcoal);color:#fff;border-radius:22px;padding:44px}
+  .fitg{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:30px}
+  @media(max-width:820px){.fitg{grid-template-columns:1fr}}
+  .fc{background:#22242a;border:1px solid #2f323a;border-radius:13px;padding:20px}
+  .fc .fi{font-size:22px;color:var(--sky)}
+  .fc h4{font-size:16px;font-weight:700;margin-top:10px}
+  .fc p{font-size:13px;color:#A9AEB8;margin-top:6px}
+  .fitlink{margin-top:24px}
+  .fitlink a{color:var(--sky);font-weight:600;font-size:15px}
+
+  .timeline{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:46px;position:relative}
+  @media(max-width:820px){.timeline{grid-template-columns:1fr;gap:16px}}
+  .tl{padding:0 22px;position:relative}
+  .tl .num{width:40px;height:40px;border-radius:50%;background:var(--blue);color:#fff;font-weight:800;display:grid;place-items:center;margin-bottom:16px}
+  .tl h4{font-size:18px;font-weight:700}
+  .tl p{color:var(--slate);font-size:14.5px;margin-top:8px}
+  .tl::after{content:"→";position:absolute;right:-8px;top:8px;color:var(--blue);font-size:20px}
+  .tl:last-child::after{display:none}
+  @media(max-width:820px){.tl::after{display:none}}
+
+  .support{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:44px}
+  @media(max-width:820px){.support{grid-template-columns:1fr}}
+  .sup{display:flex;gap:14px;border:1px solid var(--line);border-radius:14px;padding:22px}
+  .sup .si{font-size:24px;flex:0 0 auto}
+  .sup h4{font-size:17px;font-weight:700}.sup p{color:var(--slate);font-size:14.5px;margin-top:5px}
+
+  .proc{background:var(--panel);border-radius:18px;padding:30px;margin-top:40px;display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:center}
+  .proc .pchip{background:#fff;border:1px solid var(--line);border-radius:10px;padding:11px 16px;font-size:14px;font-weight:500;color:#334155}
+
+  .honest{margin-top:26px;font-size:14px;color:#5c4a1f;background:#fff7e6;border:1px solid var(--amber);border-radius:12px;padding:14px 18px}
+  .honest b{color:#8a5a00}
+
+  .cta{background:radial-gradient(700px 300px at 50% -20%,rgba(77,171,247,.26),transparent 60%),var(--ink);color:#fff;text-align:center;border-radius:22px;padding:56px 36px}
+  .cta h2{color:#fff}.cta .lead{color:#CdD3Dc;margin-top:12px}
+  .ctab{display:flex;gap:13px;justify-content:center;margin-top:26px;flex-wrap:wrap}
+  footer{background:#070809;color:#8b9099;padding:36px 0;font-size:14px}
+  footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px}
+  .note{background:#fff7e6;border-bottom:1px solid var(--amber);color:#7a4d00;font-size:13px;padding:8px 16px;text-align:center}
+</style>
+</head>
+<body>
+
+<div class="note">Protótipo da trilha enterprise (adoção em escala / acelerador). Conteúdo demonstrativo.</div>
+
+<nav>
+  <div class="wrap">
+    <div class="brand"><span class="dot"></span>fluxomind</div>
+    <div class="navlinks">
+      <a href="#usos">Como adotar</a>
+      <a href="#fit">Governança & segurança</a>
+      <a href="#modelo">Modelo de adoção</a>
+      <a href="plataforma.html">Avaliação técnica</a>
+    </div>
+    <a class="btn btn-primary" style="padding:9px 18px" href="#contato">Falar com o time enterprise</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <a class="back" href="home-v2.html">← visão geral</a>
+    <span class="pill">Para empresas · programa enterprise &amp; design partners</span>
+    <h1>Acelere suas implementações <span class="g">com a Fluxomind como motor.</span></h1>
+    <p class="hsub">Não precisa trocar o que já funciona. Adote a Fluxomind dentro dos seus processos e entregas — como acelerador — para montar sistemas internos, automatizar operações e estender suas equipes, com a governança e a segurança que o seu procurement exige.</p>
+    <div class="herocta">
+      <a class="btn btn-primary" href="#contato">Falar com o time enterprise</a>
+      <a class="btn btn-ghost" href="#modelo">Ver o programa de adoção</a>
+    </div>
+    <div class="stat">
+      <div class="s"><b>Dias, não trimestres</b><span>do pedido ao sistema interno no ar</span></div>
+      <div class="s"><b>Sem fila de dev</b><span>times de negócio entregam sozinhos</span></div>
+      <div class="s"><b>No seu ambiente</b><span>isolamento, BYOK e residência de dados</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- COMO ADOTAR -->
+<section id="usos">
+  <div class="center">
+    <div class="kick">Como grandes empresas adotam</div>
+    <h2>Quatro formas de usar a Fluxomind como acelerador</h2>
+    <p class="lead" style="margin-top:14px">Do uso interno ao produto que você entrega ao seu cliente.</p>
+  </div>
+  <div class="ways">
+    <div class="way"><div class="wi">🏗️</div><h3>Acelere implementações internas</h3><div class="tagm">Para áreas de operação, CS, RevOps, BackOffice</div><p>Seus times de negócio montam sistemas internos (cobrança, atendimento, aprovações, painéis) em dias — sem abrir ticket pra TI. Reduz a fila de demandas do time de engenharia.</p></div>
+    <div class="way"><div class="wi">🔌</div><h3>Embuta na sua stack</h3><div class="tagm">Via API e MCP server</div><p>Exponha a Fluxomind como capacidade dentro do que você já tem — seus agentes e sistemas chamam a plataforma como ferramenta. Integra, não substitui.</p></div>
+    <div class="way"><div class="wi">🏷️</div><h3>Ofereça aos seus clientes</h3><div class="tagm">White-label / OEM</div><p>Empacote operação assistida por IA dentro do seu produto ou serviço, com sua marca — sem construir a plataforma do zero.</p></div>
+    <div class="way"><div class="wi">🤝</div><h3>Co-construa com nosso time</h3><div class="tagm">Professional services</div><p>Nossa engenharia trabalha junto com a sua para acelerar a primeira implementação e capacitar seu time a seguir sozinho.</p></div>
+  </div>
+</section>
+
+<!-- FIT / GOVERNANÇA -->
+<section id="fit" style="padding-top:0">
+  <div class="wrap" style="padding:0">
+    <div class="fit">
+      <div class="kick" style="color:var(--sky)">Cabe no seu ambiente</div>
+      <h2 style="color:#fff;max-width:20ch">Feita para passar pelo seu time de segurança e compliance</h2>
+      <div class="fitg">
+        <div class="fc"><div class="fi">🔑</div><h4>Seus dados, sua chave</h4><p>Isolamento por cliente, BYOK (sua KMS) e opções de residência de dados por região.</p></div>
+        <div class="fc"><div class="fi">⚖️</div><h4>Governança aplicada pelo runtime</h4><p>Políticas, cotas, consentimento (GDPR/LGPD) e human-in-the-loop em ações sensíveis.</p></div>
+        <div class="fc"><div class="fi">🧾</div><h4>Auditável por evidência</h4><p>Trilha imutável por hash-chain e controles SOC2/GDPR escaneados continuamente.</p></div>
+      </div>
+      <div class="fitlink"><a href="plataforma.html">Ver a avaliação técnica completa (arquitetura, performance, qualidade, governança, segurança) →</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- MODELO DE ADOÇÃO -->
+<section id="modelo">
+  <div class="center">
+    <div class="kick">Modelo de adoção</div>
+    <h2>Comece pequeno, com acompanhamento. Expanda quando provar valor.</h2>
+  </div>
+  <div class="timeline">
+    <div class="tl"><div class="num">1</div><h4>Piloto guiado</h4><p>Escolhemos juntos 1 processo de alto valor. Nosso time acompanha do desenho ao primeiro resultado real, em poucas semanas.</p></div>
+    <div class="tl"><div class="num">2</div><h4>Expansão</h4><p>Provado o valor, mais áreas e processos entram. Seu time já opera com autonomia; o nosso fica de retaguarda.</p></div>
+    <div class="tl"><div class="num">3</div><h4>Embutido em escala</h4><p>A Fluxomind vira parte da sua operação — integrada à stack, com governança central e suporte dedicado.</p></div>
+  </div>
+  <div class="proc">
+    <div class="pchip">Pronto para procurement:</div>
+    <div class="pchip">Security whitepaper</div>
+    <div class="pchip">Data room técnico</div>
+    <div class="pchip">DPA / tratamento de dados</div>
+    <div class="pchip">Roadmap de certificação</div>
+  </div>
+</section>
+
+<!-- SUPORTE -->
+<section style="padding-top:0">
+  <div class="center">
+    <div class="kick">Parceria, não só licença</div>
+    <h2>Suporte e acompanhamento de verdade</h2>
+  </div>
+  <div class="support">
+    <div class="sup"><div class="si">🎯</div><div><h4>Time dedicado</h4><p>Um ponto de contato técnico e de produto que conhece a sua implementação.</p></div></div>
+    <div class="sup"><div class="si">📚</div><div><h4>Capacitação</h4><p>Habilitamos seus times de negócio e de TI para construir e operar sozinhos.</p></div></div>
+    <div class="sup"><div class="si">🛠️</div><div><h4>Professional services</h4><p>Nossa engenharia acelera as primeiras entregas e os casos mais complexos.</p></div></div>
+    <div class="sup"><div class="si">📈</div><div><h4>Roadmap conjunto</h4><p>Como design partner, sua operação influencia a prioridade do produto.</p></div></div>
+  </div>
+  <div class="honest"><b>Transparência:</b> estamos em pré-lançamento. Hoje a adoção enterprise acontece via <strong>programa de design partners com acompanhamento próximo</strong> — SLA formal, certificação SOC2 e self-serve em escala estão no roadmap. Você entra cedo, com influência no produto e condições de fundador.</div>
+</section>
+
+<!-- CTA -->
+<section style="padding-top:0">
+  <div class="wrap" style="padding:0">
+    <div class="cta" id="contato">
+      <div class="kick" style="color:var(--sky)">Vamos conversar</div>
+      <h2>Traga um processo. Devolvemos um acelerador.</h2>
+      <p class="lead">Conte qual implementação ou operação você quer acelerar — desenhamos um piloto guiado com o seu time.</p>
+      <div class="ctab">
+        <a class="btn btn-primary" href="#">Falar com o time enterprise</a>
+        <a class="btn btn-ghost" href="plataforma.html">Ver avaliação técnica</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="brand" style="color:#fff"><span class="dot"></span>fluxomind</div>
+    <div>Seu acelerador de operações e implementações.</div>
+    <div>© 2026 Fluxomind</div>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Fluxomind — Plataforma: avaliação técnica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--blue:#2B66DD;--sky:#4DABF7;--ink:#0E0F11;--charcoal:#1A1B1E;--slate:#475569;--mute:#6B7280;
+    --line:#E6EAF1;--panel:#F5F8FC;--green:#10B981;--amber:#F59E0B;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:Inter,system-ui,sans-serif;color:#101725;background:#fff;-webkit-font-smoothing:antialiased;line-height:1.6}
+  a{text-decoration:none;color:inherit}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+  .btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:15px;border-radius:12px;padding:13px 22px;cursor:pointer;border:0;transition:.18s}
+  .btn-primary{background:var(--blue);color:#fff;box-shadow:0 10px 26px -8px rgba(43,102,221,.6)}
+  .btn-primary:hover{transform:translateY(-2px)}
+  .btn-ghost{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.25)}
+  .btn-ghost:hover{background:rgba(255,255,255,.12)}
+  h2{font-size:clamp(26px,3.2vw,36px);font-weight:800;letter-spacing:-.02em;line-height:1.14}
+  h3{font-size:20px;font-weight:700;letter-spacing:-.01em}
+  .kick{color:var(--blue);font-weight:700;letter-spacing:.12em;text-transform:uppercase;font-size:12.5px;margin-bottom:12px}
+  .lead{font-size:18px;color:var(--slate)}
+  section{padding:72px 0;border-top:1px solid var(--line)}
+  .secthead{max-width:760px}
+  .mono{font-family:ui-monospace,"SF Mono",Menlo,monospace;font-size:12.5px}
+
+  /* status badge */
+  .badge{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:700;padding:4px 11px;border-radius:999px;border:1px solid}
+  .b-impl{color:#0f7a55;border-color:#9fe1cb;background:#eafaf3}
+  .b-parc{color:#9a6400;border-color:#fac08a;background:#fdf3e3}
+  .b-road{color:#1e4fb0;border-color:#b5d4f4;background:#eaf2fd}
+  .badge .d{width:7px;height:7px;border-radius:50%}
+  .b-impl .d{background:var(--green)}.b-parc .d{background:var(--amber)}.b-road .d{background:var(--blue)}
+
+  /* NAV */
+  nav{position:sticky;top:0;z-index:50;background:rgba(14,15,17,.82);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.08)}
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:62px}
+  .brand{display:flex;align-items:center;gap:10px;color:#fff;font-weight:800;font-size:19px}
+  .brand .dot{width:10px;height:10px;border-radius:50%;background:var(--blue);box-shadow:0 0 14px 2px rgba(43,102,221,.9)}
+  .navlinks{display:flex;gap:22px;align-items:center}
+  .navlinks a{color:#C7CBD1;font-size:14px;font-weight:500}
+  .navlinks a:hover{color:#fff}
+  @media(max-width:960px){.navlinks{display:none}}
+
+  /* HERO */
+  .hero{background:radial-gradient(1000px 480px at 80% -10%,rgba(43,102,221,.38),transparent 60%),var(--ink);color:#fff}
+  .hero .wrap{padding:64px 24px 56px}
+  .back{color:#9aa1ac;font-size:14px;font-weight:500}
+  .back:hover{color:#fff}
+  .pill{display:inline-flex;align-items:center;gap:8px;background:rgba(77,171,247,.12);border:1px solid rgba(77,171,247,.4);color:#bfe0ff;font-size:13px;font-weight:600;padding:7px 14px;border-radius:999px;margin:18px 0 22px}
+  h1{font-size:clamp(32px,4.4vw,50px);line-height:1.07;font-weight:800;letter-spacing:-.025em;max-width:18ch}
+  h1 .g{color:var(--sky)}
+  .hsub{margin-top:18px;font-size:19px;color:#CdD3Dc;max-width:60ch}
+  .herocta{display:flex;gap:13px;margin-top:28px;flex-wrap:wrap}
+  /* pillar quicknav */
+  .qnav{display:flex;gap:10px;flex-wrap:wrap;margin-top:34px}
+  .qnav a{font-size:13.5px;color:#C7CBD1;border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:8px 15px}
+  .qnav a:hover{border-color:var(--sky);color:#fff}
+
+  /* AI-FIRST inversion diagram */
+  .inv{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:38px}
+  @media(max-width:820px){.inv{grid-template-columns:1fr}}
+  .invcard{border-radius:16px;padding:24px}
+  .invcard.trad{background:var(--panel);border:1px solid var(--line)}
+  .invcard.fm{background:var(--charcoal);color:#fff}
+  .invcard h4{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:14px}
+  .invcard.trad h4{color:var(--mute)}.invcard.fm h4{color:var(--sky)}
+  .flow{display:flex;flex-direction:column;gap:8px}
+  .fbox{border-radius:10px;padding:11px 14px;font-size:14px;font-weight:500}
+  .invcard.trad .fbox{background:#fff;border:1px solid var(--line);color:#334155}
+  .invcard.fm .fbox{background:#22242a;border:1px solid #2f323a;color:#E5E7EB}
+  .invcard.fm .fbox b{color:var(--sky)}
+  .farr{text-align:center;color:var(--mute);font-size:14px}
+  .invcard.fm .farr{color:#5b6470}
+
+  /* layers chips */
+  .layers{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px}
+  .lchip{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:9px 13px;font-size:13px;color:#334155}
+  .lchip b{color:#0f1a2e}
+  .lchip .mono{color:var(--blue)}
+
+  /* pillar block */
+  .pillar{display:grid;grid-template-columns:300px 1fr;gap:40px;align-items:start}
+  @media(max-width:860px){.pillar{grid-template-columns:1fr;gap:20px}}
+  .pillar .pl{position:sticky;top:84px}
+  .pillar .pl .ico{width:52px;height:52px;border-radius:14px;background:var(--panel);display:grid;place-items:center;font-size:24px;color:var(--blue);margin-bottom:14px}
+  .feat{display:flex;gap:14px;padding:16px 0;border-top:1px solid var(--line)}
+  .feat:first-child{border-top:0}
+  .feat .ck{color:var(--green);font-size:18px;flex:0 0 auto;margin-top:1px}
+  .feat h4{font-size:16.5px;font-weight:700}
+  .feat p{color:var(--slate);font-size:14.5px;margin-top:4px}
+  .feat .src{font-size:12px;color:var(--mute);margin-top:5px}
+  .feat .src code{background:var(--panel);border-radius:5px;padding:1px 6px;color:#3457a6;font-family:ui-monospace,monospace;font-size:11.5px}
+
+  /* scorecard */
+  table{width:100%;border-collapse:collapse;margin-top:30px;font-size:14.5px}
+  th,td{text-align:left;padding:14px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute);font-weight:700}
+  td .next{color:var(--blue)}
+  .honest{margin-top:24px;font-size:14px;color:#5c4a1f;background:#fff7e6;border:1px solid var(--amber);border-radius:12px;padding:14px 18px}
+  .honest b{color:#8a5a00}
+
+  /* CTA */
+  .cta{background:radial-gradient(700px 300px at 50% -20%,rgba(77,171,247,.26),transparent 60%),var(--ink);color:#fff;text-align:center;border:0}
+  .cta h2{color:#fff}.cta .lead{color:#CdD3Dc;margin-top:12px}
+  .ctab{display:flex;gap:13px;justify-content:center;margin-top:26px;flex-wrap:wrap}
+  footer{background:#070809;color:#8b9099;padding:36px 0;font-size:14px;border:0}
+  footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px}
+  .note{background:#fff7e6;border-bottom:1px solid var(--amber);color:#7a4d00;font-size:13px;padding:8px 16px;text-align:center}
+</style>
+</head>
+<body>
+
+<div class="note">Protótipo da página técnica de aprofundamento (trilha enterprise / due-diligence). Conteúdo demonstrativo.</div>
+
+<nav>
+  <div class="wrap">
+    <div class="brand"><span class="dot"></span>fluxomind</div>
+    <div class="navlinks">
+      <a href="#aifirst">AI-first</a>
+      <a href="#performance">Performance</a>
+      <a href="#qualidade">Qualidade</a>
+      <a href="#governanca">Governança</a>
+      <a href="#seguranca">Segurança</a>
+    </div>
+    <a class="btn btn-primary" style="padding:9px 18px" href="#avaliar">Avaliar a fundo</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap">
+    <a class="back" href="home-v2.html">← voltar para a visão geral</a>
+    <span class="pill">Para times técnicos · CTO, Head of Platform, Segurança</span>
+    <h1>Feita para ser <span class="g">avaliada a fundo.</span></h1>
+    <p class="hsub">AI-first de verdade, multi-tenant, governada e <strong>verificável por evidência</strong> — não por slide. Esta página é para quem vai abrir o capô: arquitetura, performance, qualidade, governança e segurança, com o status real de cada coisa.</p>
+    <div class="herocta">
+      <a class="btn btn-primary" href="#avaliar">Acessar o data room técnico</a>
+      <a class="btn btn-ghost" href="#avaliar">Agendar sessão de arquitetura</a>
+    </div>
+    <div class="qnav">
+      <a href="#aifirst">① AI-first</a>
+      <a href="#arquitetura">② Arquitetura</a>
+      <a href="#performance">③ Performance & escala</a>
+      <a href="#qualidade">④ Qualidade & correção</a>
+      <a href="#governanca">⑤ Governança</a>
+      <a href="#seguranca">⑥ Segurança</a>
+      <a href="#maturidade">⑦ Maturidade & compliance</a>
+    </div>
+  </div>
+</header>
+
+<!-- AI FIRST -->
+<section id="aifirst">
+  <div class="secthead">
+    <div class="kick">① AI-first</div>
+    <h2>A IA é o fluxo de execução — não um chatbot pendurado</h2>
+    <p class="lead" style="margin-top:14px">Em sistemas tradicionais, o código chama o LLM quando precisa. Aqui, o inverso: um orquestrador decide o que fazer, consulta memória e conhecimento, planeja e aciona ferramentas — tudo governado por política e visível como um grafo de estado, auditável passo a passo.</p>
+  </div>
+  <div class="inv">
+    <div class="invcard trad">
+      <h4>Software tradicional</h4>
+      <div class="flow">
+        <div class="fbox">Código define o caminho fixo</div>
+        <div class="farr">↓</div>
+        <div class="fbox">Chama o LLM como um "acessório"</div>
+        <div class="farr">↓</div>
+        <div class="fbox">Resposta volta para o código</div>
+      </div>
+    </div>
+    <div class="invcard fm">
+      <h4>Fluxomind — AI-first</h4>
+      <div class="flow">
+        <div class="fbox"><b>Orquestrador</b> recebe a intenção</div>
+        <div class="farr">↓</div>
+        <div class="fbox">Consulta <b>memória + conhecimento</b>, planeja</div>
+        <div class="farr">↓</div>
+        <div class="fbox">Aciona <b>ferramentas</b> sob política, em grafo de estado</div>
+        <div class="farr">↓</div>
+        <div class="fbox">Cada passo <b>governado e auditável</b></div>
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:30px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+    <div class="feat" style="border:0"><span class="ck">→</span><div><h4>Multi-provider, sem lock-in</h4><p>Roteamento por perfil de custo/qualidade, fallback automático entre provedores e custo medido por chamada.</p></div></div>
+    <div class="feat" style="border:0"><span class="ck">→</span><div><h4>Composição declarativa</h4><p>O agente compõe primitivas existentes — não gera código solto. Execução visível e reproduzível.</p></div></div>
+    <div class="feat" style="border:0"><span class="ck">→</span><div><h4>Self-building</h4><p>A plataforma usa as próprias ferramentas para se estender — é a primeira usuária de si mesma.</p></div></div>
+  </div>
+</section>
+
+<!-- ARQUITETURA -->
+<section id="arquitetura">
+  <div class="secthead">
+    <div class="kick">② Arquitetura</div>
+    <h2>Engines modulares, com fronteiras garantidas por máquina</h2>
+    <p class="lead" style="margin-top:14px">39 engines em 10 camadas (verificável em <span class="mono">src/engine/</span>). Cada engine é um módulo isolado com boundaries estritos — import indevido entre internals <strong>não passa no CI</strong>. Evolução por camada, sem ruptura.</p>
+  </div>
+  <div class="layers">
+    <div class="lchip"><b>Core AI</b> · <span class="mono">agentStudio · model · prompt · memory · rag</span></div>
+    <div class="lchip"><b>Tooling</b> · <span class="mono">tool · mcp</span></div>
+    <div class="lchip"><b>Experience</b> · <span class="mono">app · dataView · speech</span></div>
+    <div class="lchip"><b>Automation</b> · <span class="mono">process · code</span></div>
+    <div class="lchip"><b>Governance</b> · <span class="mono">security · policy · quota · auditTrail</span></div>
+    <div class="lchip"><b>Data</b> · <span class="mono">data · metadata · cache · queue · file</span></div>
+    <div class="lchip"><b>Monitoring</b> · <span class="mono">monitoring</span></div>
+    <div class="lchip"><b>CI/CD AIOps</b> · <span class="mono">deployment · operations · validation</span></div>
+    <div class="lchip"><b>Ecosystem</b> · <span class="mono">api · plugin · appStore</span></div>
+    <div class="lchip"><b>Learning</b> · <span class="mono">feedback · fineTune · eval · evolution</span></div>
+  </div>
+</section>
+
+<!-- PERFORMANCE -->
+<section id="performance">
+  <div class="pillar">
+    <div class="pl">
+      <div class="ico">⚡</div>
+      <div class="kick">③ Performance & escala</div>
+      <h3>Pensada para escala — observável e resiliente</h3>
+      <p style="color:var(--slate);font-size:14.5px;margin-top:10px">As capacidades de escala estão na arquitetura. Os números de produção chegam com os pilotos.</p>
+      <span class="badge b-parc" style="margin-top:14px"><span class="d"></span> Parcial — capacidade de design</span>
+    </div>
+    <div>
+      <div class="feat"><span class="ck">✓</span><div><h4>Observabilidade e SLO</h4><p>Métricas Prometheus, SLO por tier, detecção de anomalia (z-score/IQR) e cost trace por execução.</p><div class="src">trilha: <code>monitoringEngine</code></div></div></div>
+      <div class="feat"><span class="ck">✓</span><div><h4>Assíncrono e resiliente</h4><p>Fila distribuída com retries, backoff e DLQ; cache em camadas; pools de conexão e detecção de query lenta.</p><div class="src">trilha: <code>queueEngine</code> · <code>cacheEngine</code> · <code>dataEngine</code></div></div></div>
+      <div class="feat"><span class="ck">✓</span><div><h4>Continuidade</h4><p>DR multi-region, auto-scaling e self-healing (desenhado), backup tier-based com RPO/RTO, tracing distribuído (OpenTelemetry).</p><div class="src">trilha: <code>operationsEngine</code></div></div></div>
+      <div class="honest"><b>Honestidade:</b> "self-healing" e DR são capacidades de design — ainda <strong>sem números de escala medidos</strong>, porque a produção é uma plataforma nova. Os benchmarks de carga vêm com os primeiros pilotos.</div>
+    </div>
+  </div>
+</section>
+
+<!-- QUALIDADE -->
+<section id="qualidade">
+  <div class="pillar">
+    <div class="pl">
+      <div class="ico">✅</div>
+      <div class="kick">④ Qualidade & correção</div>
+      <h3>Correção verificada por máquina, não por confiança</h3>
+      <p style="color:var(--slate);font-size:14.5px;margin-top:10px">O princípio é "confiança conquistada por evidência": a plataforma se autoverifica a cada mudança.</p>
+      <span class="badge b-impl" style="margin-top:14px"><span class="d"></span> Implementado</span>
+    </div>
+    <div>
+      <div class="feat"><span class="ck">✓</span><div><h4>6 dimensões de invariantes (PC1–PC6)</h4><p>Isolamento (probes cross-tenant + RLS via pgTAP), integridade, contratos, resiliência, compliance e evolvability — rodando como gate no CI.</p><div class="src">trilha: <code>validationEngine</code></div></div></div>
+      <div class="feat"><span class="ck">✓</span><div><h4>Qualidade de IA como gate</h4><p>LLM-as-Judge e testes baseados em propriedade barram regressão antes de promover um fluxo.</p><div class="src">trilha: <code>evalEngine</code></div></div></div>
+      <div class="feat"><span class="ck">✓</span><div><h4>Contratos e testes</h4><p>Contratos de API (OpenAPI) e de eventos (AsyncAPI) verificados; testes co-localizados ao código.</p><div class="src">trilha: <code>validationEngine</code> · co-located tests</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- GOVERNANCA -->
+<section id="governanca">
+  <div class="pillar">
+    <div class="pl">
+      <div class="ico">⚖️</div>
+      <div class="kick">⑤ Governança</div>
+      <h3>Limites na arquitetura — não no código de cada app</h3>
+      <p style="color:var(--slate);font-size:14.5px;margin-top:10px">Política declarativa que o runtime aplica em toda a plataforma, com pessoa no circuito quando importa.</p>
+      <span class="badge b-impl" style="margin-top:14px"><span class="d"></span> Implementado</span>
+    </div>
+    <div>
+      <div class="feat"><span class="ck">✓</span><div><h4>Políticas declarativas + HITL</h4><p>Guardrails versionados (checksum), avaliados com cache e explain; aprovação humana (human-in-the-loop) em ações sensíveis.</p><div class="src">trilha: <code>policyEngine</code></div></div></div>
+      <div class="feat"><span class="ck">✓</span><div><h4>Cotas e entitlements</h4><p>Rate limiting, usage tracking e enforcement por tenant; reserva atômica e overrides aprovados.</p><div class="src">trilha: <code>quotaEngine</code></div></div></div>
+      <div class="feat"><span class="ck">✓</span><div><h4>Consentimento e auditoria</h4><p>Ciclo de consentimento GDPR/LGPD e trilha de auditoria imutável por hash-chain (ver Segurança).</p><div class="src">trilha: <code>securityEngine</code> · <code>auditTrailEngine</code></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SEGURANCA -->
+<section id="seguranca">
+  <div class="pillar">
+    <div class="pl">
+      <div class="ico">🔒</div>
+      <div class="kick">⑥ Segurança</div>
+      <h3>Segurança e privacidade na fundação</h3>
+      <p style="color:var(--slate);font-size:14.5px;margin-top:10px">Multi-tenancy forte, criptografia e masking — desde o primeiro dia, sem o cliente configurar.</p>
+      <span class="badge b-impl" style="margin-top:14px"><span class="d"></span> Implementado</span>
+    </div>
+    <div>
+      <div class="feat"><span class="ck">✓</span><div><h4>BYOK — chave do cliente</h4><p>Traga a própria chave KMS (AWS/GCP/Azure). Crypto-shredding: revogou a chave, os dados ficam ilegíveis na hora — independente da plataforma.</p><div class="src">trilha: <code>securityEngine · spec-byok</code></div></div></div>
+      <div class="feat"><span class="ck">✓</span><div><h4>Isolamento multi-tenant</h4><p>Schema dedicado por cliente + RLS como backstop. O <span class="mono">tenantId</span> nunca vem do payload — deriva do contexto da requisição.</p><div class="src">trilha: <code>securityEngine</code> · <code>dataEngine</code></div></div></div>
+      <div class="feat"><span class="ck">✓</span><div><h4>Masking de PII e content safety</h4><p>Dados sensíveis mascarados (4 estratégias) antes de chegar ao LLM; guardas contra prompt-injection/jailbreak.</p><div class="src">trilha: <code>securityEngine · spec-content-safety</code></div></div></div>
+      <div class="feat"><span class="ck">✓</span><div><h4>Auth + audit hash-chain</h4><p>Dual token + RBAC; trilha SHA-256 append-only — adulteração é criptograficamente detectável e verificável por tenant.</p><div class="src">trilha: <code>securityEngine</code> · <code>auditTrailEngine · spec-hash-chain</code></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- MATURIDADE -->
+<section id="maturidade">
+  <div class="secthead">
+    <div class="kick">⑦ Maturidade & compliance</div>
+    <h2>O que está pronto, com honestidade</h2>
+    <p class="lead" style="margin-top:14px">A plataforma escaneia controles SOC2 (CC6/CC7/CC8) e GDPR (Art. 17/20/30/32) continuamente — verificação automática a cada mudança, não checklist manual.</p>
+  </div>
+  <table>
+    <thead><tr><th>Pilar</th><th>O que já entregamos</th><th>Status</th><th>Próximo passo</th></tr></thead>
+    <tbody>
+      <tr><td><b>AI-first</b></td><td>Orquestração multi-agente governada; multi-provider com fallback e custo medido</td><td><span class="badge b-impl"><span class="d"></span>Implementado</span></td><td class="next">Mais padrões de autonomia</td></tr>
+      <tr><td><b>Segurança</b></td><td>BYOK, masking de PII, RBAC, audit hash-chain</td><td><span class="badge b-impl"><span class="d"></span>Implementado</span></td><td class="next">Fail-closed amplo + pen-test externo</td></tr>
+      <tr><td><b>Governança</b></td><td>Políticas+HITL, cotas/entitlements, consentimento</td><td><span class="badge b-impl"><span class="d"></span>Implementado</span></td><td class="next">Painel self-service de governança</td></tr>
+      <tr><td><b>Qualidade</b></td><td>Invariantes PC1–PC6, LLM-as-Judge, contratos</td><td><span class="badge b-impl"><span class="d"></span>Implementado</span></td><td class="next">Cobertura de carga em escala</td></tr>
+      <tr><td><b>Performance</b></td><td>SLO, cost trace, DR multi-region, self-healing (design)</td><td><span class="badge b-parc"><span class="d"></span>Parcial</span></td><td class="next">Números de escala em produção (pós-piloto)</td></tr>
+      <tr><td><b>Compliance</b></td><td>Scanners SOC2/GDPR contínuos</td><td><span class="badge b-parc"><span class="d"></span>Parcial</span></td><td class="next">Certificação SOC2 Type II (auditoria externa)</td></tr>
+    </tbody>
+  </table>
+  <div class="honest"><b>Transparência:</b> os controles já são escaneados pela plataforma, mas a <strong>certificação SOC2 formal</strong> (auditoria de terceiro) e os <strong>números de escala</strong> estão no roadmap — somos uma plataforma nova. Preferimos provar a prometer; esta transparência é parte da avaliação.</div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="avaliar">
+  <div class="wrap">
+    <div class="kick" style="color:var(--sky)">Avaliação técnica</div>
+    <h2>Abra o capô com a gente</h2>
+    <p class="lead">Damos acesso ao data room técnico (arch docs, specs, evidências), uma sessão de arquitetura com engenharia e um ambiente de avaliação isolado.</p>
+    <div class="ctab">
+      <a class="btn btn-primary" href="#">Acessar o data room técnico</a>
+      <a class="btn btn-ghost" href="#">Agendar sessão de arquitetura</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="brand" style="color:#fff"><span class="dot"></span>fluxomind</div>
+    <div>Confiança conquistada por evidência.</div>
+    <div>© 2026 Fluxomind</div>
+  </div>
+</footer>
+</body>
+</html>
