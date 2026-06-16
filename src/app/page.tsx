@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import DemoBuilder from '@/components/DemoBuilder';
-import { PLATFORM_LOGIN, PLATFORM_SIGNUP } from '@/lib/platform';
+import SiteHeader from '@/components/SiteHeader';
+import SiteFooter from '@/components/SiteFooter';
+import { PLATFORM_SIGNUP } from '@/lib/platform';
 
 export default function Home() {
   return (
@@ -10,24 +12,7 @@ export default function Home() {
       </div>
 
       {/* NAV */}
-      <nav>
-        <div className="wrap">
-          <div className="brand">
-            <span className="dot" />
-            fluxomind
-          </div>
-          <div className="navlinks">
-            <a href="#como">Como funciona</a>
-            <a href="#usos">O que dá pra fazer</a>
-            <a href="#seguranca">Segurança</a>
-            <a href="#faq">Dúvidas</a>
-            <a href={PLATFORM_LOGIN}>Entrar</a>
-          </div>
-          <a className="btn btn-primary nav-cta" href={PLATFORM_SIGNUP}>
-            Começar grátis
-          </a>
-        </div>
-      </nav>
+      <SiteHeader cta={{ label: 'Começar grátis', href: PLATFORM_SIGNUP }} />
 
       {/* HERO */}
       <header className="hero hero--split">
@@ -442,21 +427,7 @@ export default function Home() {
       </section>
 
       {/* FOOTER */}
-      <footer>
-        <div className="wrap">
-          <div className="brand">
-            <span className="dot" />
-            fluxomind
-          </div>
-          <div>Monte o sistema da sua operação só conversando.</div>
-          <div style={{ textAlign: 'right' }}>
-            <div>© 2026 Fluxomind · FLUXOMIND LTDA — CNPJ: 60.162.547/0001-15</div>
-            <Link href="/terms" style={{ color: '#8b9099' }}>
-              Termos de Uso
-            </Link>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter tagline="Monte o sistema da sua operação só conversando." />
     </div>
   );
 }

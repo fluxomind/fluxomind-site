@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import SiteHeader from '@/components/SiteHeader';
+import SiteFooter from '@/components/SiteFooter';
 
 export const metadata: Metadata = {
   title: 'Fluxomind — para empresas: acelere suas implementações',
@@ -15,30 +17,11 @@ export default function Enterprise() {
       </div>
 
       {/* NAV */}
-      <nav>
-        <div className="wrap">
-          <div className="brand">
-            <span className="dot" />
-            fluxomind
-          </div>
-          <div className="navlinks">
-            <a href="#usos">Como adotar</a>
-            <a href="#fit">Governança &amp; segurança</a>
-            <a href="#modelo">Modelo de adoção</a>
-            <Link href="/plataforma">Avaliação técnica</Link>
-          </div>
-          <a className="btn btn-primary nav-cta" href="#contato">
-            Falar com o time enterprise
-          </a>
-        </div>
-      </nav>
+      <SiteHeader cta={{ label: 'Falar com o time enterprise', href: '#contato' }} />
 
       {/* HERO */}
       <header className="hero">
         <div className="wrap">
-          <Link className="back" href="/">
-            ← visão geral
-          </Link>
           <div>
             <span className="pill">Para empresas · programa enterprise &amp; design partners</span>
           </div>
@@ -280,16 +263,7 @@ export default function Enterprise() {
         </div>
       </section>
 
-      <footer>
-        <div className="wrap">
-          <div className="brand">
-            <span className="dot" />
-            fluxomind
-          </div>
-          <div>Seu acelerador de operações e implementações.</div>
-          <div>© 2026 Fluxomind</div>
-        </div>
-      </footer>
+      <SiteFooter tagline="Seu acelerador de operações e implementações." />
     </div>
   );
 }

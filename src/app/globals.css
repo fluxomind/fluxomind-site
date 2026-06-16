@@ -80,6 +80,7 @@ nav { position: sticky; top: 0; z-index: 50; background: rgba(14,15,17,.8); back
 nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; }
 .brand { display: flex; align-items: center; gap: 10px; color: #fff; font-weight: 800; font-size: 20px; letter-spacing: -.02em; }
 .brand .dot { width: 11px; height: 11px; border-radius: 50%; background: var(--blue); box-shadow: 0 0 16px 2px rgba(43,102,221,.9); }
+.brand .brandlogo { height: 26px; width: auto; display: block; }
 .navlinks { display: flex; gap: 24px; align-items: center; }
 .navlinks a { color: #C7CBD1; font-size: 14.5px; font-weight: 500; }
 .navlinks a:hover { color: #fff; }
@@ -349,7 +350,11 @@ td .next { color: var(--blue); }
 footer { background: #070809; color: #8b9099; padding: 40px 0; font-size: 14px; }
 footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; align-items: center; }
 footer .brand { color: #fff; }
+footer .brand .brandlogo { height: 24px; }
 footer a:hover { color: #fff; }
+footer .footlinks { display: flex; gap: 18px; flex-wrap: wrap; }
+footer .footmeta { text-align: right; font-size: 13px; line-height: 1.7; color: #8b9099; }
+@media (max-width: 720px) { footer .footmeta { text-align: left; } }
 
 /* ---------- acessibilidade: respeitar redução de movimento ---------- */
 @media (prefers-reduced-motion: reduce) {

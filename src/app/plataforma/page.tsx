@@ -1,5 +1,6 @@
-import Link from 'next/link';
 import type { Metadata } from 'next';
+import SiteHeader from '@/components/SiteHeader';
+import SiteFooter from '@/components/SiteFooter';
 
 export const metadata: Metadata = {
   title: 'Fluxomind — Plataforma: avaliação técnica',
@@ -16,31 +17,11 @@ export default function Plataforma() {
       </div>
 
       {/* NAV */}
-      <nav>
-        <div className="wrap">
-          <div className="brand">
-            <span className="dot" />
-            fluxomind
-          </div>
-          <div className="navlinks">
-            <a href="#aifirst">AI-first</a>
-            <a href="#performance">Performance</a>
-            <a href="#qualidade">Qualidade</a>
-            <a href="#governanca">Governança</a>
-            <a href="#seguranca">Segurança</a>
-          </div>
-          <a className="btn btn-primary nav-cta" href="#avaliar">
-            Avaliar a fundo
-          </a>
-        </div>
-      </nav>
+      <SiteHeader cta={{ label: 'Avaliar a fundo', href: '#avaliar' }} />
 
       {/* HERO */}
       <header className="hero">
         <div className="wrap">
-          <Link className="back" href="/">
-            ← voltar para a visão geral
-          </Link>
           <div>
             <span className="pill">Para times técnicos · CTO, Head of Platform, Segurança</span>
           </div>
@@ -596,16 +577,7 @@ export default function Plataforma() {
         </div>
       </section>
 
-      <footer>
-        <div className="wrap">
-          <div className="brand">
-            <span className="dot" />
-            fluxomind
-          </div>
-          <div>Confiança conquistada por evidência.</div>
-          <div>© 2026 Fluxomind</div>
-        </div>
-      </footer>
+      <SiteFooter tagline="Confiança conquistada por evidência." />
     </div>
   );
 }
