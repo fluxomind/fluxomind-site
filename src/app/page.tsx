@@ -1,191 +1,456 @@
-'use client';
-
-import Image from 'next/image';
-import { Zap, Target, Heart, Cpu, Shield, Layers } from 'lucide-react';
+import Link from 'next/link';
+import DemoBuilder from '@/components/DemoBuilder';
 
 export default function Home() {
-  const currentYear = new Date().getFullYear();
-
   return (
-    <div className="min-h-screen bg-white">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <div className="flex items-center">
-              <Image src="/logoSVG/logo-light.svg" alt="FluxoMind" width={120} height={32} className="h-8 w-auto" />
+    <div className="page-home">
+      <div className="note">
+        Protótipo conceitual da nova home (linguagem de venda). Conteúdo demonstrativo.
+      </div>
+
+      {/* NAV */}
+      <nav>
+        <div className="wrap">
+          <div className="brand">
+            <span className="dot" />
+            fluxomind
+          </div>
+          <div className="navlinks">
+            <a href="#como">Como funciona</a>
+            <a href="#usos">O que dá pra fazer</a>
+            <a href="#seguranca">Segurança</a>
+            <a href="#faq">Dúvidas</a>
+          </div>
+          <a className="btn btn-primary nav-cta" href="#comecar">
+            Começar grátis
+          </a>
+        </div>
+      </nav>
+
+      {/* HERO */}
+      <header className="hero hero--split">
+        <div className="wrap">
+          <div>
+            <span className="pill">
+              <span className="lz" /> Operação assistida por IA · beta privado
+            </span>
+            <h1>
+              Monte o sistema da sua operação <span className="g">só conversando.</span>
+            </h1>
+            <p className="hsub">
+              Cadastros, painéis, automações e cobranças prontos em minutos — sem programar
+              e sem esperar a TI. Você descreve o que precisa; a Fluxomind monta e opera com você.
+            </p>
+            <div className="herocta">
+              <a className="btn btn-primary btn-lg" href="#comecar">
+                Criar meu sistema grátis
+              </a>
+              <a className="btn btn-ghost btn-lg" href="#demo">
+                Ver funcionando ↓
+              </a>
             </div>
-            <div className="flex items-center space-x-6">
-              <nav className="hidden md:flex space-x-8">
-                <a href="#sobre" className="text-gray-600 hover:text-gray-900 transition-colors">
-                  Sobre
-                </a>
-                <a href="#tecnologia" className="text-gray-600 hover:text-gray-900 transition-colors">
-                  Tecnologia
-                </a>
-                <a href="#valores" className="text-gray-600 hover:text-gray-900 transition-colors">
-                  Valores
-                </a>
-              </nav>
+            <div className="reassure">
+              <span>
+                <b>✓</b> Sem cartão de crédito
+              </span>
+              <span>
+                <b>✓</b> Pronto em minutos
+              </span>
+              <span>
+                <b>✓</b> Seus dados isolados e seguros
+              </span>
             </div>
           </div>
+
+          <DemoBuilder />
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-gray-50 to-white overflow-hidden">
-        <div className="absolute inset-0 opacity-10 bg-blue-100" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
-          <div className="text-center">
-            <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-              Evolua com IA.{' '}
-              <span className="text-blue-600">Escale sem limites.</span>
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-4xl mx-auto leading-relaxed">
-              A Fluxomind é uma startup brasileira criada para democratizar o uso da inteligência artificial em empresas de qualquer tamanho.
-            </p>
-            <p className="text-lg text-gray-500 mb-12 max-w-3xl mx-auto">
-              Estamos desenvolvendo uma plataforma IA-First, no-code e baseada em metadados — combinando velocidade, arquitetura sólida e simplicidade de uso.
-            </p>
+      {/* AUDIENCE SELECTOR */}
+      <section style={{ padding: '54px 0 0' }}>
+        <div className="center" style={{ marginBottom: 30 }}>
+          <div className="kick">Por onde você quer começar?</div>
+          <h2 style={{ fontSize: 'clamp(24px,3vw,32px)' }}>Cada perfil, um caminho</h2>
+        </div>
+        <div className="wrap">
+          <div className="aud">
+            <a href="#comecar" className="audcard">
+              <div className="ai">🚀</div>
+              <h3>Quero resolver agora</h3>
+              <div className="role">Gestor / time de operação</div>
+              <p>Monte seu sistema em minutos, conversando. Comece grátis, sem TI.</p>
+              <span className="go">Montar agora →</span>
+            </a>
+            <Link href="/plataforma" className="audcard">
+              <div className="ai">🔍</div>
+              <h3>Quero avaliar a fundo</h3>
+              <div className="role">Time técnico / segurança</div>
+              <p>
+                AI-first, performance, qualidade, governança e segurança — com evidência e
+                status honesto.
+              </p>
+              <span className="go">Ver a plataforma por dentro →</span>
+            </Link>
+            <Link href="/enterprise" className="audcard">
+              <div className="ai">🏢</div>
+              <h3>Quero adotar em escala</h3>
+              <div className="role">Empresa / programa enterprise</div>
+              <p>
+                Use a Fluxomind como acelerador das suas implementações, com governança de
+                procurement.
+              </p>
+              <span className="go">Ver programa enterprise →</span>
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* Sobre a Fluxomind */}
-      <section id="sobre" className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-              Sobre a FluxoMind
-            </h2>
-            <div className="max-w-4xl mx-auto">
-              <p className="text-lg text-gray-600 mb-6">
-                Acreditamos que a inteligência artificial deve ser acessível, segura e escalável. Nossa missão é permitir que empresas construam aplicações, automações e fluxos de decisão de forma inteligente, sem depender de times técnicos ou altos investimentos.
+      {/* PROBLEM */}
+      <section>
+        <div className="wrap">
+          <div className="center">
+            <div className="kick">Soa familiar?</div>
+            <h2>Sua operação roda no improviso — e isso custa caro</h2>
+            <p className="lead" style={{ marginTop: 14 }}>
+              Planilha que ninguém entende, retrabalho, e tudo dependendo de uma pessoa ou da
+              fila da TI.
+            </p>
+          </div>
+          <div className="prob">
+            <div className="pcard">
+              <div className="pi">🗂️</div>
+              <h3>Tudo espalhado</h3>
+              <p>
+                Informação em planilhas, e-mails e na cabeça das pessoas. Ninguém tem a visão
+                completa.
               </p>
-              <p className="text-lg text-gray-600">
-                A plataforma da Fluxomind abstrai a complexidade do desenvolvimento com um motor de inteligência artificial, automações visuais e uma infraestrutura que isola e protege os dados de cada cliente. Tudo pensado para acelerar a entrega de valor real com responsabilidade e performance.
+            </div>
+            <div className="pcard">
+              <div className="pi">⏳</div>
+              <h3>Sempre esperando</h3>
+              <p>Toda mudança vira pedido pra TI ou um dev caro — e leva semanas pra sair.</p>
+            </div>
+            <div className="pcard">
+              <div className="pi">🔁</div>
+              <h3>Trabalho repetitivo</h3>
+              <p>
+                Horas todo mês fazendo cobrança, atualizando relatório e copiando dado de um
+                lugar pro outro.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Missão, Visão, Valores */}
-      <section id="valores" className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-3 gap-12">
-            {/* Missão */}
-            <div className="text-center">
-              <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Target className="h-8 w-8 text-blue-600" />
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Missão</h3>
-              <p className="text-gray-600">
-                Democratizar o desenvolvimento de software com inteligência artificial — tornando a criação de sistemas acessível a todos.
-              </p>
+      {/* TRANSFORMATION */}
+      <section style={{ paddingTop: 0 }}>
+        <div className="wrap">
+          <div className="center">
+            <div className="kick">A virada</div>
+            <h2>Do improviso ao sistema que trabalha por você</h2>
+          </div>
+          <div className="fromto">
+            <div className="ft from">
+              <h4>Hoje</h4>
+              <ul>
+                <li>
+                  <span className="x">✕</span> Planilhas que quebram e se perdem
+                </li>
+                <li>
+                  <span className="x">✕</span> Semanas esperando a TI
+                </li>
+                <li>
+                  <span className="x">✕</span> Cobrança e relatório na mão, todo mês
+                </li>
+                <li>
+                  <span className="x">✕</span> Cada ferramenta de um jeito, nada conversa
+                </li>
+              </ul>
             </div>
-
-            {/* Visão */}
-            <div className="text-center">
-              <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Zap className="h-8 w-8 text-green-600" />
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Visão</h3>
-              <p className="text-gray-600">
-                Ser a principal plataforma IA-First da América Latina, referência em acessibilidade, eficiência e impacto empresarial com inteligência artificial.
-              </p>
-            </div>
-
-            {/* Valores */}
-            <div className="text-center">
-              <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Heart className="h-8 w-8 text-purple-600" />
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Valores</h3>
-              <ul className="text-gray-600 space-y-2 text-left">
-                <li>• <strong>Acessibilidade:</strong> IA para todos, sem barreiras técnicas</li>
-                <li>• <strong>Inovação:</strong> Tecnologia de ponta com simplicidade</li>
-                <li>• <strong>Transparência:</strong> Processos claros e resultados mensuráveis</li>
-                <li>• <strong>Colaboração:</strong> Crescimento conjunto com nossos clientes</li>
-                <li>• <strong>Excelência:</strong> Qualidade em cada solução entregue</li>
+            <div className="ftarrow">→</div>
+            <div className="ft to">
+              <h4>Com a Fluxomind</h4>
+              <ul>
+                <li>
+                  <span className="c">✓</span> Um sistema sob medida, montado em minutos
+                </li>
+                <li>
+                  <span className="c">✓</span> Você mesmo muda, conversando
+                </li>
+                <li>
+                  <span className="c">✓</span> Cobranças e relatórios no automático
+                </li>
+                <li>
+                  <span className="c">✓</span> Tudo num lugar só, que aprende com o uso
+                </li>
               </ul>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Tecnologia IA-First */}
-      <section id="tecnologia" className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-              Tecnologia IA-First
-            </h2>
-            <p className="text-lg text-gray-600 max-w-4xl mx-auto mb-12">
-              Nossa abordagem combina IA generativa, modelagem baseada em metadados e uma experiência de construção visual para que empresas possam criar e evoluir seus próprios sistemas sem depender de desenvolvedores.
-            </p>
+      {/* HOW IT WORKS */}
+      <section id="como" className="why">
+        <div className="wrap">
+          <div className="center">
+            <div className="kick">Como funciona</div>
+            <h2>Do pedido ao sistema pronto, em 3 passos</h2>
           </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-gray-50 p-8 rounded-xl">
-              <div className="bg-blue-100 w-12 h-12 rounded-lg flex items-center justify-center mb-6">
-                <Cpu className="h-6 w-6 text-blue-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">IA Generativa</h3>
-              <p className="text-gray-600">
-                Tecnologia avançada de inteligência artificial que permite criação automática de conteúdo e soluções personalizadas.
+          <div className="steps3">
+            <div className="s3">
+              <div className="n">1</div>
+              <h4>Você descreve</h4>
+              <p>Escreva em português o que precisa organizar ou automatizar. Sem menus, sem código.</p>
+            </div>
+            <div className="s3">
+              <div className="n">2</div>
+              <h4>A Fluxomind monta</h4>
+              <p>
+                Ela cria os cadastros, as telas, os relatórios e as automações — e te mostra cada
+                passo na tela.
               </p>
             </div>
-
-            <div className="bg-gray-50 p-8 rounded-xl">
-              <div className="bg-green-100 w-12 h-12 rounded-lg flex items-center justify-center mb-6">
-                <Layers className="h-6 w-6 text-green-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">Metadados</h3>
-              <p className="text-gray-600">
-                Modelagem inteligente baseada em metadados que facilita a criação e manutenção de sistemas complexos.
-              </p>
-            </div>
-
-            <div className="bg-gray-50 p-8 rounded-xl">
-              <div className="bg-purple-100 w-12 h-12 rounded-lg flex items-center justify-center mb-6">
-                <Shield className="h-6 w-6 text-purple-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">Arquitetura Segura</h3>
-              <p className="text-gray-600">
-                Cada camada da plataforma foi pensada para ser extensível, segura e pronta para escala empresarial.
-              </p>
+            <div className="s3">
+              <div className="n">3</div>
+              <h4>Você opera e melhora</h4>
+              <p>Use no dia a dia, no computador ou no WhatsApp. Quer mudar algo? É só pedir.</p>
             </div>
           </div>
-
-          <div className="mt-12 text-center">
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Desde o fluxo de automações até a forma como dados e layouts são definidos semanticamente, tudo foi projetado para máxima eficiência e facilidade de uso.
-            </p>
+          <div className="center" style={{ marginTop: 44 }}>
+            <a className="btn btn-primary btn-lg" href="#comecar">
+              Montar meu primeiro sistema grátis
+            </a>
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="mb-4 md:mb-0">
-              <Image src="/logoSVG/logo-dark.svg" alt="FluxoMind" width={120} height={32} className="h-8 w-auto" />
+      {/* USE CASES */}
+      <section id="usos">
+        <div className="wrap">
+          <div className="center">
+            <div className="kick">O que dá pra fazer</div>
+            <h2>Um sistema para cada parte da sua operação</h2>
+            <p className="lead" style={{ marginTop: 14 }}>
+              Comece por uma dor — e vá expandindo conforme cresce.
+            </p>
+          </div>
+          <div className="uc">
+            <div className="ucc">
+              <div className="ui">💸</div>
+              <h4>Cobrança e inadimplência</h4>
+              <p>Veja quem está em atraso, quanto, e dispare lembretes — só com seu OK.</p>
             </div>
-            <div className="text-center md:text-right">
-              <p className="text-gray-400">
-                © {currentYear} Fluxomind — Plataforma IA-First no-code para empresas de qualquer tamanho.
-              </p>
-              <p className="text-gray-500 text-sm mt-2">
-                FLUXOMIND LTDA — CNPJ: 60.162.547/0001-15
-              </p>
-              <div className="mt-3">
-                <a href="/terms" className="text-gray-400 hover:text-white text-sm transition-colors">
-                  Termos de Uso
-                </a>
+            <div className="ucc">
+              <div className="ui">📈</div>
+              <h4>Funil de vendas</h4>
+              <p>Acompanhe oportunidades, próximos passos e follow-ups automáticos.</p>
+            </div>
+            <div className="ucc">
+              <div className="ui">🤝</div>
+              <h4>Onboarding de clientes</h4>
+              <p>Checklists, prazos e avisos para nenhum cliente novo cair no esquecimento.</p>
+            </div>
+            <div className="ucc">
+              <div className="ui">✅</div>
+              <h4>Aprovações e contratos</h4>
+              <p>Fluxos de aprovação em níveis, com histórico e nada perdido no e-mail.</p>
+            </div>
+            <div className="ucc">
+              <div className="ui">💬</div>
+              <h4>Atendimento no WhatsApp</h4>
+              <p>Um assistente que responde e executa de verdade — não só conversa.</p>
+            </div>
+            <div className="ucc">
+              <div className="ui">📊</div>
+              <h4>Painéis e relatórios</h4>
+              <p>Números atualizados ao vivo, sem ninguém montar planilha no fim do mês.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* WHY DIFFERENT */}
+      <section className="why">
+        <div className="wrap">
+          <div className="center">
+            <div className="kick">Por que é diferente</div>
+            <h2>Não é mais uma ferramenta — é um sistema vivo</h2>
+          </div>
+          <div className="whyg">
+            <div className="wcard">
+              <div className="wi">🧠</div>
+              <div>
+                <h4>Entende o seu negócio</h4>
+                <p>
+                  Quanto mais você usa, mais ela entende a sua operação e melhora sozinha. Uma
+                  planilha nunca faz isso.
+                </p>
               </div>
             </div>
+            <div className="wcard">
+              <div className="wi">⚡</div>
+              <div>
+                <h4>Pronto hoje, não em meses</h4>
+                <p>
+                  O primeiro sistema sai na primeira conversa. Mudanças saem na hora, não viram
+                  projeto.
+                </p>
+              </div>
+            </div>
+            <div className="wcard">
+              <div className="wi">📱</div>
+              <div>
+                <h4>Funciona onde você está</h4>
+                <p>No computador, no WhatsApp e na voz. O mesmo sistema, em qualquer canal.</p>
+              </div>
+            </div>
+            <div className="wcard">
+              <div className="wi">🌱</div>
+              <div>
+                <h4>Cresce com você</h4>
+                <p>
+                  Do primeiro cadastro à operação inteira da empresa — sem trocar de ferramenta no
+                  meio do caminho.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SECURITY */}
+      <section className="sec" id="seguranca">
+        <div className="wrap">
+          <div className="center">
+            <div className="kick" style={{ color: 'var(--sky)' }}>
+              Seguro de verdade
+            </div>
+            <h2 style={{ color: '#fff' }}>Seus dados são seus — isolados e protegidos</h2>
+            <p className="lead" style={{ color: '#A9AEB8', marginTop: 14 }}>
+              Segurança de nível empresarial desde o primeiro dia, sem você precisar configurar
+              nada.
+            </p>
+          </div>
+          <div className="secg">
+            <div className="secc">
+              <div className="si">🔒</div>
+              <h4>Dados isolados</h4>
+              <p>Cada empresa tem seu espaço próprio. Ninguém vê o que é seu.</p>
+            </div>
+            <div className="secc">
+              <div className="si">🔑</div>
+              <h4>Você controla a chave</h4>
+              <p>
+                Empresas maiores podem usar a própria chave de criptografia e revogar o acesso
+                quando quiserem.
+              </p>
+            </div>
+            <div className="secc">
+              <div className="si">🛡️</div>
+              <h4>Privacidade por padrão</h4>
+              <p>Dados sensíveis são protegidos automaticamente antes de qualquer processamento.</p>
+            </div>
+            <div className="secc">
+              <div className="si">🧾</div>
+              <h4>Histórico à prova</h4>
+              <p>Trilha de auditoria que registra tudo e não pode ser adulterada.</p>
+            </div>
+          </div>
+          <div className="center" style={{ marginTop: 30 }}>
+            <Link
+              className="btn btn-ghost"
+              href="/plataforma"
+              style={{ color: 'var(--sky)', borderColor: 'rgba(77,171,247,.4)' }}
+            >
+              É técnico e quer avaliar a fundo? Veja a plataforma por dentro →
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section id="faq">
+        <div className="wrap">
+          <div className="center">
+            <div className="kick">Dúvidas comuns</div>
+            <h2>O que costumam perguntar</h2>
+          </div>
+          <div className="faq">
+            <div className="qa">
+              <h4>Preciso saber programar?</h4>
+              <p>
+                Não. Você conversa em português e a plataforma monta tudo. Se um dia precisar de
+                algo muito específico, dá pra ir além — mas a maioria nunca precisa.
+              </p>
+            </div>
+            <div className="qa">
+              <h4>Meus dados ficam seguros?</h4>
+              <p>
+                Sim. Cada empresa fica isolada, os dados são criptografados, e empresas maiores
+                podem usar a própria chave. Você manda nos seus dados.
+              </p>
+            </div>
+            <div className="qa">
+              <h4>Vou ter que jogar fora minha planilha ou meu CRM?</h4>
+              <p>
+                Não precisa. Comece centralizando o que está espalhado, do seu jeito, e expanda no
+                seu ritmo.
+              </p>
+            </div>
+            <div className="qa">
+              <h4>Quanto tempo até começar a usar?</h4>
+              <p>
+                Minutos. Seu primeiro sistema sai já na primeira conversa — você viu acontecer aqui
+                em cima.
+              </p>
+            </div>
+            <div className="qa">
+              <h4>Quanto custa?</h4>
+              <p>
+                Estamos em beta privado: você começa grátis. Os planos são definidos conforme sua
+                empresa cresce no uso — sem surpresa.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* OFFER */}
+      <section className="offer" id="comecar">
+        <div className="wrap">
+          <div className="kick" style={{ color: 'var(--sky)' }}>
+            Comece agora
+          </div>
+          <h2>Monte seu primeiro sistema hoje</h2>
+          <p className="lead">
+            Escreva o que sua operação precisa e veja pronto em minutos. Sem cartão, sem
+            compromisso.
+          </p>
+          <div className="offerbtns">
+            <a className="btn btn-primary btn-lg" href="#demo">
+              Criar meu sistema grátis
+            </a>
+            <a className="btn btn-ghost btn-lg" href="#">
+              Falar com a gente
+            </a>
+          </div>
+          <div className="scar">⏳ Beta privado — estamos abrindo poucas vagas por mês</div>
+        </div>
+      </section>
+
+      {/* FOOTER */}
+      <footer>
+        <div className="wrap">
+          <div className="brand">
+            <span className="dot" />
+            fluxomind
+          </div>
+          <div>Monte o sistema da sua operação só conversando.</div>
+          <div style={{ textAlign: 'right' }}>
+            <div>© 2026 Fluxomind · FLUXOMIND LTDA — CNPJ: 60.162.547/0001-15</div>
+            <Link href="/terms" style={{ color: '#8b9099' }}>
+              Termos de Uso
+            </Link>
           </div>
         </div>
       </footer>
