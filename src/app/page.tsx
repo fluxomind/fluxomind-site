@@ -53,45 +53,6 @@ export default function Home() {
         </div>
       </header>
 
-      {/* AUDIENCE SELECTOR */}
-      <section style={{ padding: '54px 0 0' }}>
-        <div className="center" style={{ marginBottom: 30 }}>
-          <div className="kick">Por onde você quer começar?</div>
-          <h2 style={{ fontSize: 'clamp(24px,3vw,32px)' }}>Cada perfil, um caminho</h2>
-        </div>
-        <div className="wrap">
-          <div className="aud">
-            <a href="#demo" className="audcard">
-              <div className="ai">🚀</div>
-              <h3>Quero resolver agora</h3>
-              <div className="role">Gestor / time de operação</div>
-              <p>Monte seu sistema em minutos, conversando. Comece grátis, sem TI.</p>
-              <span className="go">Montar agora →</span>
-            </a>
-            <Link href="/plataforma" className="audcard">
-              <div className="ai">🔍</div>
-              <h3>Quero avaliar a fundo</h3>
-              <div className="role">Time técnico / segurança</div>
-              <p>
-                AI-first, performance, qualidade, governança e segurança — com evidência e
-                status honesto.
-              </p>
-              <span className="go">Ver a plataforma por dentro →</span>
-            </Link>
-            <Link href="/enterprise" className="audcard">
-              <div className="ai">🏢</div>
-              <h3>Quero adotar em escala</h3>
-              <div className="role">Empresa / programa enterprise</div>
-              <p>
-                Use a Fluxomind como acelerador das suas implementações, com governança de
-                procurement.
-              </p>
-              <span className="go">Ver programa enterprise →</span>
-            </Link>
-          </div>
-        </div>
-      </section>
-
       {/* PROBLEM */}
       <section>
         <div className="wrap">

@@ -17,7 +17,7 @@ export default function Enterprise() {
       </div>
 
       {/* NAV */}
-      <SiteHeader cta={{ label: 'Falar com o time enterprise', href: '#contato' }} />
+      <SiteHeader cta={{ label: 'Falar com o time', href: '#contato' }} />
 
       {/* HERO */}
       <header className="hero">
