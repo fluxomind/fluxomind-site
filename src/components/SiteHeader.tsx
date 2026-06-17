@@ -22,11 +22,11 @@ export default function SiteHeader({ cta }: { cta: Cta }) {
         </Link>
         <div className="navlinks">
           <Link href="/#usos">O que resolvo</Link>
-          <Link href="/o-que-tem">O que tem</Link>
-          <Link href="/plataforma">Plataforma</Link>
           <Link href="/acelere">Acelere</Link>
-          <Link href="/precos">Preços</Link>
+          <Link href="/o-que-tem">O que tem</Link>
           <Link href="/#seguranca">Segurança</Link>
+          <Link href="/plataforma">Plataforma</Link>
+          <Link href="/precos">Preços</Link>
           <a href={PLATFORM_LOGIN}>Entrar</a>
         </div>
         <a className="btn btn-primary nav-cta" href={cta.href}>
