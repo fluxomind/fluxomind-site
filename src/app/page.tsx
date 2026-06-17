@@ -183,10 +183,12 @@ export default function Home() {
         <div className="wrap">
           <div className="center">
             <div className="kick">O que resolvo</div>
-            <h2>Você descreve a dor. Ela resolve — com a prova na tela.</h2>
+            <h2>Planilha, e-mail, dez ferramentas — e alguém reconciliando tudo na mão.</h2>
             <p className="lead" style={{ marginTop: 14 }}>
-              Comece por uma dor — e vá expandindo conforme cresce. Em cada caso: você pede em
-              português, ela executa, e nada que toca o mundo sai sem o seu OK.
+              É aí que a sua operação perde horas e a estratégia para. A Fluxomind tira isso das suas
+              costas — não é um chat que responde nem um copilot que sugere: você pede, <strong>ela
+              executa</strong>, com a prova na tela e nada crítico saindo sem o seu OK. Comece por uma
+              dor:
             </p>
           </div>
           <div className="uc">
