@@ -2,12 +2,12 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
-import { PLATFORM_SIGNUP } from '@/lib/platform';
+import { PLATFORM_WAITLIST } from '@/lib/platform';
 
 export const metadata: Metadata = {
-  title: 'Fluxomind — Preços: comece grátis, cresça pagando pelo uso',
+  title: 'Fluxomind — Preços: beta por convite, depois pague só pelo uso',
   description:
-    'Crie sua conta grátis, sem cartão, com um limite de uso claro. Quando precisar de mais, adicione um cartão e amplie — pague só pelo que usar, sem surpresa.',
+    'A Fluxomind está em beta por convite (pré-lançamento). No beta você entra sem custo, com um limite de uso claro pra montar e testar de verdade. Quando o produto abrir, você cresce pagando só pelo que usar — sem surpresa.',
 };
 
 export default function Precos() {
@@ -18,7 +18,7 @@ export default function Precos() {
         clientes — conteúdo demonstrativo.
       </div>
 
-      <SiteHeader cta={{ label: 'Criar meu sistema grátis', href: PLATFORM_SIGNUP }} />
+      <SiteHeader cta={{ label: 'Pedir acesso', href: PLATFORM_WAITLIST }} />
 
       {/* HERO */}
       <header className="hero">
@@ -28,12 +28,12 @@ export default function Precos() {
               Preços
             </div>
             <h1>
-              Comece grátis. <span className="g">Cresça pagando só pelo que usa.</span>
+              Entre no beta. <span className="g">Depois, cresça pagando só pelo que usa.</span>
             </h1>
             <p className="hsub" style={{ margin: '18px auto 0', maxWidth: '52ch' }}>
-              Crie sua conta sem cartão, com um limite de uso claro pra montar e testar de verdade.
-              Quando o valor aparecer, adicione um cartão e amplie — você no controle, sem surpresa
-              na fatura.
+              No beta, você entra sem custo, com um limite de uso claro pra montar e testar de
+              verdade. Quando o produto abrir, você cresce pagando só pelo que usa — cartão só pra
+              ampliar o limite, sem surpresa na fatura.
             </p>
           </div>
         </div>
@@ -45,11 +45,11 @@ export default function Precos() {
           <div className="plans">
             {/* GRÁTIS */}
             <div className="plan">
-              <div className="ptag">Grátis</div>
-              <h3>Comece sem cartão</h3>
+              <div className="ptag">Beta</div>
+              <h3>Comece no beta</h3>
               <div className="price">
                 <b>R$ 0</b>
-                pra começar — sem cartão de crédito
+                no beta, por convite — sem cartão
               </div>
               <p className="desc">Pra provar valor e montar seus primeiros sistemas.</p>
               <ul>
@@ -66,8 +66,8 @@ export default function Precos() {
                   <span className="ck">✓</span> Seus dados isolados e seguros
                 </li>
               </ul>
-              <a className="btn btn-primary" href={PLATFORM_SIGNUP}>
-                Criar meu sistema grátis
+              <a className="btn btn-primary" href={PLATFORM_WAITLIST}>
+                Pedir acesso ao beta
               </a>
             </div>
 
@@ -95,8 +95,8 @@ export default function Precos() {
                   <span className="ck">✓</span> Mais capacidade, automações e canais
                 </li>
               </ul>
-              <a className="btn btn-primary" href={PLATFORM_SIGNUP}>
-                Começar grátis e ampliar quando quiser
+              <a className="btn btn-primary" href={PLATFORM_WAITLIST}>
+                Pedir acesso ao beta
               </a>
             </div>
 
@@ -144,8 +144,8 @@ export default function Precos() {
             <div className="qa">
               <h4>Preciso de cartão pra começar?</h4>
               <p>
-                Não. Você cria a conta grátis, sem cartão, e já monta seu primeiro sistema. O cartão
-                só entra quando você quiser ampliar o limite.
+                Não. O beta é por convite e começa sem custo, sem cartão. O cartão só entra quando
+                você quiser ampliar o limite, conforme o produto abre.
               </p>
             </div>
             <div className="qa">
@@ -169,17 +169,17 @@ export default function Precos() {
           <div className="kick" style={{ color: 'var(--sky)' }}>
             Comece agora
           </div>
-          <h2>Monte seu primeiro sistema hoje</h2>
-          <p className="lead">Grátis, sem cartão. Em minutos você vê funcionando.</p>
+          <h2>Peça seu acesso ao beta</h2>
+          <p className="lead">Beta por convite. Em minutos você vê funcionando.</p>
           <div className="offerbtns">
-            <a className="btn btn-primary btn-lg" href={PLATFORM_SIGNUP}>
-              Criar meu sistema grátis
+            <a className="btn btn-primary btn-lg" href={PLATFORM_WAITLIST}>
+              Pedir acesso ao beta
             </a>
           </div>
         </div>
       </section>
 
-      <SiteFooter tagline="Comece grátis, cresça pagando só pelo que usa." />
+      <SiteFooter tagline="Beta por convite. Depois, pague só pelo que usa." />
     </div>
   );
 }

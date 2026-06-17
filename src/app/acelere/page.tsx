@@ -2,6 +2,9 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
+import { PLATFORM_CONTACT } from '@/lib/platform';
+
+const SIGNATURE = 'Delegue a tarefa. Receba a conclusão com a prova.';
 
 export const metadata: Metadata = {
   title: 'Fluxomind — para empresas: acelere suas implementações',
@@ -17,7 +20,7 @@ export default function Enterprise() {
       </div>
 
       {/* NAV */}
-      <SiteHeader cta={{ label: 'Falar com o time', href: '#contato' }} />
+      <SiteHeader cta={{ label: 'Falar com o time', href: PLATFORM_CONTACT }} />
 
       {/* HERO */}
       <header className="hero">
@@ -25,6 +28,7 @@ export default function Enterprise() {
           <div>
             <span className="pill">Para empresas · programa enterprise &amp; design partners</span>
           </div>
+          <div className="kick" style={{ marginTop: 18 }}>{SIGNATURE}</div>
           <h1>
             Acelere suas implementações <span className="g">com a Fluxomind como motor.</span>
           </h1>
@@ -35,7 +39,7 @@ export default function Enterprise() {
           </p>
           <div className="herocta">
             <a className="btn btn-primary" href="#contato">
-              Falar com o time enterprise
+              Falar com o time
             </a>
             <a className="btn btn-ghost" href="#modelo">
               Ver o programa de adoção
@@ -43,8 +47,8 @@ export default function Enterprise() {
           </div>
           <div className="stat">
             <div className="s">
-              <b>Dias, não trimestres</b>
-              <span>do pedido ao sistema interno no ar</span>
+              <b>Desenhada para entregar em dias</b>
+              <span>do pedido ao sistema interno, sem fila de dev</span>
             </div>
             <div className="s">
               <b>Sem fila de dev</b>
@@ -252,8 +256,8 @@ export default function Enterprise() {
               com o seu time.
             </p>
             <div className="ctab">
-              <a className="btn btn-primary" href="#">
-                Falar com o time enterprise
+              <a className="btn btn-primary" href={PLATFORM_CONTACT}>
+                Falar com o time
               </a>
               <Link className="btn btn-ghost" href="/plataforma">
                 Ver avaliação técnica

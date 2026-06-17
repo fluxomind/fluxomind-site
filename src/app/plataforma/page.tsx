@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
+import { PLATFORM_CONTACT } from '@/lib/platform';
 
 export const metadata: Metadata = {
   title: 'Fluxomind — Plataforma: avaliação técnica',
@@ -22,6 +23,9 @@ export default function Plataforma() {
       {/* HERO */}
       <header className="hero">
         <div className="wrap">
+          <div className="kick" style={{ color: 'var(--sky)' }}>
+            Delegue a tarefa. Receba a conclusão com a prova.
+          </div>
           <div>
             <span className="pill">Para times técnicos · CTO, Head of Platform, Segurança</span>
           </div>
@@ -123,14 +127,67 @@ export default function Plataforma() {
             <div className="feat nb">
               <span className="ck">→</span>
               <div>
-                <h4>Self-building</h4>
+                <h4>Self-building governado</h4>
                 <p>
-                  A plataforma usa as próprias ferramentas para se estender — é a primeira usuária
-                  de si mesma.
+                  Estende o modelo do tenant via ferramentas governadas (create-only), com as
+                  tabelas-base do sistema bloqueadas — dogfooding, não auto-modificação.
                 </p>
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* FLYWHEEL + ATLAS */}
+      <section id="flywheel">
+        <div className="wrap">
+          <div className="secthead">
+            <div className="kick">◆ Flywheel + Atlas</div>
+            <h2>Fica mais inteligente quanto mais é usada</h2>
+            <p className="lead" style={{ marginTop: 14 }}>
+              A plataforma não entrega valor uma vez — ela gira. Dois loops acoplados sobre{' '}
+              <strong>um único cérebro semântico</strong>: a intenção vira app, o app gera operação,
+              a operação devolve a próxima ação, e cada volta parte de um ponto mais alto.
+            </p>
+          </div>
+          <div className="aifeats">
+            <div className="feat nb">
+              <span className="ck">→</span>
+              <div>
+                <h4>Self-building loop</h4>
+                <p>
+                  Você descreve a intenção; a plataforma cria objeto, campos e telas — sem ciclo de
+                  engenharia no caminho.
+                </p>
+              </div>
+            </div>
+            <div className="feat nb">
+              <span className="ck">→</span>
+              <div>
+                <h4>Insight loop</h4>
+                <p>
+                  Operar gera dado real; a plataforma lê a operação e devolve a próxima ação — mais
+                  precisa que a anterior.
+                </p>
+              </div>
+            </div>
+            <div className="feat nb">
+              <span className="ck">→</span>
+              <div>
+                <h4>Atlas — o cérebro semântico</h4>
+                <p>
+                  Classifica as entidades do negócio automaticamente (embedding + LLM, alinhado a
+                  Schema.org), onde Palantir/Fabric exigem ontologia manual de US$ 1M+/ano.{' '}
+                  <em>Maturidade: em construção (Parcial).</em>
+                </p>
+              </div>
+            </div>
+          </div>
+          <p className="lead" style={{ marginTop: 18, opacity: 0.85 }}>
+            Quanto mais você usa, mais o Atlas sabe — e mais barato fica entregar a próxima coisa. É
+            o que separa um produto-flywheel de uma ferramenta: a ferramenta entrega o mesmo na
+            milésima vez; o flywheel entrega mais, por menos.
+          </p>
         </div>
       </section>
 
@@ -269,7 +326,7 @@ export default function Plataforma() {
               <div className="feat">
                 <span className="ck">✓</span>
                 <div>
-                  <h4>6 dimensões de invariantes (PC1–PC6)</h4>
+                  <h4>Invariantes de qualidade, verificados no CI</h4>
                   <p>
                     Isolamento (probes cross-tenant + RLS via pgTAP), integridade, contratos,
                     resiliência, compliance e evolvability — rodando como gate no CI.
@@ -472,12 +529,12 @@ export default function Plataforma() {
                 </td>
                 <td>Orquestração multi-agente governada; multi-provider com fallback e custo medido</td>
                 <td>
-                  <span className="badge b-impl">
+                  <span className="badge b-parc">
                     <span className="d" />
-                    Implementado
+                    Parcial
                   </span>
                 </td>
-                <td className="next">Mais padrões de autonomia</td>
+                <td className="next">Jornada multi-worker em hardening; mais padrões de autonomia</td>
               </tr>
               <tr>
                 <td>
@@ -498,18 +555,18 @@ export default function Plataforma() {
                 </td>
                 <td>Políticas+HITL, cotas/entitlements, consentimento</td>
                 <td>
-                  <span className="badge b-impl">
+                  <span className="badge b-parc">
                     <span className="d" />
-                    Implementado
+                    Parcial
                   </span>
                 </td>
-                <td className="next">Painel self-service de governança</td>
+                <td className="next">Billing/payment + painel self-service de governança</td>
               </tr>
               <tr>
                 <td>
                   <b>Qualidade</b>
                 </td>
-                <td>Invariantes PC1–PC6, LLM-as-Judge, contratos</td>
+                <td>Invariantes de qualidade, LLM-as-Judge, contratos</td>
                 <td>
                   <span className="badge b-impl">
                     <span className="d" />
@@ -567,10 +624,10 @@ export default function Plataforma() {
             arquitetura com engenharia e um ambiente de avaliação isolado.
           </p>
           <div className="ctab">
-            <a className="btn btn-primary" href="#">
+            <a className="btn btn-primary" href={PLATFORM_CONTACT}>
               Acessar o data room técnico
             </a>
-            <a className="btn btn-ghost" href="#">
+            <a className="btn btn-ghost" href={PLATFORM_CONTACT}>
               Agendar sessão de arquitetura
             </a>
           </div>
