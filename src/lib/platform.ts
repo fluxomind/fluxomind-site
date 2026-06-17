@@ -1,12 +1,14 @@
 // Destinos de conversão do site.
 //
-// MOTION: beta por convite (pré-lançamento privado). O CTA primário de
-// conversão é "pedir acesso / entrar na lista" — NUNCA "criar conta grátis".
-// Self-serve aberto (PLG) exige billing/SSO/MFA, que são gaps declarados:
-// é roadmap, não fato. Ver _product2/_showcase/message-house.md §4.
+// MOTION: self-serve. O cliente cria a conta direto (PLATFORM_SIGNUP); o acesso
+// ao beta é liberado no PROCESSO INTERNO (backend) — sem waitlist por e-mail,
+// que não escala e exige triagem manual. Billing/SSO/MFA entram conforme o
+// produto abre. Decisão do fundador (2026-06-16): converter por signup, gatear
+// o acesso depois.
 //
-// PLATFORM_WAITLIST  → CTA primário (pedir acesso ao beta).
-// PLATFORM_SIGNUP/LOGIN → uso só de quem JÁ é beta (entrar na plataforma).
+// PLATFORM_SIGNUP → CTA primário de conversão (criar conta / criar meu sistema).
+// PLATFORM_CONTACT → trilha enterprise (falar com o time / data room).
+// PLATFORM_WAITLIST → NÃO usado por padrão; mantido para campanhas pontuais.
 
 export const PLATFORM_BASE = 'https://platform.fluxomind.com';
 export const PLATFORM_SIGNUP = `${PLATFORM_BASE}/auth/signup`;

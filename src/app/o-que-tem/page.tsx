@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import HexAgono360 from '@/components/HexAgono360';
-import { PLATFORM_WAITLIST } from '@/lib/platform';
+import { PLATFORM_SIGNUP } from '@/lib/platform';
 
 export const metadata: Metadata = {
   title: 'Fluxomind — O que faz: um app, seis faces da sua operação',
@@ -65,7 +65,7 @@ export default function OQueTem() {
         Protótipo da vitrine de capacidades. Conteúdo demonstrativo.
       </div>
 
-      <SiteHeader cta={{ label: 'Pedir acesso', href: PLATFORM_WAITLIST }} />
+      <SiteHeader cta={{ label: 'Criar meu sistema', href: PLATFORM_SIGNUP }} />
 
       {/* HERO */}
       <header className="hero">
@@ -112,8 +112,8 @@ export default function OQueTem() {
             <p className="lead" style={{ marginBottom: 18 }}>
               Seis faces, um app — e você só precisa conversar. A plataforma cuida do resto.
             </p>
-            <a className="btn btn-primary btn-lg" href={PLATFORM_WAITLIST}>
-              Pedir acesso ao beta
+            <a className="btn btn-primary btn-lg" href={PLATFORM_SIGNUP}>
+              Criar meu sistema
             </a>
             <div style={{ marginTop: 16 }}>
               <Link href="/plataforma" style={{ color: 'var(--blue)', fontWeight: 600 }}>

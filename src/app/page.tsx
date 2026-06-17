@@ -14,14 +14,14 @@ export default function Home() {
       </div>
 
       {/* NAV */}
-      <SiteHeader cta={{ label: 'Começar grátis', href: PLATFORM_SIGNUP }} />
+      <SiteHeader cta={{ label: 'Criar meu sistema', href: PLATFORM_SIGNUP }} />
 
       {/* HERO */}
       <header className="hero hero--split">
         <div className="wrap">
           <div>
             <span className="pill">
-              <span className="lz" /> Plataforma operacional AI-first · beta por convite
+              <span className="lz" /> Plataforma operacional AI-first · em beta
             </span>
             <h1>
               Delegue a tarefa. <span className="g">Receba a conclusão com a prova.</span>
@@ -33,7 +33,7 @@ export default function Home() {
             </p>
             <div className="herocta">
               <a className="btn btn-primary btn-lg" href={PLATFORM_SIGNUP}>
-                Criar meu sistema grátis
+                Criar meu sistema
               </a>
               <a className="btn btn-ghost btn-lg" href="#demo">
                 Ver funcionando ↓
@@ -41,7 +41,7 @@ export default function Home() {
             </div>
             <div className="reassure">
               <span>
-                <b>✓</b> Sem compromisso
+                <b>✓</b> Comece em minutos
               </span>
               <span>
                 <b>✓</b> A prova na tela, a cada passo
@@ -172,7 +172,7 @@ export default function Home() {
           </div>
           <div className="center" style={{ marginTop: 44 }}>
             <a className="btn btn-primary btn-lg" href={PLATFORM_SIGNUP}>
-              Montar meu primeiro sistema grátis
+              Criar meu sistema
             </a>
           </div>
         </div>
@@ -420,9 +420,9 @@ export default function Home() {
             <div className="qa">
               <h4>Quanto custa?</h4>
               <p>
-                Estamos em beta por convite: quem entra começa sem custo, com um limite de uso
-                claro. Conforme o produto abre, os planos crescem com o uso — cartão só pra ampliar
-                o limite, sem surpresa na fatura.
+                Estamos em beta: você cria a conta e começa sem custo, com um limite de uso claro.
+                Conforme o produto abre, os planos crescem com o uso — cartão só pra ampliar o
+                limite, sem surpresa na fatura.
               </p>
             </div>
           </div>
@@ -437,18 +437,18 @@ export default function Home() {
           </div>
           <h2>Delegue a sua primeira tarefa hoje</h2>
           <p className="lead">
-            Descreva o que precisa e veja a tarefa pronta, com a prova na tela. Beta por convite —
-            entre na lista.
+            Descreva o que precisa e veja a tarefa pronta, com a prova na tela. Em beta: crie sua
+            conta e comece grátis.
           </p>
           <div className="offerbtns">
             <a className="btn btn-primary btn-lg" href={PLATFORM_SIGNUP}>
-              Criar meu sistema grátis
+              Criar meu sistema
             </a>
             <a className="btn btn-ghost btn-lg" href={PLATFORM_CONTACT}>
               Falar com a gente
             </a>
           </div>
-          <div className="scar">⏳ Beta por convite — estamos abrindo poucas vagas por mês</div>
+          <div className="scar">⏳ Em beta — crie sua conta; liberamos seu acesso em seguida</div>
         </div>
       </section>
 

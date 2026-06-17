@@ -2,12 +2,12 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
-import { PLATFORM_WAITLIST } from '@/lib/platform';
+import { PLATFORM_SIGNUP } from '@/lib/platform';
 
 export const metadata: Metadata = {
-  title: 'Fluxomind — Preços: beta por convite, depois pague só pelo uso',
+  title: 'Fluxomind — Preços: grátis no beta, depois pague só pelo uso',
   description:
-    'A Fluxomind está em beta por convite (pré-lançamento). No beta você entra sem custo, com um limite de uso claro pra montar e testar de verdade. Quando o produto abrir, você cresce pagando só pelo que usar — sem surpresa.',
+    'A Fluxomind está em beta (pré-lançamento). No beta você cria sua conta e entra sem custo, com um limite de uso claro pra montar e testar de verdade. Quando o produto abrir, você cresce pagando só pelo que usar — sem surpresa.',
 };
 
 export default function Precos() {
@@ -18,7 +18,7 @@ export default function Precos() {
         clientes — conteúdo demonstrativo.
       </div>
 
-      <SiteHeader cta={{ label: 'Pedir acesso', href: PLATFORM_WAITLIST }} />
+      <SiteHeader cta={{ label: 'Criar meu sistema', href: PLATFORM_SIGNUP }} />
 
       {/* HERO */}
       <header className="hero">
@@ -49,7 +49,7 @@ export default function Precos() {
               <h3>Comece no beta</h3>
               <div className="price">
                 <b>R$ 0</b>
-                no beta, por convite — sem cartão
+                grátis no beta — sem cartão
               </div>
               <p className="desc">Pra provar valor e montar seus primeiros sistemas.</p>
               <ul>
@@ -66,8 +66,8 @@ export default function Precos() {
                   <span className="ck">✓</span> Seus dados isolados e seguros
                 </li>
               </ul>
-              <a className="btn btn-primary" href={PLATFORM_WAITLIST}>
-                Pedir acesso ao beta
+              <a className="btn btn-primary" href={PLATFORM_SIGNUP}>
+                Criar meu sistema
               </a>
             </div>
 
@@ -95,8 +95,8 @@ export default function Precos() {
                   <span className="ck">✓</span> Mais capacidade, automações e canais
                 </li>
               </ul>
-              <a className="btn btn-primary" href={PLATFORM_WAITLIST}>
-                Pedir acesso ao beta
+              <a className="btn btn-primary" href={PLATFORM_SIGNUP}>
+                Criar meu sistema
               </a>
             </div>
 
@@ -144,7 +144,7 @@ export default function Precos() {
             <div className="qa">
               <h4>Preciso de cartão pra começar?</h4>
               <p>
-                Não. O beta é por convite e começa sem custo, sem cartão. O cartão só entra quando
+                Não. No beta você cria a conta e começa sem custo, sem cartão. O cartão só entra quando
                 você quiser ampliar o limite, conforme o produto abre.
               </p>
             </div>
@@ -170,16 +170,16 @@ export default function Precos() {
             Comece agora
           </div>
           <h2>Peça seu acesso ao beta</h2>
-          <p className="lead">Beta por convite. Em minutos você vê funcionando.</p>
+          <p className="lead">Grátis no beta. Em minutos você vê funcionando.</p>
           <div className="offerbtns">
-            <a className="btn btn-primary btn-lg" href={PLATFORM_WAITLIST}>
-              Pedir acesso ao beta
+            <a className="btn btn-primary btn-lg" href={PLATFORM_SIGNUP}>
+              Criar meu sistema
             </a>
           </div>
         </div>
       </section>
 
-      <SiteFooter tagline="Beta por convite. Depois, pague só pelo que usa." />
+      <SiteFooter tagline="Grátis no beta. Depois, pague só pelo que usa." />
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { PLATFORM_WAITLIST, PLATFORM_CONTACT } from '@/lib/platform';
+import { PLATFORM_SIGNUP, PLATFORM_CONTACT } from '@/lib/platform';
 
 /* ------------------------------------------------------------------
    Seletor de 3 trilhas por tamanho (Message House §4).
@@ -19,13 +19,13 @@ const TRACKS: Track[] = [
     tag: 'Para a minha operação',
     title: 'SMB · times pequenos',
     desc: 'Monte seu primeiro sistema conversando e veja a prova na tela — você descreve, ela faz, e nada sai sem o seu OK.',
-    cta: { label: 'Pedir acesso (beta)', href: PLATFORM_WAITLIST, external: true },
+    cta: { label: 'Criar meu sistema', href: PLATFORM_SIGNUP, external: true },
   },
   {
     tag: 'Operação assistida no seu processo',
     title: 'Mid-market · RevOps, CS, cobrança',
     desc: 'A Fluxomind opera assistida dentro do seu processo — cobrança, vendas, onboarding — com a conclusão por evidência a cada passo.',
-    cta: { label: 'Ver na minha operação', href: PLATFORM_WAITLIST, external: true },
+    cta: { label: 'Ver na minha operação', href: PLATFORM_SIGNUP, external: true },
   },
   {
     tag: 'Governança que sobrevive à diligência',
