@@ -2,6 +2,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
+import HexAgono360 from '@/components/HexAgono360';
 import { PLATFORM_WAITLIST } from '@/lib/platform';
 
 export const metadata: Metadata = {
@@ -84,6 +85,13 @@ export default function OQueTem() {
           </div>
         </div>
       </header>
+
+      {/* HEXÁGONO 360 — a visão viva das 6 faces */}
+      <section style={{ paddingTop: 8 }}>
+        <div className="wrap">
+          <HexAgono360 />
+        </div>
+      </section>
 
       {/* AS 6 FACES */}
       <section>

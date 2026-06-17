@@ -3,7 +3,7 @@ import DemoBuilder from '@/components/DemoBuilder';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import TrackSelector from '@/components/TrackSelector';
-import Solucoes from '@/components/Solucoes';
+import HexAgono360 from '@/components/HexAgono360';
 import { PLATFORM_CONTACT, PLATFORM_SIGNUP } from '@/lib/platform';
 
 export default function Home() {
@@ -235,7 +235,7 @@ export default function Home() {
             </p>
           </div>
           <div style={{ marginTop: 38 }}>
-            <Solucoes />
+            <HexAgono360 />
           </div>
         </div>
       </section>
