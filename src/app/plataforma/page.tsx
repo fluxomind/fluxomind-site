@@ -72,10 +72,10 @@ export default function Plataforma() {
           </p>
           <div className="herocta">
             <a className="btn btn-primary" href="#avaliar">
-              Acessar o data room técnico
+              Falar com engenharia
             </a>
             <a className="btn btn-ghost" href="#avaliar">
-              Agendar sessão de arquitetura
+              Solicitar acesso técnico
             </a>
           </div>
           <div className="qnav">
@@ -230,9 +230,11 @@ export default function Plataforma() {
             <div className="kick">② Arquitetura</div>
             <h2>Engines modulares, com fronteiras garantidas por máquina</h2>
             <p className="lead" style={{ marginTop: 14 }}>
-              39 engines em 10 camadas (verificável em <span className="mono">src/engine/</span>).
-              Cada engine é um módulo isolado com boundaries estritos — import indevido entre
-              internals <strong>não passa no CI</strong>. Evolução por camada, sem ruptura.
+              39 engines organizadas em 10 camadas (verificável em{' '}
+              <span className="mono">src/engine/</span>) — abaixo, as camadas com engines
+              representativas de cada uma. Cada engine é um módulo isolado com boundaries estritos —
+              import indevido entre internals <strong>não passa no CI</strong>. Evolução por camada,
+              sem ruptura.
             </p>
           </div>
           <div className="layers">
@@ -657,10 +659,10 @@ export default function Plataforma() {
           </p>
           <div className="ctab">
             <a className="btn btn-primary" href={PLATFORM_CONTACT}>
-              Acessar o data room técnico
+              Falar com engenharia
             </a>
             <a className="btn btn-ghost" href={PLATFORM_CONTACT}>
-              Agendar sessão de arquitetura
+              Solicitar acesso técnico
             </a>
           </div>
         </div>
