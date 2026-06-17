@@ -525,19 +525,6 @@ export default function Plataforma() {
             <tbody>
               <tr>
                 <td>
-                  <b>AI-first</b>
-                </td>
-                <td>Orquestração multi-agente governada; multi-provider com fallback e custo medido</td>
-                <td>
-                  <span className="badge b-parc">
-                    <span className="d" />
-                    Parcial
-                  </span>
-                </td>
-                <td className="next">Jornada multi-worker em hardening; mais padrões de autonomia</td>
-              </tr>
-              <tr>
-                <td>
                   <b>Segurança</b>
                 </td>
                 <td>BYOK, masking de PII, RBAC, audit hash-chain</td>
@@ -551,19 +538,6 @@ export default function Plataforma() {
               </tr>
               <tr>
                 <td>
-                  <b>Governança</b>
-                </td>
-                <td>Políticas+HITL, cotas/entitlements, consentimento</td>
-                <td>
-                  <span className="badge b-parc">
-                    <span className="d" />
-                    Parcial
-                  </span>
-                </td>
-                <td className="next">Billing/payment + painel self-service de governança</td>
-              </tr>
-              <tr>
-                <td>
                   <b>Qualidade</b>
                 </td>
                 <td>Invariantes de qualidade, LLM-as-Judge, contratos</td>
@@ -574,6 +548,32 @@ export default function Plataforma() {
                   </span>
                 </td>
                 <td className="next">Cobertura de carga em escala</td>
+              </tr>
+              <tr>
+                <td>
+                  <b>AI-first</b>
+                </td>
+                <td>Orquestração multi-agente governada; multi-provider com fallback e custo medido</td>
+                <td>
+                  <span className="badge b-parc">
+                    <span className="d" />
+                    Parcial
+                  </span>
+                </td>
+                <td className="next">Jornada multi-worker em hardening; mais padrões de autonomia</td>
+              </tr>
+              <tr>
+                <td>
+                  <b>Governança</b>
+                </td>
+                <td>Políticas+HITL, cotas/entitlements, consentimento</td>
+                <td>
+                  <span className="badge b-parc">
+                    <span className="d" />
+                    Parcial
+                  </span>
+                </td>
+                <td className="next">Billing/payment + painel self-service de governança</td>
               </tr>
               <tr>
                 <td>
