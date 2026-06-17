@@ -144,8 +144,8 @@ export default function OQueTem() {
             <p className="lead" style={{ margin: '14px auto 0', maxWidth: '60ch' }}>
               Ferramentas de gerar código entregam um projeto que <em>nasce do zero</em> — e a partir
               daí é seu pra manter. A Fluxomind não gera as seis faces como código solto: ela as{' '}
-              <strong>compõe sobre um substrato vivo</strong> que já traz dados, telas, governança e
-              conexões prontos. Você muda conversando; nada apodrece em código órfão.
+              <strong>monta sobre uma plataforma que já está de pé</strong>, com dados, telas,
+              governança e conexões prontos. Você muda conversando; nada apodrece em código órfão.
             </p>
           </div>
 
@@ -163,7 +163,7 @@ export default function OQueTem() {
             <div className="col good">
               <h4>App Fluxomind</h4>
               <ul>
-                <li>Composição sobre substrato vivo: zero código pra você manter.</li>
+                <li>Montado sobre uma plataforma que já está de pé: zero código pra você manter.</li>
                 <li>Multi-tenancy, papéis e permissões herdados de fábrica, em todo app.</li>
                 <li>Muda conversando — a mesma fonte da verdade, sem drift acumulado.</li>
                 <li>A mesma operação vira tela, WhatsApp, voz e ferramenta via MCP.</li>

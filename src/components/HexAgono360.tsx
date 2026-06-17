@@ -229,7 +229,7 @@ export default function HexAgono360() {
 
       <p className="hx-foot">
         Exemplo de um app vivo: as <b>seis faces acesas</b>, com canais publicados —{' '}
-        <b>Confiança</b> nasce acesa por herança (governança do substrato). Construir e evoluir são
+        <b>Confiança</b> nasce acesa por herança (governança da plataforma). Construir e evoluir são
         o mesmo hexágono — esculpir uma face, <b>sem rebuild, sem drift</b>.
       </p>
     </div>
