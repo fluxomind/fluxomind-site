@@ -199,7 +199,8 @@ nav .wrap { display: flex; align-items: center; justify-content: space-between; 
 @media (max-width: 560px) { .uc { grid-template-columns: 1fr; } }
 .ucc { border: 1px solid var(--line); border-radius: 14px; padding: 22px; transition: .18s; }
 .ucc:hover { border-color: #c7d4ec; transform: translateY(-2px); box-shadow: 0 14px 30px -20px rgba(15,23,42,.35); }
-.ucc .ui { font-size: 24px; }
+.ucc .ui { color: var(--blue); line-height: 0; display: inline-flex; }
+.ucc .ui svg { width: 28px; height: 28px; }
 .ucc h4 { font-size: 17px; font-weight: 700; margin-top: 12px; }
 .ucc p { color: var(--slate); font-size: 14px; margin-top: 6px; }
 

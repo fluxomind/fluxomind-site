@@ -182,42 +182,76 @@ export default function Home() {
       <section id="usos">
         <div className="wrap">
           <div className="center">
-            <div className="kick">O que dá pra fazer</div>
-            <h2>Um sistema para cada parte da sua operação</h2>
+            <div className="kick">O que resolvo</div>
+            <h2>Você descreve a dor. Ela resolve — com a prova na tela.</h2>
             <p className="lead" style={{ marginTop: 14 }}>
-              Comece por uma dor — e vá expandindo conforme cresce.
+              Comece por uma dor — e vá expandindo conforme cresce. Em cada caso: você pede em
+              português, ela executa, e nada que toca o mundo sai sem o seu OK.
             </p>
           </div>
           <div className="uc">
             <div className="ucc">
-              <div className="ui">💸</div>
+              <div className="ui" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="9" />
+                  <path d="M14.6 9.2c-.6-.7-1.6-1.1-2.6-1.1-1.4 0-2.6.8-2.6 2s1.2 1.7 2.6 2 2.6.8 2.6 2-1.2 2-2.6 2c-1 0-2-.4-2.6-1.1" />
+                  <path d="M12 6.4v11.2" />
+                </svg>
+              </div>
               <h4>Cobrança e inadimplência</h4>
-              <p>Veja quem está em atraso, quanto, e dispare lembretes — só com seu OK.</p>
+              <p>“Cobra os 5 maiores em atraso, tom firme” — ela compõe as mensagens, mostra o preview e dispara só com o seu OK.</p>
             </div>
             <div className="ucc">
-              <div className="ui">📈</div>
+              <div className="ui" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M3 5h18l-7 8.2V20l-4 1.5v-8.3L3 5z" />
+                </svg>
+              </div>
               <h4>Funil de vendas</h4>
-              <p>Acompanhe oportunidades, próximos passos e follow-ups automáticos.</p>
+              <p>“Quais oportunidades pararam há 7 dias?” — ela cruza, te responde e agenda os follow-ups.</p>
             </div>
             <div className="ucc">
-              <div className="ui">🤝</div>
+              <div className="ui" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="9" cy="8" r="3.3" />
+                  <path d="M3.4 19.2c.7-3 3.1-4.7 5.6-4.7 1 0 2 .2 2.8.7" />
+                  <path d="M14.6 16.4l2 2 3.6-3.9" />
+                </svg>
+              </div>
               <h4>Onboarding de clientes</h4>
-              <p>Checklists, prazos e avisos para nenhum cliente novo cair no esquecimento.</p>
+              <p>“Monta o onboarding do cliente novo” — checklist, prazos e avisos, sem ninguém cair no esquecimento.</p>
             </div>
             <div className="ucc">
-              <div className="ui">✅</div>
+              <div className="ui" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M7 3.5h7l4 4V20a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4.5a1 1 0 0 1 1-1z" />
+                  <path d="M13.5 3.5V8H18" />
+                  <path d="M9 14l2 2 4-4" />
+                </svg>
+              </div>
               <h4>Aprovações e contratos</h4>
-              <p>Fluxos de aprovação em níveis, com histórico e nada perdido no e-mail.</p>
+              <p>“Aprovação em 2 níveis acima de um limite” — fluxo montado, histórico guardado, nada perdido no e-mail.</p>
             </div>
             <div className="ucc">
-              <div className="ui">💬</div>
+              <div className="ui" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 11.4a8.4 8.4 0 0 1-12.3 7.5L4 20l1.1-4.2A8.4 8.4 0 1 1 21 11.4z" />
+                </svg>
+              </div>
               <h4>Atendimento no WhatsApp</h4>
-              <p>Um assistente que responde e executa de verdade — não só conversa.</p>
+              <p>Atende no WhatsApp e executa de verdade — responde, registra e age sobre os seus dados, não só conversa.</p>
             </div>
             <div className="ucc">
-              <div className="ui">📊</div>
+              <div className="ui" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M4 4v16h16" />
+                  <path d="M8 17v-4" />
+                  <path d="M13 17V8" />
+                  <path d="M18 17v-6" />
+                </svg>
+              </div>
               <h4>Painéis e relatórios</h4>
-              <p>Números atualizados ao vivo, sem ninguém montar planilha no fim do mês.</p>
+              <p>“Monta um painel de risco por faixa de atraso” — números ao vivo, sem ninguém montar planilha no fim do mês.</p>
             </div>
           </div>
         </div>
