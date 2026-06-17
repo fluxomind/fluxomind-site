@@ -276,6 +276,7 @@ nav .wrap { display: flex; align-items: center; justify-content: space-between; 
 @media (max-width: 860px) { .pillar { grid-template-columns: 1fr; gap: 20px; } }
 .pillar .pl { position: sticky; top: 84px; }
 .pillar .pl .ico { width: 52px; height: 52px; border-radius: 14px; background: var(--panel); display: grid; place-items: center; font-size: 24px; color: var(--blue); margin-bottom: 14px; }
+.pillar .pl .ico svg { width: 26px; height: 26px; }
 .feat { display: flex; gap: 14px; padding: 16px 0; border-top: 1px solid var(--line); }
 .feat:first-child { border-top: 0; }
 .feat.nb { border-top: 0; padding: 0; }

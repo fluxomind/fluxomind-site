@@ -9,6 +9,38 @@ export const metadata: Metadata = {
     'AI-first de verdade, multi-tenant, governada e verificável por evidência. Arquitetura, performance, qualidade, governança e segurança, com o status real de cada coisa.',
 };
 
+// Ícones SVG de traço dos pilares — alinhados ao resto do site (sem emoji colorido).
+const ICON_PROPS = {
+  viewBox: '0 0 24 24',
+  fill: 'none',
+  stroke: 'currentColor',
+  strokeWidth: 1.8,
+  strokeLinecap: 'round' as const,
+  strokeLinejoin: 'round' as const,
+};
+const ICON_PERF = (
+  <svg {...ICON_PROPS}>
+    <path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z" />
+  </svg>
+);
+const ICON_QUAL = (
+  <svg {...ICON_PROPS}>
+    <circle cx="12" cy="12" r="9" />
+    <path d="M8.5 12.5l2.5 2.5 4.5-5" />
+  </svg>
+);
+const ICON_GOV = (
+  <svg {...ICON_PROPS}>
+    <path d="M12 3.5v16M6 19.5h12M5 7h14M12 4.2a1.4 1.4 0 1 0 0 .01M5 7l-2.5 5h5L5 7zM19 7l-2.5 5h5L19 7z" />
+  </svg>
+);
+const ICON_SEC = (
+  <svg {...ICON_PROPS}>
+    <rect x="5" y="11" width="14" height="9" rx="2" />
+    <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+  </svg>
+);
+
 export default function Plataforma() {
   return (
     <div className="page-tech">
@@ -244,7 +276,7 @@ export default function Plataforma() {
         <div className="wrap">
           <div className="pillar">
             <div className="pl">
-              <div className="ico">⚡</div>
+              <div className="ico">{ICON_PERF}</div>
               <div className="kick">③ Performance &amp; escala</div>
               <h3>Pensada para escala — observável e resiliente</h3>
               <p style={{ color: 'var(--slate)', fontSize: '14.5px', marginTop: 10 }}>
@@ -311,7 +343,7 @@ export default function Plataforma() {
         <div className="wrap">
           <div className="pillar">
             <div className="pl">
-              <div className="ico">✅</div>
+              <div className="ico">{ICON_QUAL}</div>
               <div className="kick">④ Qualidade &amp; correção</div>
               <h3>Correção verificada por máquina, não por confiança</h3>
               <p style={{ color: 'var(--slate)', fontSize: '14.5px', marginTop: 10 }}>
@@ -372,7 +404,7 @@ export default function Plataforma() {
         <div className="wrap">
           <div className="pillar">
             <div className="pl">
-              <div className="ico">⚖️</div>
+              <div className="ico">{ICON_GOV}</div>
               <div className="kick">⑤ Governança</div>
               <h3>Limites na arquitetura — não no código de cada app</h3>
               <p style={{ color: 'var(--slate)', fontSize: '14.5px', marginTop: 10 }}>
@@ -433,7 +465,7 @@ export default function Plataforma() {
         <div className="wrap">
           <div className="pillar">
             <div className="pl">
-              <div className="ico">🔒</div>
+              <div className="ico">{ICON_SEC}</div>
               <div className="kick">⑥ Segurança</div>
               <h3>Segurança e privacidade na fundação</h3>
               <p style={{ color: 'var(--slate)', fontSize: '14.5px', marginTop: 10 }}>
