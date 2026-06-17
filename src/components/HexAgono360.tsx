@@ -25,11 +25,11 @@ function hexPoint(angleDeg: number, r: number): [number, number] {
 type Face = { key: string; label: string; q: string; badge: string; live: boolean; trust: boolean };
 
 const FACES: Face[] = [
-  { key: 'dominio', label: 'Domínio', q: 'O que meu negócio guarda?', badge: '1 objeto · 5 campos', live: true, trust: false },
-  { key: 'experiencia', label: 'Experiência', q: 'O que as pessoas veem e fazem?', badge: '1 painel', live: true, trust: false },
-  { key: 'inteligencia', label: 'Inteligência', q: 'Como ela decide e me ajuda?', badge: '1 agente · Ally', live: true, trust: false },
-  { key: 'processo', label: 'Processo', q: 'O que acontece sozinho?', badge: '—', live: false, trust: false },
-  { key: 'conexoes', label: 'Conexões', q: 'Com o que ela conversa?', badge: '—', live: false, trust: false },
+  { key: 'dominio', label: 'Domínio', q: 'O que meu negócio guarda?', badge: '4 objetos', live: true, trust: false },
+  { key: 'experiencia', label: 'Experiência', q: 'O que as pessoas veem e fazem?', badge: '6 telas · 1 painel', live: true, trust: false },
+  { key: 'inteligencia', label: 'Inteligência', q: 'Como ela decide e me ajuda?', badge: '2 agentes', live: true, trust: false },
+  { key: 'processo', label: 'Processo', q: 'O que acontece sozinho?', badge: '3 automações', live: true, trust: false },
+  { key: 'conexoes', label: 'Conexões', q: 'Com o que ela conversa?', badge: 'WhatsApp · API', live: true, trust: false },
   { key: 'confianca', label: 'Confiança', q: 'Quem pode o quê, com que prova?', badge: 'herdada', live: true, trust: true },
 ];
 
@@ -228,9 +228,9 @@ export default function HexAgono360() {
       </div>
 
       <p className="hx-foot">
-        Estado ilustrativo: a jornada da Marina — 1 objeto, 1 painel, a Ally como Inteligência.
-        Processo e Conexões ainda apagados; <b>Confiança</b> já nasce acesa (governança herdada).
-        Construir e evoluir são o mesmo hexágono — esculpir uma face, <b>sem rebuild, sem drift</b>.
+        Exemplo de um app vivo: as <b>seis faces acesas</b>, com canais publicados —{' '}
+        <b>Confiança</b> nasce acesa por herança (governança do substrato). Construir e evoluir são
+        o mesmo hexágono — esculpir uma face, <b>sem rebuild, sem drift</b>.
       </p>
     </div>
   );
