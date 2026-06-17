@@ -6,7 +6,7 @@ import HexAgono360 from '@/components/HexAgono360';
 import { PLATFORM_WAITLIST } from '@/lib/platform';
 
 export const metadata: Metadata = {
-  title: 'Fluxomind — O que tem: um app, seis faces da sua operação',
+  title: 'Fluxomind — O que faz: um app, seis faces da sua operação',
   description:
     'Todo app da Fluxomind responde seis perguntas do seu negócio: domínio, experiência, inteligência, processo, conexões e confiança. Você descreve, e ela esculpe.',
 };
@@ -72,7 +72,7 @@ export default function OQueTem() {
         <div className="wrap">
           <div className="center">
             <div className="kick" style={{ color: 'var(--sky)' }}>
-              O que tem
+              O que faz
             </div>
             <h1>
               Um app, <span className="g">seis faces da sua operação.</span>
