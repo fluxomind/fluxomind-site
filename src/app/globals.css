@@ -339,7 +339,8 @@ td .next { color: var(--blue); }
 .support { display: grid; grid-template-columns: repeat(2,1fr); gap: 18px; margin-top: 44px; }
 @media (max-width: 820px) { .support { grid-template-columns: 1fr; } }
 .sup { display: flex; gap: 14px; border: 1px solid var(--line); border-radius: 14px; padding: 22px; }
-.sup .si { font-size: 24px; flex: 0 0 auto; }
+.sup .si { font-size: 24px; flex: 0 0 auto; color: var(--blue); line-height: 0; display: inline-flex; }
+.way .wi svg, .fc .fi svg, .sup .si svg { width: 24px; height: 24px; }
 .sup h4 { font-size: 17px; font-weight: 700; }
 .sup p { color: var(--slate); font-size: 14.5px; margin-top: 5px; }
 
