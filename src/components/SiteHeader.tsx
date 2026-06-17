@@ -24,7 +24,7 @@ export default function SiteHeader({ cta }: { cta: Cta }) {
           <Link href="/#usos">O que resolvo</Link>
           <Link href="/acelere">Acelere</Link>
           <Link href="/o-que-tem">O que faz</Link>
-          <Link href="/#seguranca">Segurança</Link>
+          <Link href="/seguranca">Segurança</Link>
           <Link href="/plataforma">Plataforma</Link>
           <Link href="/precos">Preços</Link>
           <a href={PLATFORM_LOGIN}>Entrar</a>

@@ -372,10 +372,10 @@ export default function Home() {
           <div className="center" style={{ marginTop: 30 }}>
             <Link
               className="btn btn-ghost"
-              href="/plataforma"
+              href="/seguranca"
               style={{ color: 'var(--sky)', borderColor: 'rgba(77,171,247,.4)' }}
             >
-              É técnico e quer avaliar a fundo? Veja a plataforma por dentro →
+              Como protegemos seus dados, em detalhe →
             </Link>
           </div>
         </div>
