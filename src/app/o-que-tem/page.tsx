@@ -13,44 +13,84 @@ export const metadata: Metadata = {
 
 // As 6 perguntas de cliente (App 360) — eixo comercial canônico do _product2.
 // (No técnico isso se chama "dimensões"; aqui, NUNCA — é linguagem de cliente.)
+const ICON_PROPS = {
+  viewBox: '0 0 24 24',
+  fill: 'none',
+  stroke: 'currentColor',
+  strokeWidth: 1.8,
+  strokeLinecap: 'round' as const,
+  strokeLinejoin: 'round' as const,
+};
+
 const FACES = [
   {
-    icon: '🗄️',
+    icon: (
+      <svg {...ICON_PROPS}>
+        <ellipse cx="12" cy="6" rx="7" ry="2.6" />
+        <path d="M5 6v6c0 1.4 3.1 2.6 7 2.6s7-1.2 7-2.6V6" />
+        <path d="M5 12v6c0 1.4 3.1 2.6 7 2.6s7-1.2 7-2.6v-6" />
+      </svg>
+    ),
     area: 'Domínio',
     q: 'O que meu negócio guarda?',
     desc: 'Seus clientes, contratos, pedidos, tickets — os objetos do seu negócio, com campos e relações. Você descreve em português; ela cria o modelo de dados, sem você desenhar tabela.',
     tag: 'Objetos · campos · relações',
   },
   {
-    icon: '🖥️',
+    icon: (
+      <svg {...ICON_PROPS}>
+        <rect x="3" y="4" width="18" height="13" rx="1.5" />
+        <path d="M3 9h18M8.5 21h7M12 17v4" />
+      </svg>
+    ),
     area: 'Experiência',
     q: 'O que as pessoas veem e fazem?',
     desc: 'Listas, formulários, fichas e painéis — gerados pra cada cadastro e ajustados conversando. A mesma operação vira tela no computador e conversa no WhatsApp e na voz.',
     tag: 'Telas · painéis · WhatsApp · voz',
   },
   {
-    icon: '🧠',
+    icon: (
+      <svg {...ICON_PROPS}>
+        <path d="M12 3l1.7 4.3L18 9l-4.3 1.7L12 15l-1.7-4.3L6 9l4.3-1.7L12 3z" />
+        <circle cx="18" cy="17.5" r="2" />
+      </svg>
+    ),
     area: 'Inteligência',
     q: 'O que ele pensa e me ajuda a fazer?',
     desc: 'Agentes que executam de verdade — cobram, respondem, organizam — apoiados por um cérebro que entende o seu negócio e busca no seu conhecimento. Não é chatbot: é trabalho feito.',
     tag: 'Agentes · copilots · conhecimento (RAG)',
   },
   {
-    icon: '🔀',
+    icon: (
+      <svg {...ICON_PROPS}>
+        <rect x="3" y="4" width="6" height="5" rx="1" />
+        <rect x="15" y="15" width="6" height="5" rx="1" />
+        <path d="M6 9v4a3 3 0 0 0 3 3h6" />
+      </svg>
+    ),
     area: 'Processo',
     q: 'O que acontece sozinho?',
     desc: 'Automações, fluxos e regras que rodam por evento, dado ou gatilho — com aprovações em níveis e você no circuito nas decisões que importam.',
     tag: 'Automações · fluxos · aprovações',
   },
   {
-    icon: '🔌',
+    icon: (
+      <svg {...ICON_PROPS}>
+        <path d="M8.7 15.3l-2 2a3.5 3.5 0 0 1-5-5l2-2M15.3 8.7l2-2a3.5 3.5 0 0 1 5 5l-2 2M9 15l6-6" />
+      </svg>
+    ),
     area: 'Conexões',
     q: 'Com o que ele conversa?',
     desc: 'Conectores, APIs e MCP: a Fluxomind puxa dados do que você já usa e ainda vira uma ferramenta dentro de outros sistemas. Integra, não substitui na marra.',
     tag: 'Conectores · API · MCP',
   },
   {
-    icon: '🛡️',
+    icon: (
+      <svg {...ICON_PROPS}>
+        <path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z" />
+        <path d="M9 12l2 2 4-4" />
+      </svg>
+    ),
     area: 'Confiança',
     q: 'Quem usa, e o que cada um pode?',
     desc: 'Papéis e permissões, compartilhamento governado, mascaramento de dados sensíveis e trilha de auditoria. Governança não é add-on — vem de fábrica.',
@@ -90,6 +130,47 @@ export default function OQueTem() {
       <section style={{ paddingTop: 8 }}>
         <div className="wrap">
           <HexAgono360 />
+        </div>
+      </section>
+
+      {/* APP VS PROJETO GERADO — o que torna isso diferente */}
+      <section>
+        <div className="wrap">
+          <div className="center">
+            <div className="kick">Por que isso é diferente</div>
+            <h2>
+              Não é um projeto de código. <span className="g">É um app que vive na plataforma.</span>
+            </h2>
+            <p className="lead" style={{ margin: '14px auto 0', maxWidth: '60ch' }}>
+              Ferramentas de gerar código entregam um projeto que <em>nasce do zero</em> — e a partir
+              daí é seu pra manter. A Fluxomind não gera as seis faces como código solto: ela as{' '}
+              <strong>compõe sobre um substrato vivo</strong> que já traz dados, telas, governança e
+              conexões prontos. Você muda conversando; nada apodrece em código órfão.
+            </p>
+          </div>
+
+          <div className="appvs">
+            <div className="col bad">
+              <h4>Projeto gerado (Lovable, v0, Bolt)</h4>
+              <ul>
+                <li>Nasce do zero: código que vira sua responsabilidade pra sempre.</li>
+                <li>Multi-tenant, papéis e permissões? Você implementa — ou fica sem.</li>
+                <li>Cada pedido novo é mais código colado; o drift é questão de tempo.</li>
+                <li>Uma superfície só: o que virou web não vira WhatsApp nem voz sozinho.</li>
+                <li>Integrações e auditoria por sua conta, fora do que foi gerado.</li>
+              </ul>
+            </div>
+            <div className="col good">
+              <h4>App Fluxomind</h4>
+              <ul>
+                <li>Composição sobre substrato vivo: zero código pra você manter.</li>
+                <li>Multi-tenancy, papéis e permissões herdados de fábrica, em todo app.</li>
+                <li>Muda conversando — a mesma fonte da verdade, sem drift acumulado.</li>
+                <li>A mesma operação vira tela, WhatsApp, voz e ferramenta via MCP.</li>
+                <li>Conexões, mascaramento e trilha de auditoria já vêm no chão.</li>
+              </ul>
+            </div>
+          </div>
         </div>
       </section>
 
