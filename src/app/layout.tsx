@@ -9,9 +9,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Fluxomind — monte o sistema da sua operação só conversando",
+  title: "Fluxomind — delegue a tarefa, receba a conclusão com a prova",
   description:
-    "Cadastros, painéis, automações e cobranças prontos em minutos — sem programar e sem esperar a TI. Você descreve o que precisa; a Fluxomind monta e opera com você.",
+    "Plataforma operacional AI-first: você delega a tarefa e recebe a conclusão com a prova. Ela se constrói a partir do que você pede, opera sobre os seus dados e fica mais inteligente quanto mais você usa.",
 };
 
 export default function RootLayout({

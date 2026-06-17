@@ -2,7 +2,9 @@ import Link from 'next/link';
 import DemoBuilder from '@/components/DemoBuilder';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
-import { PLATFORM_SIGNUP } from '@/lib/platform';
+import TrackSelector from '@/components/TrackSelector';
+import Solucoes from '@/components/Solucoes';
+import { PLATFORM_CONTACT, PLATFORM_SIGNUP } from '@/lib/platform';
 
 export default function Home() {
   return (
@@ -19,14 +21,15 @@ export default function Home() {
         <div className="wrap">
           <div>
             <span className="pill">
-              <span className="lz" /> Operação assistida por IA · comece grátis
+              <span className="lz" /> Plataforma operacional AI-first · beta por convite
             </span>
             <h1>
-              Monte o sistema da sua operação <span className="g">só conversando.</span>
+              Delegue a tarefa. <span className="g">Receba a conclusão com a prova.</span>
             </h1>
             <p className="hsub">
-              Cadastros, painéis, automações e cobranças prontos em minutos — sem programar
-              e sem esperar a TI. Você descreve o que precisa; a Fluxomind monta e opera com você.
+              A Fluxomind se constrói a partir do que você pede, opera sobre os seus dados e
+              devolve a tarefa pronta — com a prova na tela. E fica mais inteligente quanto mais
+              você usa.
             </p>
             <div className="herocta">
               <a className="btn btn-primary btn-lg" href={PLATFORM_SIGNUP}>
@@ -38,10 +41,10 @@ export default function Home() {
             </div>
             <div className="reassure">
               <span>
-                <b>✓</b> Sem cartão de crédito
+                <b>✓</b> Sem compromisso
               </span>
               <span>
-                <b>✓</b> Pronto em minutos
+                <b>✓</b> A prova na tela, a cada passo
               </span>
               <span>
                 <b>✓</b> Seus dados isolados e seguros
@@ -52,6 +55,9 @@ export default function Home() {
           <DemoBuilder />
         </div>
       </header>
+
+      {/* TRACK SELECTOR — 3 trilhas por tamanho (Message House §4) */}
+      <TrackSelector />
 
       {/* PROBLEM */}
       <section>
@@ -217,12 +223,33 @@ export default function Home() {
         </div>
       </section>
 
-      {/* WHY DIFFERENT */}
+      {/* SOLUÇÕES — as 6 perguntas de cliente (Message House §3) */}
+      <section id="solucoes" style={{ paddingTop: 0 }}>
+        <div className="wrap">
+          <div className="center">
+            <div className="kick">Soluções</div>
+            <h2>Seis perguntas que todo negócio faz — uma plataforma que responde</h2>
+            <p className="lead" style={{ marginTop: 14 }}>
+              Não importa a sua operação: ela cabe em seis perguntas. A Fluxomind responde as seis,
+              a partir do que você pede.
+            </p>
+          </div>
+          <div style={{ marginTop: 38 }}>
+            <Solucoes />
+          </div>
+        </div>
+      </section>
+
+      {/* WHY DIFFERENT — moat (Atlas + flywheel + negação tripla) */}
       <section className="why">
         <div className="wrap">
           <div className="center">
-            <div className="kick">Por que é diferente</div>
-            <h2>Não é mais uma ferramenta — é um sistema vivo</h2>
+            <div className="kick">O que não dá pra copiar</div>
+            <h2>Quanto mais você usa, mais inteligente ela fica</h2>
+            <p className="lead" style={{ marginTop: 14 }}>
+              Não é um chatbot, não é um builder low-code, não é um wrapper de LLM — é a operação
+              que se monta, opera e aprende com você.
+            </p>
           </div>
           <div className="whyg">
             <div className="wcard">
@@ -230,35 +257,38 @@ export default function Home() {
               <div>
                 <h4>Entende o seu negócio</h4>
                 <p>
-                  Quanto mais você usa, mais ela entende a sua operação e melhora sozinha. Uma
-                  planilha nunca faz isso.
+                  Um cérebro semântico reconhece suas entidades e conecta seus dados. Ela trata a
+                  sua operação como conhecimento — não como planilha solta.
                 </p>
               </div>
             </div>
             <div className="wcard">
-              <div className="wi">⚡</div>
+              <div className="wi">🔁</div>
               <div>
-                <h4>Pronto hoje, não em meses</h4>
+                <h4>Fica mais inteligente quanto mais usa</h4>
                 <p>
-                  O primeiro sistema sai na primeira conversa. Mudanças saem na hora, não viram
-                  projeto.
+                  Cada operação ensina a próxima. Com o tempo, ela passa a sugerir o próximo passo
+                  sozinha — antes de você pedir.
                 </p>
               </div>
             </div>
             <div className="wcard">
-              <div className="wi">📱</div>
+              <div className="wi">🧩</div>
               <div>
-                <h4>Funciona onde você está</h4>
-                <p>No computador, no WhatsApp e na voz. O mesmo sistema, em qualquer canal.</p>
+                <h4>Se constrói a partir do seu pedido</h4>
+                <p>
+                  Você descreve, e ela cria os objetos, as telas e os fluxos. Sem ciclo de TI no
+                  caminho — você muda conversando.
+                </p>
               </div>
             </div>
             <div className="wcard">
-              <div className="wi">🌱</div>
+              <div className="wi">✅</div>
               <div>
-                <h4>Cresce com você</h4>
+                <h4>Entrega com prova, não com promessa</h4>
                 <p>
-                  Do primeiro cadastro à operação inteira da empresa — sem trocar de ferramenta no
-                  meio do caminho.
+                  Não é “a IA respondeu”. É “a tarefa foi feita — e aqui está a prova”, na tela, a
+                  cada passo.
                 </p>
               </div>
             </div>
@@ -275,8 +305,7 @@ export default function Home() {
             </div>
             <h2 style={{ color: '#fff' }}>Seus dados são seus — isolados e protegidos</h2>
             <p className="lead" style={{ color: '#A9AEB8', marginTop: 14 }}>
-              Segurança de nível empresarial desde o primeiro dia, sem você precisar configurar
-              nada.
+              Governança arquitetural desde o primeiro dia, sem você precisar configurar nada.
             </p>
           </div>
           <div className="secg">
@@ -301,7 +330,7 @@ export default function Home() {
             <div className="secc">
               <div className="si">🧾</div>
               <h4>Histórico à prova</h4>
-              <p>Trilha de auditoria que registra tudo e não pode ser adulterada.</p>
+              <p>Trilha de auditoria encadeada por hash que detecta qualquer adulteração — verificável.</p>
             </div>
           </div>
           <div className="center" style={{ marginTop: 30 }}>
@@ -348,16 +377,16 @@ export default function Home() {
             <div className="qa">
               <h4>Quanto tempo até começar a usar?</h4>
               <p>
-                Minutos. Seu primeiro sistema sai já na primeira conversa — você viu acontecer aqui
-                em cima.
+                Liberado o seu acesso ao beta, o primeiro sistema sai já na primeira conversa —
+                você viu acontecer aqui em cima.
               </p>
             </div>
             <div className="qa">
               <h4>Quanto custa?</h4>
               <p>
-                Você cria sua conta grátis, sem cartão, com um limite de uso claro — dá pra testar
-                de verdade. Quando precisar de mais, adiciona um cartão e amplia o limite. Você no
-                controle, sem surpresa na fatura.
+                Estamos em beta por convite: quem entra começa sem custo, com um limite de uso
+                claro. Conforme o produto abre, os planos crescem com o uso — cartão só pra ampliar
+                o limite, sem surpresa na fatura.
               </p>
             </div>
           </div>
@@ -370,25 +399,25 @@ export default function Home() {
           <div className="kick" style={{ color: 'var(--sky)' }}>
             Comece agora
           </div>
-          <h2>Monte seu primeiro sistema hoje</h2>
+          <h2>Delegue a sua primeira tarefa hoje</h2>
           <p className="lead">
-            Escreva o que sua operação precisa e veja pronto em minutos. Sem cartão, sem
-            compromisso.
+            Descreva o que precisa e veja a tarefa pronta, com a prova na tela. Beta por convite —
+            entre na lista.
           </p>
           <div className="offerbtns">
             <a className="btn btn-primary btn-lg" href={PLATFORM_SIGNUP}>
               Criar meu sistema grátis
             </a>
-            <a className="btn btn-ghost btn-lg" href="#">
+            <a className="btn btn-ghost btn-lg" href={PLATFORM_CONTACT}>
               Falar com a gente
             </a>
           </div>
-          <div className="scar">✓ Comece grátis, sem cartão — cartão só pra ampliar o limite</div>
+          <div className="scar">⏳ Beta por convite — estamos abrindo poucas vagas por mês</div>
         </div>
       </section>
 
       {/* FOOTER */}
-      <SiteFooter tagline="Monte o sistema da sua operação só conversando." />
+      <SiteFooter tagline="Delegue a tarefa. Receba a conclusão com a prova." />
     </div>
   );
 }

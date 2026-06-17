@@ -2,62 +2,58 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
-import { PLATFORM_SIGNUP } from '@/lib/platform';
+import { PLATFORM_WAITLIST } from '@/lib/platform';
 
 export const metadata: Metadata = {
-  title: 'Fluxomind — O que tem: a potência por trás do simples',
+  title: 'Fluxomind — O que tem: um app, seis faces da sua operação',
   description:
-    'Apps montados conversando, telas que se geram e evoluem, workflows, agentes próprios, ontologia, gestão de arquivos, WhatsApp e voz, API e MCP. Veja do que a plataforma é capaz.',
+    'Todo app da Fluxomind responde seis perguntas do seu negócio: domínio, experiência, inteligência, processo, conexões e confiança. Você descreve, e ela esculpe.',
 };
 
-const FEATURES = [
+// As 6 perguntas de cliente (App 360) — eixo comercial canônico do _product2.
+// (No técnico isso se chama "dimensões"; aqui, NUNCA — é linguagem de cliente.)
+const FACES = [
   {
-    icon: '🧱',
-    title: 'Apps sob medida, montados conversando',
-    desc: 'Descreva sua operação e a plataforma cria os objetos, os dados, as telas e os painéis. Sem template engessado, sem começar do zero — e sem escrever código.',
-    tag: 'Criação de apps',
+    icon: '🗄️',
+    area: 'Domínio',
+    q: 'O que meu negócio guarda?',
+    desc: 'Seus clientes, contratos, pedidos, tickets — os objetos do seu negócio, com campos e relações. Você descreve em português; ela cria o modelo de dados, sem você desenhar tabela.',
+    tag: 'Objetos · campos · relações',
   },
   {
     icon: '🖥️',
-    title: 'Telas que se geram — e evoluem',
-    desc: 'Lista, formulário, ficha e busca aparecem prontos pra cada cadastro. Precisa mudar um campo, uma regra ou um layout? É só pedir, e a tela se ajusta na hora.',
-    tag: 'Telas automáticas',
-  },
-  {
-    icon: '🔀',
-    title: 'Automação com workflows',
-    desc: 'Aprovações em níveis, gatilhos e rotinas que rodam sozinhas — com você no circuito nas decisões que importam. O processo trabalha; você só decide o que precisa.',
-    tag: 'Workflows',
-  },
-  {
-    icon: '🤖',
-    title: 'Seus próprios agentes',
-    desc: 'Crie agentes que executam de verdade: cobram, respondem, organizam e dão o próximo passo. Não é chatbot que só conversa — é trabalho feito, sob suas regras.',
-    tag: 'Agentes',
+    area: 'Experiência',
+    q: 'O que as pessoas veem e fazem?',
+    desc: 'Listas, formulários, fichas e painéis — gerados pra cada cadastro e ajustados conversando. A mesma operação vira tela no computador e conversa no WhatsApp e na voz.',
+    tag: 'Telas · painéis · WhatsApp · voz',
   },
   {
     icon: '🧠',
-    title: 'Ontologia: ela entende o seu negócio',
-    desc: 'Um cérebro semântico reconhece suas entidades, conecta os dados e enriquece o que você cadastra. Quanto mais você usa, mais inteligente a sua operação fica.',
-    tag: 'Ontologia',
+    area: 'Inteligência',
+    q: 'O que ele pensa e me ajuda a fazer?',
+    desc: 'Agentes que executam de verdade — cobram, respondem, organizam — apoiados por um cérebro que entende o seu negócio e busca no seu conhecimento. Não é chatbot: é trabalho feito.',
+    tag: 'Agentes · copilots · conhecimento (RAG)',
   },
   {
-    icon: '📎',
-    title: 'Gestão de arquivos',
-    desc: 'Suba documentos e contratos; a plataforma organiza, extrai a informação e conecta tudo ao resto da sua operação — nada mais perdido em pastas e e-mails.',
-    tag: 'Arquivos',
-  },
-  {
-    icon: '💬',
-    title: 'WhatsApp e voz',
-    desc: 'A mesma operação no computador, no WhatsApp e por voz. Seu time opera de onde já está, no canal que já usa — sem aprender ferramenta nova.',
-    tag: 'Canais',
+    icon: '🔀',
+    area: 'Processo',
+    q: 'O que acontece sozinho?',
+    desc: 'Automações, fluxos e regras que rodam por evento, dado ou gatilho — com aprovações em níveis e você no circuito nas decisões que importam.',
+    tag: 'Automações · fluxos · aprovações',
   },
   {
     icon: '🔌',
-    title: 'Conecta no que você já usa',
-    desc: 'Por API e MCP, a Fluxomind vira uma capacidade dentro da sua stack e puxa dados de onde você precisa. Integra com o que existe, não substitui na marra.',
-    tag: 'API & integrações',
+    area: 'Conexões',
+    q: 'Com o que ele conversa?',
+    desc: 'Conectores, APIs e MCP: a Fluxomind puxa dados do que você já usa e ainda vira uma ferramenta dentro de outros sistemas. Integra, não substitui na marra.',
+    tag: 'Conectores · API · MCP',
+  },
+  {
+    icon: '🛡️',
+    area: 'Confiança',
+    q: 'Quem usa, e o que cada um pode?',
+    desc: 'Papéis e permissões, compartilhamento governado, mascaramento de dados sensíveis e trilha de auditoria. Governança não é add-on — vem de fábrica.',
+    tag: 'Permissões · sharing · auditoria',
   },
 ];
 
@@ -68,7 +64,7 @@ export default function OQueTem() {
         Protótipo da vitrine de capacidades. Conteúdo demonstrativo.
       </div>
 
-      <SiteHeader cta={{ label: 'Criar meu sistema grátis', href: PLATFORM_SIGNUP }} />
+      <SiteHeader cta={{ label: 'Pedir acesso', href: PLATFORM_WAITLIST }} />
 
       {/* HERO */}
       <header className="hero">
@@ -78,24 +74,26 @@ export default function OQueTem() {
               O que tem
             </div>
             <h1>
-              A potência <span className="g">por trás do simples.</span>
+              Um app, <span className="g">seis faces da sua operação.</span>
             </h1>
-            <p className="hsub" style={{ margin: '18px auto 0', maxWidth: '54ch' }}>
-              Por fora, você só conversa. Por baixo, uma plataforma completa monta, automatiza e
-              opera a sua operação inteira. Veja do que ela é capaz.
+            <p className="hsub" style={{ margin: '18px auto 0', maxWidth: '56ch' }}>
+              Todo app da Fluxomind responde seis perguntas do seu negócio. Você não monta as faces
+              uma a uma: descreve o que precisa, e ela esculpe — composição viva, não ilhas de
+              código.
             </p>
           </div>
         </div>
       </header>
 
-      {/* FEATURES */}
+      {/* AS 6 FACES */}
       <section>
         <div className="wrap">
           <div className="feats">
-            {FEATURES.map((f) => (
-              <div className="featx" key={f.title}>
+            {FACES.map((f) => (
+              <div className="featx" key={f.area}>
                 <div className="fx">{f.icon}</div>
-                <h3>{f.title}</h3>
+                <div className="area">{f.area}</div>
+                <h3>{f.q}</h3>
                 <p>{f.desc}</p>
                 <span className="tag">{f.tag}</span>
               </div>
@@ -104,10 +102,10 @@ export default function OQueTem() {
 
           <div className="center" style={{ marginTop: 46 }}>
             <p className="lead" style={{ marginBottom: 18 }}>
-              É muita coisa — mas você só precisa conversar. A plataforma cuida do resto.
+              Seis faces, um app — e você só precisa conversar. A plataforma cuida do resto.
             </p>
-            <a className="btn btn-primary btn-lg" href={PLATFORM_SIGNUP}>
-              Criar meu sistema grátis
+            <a className="btn btn-primary btn-lg" href={PLATFORM_WAITLIST}>
+              Pedir acesso ao beta
             </a>
             <div style={{ marginTop: 16 }}>
               <Link href="/plataforma" style={{ color: 'var(--blue)', fontWeight: 600 }}>
@@ -118,7 +116,7 @@ export default function OQueTem() {
         </div>
       </section>
 
-      <SiteFooter tagline="A potência por trás do simples." />
+      <SiteFooter tagline="Delegue a tarefa. Receba a conclusão com a prova." />
     </div>
   );
 }

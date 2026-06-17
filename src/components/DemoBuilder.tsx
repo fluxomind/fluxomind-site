@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { PLATFORM_SIGNUP } from '@/lib/platform';
+import { PLATFORM_WAITLIST } from '@/lib/platform';
 
 /* ------------------------------------------------------------------
    Demo "live-build" da home (F0 — animação mockada).
@@ -294,8 +294,8 @@ export default function DemoBuilder() {
               <div className="ok">
                 <b>Pronto.</b> {scenario.done}
               </div>
-              <a className="btn btn-primary" href={PLATFORM_SIGNUP}>
-                Quero este sistema na minha empresa →
+              <a className="btn btn-primary" href={PLATFORM_WAITLIST}>
+                Quero este sistema na minha empresa — pedir acesso →
               </a>
             </div>
           )}
