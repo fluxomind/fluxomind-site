@@ -1,11 +1,12 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { PLATFORM_LOGIN } from '@/lib/platform';
 
 type Cta = { label: string; href: string };
 
 // Cabeçalho global. CTA primário de nav é sempre CTA.demo → /#demo
 // (message house §6); rótulos canônicos em src/lib/messages.ts (CTA).
+// "Entrar" (PLATFORM_LOGIN) omitido enquanto a plataforma não lança
+// (decisão do fundador 2026-07-02) — betas recebem a URL do time.
 export default function SiteHeader({ cta }: { cta: Cta }) {
   return (
     <nav>
@@ -27,7 +28,6 @@ export default function SiteHeader({ cta }: { cta: Cta }) {
           <Link href="/seguranca">Segurança</Link>
           <Link href="/plataforma">Plataforma</Link>
           <Link href="/precos">Preços</Link>
-          <a href={PLATFORM_LOGIN}>Entrar</a>
         </div>
         <a className="btn btn-primary nav-cta" href={cta.href}>
           {cta.label}

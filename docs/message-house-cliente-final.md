@@ -74,7 +74,7 @@ A conversão principal do site é **viver a demonstração** — o encantamento 
 | Primário (nav + hero) | **Veja a Fluxomind trabalhar** | `/#demo` |
 | Pós-demonstração / decisão | **Quero isso no meu negócio** | `PLATFORM_BETA` (lista do beta) |
 | Humano / escala | **Falar com o time** | `PLATFORM_CONTACT` |
-| Quem já é beta | **Entrar** | `PLATFORM_LOGIN` |
+| Quem já é beta | **Entrar** | `PLATFORM_LOGIN` — **omitido do site enquanto a plataforma não lança** (decisão 2026-07-02); betas recebem a URL do time |
 
 `PLATFORM_SIGNUP` **não é mais CTA primário** (BCM-07: free aberto sangra a margem; cliente chega high-intent). A constante permanece exportada para reversão fácil.
 
