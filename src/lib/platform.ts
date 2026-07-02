@@ -13,7 +13,7 @@ export const PLATFORM_BASE = 'https://platform.fluxomind.com';
 export const PLATFORM_SIGNUP = `${PLATFORM_BASE}/auth/signup`;
 export const PLATFORM_LOGIN = `${PLATFORM_BASE}/auth/login`;
 
-const CONTACT_EMAIL = 'contato@fluxomind.com.br';
+const CONTACT_EMAIL = 'contato@fluxomind.com';
 
 // Pedido de acesso ao beta (pós-demonstração). Sem backend de captura no site
 // ainda, o destino é um mailto; quando houver rota/form, troca-se só aqui.

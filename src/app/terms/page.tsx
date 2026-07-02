@@ -273,7 +273,7 @@ export default function TermsOfService() {
             <div className="bg-gray-50 p-6 rounded-lg">
               <p className="text-gray-700 font-semibold">FLUXOMIND LTDA</p>
               <p className="text-gray-600">CNPJ: 60.162.547/0001-15</p>
-              <p className="text-gray-600">E-mail: contato@fluxomind.com.br</p>
+              <p className="text-gray-600">E-mail: contato@fluxomind.com</p>
             </div>
           </section>
         </article>
