@@ -180,7 +180,7 @@ export default function OQueTem() {
 
           <div className="appvs">
             <div className="col bad">
-              <h4>Projeto gerado (Lovable, v0, Bolt)</h4>
+              <h4>Projeto gerado por builder de código</h4>
               <ul>
                 <li>Nasce do zero: código que vira sua responsabilidade para sempre.</li>
                 <li>Multi-tenant, papéis e permissões? Você implementa — ou fica sem.</li>

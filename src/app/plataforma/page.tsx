@@ -209,8 +209,8 @@ export default function Plataforma() {
                 <h4>Atlas — o cérebro semântico</h4>
                 <p>
                   Classifica as entidades do negócio automaticamente (embedding + LLM, alinhado a
-                  Schema.org) — sem o projeto manual de ontologia que plataformas como
-                  Palantir/Fabric exigem. <em>Maturidade: em construção (Parcial).</em>
+                  Schema.org) — sem projeto manual de ontologia.{' '}
+                  <em>Maturidade: em construção (Parcial).</em>
                 </p>
               </div>
             </div>

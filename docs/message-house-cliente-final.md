@@ -70,7 +70,7 @@ A conversão principal do site é **viver a demonstração** — o encantamento 
 
 **Usar:** app operante · negócio de software vivo · opera o dia a dia · conclusão com a prova · governado · se molda à empresa · escala para um humano (handoff) · em semanas, não meses · fica mais inteligente quanto mais você usa · uma fatura em reais (managed LLM).
 
-**Vetado:** "código morto" (vetado pelo fundador) · "6 dimensões" fora de /plataforma · "substrato vivo" · "waitlist" (dizer "lista do beta") · "data room" em botão · superlativo sem fonte · qualquer claim de catálogo/marketplace/avatar como existente · promessa de resultado financeiro específico.
+**Vetado:** "código morto" (vetado pelo fundador) · "6 dimensões" fora de /plataforma · "substrato vivo" · "waitlist" (dizer "lista do beta") · "data room" em botão · superlativo sem fonte · qualquer claim de catálogo/marketplace/avatar como existente · promessa de resultado financeiro específico · **nomear concorrente na copy do site** (Lovable/v0/Bolt/Palantir etc. — "anti-Lovable" é linguagem interna; no site, comparar com a categoria: "builder de código", "no-code genérico"). SoRs a que a plataforma se integra (SAP/Salesforce/TOTVS) podem ser nomeados — são integração, não comparação.
 
 **Números com fonte (usáveis):** 39 engines em 10 camadas (fato — plataforma) · 79% das empresas adotaram agentes, só 11% em produção (o gap que a categoria "operar" fecha) · 45% do código gerado por IA falha em segurança (Veracode) — usar no máximo 1× no site, em /acelere ou home.
 
