@@ -9,9 +9,33 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Fluxomind — delegue a tarefa, receba a conclusão com a prova",
+  metadataBase: new URL("https://www.fluxomind.com"),
+  title: {
+    default: "Fluxomind — delegue a tarefa, receba a conclusão com a prova",
+    template: "%s · Fluxomind",
+  },
   description:
-    "Plataforma operacional AI-first: você delega a tarefa e recebe a conclusão com a prova. Ela se constrói a partir do que você pede, opera sobre os seus dados e fica mais inteligente quanto mais você usa.",
+    "Um app que resolve o seu problema e se opera sozinho — integrado ao que você já tem, governado, em semanas. Se constrói a partir do que você pede e fica mais inteligente quanto mais você usa.",
+  openGraph: {
+    type: "website",
+    locale: "pt_BR",
+    siteName: "Fluxomind",
+    title: "Fluxomind — delegue a tarefa, receba a conclusão com a prova",
+    description:
+      "Um app que resolve o seu problema e se opera sozinho — integrado ao que você já tem, governado, em semanas.",
+    images: [
+      {
+        url: "/og.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Fluxomind",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/og.jpg"],
+  },
 };
 
 export default function RootLayout({

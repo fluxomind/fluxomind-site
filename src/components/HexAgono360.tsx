@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { FACES as CANON_FACES } from '@/lib/messages';
 
 /**
  * Hexágono 360° — a âncora visual única da Fluxomind.
@@ -24,14 +25,23 @@ function hexPoint(angleDeg: number, r: number): [number, number] {
 
 type Face = { key: string; label: string; q: string; badge: string; live: boolean; trust: boolean };
 
-const FACES: Face[] = [
-  { key: 'dominio', label: 'Domínio', q: 'O que meu negócio guarda?', badge: '4 objetos', live: true, trust: false },
-  { key: 'experiencia', label: 'Experiência', q: 'O que as pessoas veem e fazem?', badge: '6 telas · 1 painel', live: true, trust: false },
-  { key: 'inteligencia', label: 'Inteligência', q: 'Como ela decide e me ajuda?', badge: '2 agentes', live: true, trust: false },
-  { key: 'processo', label: 'Processo', q: 'O que acontece sozinho?', badge: '3 automações', live: true, trust: false },
-  { key: 'conexoes', label: 'Conexões', q: 'Com o que ela conversa?', badge: 'WhatsApp · API', live: true, trust: false },
-  { key: 'confianca', label: 'Confiança', q: 'Quem pode o quê, com que prova?', badge: 'herdada', live: true, trust: true },
-];
+// Perguntas/rótulos canônicos vêm de src/lib/messages.ts; aqui só o estado
+// ilustrativo da cena (badge de conteúdo, face acesa, Confiança herdada).
+const FACE_SCENE: Record<string, { badge: string; live: boolean; trust: boolean }> = {
+  dominio: { badge: '4 objetos', live: true, trust: false },
+  experiencia: { badge: '6 telas · 1 painel', live: true, trust: false },
+  inteligencia: { badge: '2 agentes', live: true, trust: false },
+  processo: { badge: '3 automações', live: true, trust: false },
+  conexoes: { badge: 'WhatsApp · API', live: true, trust: false },
+  confianca: { badge: 'herdada', live: true, trust: true },
+};
+
+const FACES: Face[] = CANON_FACES.map((f) => ({
+  key: f.key,
+  label: f.label,
+  q: f.q,
+  ...FACE_SCENE[f.key],
+}));
 
 const NODES = [
   { key: 'web', label: 'Web / Desktop', mode: 'destino', ang: 0 },
@@ -81,20 +91,20 @@ export default function HexAgono360() {
     <div className="hx-root">
       <style>{CSS}</style>
 
-      <div className="hx-modes" role="group" aria-label="Modo de manifestação do App">
+      <div className="hx-modes" role="group" aria-label="Modo de manifestação do app">
         <button
           className="hx-mode-btn"
           aria-pressed={mode === 'destino'}
           onClick={() => setMode('destino')}
         >
-          Modo Destino — o App vira tela e conversa
+          Modo Destino — o app vira tela e conversa
         </button>
         <button
           className="hx-mode-btn"
           aria-pressed={mode === 'capacidade'}
           onClick={() => setMode('capacidade')}
         >
-          Modo Capacidade — o App vira ferramenta (MCP)
+          Modo Capacidade — o app vira ferramenta (MCP)
         </button>
       </div>
 
@@ -104,7 +114,7 @@ export default function HexAgono360() {
             className="hx"
             viewBox="0 0 600 600"
             role="img"
-            aria-label="Hexágono 360°: seis faces de anatomia do App (Domínio, Experiência, Inteligência, Processo, Conexões, Confiança) com um anel orbital de canais (Web/Desktop, WhatsApp, Voz, Claude/MCP, API)."
+            aria-label="Hexágono 360°: seis faces de anatomia do app (Domínio, Experiência, Inteligência, Processo, Conexões, Confiança) com um anel orbital de canais (Web/Desktop, WhatsApp, Voz, Claude/MCP, API)."
           >
             <defs>
               <radialGradient id="hxCoreGrad" cx="50%" cy="50%" r="50%">
@@ -197,7 +207,7 @@ export default function HexAgono360() {
               <circle cx="300" cy="300" r="62" fill="#0b1120" stroke="#283452" strokeWidth="1.2" />
               <text x="300" y="294" textAnchor="middle" className="hx-core-sub">SEU</text>
               <text x="300" y="312" textAnchor="middle" className="hx-core-title">APP</text>
-              <text x="300" y="328" textAnchor="middle" className="hx-core-sub">VIVO</text>
+              <text x="300" y="328" textAnchor="middle" className="hx-core-sub">OPERANTE</text>
             </g>
 
             {/* anel de canais */}
@@ -228,7 +238,7 @@ export default function HexAgono360() {
       </div>
 
       <p className="hx-foot">
-        Exemplo de um app vivo: as <b>seis faces acesas</b>, com canais publicados —{' '}
+        Exemplo de um app operante: as <b>seis faces acesas</b>, com canais publicados —{' '}
         <b>Confiança</b> nasce acesa por herança (governança da plataforma). Construir e evoluir são
         o mesmo hexágono — esculpir uma face, <b>sem rebuild, sem drift</b>.
       </p>

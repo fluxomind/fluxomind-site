@@ -2,274 +2,332 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
+import { SIGNATURE, NEGATION, PHASE, CTA } from '@/lib/messages';
 import { PLATFORM_CONTACT } from '@/lib/platform';
 
-const SIGNATURE = 'Delegue a tarefa. Receba a conclusão com a prova.';
-
 export const metadata: Metadata = {
-  title: 'Fluxomind — para empresas: acelere suas implementações',
+  title: 'Acelere — do piloto à produção',
   description:
-    'Adote a Fluxomind como acelerador das suas implementações, com a governança e a segurança que o seu procurement exige.',
+    'Para a empresa que já tentou IA e viu pilotos morrerem: 79% adotaram agentes (PwC, 2025), só 11% os têm implantados (KPMG, 2025). A Fluxomind entrega o processo operado — o agente roda o dia a dia, um humano decide nos casos sensíveis, integrado ao que você já tem.',
 };
 
-export default function Enterprise() {
+const ICON_PROPS = {
+  viewBox: '0 0 24 24',
+  fill: 'none',
+  stroke: 'currentColor',
+  strokeWidth: 1.8,
+  strokeLinecap: 'round' as const,
+  strokeLinejoin: 'round' as const,
+};
+
+// Por que os pilotos morrem — as três paredes entre a demo e a produção.
+const WALLS = [
+  {
+    icon: (
+      <svg {...ICON_PROPS} width={26} height={26}>
+        <path d="M7 9h10v3a5 5 0 0 1-10 0V9z" />
+        <path d="M9.5 9V5M14.5 9V5M12 17v4" />
+      </svg>
+    ),
+    title: 'O protótipo vive sozinho',
+    desc: 'A sua operação vive no ERP, no CRM, no e-mail e no WhatsApp. Um piloto que não conversa com eles não entra na rotina de ninguém — por melhor que tenha sido a demo.',
+  },
+  {
+    icon: (
+      <svg {...ICON_PROPS} width={26} height={26}>
+        <path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z" />
+        <path d="M12 8.5v4M12 15.5h.01" />
+      </svg>
+    ),
+    title: 'Segurança barra o que não é governado',
+    desc: 'Sem permissões, limites e trilha de auditoria, o piloto não passa do comitê. E com razão: ninguém entrega um processo real ao que não presta contas.',
+  },
+  {
+    icon: (
+      <svg {...ICON_PROPS} width={26} height={26}>
+        <rect x="4" y="5" width="16" height="15" rx="2" />
+        <path d="M8 3v4M16 3v4M4 10h16" />
+      </svg>
+    ),
+    title: 'Ninguém assume a segunda-feira',
+    desc: 'O modelo responde bem — mas quem roda o processo toda semana, trata as exceções e não deixa a bola cair? Sem um dono da operação, o piloto vira mais uma aba aberta.',
+  },
+];
+
+// Entregue operado — o que "rodando" significa na prática.
+const OPERATED = [
+  {
+    icon: (
+      <svg {...ICON_PROPS}>
+        <path d="M20 12a8 8 0 1 1-2.3-5.7" />
+        <path d="M20 3v4h-4" />
+      </svg>
+    ),
+    tag: 'Processo',
+    title: 'O agente roda o dia a dia',
+    desc: 'Cobrança que acompanha o atraso, follow-up que não esquece, aprovação que anda. O processo acontece sem depender de alguém lembrar dele.',
+  },
+  {
+    icon: (
+      <svg {...ICON_PROPS}>
+        <circle cx="9" cy="8" r="3.2" />
+        <path d="M3.5 19c.6-3 2.7-4.6 5.5-4.6 1.2 0 2.3.3 3.2.9" />
+        <path d="M14.5 17.5l2 2 4-4" />
+      </svg>
+    ),
+    tag: 'Handoff',
+    title: 'Um humano decide nos casos sensíveis',
+    desc: 'Quando o caso exige — desconto fora da alçada, cliente delicado, valor alto — o app escala para uma pessoa do seu time. A IA propõe; quem manda decide.',
+  },
+  {
+    icon: (
+      <svg {...ICON_PROPS}>
+        <path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z" />
+        <path d="M9 12l2 2 4-4" />
+      </svg>
+    ),
+    tag: 'Governança',
+    title: 'Governado, com prova de cada ação',
+    desc: 'Permissões, limites de uso e trilha de auditoria à prova de adulteração em cada passo. Cada conclusão chega com a evidência do que foi feito.',
+  },
+  {
+    icon: (
+      <svg {...ICON_PROPS}>
+        <circle cx="12" cy="12" r="2.5" />
+        <circle cx="4.5" cy="6" r="1.8" />
+        <circle cx="19.5" cy="6" r="1.8" />
+        <circle cx="4.5" cy="18" r="1.8" />
+        <circle cx="19.5" cy="18" r="1.8" />
+        <path d="M10 10.2L6 7.4M14 10.2L18 7.4M10 13.8L6 16.6M14 13.8L18 16.6" />
+      </svg>
+    ),
+    tag: 'Integração',
+    title: 'Senta ao redor do que você já tem',
+    desc: 'SAP, Salesforce e TOTVS ficam exatamente onde estão — o app opera ao redor deles, integrando por API, e-mail e WhatsApp, sem projeto de substituição.',
+  },
+];
+
+export default function Acelere() {
   return (
     <div className="page-ent">
-      <div className="note">
-        Protótipo da trilha enterprise (adoção em escala / acelerador). Conteúdo demonstrativo.
-      </div>
-
       {/* NAV */}
-      <SiteHeader cta={{ label: 'Falar com o time', href: PLATFORM_CONTACT }} />
+      <SiteHeader cta={{ label: CTA.demo, href: '/#demo' }} />
 
-      {/* HERO */}
+      {/* HERO — dor primeiro */}
       <header className="hero">
         <div className="wrap">
           <div>
-            <span className="pill">Para empresas · programa enterprise &amp; design partners</span>
+            <span className="pill">Para empresas · adoção de IA em escala</span>
           </div>
           <div className="kick" style={{ marginTop: 18 }}>{SIGNATURE}</div>
-          <h1>
-            Acelere suas implementações <span className="g">com a Fluxomind como motor.</span>
+          <h1 style={{ maxWidth: '22ch' }}>
+            O piloto de IA impressionou na demo — <span className="g">e morreu antes da produção.</span>
           </h1>
           <p className="hsub">
-            A maioria dos pilotos de IA morre antes da produção — trava na integração, na governança
-            e na fila da TI, não no modelo. A Fluxomind acelera <strong>por dentro do que você já
-            tem</strong>, sem trocar o que funciona: não é um chat que responde nem um copilot que
-            sugere — seus times montam sistemas que <strong>executam de verdade</strong>, em dias,
-            com a governança e a segurança que o seu procurement exige.
+            Se essa história aconteceu na sua empresa, o problema não foi o modelo — construir
+            nunca foi o gargalo. O que mata o piloto é o que vem depois:
+            integrar, governar e operar todo dia. <strong>É exatamente a parte que a Fluxomind
+            entrega.</strong>
           </p>
           <div className="herocta">
-            <a className="btn btn-primary" href="#contato">
-              Falar com o time
+            <a className="btn btn-primary" href={PLATFORM_CONTACT}>
+              {CTA.contact}
             </a>
-            <a className="btn btn-ghost" href="#modelo">
-              Ver o programa de adoção
+            <a className="btn btn-ghost" href="#operado">
+              Ver o que muda
             </a>
           </div>
           <div className="stat">
             <div className="s">
-              <b>Desenhada para entregar em dias</b>
-              <span>do pedido ao sistema interno, sem fila de dev</span>
+              <b>79%</b>
+              <span>das empresas já adotaram agentes de IA (PwC, mai/2025)</span>
             </div>
             <div className="s">
-              <b>Sem fila de dev</b>
-              <span>times de negócio entregam sozinhos</span>
+              <b>11%</b>
+              <span>os têm de fato implantados (KPMG, 2025)</span>
             </div>
             <div className="s">
-              <b>No seu ambiente</b>
-              <span>isolamento, BYOK e residência de dados</span>
+              <b>construir ≠ operar</b>
+              <span>o gap onde os pilotos morrem</span>
             </div>
           </div>
         </div>
       </header>
 
-      {/* COMO ADOTAR */}
-      <section id="usos">
+      {/* POR QUE OS PILOTOS MORREM */}
+      <section id="por-que">
         <div className="wrap">
           <div className="center">
-            <div className="kick">Como as empresas adotam</div>
-            <h2>Quatro formas de usar a Fluxomind como acelerador</h2>
+            <div className="kick">Por que os pilotos morrem</div>
+            <h2>O piloto prova que a IA funciona. Não prova que ela opera.</h2>
             <p className="lead" style={{ marginTop: 14 }}>
-              Do uso interno ao produto que você entrega ao seu cliente.
+              Entre a demo e a produção aparecem três paredes — e nenhuma delas é o modelo.
             </p>
           </div>
-          <div className="ways">
-            <div className="way">
-              <div className="wi" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3.5" y="9" width="7" height="11" rx="1" /><rect x="13.5" y="4" width="7" height="16" rx="1" /><path d="M6.5 12.5h1M6.5 15.5h1M16.5 7.5h1M16.5 11h1M16.5 14.5h1" /></svg></div>
-              <h3>Acelere implementações internas</h3>
-              <div className="tagm">Para áreas de operação, CS, RevOps, BackOffice</div>
-              <p>
-                Seus times de negócio montam sistemas internos (cobrança, atendimento, aprovações,
-                painéis) em dias — sem abrir ticket pra TI. Reduz a fila de demandas do time de
-                engenharia.
-              </p>
-            </div>
-            <div className="way">
-              <div className="wi" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M9 2v4.5M15 2v4.5" /><path d="M6.5 6.5h11V10a5.5 5.5 0 0 1-11 0V6.5z" /><path d="M12 15.5V21" /></svg></div>
-              <h3>Embuta na sua stack</h3>
-              <div className="tagm">Via API e MCP server</div>
-              <p>
-                Exponha a Fluxomind como capacidade dentro do que você já tem — seus agentes e
-                sistemas chamam a plataforma como ferramenta. Integra, não substitui.
-              </p>
-            </div>
-            <div className="way">
-              <div className="wi" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M3.5 12.8V4.8a1.3 1.3 0 0 1 1.3-1.3h8L20.8 11a1.3 1.3 0 0 1 0 1.9l-7.9 7.9a1.3 1.3 0 0 1-1.9 0L3.5 12.8z" /><circle cx="7.5" cy="7.5" r="1.3" /></svg></div>
-              <h3>Ofereça aos seus clientes</h3>
-              <div className="tagm">White-label / OEM</div>
-              <p>
-                Empacote operação assistida por IA dentro do seu produto ou serviço, com sua marca —
-                sem construir a plataforma do zero.
-              </p>
-            </div>
-            <div className="way">
-              <div className="wi" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="8" cy="9" r="2.6" /><circle cx="16" cy="9" r="2.6" /><path d="M3.6 18.6c.5-2.6 2.3-4 4.4-4s3.9 1.4 4.4 4" /><path d="M14 14.8c1.8.2 3.3 1.5 3.8 3.8" /></svg></div>
-              <h3>Co-construa com nosso time</h3>
-              <div className="tagm">Professional services</div>
-              <p>
-                Nossa engenharia trabalha junto com a sua para acelerar a primeira implementação e
-                capacitar seu time a seguir sozinho.
-              </p>
-            </div>
+          <div className="prob">
+            {WALLS.map((w) => (
+              <div className="pcard" key={w.title}>
+                <div className="pi" aria-hidden="true" style={{ color: 'var(--blue)', lineHeight: 0 }}>
+                  {w.icon}
+                </div>
+                <h3>{w.title}</h3>
+                <p>{w.desc}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* FIT / GOVERNANÇA */}
-      <section id="fit" style={{ paddingTop: 0 }}>
+      {/* NEGAÇÃO — a diferença de categoria */}
+      <section style={{ paddingTop: 0 }}>
         <div className="wrap">
           <div className="fit">
             <div className="kick" style={{ color: 'var(--sky)' }}>
-              Cabe no seu ambiente
+              A diferença
             </div>
-            <h2 style={{ color: '#fff', maxWidth: '20ch' }}>
-              Feita para passar pelo seu time de segurança e compliance
+            <h2 style={{ color: '#fff', maxWidth: '24ch' }}>
+              Não é mais um piloto para testar. É o processo entregue rodando.
             </h2>
-            <div className="fitg">
-              <div className="fc">
-                <div className="fi" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="8" cy="8" r="4.2" /><path d="M11 11l8.5 8.5M16.5 16.5l2-2M18.5 18.5l2-2" /></svg></div>
-                <h4>Seus dados, sua chave</h4>
-                <p>Isolamento por cliente, BYOK (sua KMS) e opções de residência de dados por região.</p>
+            <ul
+              style={{
+                listStyle: 'none',
+                marginTop: 26,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 10,
+              }}
+            >
+              {NEGATION.nots.map((n) => (
+                <li
+                  key={n}
+                  style={{
+                    display: 'flex',
+                    gap: 10,
+                    alignItems: 'flex-start',
+                    color: '#A9AEB8',
+                    fontSize: 16,
+                  }}
+                >
+                  <span aria-hidden="true" style={{ color: '#e07a5f', fontWeight: 700 }}>
+                    ✕
+                  </span>
+                  {n}
+                </li>
+              ))}
+            </ul>
+            <p
+              style={{
+                marginTop: 22,
+                fontSize: 19,
+                color: '#fff',
+                fontWeight: 600,
+                maxWidth: '58ch',
+                lineHeight: 1.55,
+              }}
+            >
+              {NEGATION.is}
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ENTREGUE OPERADO */}
+      <section id="operado" style={{ paddingTop: 0 }}>
+        <div className="wrap">
+          <div className="center">
+            <div className="kick">Entregue operado</div>
+            <h2>O que chega na sua empresa já chega rodando</h2>
+            <p className="lead" style={{ marginTop: 14 }}>
+              Você não recebe uma ferramenta para o time aprender a usar. Recebe o processo em
+              operação — e é assim que ele roda.
+            </p>
+          </div>
+          <div className="ways">
+            {OPERATED.map((o) => (
+              <div className="way" key={o.title}>
+                <div className="wi" aria-hidden="true">
+                  {o.icon}
+                </div>
+                <h3>{o.title}</h3>
+                <div className="tagm">{o.tag}</div>
+                <p>{o.desc}</p>
               </div>
-              <div className="fc">
-                <div className="fi" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z" /><path d="M9 12l2 2 4-4" /></svg></div>
-                <h4>Governança aplicada pelo runtime</h4>
-                <p>
-                  Políticas, cotas, consentimento (GDPR/LGPD) e human-in-the-loop em ações
-                  sensíveis.
-                </p>
-              </div>
-              <div className="fc">
-                <div className="fi" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M7 3.5h7l4 4V20a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4.5a1 1 0 0 1 1-1z" /><path d="M13.5 3.5V8H18" /><path d="M9 12.5h6M9 16h6" /></svg></div>
-                <h4>Auditável por evidência</h4>
-                <p>Trilha imutável por hash-chain e controles SOC2/GDPR escaneados continuamente.</p>
-              </div>
-            </div>
-            <div className="fitlink">
-              <Link href="/plataforma">
-                Ver a avaliação técnica completa (arquitetura, performance, qualidade, governança,
-                segurança) →
-              </Link>
-            </div>
+            ))}
+          </div>
+          <div className="fitlink" style={{ textAlign: 'center' }}>
+            <Link href="/seguranca">
+              Como a governança e a segurança funcionam, em detalhe →
+            </Link>
           </div>
         </div>
       </section>
 
       {/* MODELO DE ADOÇÃO */}
-      <section id="modelo">
+      <section id="modelo" style={{ paddingTop: 0 }}>
         <div className="wrap">
           <div className="center">
             <div className="kick">Modelo de adoção</div>
-            <h2>Comece pequeno, com acompanhamento. Expanda quando provar valor.</h2>
+            <h2>Comece por um processo. Em semanas — não num projeto de meses.</h2>
           </div>
           <div className="timeline">
             <div className="tl">
               <div className="num">1</div>
-              <h4>Piloto guiado</h4>
+              <h4>Um processo, acompanhado</h4>
               <p>
-                Escolhemos juntos 1 processo de alto valor. Nosso time acompanha do desenho ao
-                primeiro resultado real, em poucas semanas.
+                Escolhemos juntos um processo que dói — cobrança, atendimento, aprovações. Nosso
+                time acompanha do desenho à primeira conclusão real.
               </p>
             </div>
             <div className="tl">
               <div className="num">2</div>
-              <h4>Expansão</h4>
+              <h4>Prova no dia a dia</h4>
               <p>
-                Provado o valor, mais áreas e processos entram. Seu time já opera com autonomia; o
-                nosso fica de retaguarda.
+                O app opera e a sua equipe vê cada conclusão com a prova — no processo de verdade,
+                não em slide. É a evidência que o piloto nunca teve.
               </p>
             </div>
             <div className="tl">
               <div className="num">3</div>
-              <h4>Embutido em escala</h4>
+              <h4>Expansão área a área</h4>
               <p>
-                A Fluxomind vira parte da sua operação — integrada à stack, com governança central e
-                suporte dedicado.
+                Provado o valor, outros processos entram. A governança segue central; cada área
+                ganha o seu app operante.
               </p>
             </div>
           </div>
-          <div className="proc">
-            <div className="pchip">Pronto para procurement:</div>
-            <div className="pchip">Security whitepaper</div>
-            <div className="pchip">Data room técnico</div>
-            <div className="pchip">DPA / tratamento de dados</div>
-            <div className="pchip">Roadmap de certificação</div>
-          </div>
-        </div>
-      </section>
-
-      {/* SUPORTE */}
-      <section style={{ paddingTop: 0 }}>
-        <div className="wrap">
-          <div className="center">
-            <div className="kick">Parceria, não só licença</div>
-            <h2>Suporte e acompanhamento de verdade</h2>
-          </div>
-          <div className="support">
-            <div className="sup">
-              <div className="si" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9" /><circle cx="12" cy="12" r="5" /><circle cx="12" cy="12" r="1.5" /></svg></div>
-              <div>
-                <h4>Time dedicado</h4>
-                <p>Um ponto de contato técnico e de produto que conhece a sua implementação.</p>
-              </div>
-            </div>
-            <div className="sup">
-              <div className="si" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 5.2A1.2 1.2 0 0 1 5.2 4H11v15.5H5.2A1.2 1.2 0 0 0 4 20.7V5.2z" /><path d="M20 5.2A1.2 1.2 0 0 0 18.8 4H13v15.5h5.8a1.2 1.2 0 0 1 1.2 1.2V5.2z" /></svg></div>
-              <div>
-                <h4>Capacitação</h4>
-                <p>Habilitamos seus times de negócio e de TI para construir e operar sozinhos.</p>
-              </div>
-            </div>
-            <div className="sup">
-              <div className="si" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M14.7 6.3a3.6 3.6 0 0 0-4.8 4.3l-5.7 5.7 2.2 2.2 5.7-5.7a3.6 3.6 0 0 0 4.3-4.8l-2.3 2.3-1.9-1.9 2.5-2.4z" /></svg></div>
-              <div>
-                <h4>Professional services</h4>
-                <p>Nossa engenharia acelera as primeiras entregas e os casos mais complexos.</p>
-              </div>
-            </div>
-            <div className="sup">
-              <div className="si" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4v16h16" /><path d="M7 14l3-3 3 3 5-6" /><path d="M18 8h-2.5M18 8v2.5" /></svg></div>
-              <div>
-                <h4>Roadmap conjunto</h4>
-                <p>Como design partner, sua operação influencia a prioridade do produto.</p>
-              </div>
-            </div>
-          </div>
           <div className="honest">
-            <b>Transparência:</b> estamos em pré-lançamento. Hoje a adoção enterprise acontece via{' '}
-            <strong>programa de design partners com acompanhamento próximo</strong> — SLA formal,
-            certificação SOC2 e self-serve em escala estão no roadmap. Você entra cedo, com
-            influência no produto e condições de fundador.
+            <b>Transparência.</b> {PHASE.exists.title}: {PHASE.exists.desc} Estamos em beta — a
+            adoção acontece acompanhada de perto pelo nosso time; SLA formal e certificações estão
+            no roadmap. {PHASE.vision.title}: {PHASE.vision.desc}
           </div>
         </div>
       </section>
 
-      {/* CTA */}
+      {/* CTA FINAL */}
       <section style={{ paddingTop: 0 }}>
         <div className="wrap">
           <div className="cta-card" id="contato">
             <div className="kick" style={{ color: 'var(--sky)' }}>
               Vamos conversar
             </div>
-            <h2>Traga um processo. Devolvemos um acelerador.</h2>
+            <h2>Traga o piloto que morreu. Saia com um processo operando.</h2>
             <p className="lead">
-              Conte qual implementação ou operação você quer acelerar — desenhamos um piloto guiado
-              com o seu time.
+              Conte qual processo você quer delegar. Desenhamos com o seu time o primeiro app
+              operante da sua empresa — e você acompanha cada conclusão, com a prova.
             </p>
             <div className="ctab">
               <a className="btn btn-primary" href={PLATFORM_CONTACT}>
-                Falar com o time
+                {CTA.contact}
               </a>
               <Link className="btn btn-ghost" href="/plataforma">
-                Ver avaliação técnica
+                Ver a avaliação técnica
               </Link>
             </div>
           </div>
         </div>
       </section>
 
-      <SiteFooter tagline="Seu acelerador de operações e implementações." />
+      <SiteFooter tagline="O software se molda à empresa — e opera o processo." />
     </div>
   );
 }

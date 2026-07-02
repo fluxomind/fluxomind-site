@@ -1,194 +1,156 @@
 import Link from 'next/link';
+import type { Metadata } from 'next';
 import DemoBuilder from '@/components/DemoBuilder';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
-import TrackSelector from '@/components/TrackSelector';
 import HexAgono360 from '@/components/HexAgono360';
-import { PLATFORM_CONTACT, PLATFORM_SIGNUP } from '@/lib/platform';
+import {
+  SIGNATURE,
+  PROMISE,
+  NEGATION,
+  FACES,
+  TRUST_RULES,
+  PHASE,
+  CTA,
+} from '@/lib/messages';
+import { PLATFORM_BETA, PLATFORM_CONTACT } from '@/lib/platform';
+
+export const metadata: Metadata = {
+  title: { absolute: 'Fluxomind — delegue a tarefa, receba a conclusão com a prova' },
+  description:
+    'Um app que resolve o seu problema e se opera sozinho — integrado ao que você já tem, governado, em semanas. Veja a demonstração: o app se constrói na sua frente e opera o dia a dia, com humano nos casos sensíveis.',
+};
+
+// Assinatura canônica (messages.ts), com destaque visual na segunda frase.
+const SIG_BREAK = SIGNATURE.indexOf('. ') + 1;
+const SIG_HEAD = SIGNATURE.slice(0, SIG_BREAK); // "Delegue a tarefa."
+const SIG_TAIL = SIGNATURE.slice(SIG_BREAK).trim(); // "Receba a conclusão com a prova."
+
+const ICON_PROPS = {
+  viewBox: '0 0 24 24',
+  fill: 'none',
+  stroke: 'currentColor',
+  strokeWidth: 1.8,
+  strokeLinecap: 'round' as const,
+  strokeLinejoin: 'round' as const,
+};
+
+// Ícones das 5 regras da confiança (mesma ordem de TRUST_RULES).
+const TRUST_ICONS = [
+  // Enquadramento — alvo
+  <svg key="enquadramento" {...ICON_PROPS}>
+    <circle cx="12" cy="12" r="8" />
+    <circle cx="12" cy="12" r="3.4" />
+    <path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22" />
+  </svg>,
+  // Coerência — pontas conectadas
+  <svg key="coerencia" {...ICON_PROPS}>
+    <circle cx="5" cy="12" r="2.2" />
+    <circle cx="19" cy="12" r="2.2" />
+    <path d="M7.2 12h9.6" />
+    <path d="M12 9.8V7M12 14.2V17" />
+  </svg>,
+  // Correção + desfazer — seta de undo
+  <svg key="correcao" {...ICON_PROPS}>
+    <path d="M9 14l-4-4 4-4" />
+    <path d="M5 10h9a5 5 0 0 1 0 10h-3" />
+  </svg>,
+  // Humano assume — pessoa
+  <svg key="humano" {...ICON_PROPS}>
+    <circle cx="12" cy="8" r="3.2" />
+    <path d="M5.5 20c1-3.8 3.6-5.6 6.5-5.6s5.5 1.8 6.5 5.6" />
+  </svg>,
+  // Seus dados, só seus — cadeado
+  <svg key="dados" {...ICON_PROPS}>
+    <rect x="5" y="11" width="14" height="9" rx="2" />
+    <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+  </svg>,
+];
+
+const PHASE_CARDS = [
+  { badge: 'b-impl', ...PHASE.exists },
+  { badge: 'b-parc', ...PHASE.next },
+  { badge: 'b-road', ...PHASE.vision },
+];
 
 export default function Home() {
   return (
     <div className="page-home">
-      <div className="note">
-        Protótipo conceitual da nova home (linguagem de venda). Conteúdo demonstrativo.
-      </div>
+      <style>{HOME_CSS}</style>
 
-      {/* NAV */}
-      <SiteHeader cta={{ label: 'Criar meu sistema', href: PLATFORM_SIGNUP }} />
+      {/* NAV — CTA primário leva à demonstração (a conversão é viver a demo) */}
+      <SiteHeader cta={{ label: CTA.demo, href: '#demo' }} />
 
       {/* HERO */}
-      <header className="hero hero--split">
-        <div className="wrap">
-          <div>
-            <span className="pill">
-              <span className="lz" /> Plataforma operacional AI-first · em beta
-            </span>
-            <h1>
-              Delegue a tarefa. <span className="g">Receba a conclusão com a prova.</span>
-            </h1>
-            <p className="hsub">
-              A Fluxomind se constrói a partir do que você pede, opera sobre os seus dados e
-              devolve a tarefa pronta — com a prova na tela. E fica mais inteligente quanto mais
-              você usa.
-            </p>
-            <div className="herocta">
-              <a className="btn btn-primary btn-lg" href={PLATFORM_SIGNUP}>
-                Criar meu sistema
-              </a>
-              <a className="btn btn-ghost btn-lg" href="#demo">
-                Ver funcionando ↓
-              </a>
-            </div>
-            <div className="reassure">
-              <span>
-                <b>✓</b> Comece em minutos
-              </span>
-              <span>
-                <b>✓</b> A prova na tela, a cada passo
-              </span>
-              <span>
-                <b>✓</b> Seus dados isolados e seguros
-              </span>
-            </div>
+      <header className="hero">
+        <div className="wrap" style={{ textAlign: 'center', paddingBottom: 48 }}>
+          <span className="pill">
+            <span className="lz" /> Plataforma em beta · a demonstração está logo abaixo
+          </span>
+          <h1 style={{ maxWidth: '24ch', margin: '0 auto' }}>
+            {SIG_HEAD} <span className="g">{SIG_TAIL}</span>
+          </h1>
+          <p className="hsub" style={{ maxWidth: '62ch', margin: '18px auto 0' }}>
+            {PROMISE} Se constrói a partir do que você pede — e fica mais inteligente quanto
+            mais você usa.
+          </p>
+          <div className="herocta" style={{ justifyContent: 'center' }}>
+            <a className="btn btn-primary btn-lg" href="#demo">
+              {CTA.demo} ↓
+            </a>
           </div>
-
-          <DemoBuilder />
+          <div className="reassure" style={{ justifyContent: 'center' }}>
+            <span>
+              <b>✓</b> Assista sem cadastro
+            </span>
+            <span>
+              <b>✓</b> A prova na tela, a cada passo
+            </span>
+            <span>
+              <b>✓</b> Humano assume nos casos sensíveis
+            </span>
+          </div>
         </div>
       </header>
 
-      {/* TRACK SELECTOR — 3 trilhas por tamanho (Message House §4) */}
-      <TrackSelector />
-
-      {/* PROBLEM */}
-      <section>
+      {/* A DEMO — o coração da página: construir e, depois, OPERAR */}
+      <section
+        id="demo"
+        style={{
+          background:
+            'radial-gradient(900px 420px at 50% 0%, rgba(43,102,221,.28), transparent 60%), var(--ink)',
+          color: '#fff',
+        }}
+      >
         <div className="wrap">
           <div className="center">
-            <div className="kick">Soa familiar?</div>
-            <h2>Sua operação roda no improviso — e isso custa caro</h2>
-            <p className="lead" style={{ marginTop: 14 }}>
-              Planilha que ninguém entende, retrabalho, e tudo dependendo de uma pessoa ou da
-              fila da TI.
+            <div className="kick" style={{ color: 'var(--sky)' }}>
+              A demonstração
+            </div>
+            <h2 style={{ color: '#fff' }}>O app se constrói na sua frente. E depois, opera.</h2>
+            <p className="lead" style={{ color: '#CdD3Dc', marginTop: 14 }}>
+              Construir ficou fácil — qualquer IA te entrega um protótipo.{' '}
+              <strong style={{ color: '#fff' }}>Operar é o que falta.</strong> Descreva um
+              problema real e assista aos dois atos: o app nasce diante de você — e, trinta dias
+              depois, está cuidando do dia a dia.
             </p>
           </div>
-          <div className="prob">
-            <div className="pcard">
-              <div className="pi">🗂️</div>
-              <h3>Tudo espalhado</h3>
-              <p>
-                Informação em planilhas, e-mails e na cabeça das pessoas. Ninguém tem a visão
-                completa.
-              </p>
-            </div>
-            <div className="pcard">
-              <div className="pi">⏳</div>
-              <h3>Sempre esperando</h3>
-              <p>Toda mudança vira pedido pra TI ou um dev caro — e leva semanas pra sair.</p>
-            </div>
-            <div className="pcard">
-              <div className="pi">🔁</div>
-              <h3>Trabalho repetitivo</h3>
-              <p>
-                Horas todo mês fazendo cobrança, atualizando relatório e copiando dado de um
-                lugar pro outro.
-              </p>
-            </div>
+          <div style={{ maxWidth: 760, margin: '38px auto 0' }}>
+            <DemoBuilder />
           </div>
         </div>
       </section>
 
-      {/* TRANSFORMATION */}
-      <section style={{ paddingTop: 0 }}>
-        <div className="wrap">
-          <div className="center">
-            <div className="kick">A virada</div>
-            <h2>Do improviso ao sistema que trabalha por você</h2>
-          </div>
-          <div className="fromto">
-            <div className="ft from">
-              <h4>Hoje</h4>
-              <ul>
-                <li>
-                  <span className="x">✕</span> Planilhas que quebram e se perdem
-                </li>
-                <li>
-                  <span className="x">✕</span> Semanas esperando a TI
-                </li>
-                <li>
-                  <span className="x">✕</span> Cobrança e relatório na mão, todo mês
-                </li>
-                <li>
-                  <span className="x">✕</span> Cada ferramenta de um jeito, nada conversa
-                </li>
-              </ul>
-            </div>
-            <div className="ftarrow">→</div>
-            <div className="ft to">
-              <h4>Com a Fluxomind</h4>
-              <ul>
-                <li>
-                  <span className="c">✓</span> Um sistema sob medida, montado em minutos
-                </li>
-                <li>
-                  <span className="c">✓</span> Você mesmo muda, conversando
-                </li>
-                <li>
-                  <span className="c">✓</span> Cobranças e relatórios no automático
-                </li>
-                <li>
-                  <span className="c">✓</span> Tudo num lugar só, que aprende com o uso
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* HOW IT WORKS */}
-      <section id="como" className="why">
-        <div className="wrap">
-          <div className="center">
-            <div className="kick">Como funciona</div>
-            <h2>Do pedido ao sistema pronto, em 3 passos</h2>
-          </div>
-          <div className="steps3">
-            <div className="s3">
-              <div className="n">1</div>
-              <h4>Você descreve</h4>
-              <p>Escreva em português o que precisa organizar ou automatizar. Sem menus, sem código.</p>
-            </div>
-            <div className="s3">
-              <div className="n">2</div>
-              <h4>A Fluxomind monta</h4>
-              <p>
-                Ela cria os cadastros, as telas, os relatórios e as automações — e te mostra cada
-                passo na tela.
-              </p>
-            </div>
-            <div className="s3">
-              <div className="n">3</div>
-              <h4>Você opera e melhora</h4>
-              <p>Use no dia a dia, no computador ou no WhatsApp. Quer mudar algo? É só pedir.</p>
-            </div>
-          </div>
-          <div className="center" style={{ marginTop: 44 }}>
-            <a className="btn btn-primary btn-lg" href={PLATFORM_SIGNUP}>
-              Criar meu sistema
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* USE CASES */}
+      {/* O QUE RESOLVE */}
       <section id="usos">
         <div className="wrap">
           <div className="center">
-            <div className="kick">O que resolvo</div>
+            <div className="kick">O que resolve</div>
             <h2>Planilha, e-mail, dez ferramentas — e alguém reconciliando tudo na mão.</h2>
             <p className="lead" style={{ marginTop: 14 }}>
-              É aí que a sua operação perde horas e a estratégia para. A Fluxomind tira isso das suas
-              costas — não é um chat que responde nem um copilot que sugere: você pede, <strong>ela
-              executa</strong>, com a prova na tela e nada crítico saindo sem o seu OK. Comece por uma
-              dor:
+              É aí que a sua operação perde horas e a estratégia para. A Fluxomind tira isso das
+              suas costas — você pede, <strong>ela executa</strong>, com a prova na tela e nada
+              crítico saindo sem o seu OK. Comece por uma dor:
             </p>
           </div>
           <div className="uc">
@@ -259,115 +221,106 @@ export default function Home() {
         </div>
       </section>
 
-      {/* SOLUÇÕES — as 6 perguntas de cliente (Message House §3) */}
-      <section id="solucoes" style={{ paddingTop: 0 }}>
+      {/* COMO FUNCIONA */}
+      <section id="como" className="why">
         <div className="wrap">
           <div className="center">
-            <div className="kick">Soluções</div>
-            <h2>Seis perguntas que todo negócio faz — uma plataforma que responde</h2>
+            <div className="kick">Como funciona</div>
+            <h2>Do problema ao processo rodando, em 3 passos</h2>
+          </div>
+          <div className="steps3">
+            <div className="s3">
+              <div className="n">1</div>
+              <h4>Descreva o problema</h4>
+              <p>
+                Em português, do seu jeito: “controlar clientes em atraso”, “organizar o
+                onboarding”. Sem menus, sem código, sem projeto.
+              </p>
+            </div>
+            <div className="s3">
+              <div className="n">2</div>
+              <h4>Veja o app se construir</h4>
+              <p>
+                Cadastros, telas, painéis e automações nascem na sua frente — com a prova na
+                tela a cada passo.
+              </p>
+            </div>
+            <div className="s3">
+              <div className="n">3</div>
+              <h4>Adote operado</h4>
+              <p>
+                O agente roda o dia a dia: detecta, prepara, executa com o seu OK — e escala
+                para um humano nos casos sensíveis.
+              </p>
+            </div>
+          </div>
+          <div className="center" style={{ marginTop: 44 }}>
+            <a className="btn btn-primary btn-lg" href={PLATFORM_BETA}>
+              {CTA.beta}
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* AS 6 PERGUNTAS + HEXÁGONO */}
+      <section id="solucoes">
+        <div className="wrap">
+          <div className="center">
+            <div className="kick">O que o seu app responde</div>
+            <h2>Seis perguntas que todo negócio faz — o seu app responde às seis</h2>
             <p className="lead" style={{ marginTop: 14 }}>
-              Não importa a sua operação: ela cabe em seis perguntas. A Fluxomind responde as seis,
-              a partir do que você pede.
+              Qualquer operação cabe nelas. O seu app nasce respondendo às seis — e é isso que
+              faz dele um sistema inteiro, não um protótipo.
             </p>
           </div>
-          <div style={{ marginTop: 38 }}>
+          <div className="uc" style={{ marginTop: 38 }}>
+            {FACES.map((f) => (
+              <div className="ucc" key={f.key}>
+                <div className="fmh-facelabel">{f.label}</div>
+                <h4 style={{ marginTop: 6 }}>{f.q}</h4>
+                <p>{f.gloss}</p>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 30 }}>
             <HexAgono360 />
           </div>
-        </div>
-      </section>
 
-      {/* WHY DIFFERENT — moat (Atlas + flywheel + negação tripla) */}
-      <section className="why">
-        <div className="wrap">
-          <div className="center">
-            <div className="kick">O que não dá pra copiar</div>
-            <h2>Quanto mais você usa, mais inteligente ela fica</h2>
-            <p className="lead" style={{ marginTop: 14 }}>
-              Não é um chatbot, não é um builder low-code, não é um wrapper de LLM — é a operação
-              que se monta, opera e aprende com você.
-            </p>
-          </div>
-          <div className="whyg">
-            <div className="wcard">
-              <div className="wi">🧠</div>
-              <div>
-                <h4>Entende o seu negócio</h4>
-                <p>
-                  Um cérebro semântico reconhece suas entidades e conecta seus dados. Ela trata a
-                  sua operação como conhecimento — não como planilha solta.
-                </p>
-              </div>
+          {/* Negação tripla */}
+          <div className="fit fmh-neg" style={{ marginTop: 40 }}>
+            <div className="nots">
+              {NEGATION.nots.map((n) => (
+                <span key={n}>{n}</span>
+              ))}
             </div>
-            <div className="wcard">
-              <div className="wi">🔁</div>
-              <div>
-                <h4>Fica mais inteligente quanto mais usa</h4>
-                <p>
-                  Cada operação ensina a próxima. Com o tempo, ela passa a sugerir o próximo passo
-                  sozinha — antes de você pedir.
-                </p>
-              </div>
-            </div>
-            <div className="wcard">
-              <div className="wi">🧩</div>
-              <div>
-                <h4>Se constrói a partir do seu pedido</h4>
-                <p>
-                  Você descreve, e ela cria os objetos, as telas e os fluxos. Sem ciclo de TI no
-                  caminho — você muda conversando.
-                </p>
-              </div>
-            </div>
-            <div className="wcard">
-              <div className="wi">✅</div>
-              <div>
-                <h4>Entrega com prova, não com promessa</h4>
-                <p>
-                  Não é “a IA respondeu”. É “a tarefa foi feita — e aqui está a prova”, na tela, a
-                  cada passo.
-                </p>
-              </div>
-            </div>
+            <p className="is">{NEGATION.is}</p>
           </div>
         </div>
       </section>
 
-      {/* SECURITY */}
+      {/* CONFIANÇA — as 5 regras */}
       <section className="sec" id="seguranca">
         <div className="wrap">
           <div className="center">
             <div className="kick" style={{ color: 'var(--sky)' }}>
-              Seguro de verdade
+              As 5 regras da confiança
             </div>
-            <h2 style={{ color: '#fff' }}>Seus dados são seus — isolados e protegidos</h2>
+            <h2 style={{ color: '#fff' }}>Confiar uma operação a um app exige regras. São cinco.</h2>
             <p className="lead" style={{ color: '#A9AEB8', marginTop: 14 }}>
-              Governança arquitetural desde o primeiro dia, sem você precisar configurar nada.
+              Elas vêm de fábrica, para qualquer app criado na plataforma — e são o que deixa
+              você delegar sem medo.
             </p>
           </div>
-          <div className="secg">
-            <div className="secc">
-              <div className="si">🔒</div>
-              <h4>Dados isolados</h4>
-              <p>Cada empresa tem seu espaço próprio. Ninguém vê o que é seu.</p>
-            </div>
-            <div className="secc">
-              <div className="si">🔑</div>
-              <h4>Você controla a chave</h4>
-              <p>
-                Empresas maiores podem usar a própria chave de criptografia e revogar o acesso
-                quando quiserem.
-              </p>
-            </div>
-            <div className="secc">
-              <div className="si">🛡️</div>
-              <h4>Privacidade por padrão</h4>
-              <p>Dados sensíveis são protegidos automaticamente antes de qualquer processamento.</p>
-            </div>
-            <div className="secc">
-              <div className="si">🧾</div>
-              <h4>Histórico à prova</h4>
-              <p>Trilha de auditoria encadeada por hash que detecta qualquer adulteração — verificável.</p>
-            </div>
+          <div className="fmh-trust">
+            {TRUST_RULES.map((r, i) => (
+              <div className="secc" key={r.title}>
+                <div className="si" aria-hidden="true">
+                  {TRUST_ICONS[i]}
+                </div>
+                <h4>{r.title}</h4>
+                <p>{r.desc}</p>
+              </div>
+            ))}
           </div>
           <div className="center" style={{ marginTop: 30 }}>
             <Link
@@ -375,14 +328,63 @@ export default function Home() {
               href="/seguranca"
               style={{ color: 'var(--sky)', borderColor: 'rgba(77,171,247,.4)' }}
             >
-              Como protegemos seus dados, em detalhe →
+              Como cada regra é garantida, em detalhe →
             </Link>
           </div>
         </div>
       </section>
 
+      {/* ROTAS — banda discreta por perfil */}
+      <section
+        style={{
+          padding: '30px 0',
+          background: 'var(--panel)',
+          borderTop: '1px solid var(--line)',
+          borderBottom: '1px solid var(--line)',
+        }}
+      >
+        <div className="wrap fmh-routes">
+          <span>
+            Empresa maior? <Link href="/acelere">Adoção em escala →</Link>
+          </span>
+          <span>
+            Time técnico? <Link href="/plataforma">A plataforma por dentro →</Link>
+          </span>
+        </div>
+      </section>
+
+      {/* PARA ONDE ISSO VAI — fato, lacuna e aposta */}
+      <section>
+        <div className="wrap">
+          <div className="center">
+            <div className="kick">Para onde isso vai</div>
+            <h2>O que já existe, o que vem agora — e a visão</h2>
+            <p className="lead" style={{ marginTop: 14 }}>
+              Fato, lacuna e aposta — sem confundir os três. É assim que preferimos te contar.
+            </p>
+          </div>
+          <div className="prob">
+            {PHASE_CARDS.map((c) => (
+              <div className="pcard" key={c.title}>
+                <span className={`badge ${c.badge}`}>
+                  <span className="d" /> {c.title}
+                </span>
+                <p style={{ color: 'var(--slate)', marginTop: 16, fontSize: 15.5 }}>{c.desc}</p>
+              </div>
+            ))}
+          </div>
+          <p
+            className="center"
+            style={{ marginTop: 28, color: 'var(--mute)', fontSize: 14.5 }}
+          >
+            A visão — especialistas empacotando seus métodos em apps operantes — é o rumo
+            declarado, não o presente. Vamos contando por aqui, capítulo a capítulo.
+          </p>
+        </div>
+      </section>
+
       {/* FAQ */}
-      <section id="faq">
+      <section id="faq" style={{ paddingTop: 0 }}>
         <div className="wrap">
           <div className="center">
             <div className="kick">Dúvidas comuns</div>
@@ -392,68 +394,84 @@ export default function Home() {
             <div className="qa">
               <h4>Preciso saber programar?</h4>
               <p>
-                Não. Você conversa em português e a plataforma monta tudo. Se um dia precisar de
-                algo muito específico, dá pra ir além — mas a maioria nunca precisa.
+                Não. Você descreve o problema em português; o app se constrói e, para mudar,
+                você conversa. Sem dev no caminho.
               </p>
             </div>
             <div className="qa">
               <h4>Meus dados ficam seguros?</h4>
               <p>
-                Sim. Cada empresa fica isolada, os dados são criptografados, e empresas maiores
-                podem usar a própria chave. Você manda nos seus dados.
+                Cada empresa fica isolada de verdade, os dados são criptografados e toda ação
+                fica numa trilha à prova de adulteração. Quem exige pode trazer a própria chave.
+                Os detalhes estão em <Link href="/seguranca" style={{ color: 'var(--blue)', fontWeight: 600 }}>Segurança</Link>.
               </p>
             </div>
             <div className="qa">
-              <h4>Vou ter que jogar fora minha planilha ou meu CRM?</h4>
+              <h4>Vou ter que largar minha planilha ou meu CRM?</h4>
               <p>
-                Não precisa. Comece centralizando o que está espalhado, do seu jeito, e expanda no
-                seu ritmo.
+                Não. O app nasce integrado ao que você já tem — WhatsApp, e-mail, API, seus
+                sistemas — e você migra no seu ritmo.
               </p>
             </div>
             <div className="qa">
-              <h4>Quanto tempo até começar a usar?</h4>
+              <h4>Em quanto tempo estou rodando?</h4>
               <p>
-                Liberado o seu acesso ao beta, o primeiro sistema sai já na primeira conversa —
-                você viu acontecer aqui em cima.
+                Em semanas, não num projeto de meses. No beta, o time acompanha de perto: o
+                primeiro caso a gente monta com você.
               </p>
             </div>
             <div className="qa">
               <h4>Quanto custa?</h4>
               <p>
-                Estamos em beta: você cria a conta e começa sem custo, com um limite de uso claro.
-                Conforme o produto abre, os planos crescem com o uso — cartão só pra ampliar o
-                limite, sem surpresa na fatura.
+                Durante o beta, ninguém pede cartão: o acesso é acompanhado e sem custo para
+                começar. Os planos estão em <Link href="/precos" style={{ color: 'var(--blue)', fontWeight: 600 }}>Preços</Link>.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* OFFER */}
+      {/* CTA FINAL */}
       <section className="offer" id="comecar">
         <div className="wrap">
           <div className="kick" style={{ color: 'var(--sky)' }}>
-            Comece agora
+            O próximo passo
           </div>
-          <h2>Delegue a sua primeira tarefa hoje</h2>
+          <h2>Delegue a primeira tarefa</h2>
           <p className="lead">
-            Descreva o que precisa e veja a tarefa pronta, com a prova na tela. Em beta: crie sua
-            conta e comece grátis.
+            Conte qual problema você quer tirar das costas. No beta, montamos o primeiro app
+            operante com você — e você recebe a conclusão com a prova.
           </p>
           <div className="offerbtns">
-            <a className="btn btn-primary btn-lg" href={PLATFORM_SIGNUP}>
-              Criar meu sistema
+            <a className="btn btn-primary btn-lg" href={PLATFORM_BETA}>
+              {CTA.beta}
             </a>
             <a className="btn btn-ghost btn-lg" href={PLATFORM_CONTACT}>
-              Falar com a gente
+              {CTA.contact}
             </a>
           </div>
-          <div className="scar">⏳ Em beta — crie sua conta; liberamos seu acesso em seguida</div>
+          <div className="scar">Beta acompanhado · sem cartão · em semanas, não meses</div>
         </div>
       </section>
 
       {/* FOOTER */}
-      <SiteFooter tagline="Delegue a tarefa. Receba a conclusão com a prova." />
+      <SiteFooter tagline={SIGNATURE} />
     </div>
   );
 }
+
+// Estilos específicos da home (não tocamos globals.css — compartilhado).
+const HOME_CSS = `
+.fmh-facelabel { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--blue); }
+.fmh-trust { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-top: 34px; }
+@media (max-width: 1024px) { .fmh-trust { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 640px) { .fmh-trust { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 440px) { .fmh-trust { grid-template-columns: 1fr; } }
+.fmh-neg { text-align: center; }
+.fmh-neg .nots { display: flex; gap: 10px 28px; justify-content: center; flex-wrap: wrap; color: #A9AEB8; font-size: 15px; }
+.fmh-neg .nots span::before { content: "✕"; margin-right: 8px; color: #e58973; font-weight: 700; }
+.fmh-neg .is { margin: 20px auto 0; color: #fff; font-size: clamp(17px, 2.1vw, 21px); font-weight: 700; line-height: 1.5; max-width: 58ch; }
+.fmh-routes { display: flex; gap: 12px 48px; justify-content: center; flex-wrap: wrap; font-size: 15px; color: var(--slate); }
+.fmh-routes a { color: var(--blue); font-weight: 600; }
+.fmh-routes a:hover { text-decoration: underline; }
+`;

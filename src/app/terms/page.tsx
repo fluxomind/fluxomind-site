@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Termos de Uso - FluxoMind',
-  description: 'Termos de Uso e Condições de Serviço da FluxoMind',
+  title: 'Termos de Uso',
+  description: 'Termos de Uso e Condições de Serviço da Fluxomind',
 };
 
 export default function TermsOfService() {
@@ -17,7 +17,7 @@ export default function TermsOfService() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <Link href="/" className="flex items-center">
-              <img src="/logoSVG/logo-light.svg" alt="FluxoMind" className="h-8 w-auto" />
+              <img src="/logoSVG/logo-light.svg" alt="Fluxomind" className="h-8 w-auto" />
             </Link>
             <Link href="/" className="text-gray-600 hover:text-gray-900 transition-colors">
               Voltar ao início
@@ -39,21 +39,21 @@ export default function TermsOfService() {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-gray-900 mb-4">1. Aceitação dos Termos</h2>
             <p className="text-gray-600 mb-4">
-              Ao acessar ou utilizar os serviços da FluxoMind (&quot;Serviços&quot;), incluindo nossa plataforma,
+              Ao acessar ou utilizar os serviços da Fluxomind (&quot;Serviços&quot;), incluindo nossa plataforma,
               aplicativos, APIs e integrações de mensagens (incluindo WhatsApp Business), você concorda
               em estar vinculado a estes Termos de Uso (&quot;Termos&quot;). Se você não concordar com estes Termos,
               não utilize nossos Serviços.
             </p>
             <p className="text-gray-600">
               Estes Termos constituem um acordo legal entre você e a FLUXOMIND LTDA, inscrita no
-              CNPJ sob o nº 60.162.547/0001-15, com sede no Brasil (&quot;FluxoMind&quot;, &quot;nós&quot;, &quot;nosso&quot; ou &quot;nossa&quot;).
+              CNPJ sob o nº 60.162.547/0001-15, com sede no Brasil (&quot;Fluxomind&quot;, &quot;nós&quot;, &quot;nosso&quot; ou &quot;nossa&quot;).
             </p>
           </section>
 
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-gray-900 mb-4">2. Descrição dos Serviços</h2>
             <p className="text-gray-600 mb-4">
-              A FluxoMind oferece uma plataforma de inteligência artificial e automação que permite:
+              A Fluxomind oferece uma plataforma de inteligência artificial e automação que permite:
             </p>
             <ul className="list-disc pl-6 text-gray-600 space-y-2 mb-4">
               <li>Criação e gestão de automações inteligentes</li>
@@ -146,13 +146,13 @@ export default function TermsOfService() {
             <h2 className="text-2xl font-semibold text-gray-900 mb-4">7. Propriedade Intelectual</h2>
             <p className="text-gray-600 mb-4">
               Todos os direitos de propriedade intelectual relacionados aos Serviços, incluindo
-              software, design, marcas e conteúdo, pertencem à FluxoMind ou seus licenciadores.
+              software, design, marcas e conteúdo, pertencem à Fluxomind ou seus licenciadores.
               Você recebe uma licença limitada, não exclusiva e não transferível para utilizar os
               Serviços conforme estes Termos.
             </p>
             <p className="text-gray-600">
               Você mantém a propriedade de todo o conteúdo que criar ou carregar através dos Serviços,
-              concedendo à FluxoMind uma licença para processar e exibir tal conteúdo conforme necessário
+              concedendo à Fluxomind uma licença para processar e exibir tal conteúdo conforme necessário
               para a prestação dos Serviços.
             </p>
           </section>
@@ -165,7 +165,7 @@ export default function TermsOfService() {
               na Política de Privacidade.
             </p>
             <p className="text-gray-600">
-              A FluxoMind está comprometida com a conformidade com a Lei Geral de Proteção de Dados (LGPD)
+              A Fluxomind está comprometida com a conformidade com a Lei Geral de Proteção de Dados (LGPD)
               e outras legislações aplicáveis de proteção de dados.
             </p>
           </section>
@@ -193,7 +193,7 @@ export default function TermsOfService() {
                 Os Serviços são fornecidos &quot;como estão&quot;, sem garantias de qualquer tipo
               </li>
               <li>
-                A FluxoMind não será responsável por danos indiretos, incidentais, especiais ou
+                A Fluxomind não será responsável por danos indiretos, incidentais, especiais ou
                 consequenciais
               </li>
               <li>
@@ -205,7 +205,7 @@ export default function TermsOfService() {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-gray-900 mb-4">11. Indenização</h2>
             <p className="text-gray-600">
-              Você concorda em indenizar e isentar a FluxoMind, seus diretores, funcionários e
+              Você concorda em indenizar e isentar a Fluxomind, seus diretores, funcionários e
               parceiros de quaisquer reclamações, perdas ou danos decorrentes de: (a) seu uso dos
               Serviços; (b) violação destes Termos; (c) violação de direitos de terceiros; ou
               (d) conteúdo que você transmitir através dos Serviços.
@@ -248,7 +248,7 @@ export default function TermsOfService() {
             <ul className="list-disc pl-6 text-gray-600 space-y-2">
               <li>
                 <strong>Integralidade:</strong> Estes Termos constituem o acordo integral entre
-                você e a FluxoMind
+                você e a Fluxomind
               </li>
               <li>
                 <strong>Renúncia:</strong> A falha em exercer qualquer direito não constitui
@@ -284,7 +284,7 @@ export default function TermsOfService() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <Link href="/" className="mb-4 md:mb-0">
-              <img src="/logoSVG/logo-dark.svg" alt="FluxoMind" className="h-8 w-auto" />
+              <img src="/logoSVG/logo-dark.svg" alt="Fluxomind" className="h-8 w-auto" />
             </Link>
             <div className="text-center md:text-right">
               <p className="text-gray-400">

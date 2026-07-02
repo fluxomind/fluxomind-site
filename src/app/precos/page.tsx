@@ -2,23 +2,19 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
-import { PLATFORM_SIGNUP } from '@/lib/platform';
+import { CTA } from '@/lib/messages';
+import { PLATFORM_BETA, PLATFORM_CONTACT } from '@/lib/platform';
 
 export const metadata: Metadata = {
-  title: 'Fluxomind — Preços: grátis no beta, depois pague só pelo uso',
+  title: 'Preços',
   description:
-    'A Fluxomind está em beta (pré-lançamento). No beta você cria sua conta e entra sem custo, com um limite de uso claro pra montar e testar de verdade. Quando o produto abrir, você cresce pagando só pelo que usar — sem surpresa.',
+    'Durante o beta, o acesso é acompanhado e sem cartão — você entra pela lista do beta. Depois, assinatura + uso com os modelos de fronteira inclusos: uma fatura, em reais, sem gerir contas e chaves de IA.',
 };
 
 export default function Precos() {
   return (
     <div className="page-pricing">
-      <div className="note">
-        Protótipo da página de preços. As faixas finais estão sendo definidas com os primeiros
-        clientes — conteúdo demonstrativo.
-      </div>
-
-      <SiteHeader cta={{ label: 'Criar meu sistema', href: PLATFORM_SIGNUP }} />
+      <SiteHeader cta={{ label: CTA.demo, href: '/#demo' }} />
 
       {/* HERO */}
       <header className="hero">
@@ -28,12 +24,12 @@ export default function Precos() {
               Preços
             </div>
             <h1>
-              Entre no beta. <span className="g">Depois, cresça pagando só pelo que usa.</span>
+              No beta, sem cartão. <span className="g">Depois, assinatura + uso.</span>
             </h1>
-            <p className="hsub" style={{ margin: '18px auto 0', maxWidth: '52ch' }}>
-              No beta, você entra sem custo, com um limite de uso claro pra montar e testar de
-              verdade. Quando o produto abrir, você cresce pagando só pelo que usa — cartão só pra
-              ampliar o limite, sem surpresa na fatura.
+            <p className="hsub" style={{ margin: '18px auto 0', maxWidth: '56ch' }}>
+              Durante o beta, o acesso é acompanhado — o time entra junto, sem cartão e sem
+              cobrança. Depois, o desenho é simples: uma assinatura mais o uso, com os modelos de
+              fronteira já inclusos numa única fatura em reais.
             </p>
           </div>
         </div>
@@ -43,121 +39,158 @@ export default function Precos() {
       <section>
         <div className="wrap">
           <div className="plans">
-            {/* GRÁTIS */}
+            {/* BETA */}
             <div className="plan">
-              <div className="ptag">Beta</div>
-              <h3>Comece no beta</h3>
+              <div className="ptag">Hoje · beta</div>
+              <h3>Beta acompanhado</h3>
               <div className="price">
-                <b>R$ 0</b>
-                grátis no beta — sem cartão
+                <b>Sem cartão</b>
+                sem custo durante o beta
               </div>
-              <p className="desc">Pra provar valor e montar seus primeiros sistemas.</p>
+              <p className="desc">
+                Você não entra sozinho: o time acompanha e monta com você o primeiro app operante.
+              </p>
               <ul>
                 <li>
-                  <span className="ck">✓</span> Monte sistemas conversando, em minutos
+                  <span className="ck">✓</span> Acesso pela lista do beta, acompanhado pelo time
                 </li>
                 <li>
-                  <span className="ck">✓</span> Um limite de uso claro pra testar de verdade
+                  <span className="ck">✓</span> Sem cartão e sem cobrança enquanto durar o beta
                 </li>
                 <li>
-                  <span className="ck">✓</span> Use no computador e no WhatsApp
+                  <span className="ck">✓</span> Um app operante de verdade, no seu processo
                 </li>
                 <li>
-                  <span className="ck">✓</span> Seus dados isolados e seguros
+                  <span className="ck">✓</span> Seus dados isolados desde o primeiro dia
                 </li>
               </ul>
-              <a className="btn btn-primary" href={PLATFORM_SIGNUP}>
-                Criar meu sistema
+              <a className="btn btn-primary" href={PLATFORM_BETA}>
+                {CTA.beta}
               </a>
             </div>
 
-            {/* USO */}
+            {/* ASSINATURA + USO */}
             <div className="plan featured">
-              <div className="ribbon">Mais usado</div>
-              <div className="ptag">Uso</div>
-              <h3>Amplie com cartão</h3>
+              <div className="ribbon">Depois do beta</div>
+              <div className="ptag">Assinatura + uso</div>
+              <h3>Uma fatura, em reais</h3>
               <div className="price">
-                <b>Pague pelo uso</b>
-                adicione um cartão e amplie o limite
+                <b>Assinatura + uso</b>
+                com os modelos de IA inclusos
               </div>
-              <p className="desc">Pra crescer sem trava, pagando só pelo que consumir.</p>
+              <p className="desc">
+                O desenho do produto para depois do beta: previsível na base, proporcional ao que
+                roda.
+              </p>
               <ul>
                 <li>
-                  <span className="ck">✓</span> Tudo do grátis, sem o teto
+                  <span className="ck">✓</span> Modelos de fronteira embutidos — sem contratar
+                  provedor de IA por fora
                 </li>
                 <li>
-                  <span className="ck">✓</span> Medidor de uso e limites que você controla
+                  <span className="ck">✓</span> Uma única fatura, em reais — nada de conta de IA em
+                  dólar
                 </li>
                 <li>
-                  <span className="ck">✓</span> Paga só pelo que usar — sem fatura surpresa
+                  <span className="ck">✓</span> Sem gerir contas, chaves e limites de provedores
                 </li>
                 <li>
-                  <span className="ck">✓</span> Mais capacidade, automações e canais
+                  <span className="ck">✓</span> Consumo visível na conta; para ampliar, fale com o
+                  time
                 </li>
               </ul>
-              <a className="btn btn-primary" href={PLATFORM_SIGNUP}>
-                Criar meu sistema
+              <a className="btn btn-primary" href={PLATFORM_BETA}>
+                {CTA.beta}
               </a>
             </div>
 
-            {/* ENTERPRISE */}
+            {/* ESCALA */}
             <div className="plan">
               <div className="ptag">Escala</div>
-              <h3>Pra escala e procurement</h3>
+              <h3>Adoção em escala</h3>
               <div className="price">
-                <b>Sob medida</b>
-                isolamento, governança e suporte dedicado
+                <b>Com o time</b>
+                condições sob medida para escala
               </div>
-              <p className="desc">Pra adotar em escala, com o que o seu procurement exige.</p>
+              <p className="desc">
+                Para adotar em mais processos e mais áreas — com o que o seu procurement exige.
+              </p>
               <ul>
                 <li>
                   <span className="ck">✓</span> Isolamento dedicado e BYOK (sua chave)
                 </li>
                 <li>
-                  <span className="ck">✓</span> Governança, residência de dados e auditoria
+                  <span className="ck">✓</span> Governança e trilha de auditoria verificável
                 </li>
                 <li>
-                  <span className="ck">✓</span> Onboarding guiado e suporte dedicado
+                  <span className="ck">✓</span> Onboarding guiado, lado a lado com o time
                 </li>
                 <li>
-                  <span className="ck">✓</span> Programa de design partners
+                  <span className="ck">✓</span> Nos casos sensíveis, uma pessoa decide
                 </li>
               </ul>
-              <Link className="btn btn-ghost-d" href="/acelere">
-                Falar com o time
-              </Link>
+              <a className="btn btn-ghost-d" href={PLATFORM_CONTACT}>
+                {CTA.contact}
+              </a>
             </div>
           </div>
 
           <div className="honest" style={{ maxWidth: 760, margin: '34px auto 0' }}>
-            <b>Transparência:</b> estamos definindo as faixas finais com os primeiros clientes. Você
-            sempre vê seu <strong>limite e seu consumo</strong> na conta — sem cobrança escondida,
-            sem surpresa, e cancela quando quiser.
+            <b>Transparência:</b> as faixas finais de preço estão sendo definidas com os primeiros
+            clientes do beta — por isso não publicamos números que ainda podem mudar. O que já está
+            definido é o desenho: <strong>assinatura + uso</strong>, com os modelos de fronteira
+            inclusos e uma única fatura em reais.
           </div>
         </div>
       </section>
 
-      {/* FAQ rápido */}
+      {/* FAQ */}
       <section style={{ paddingTop: 0 }}>
         <div className="wrap">
           <div className="faq">
             <div className="qa">
-              <h4>Preciso de cartão pra começar?</h4>
+              <h4>Preciso de cartão para começar?</h4>
               <p>
-                Não. No beta você cria a conta e começa sem custo, sem cartão. O cartão só entra quando
-                você quiser ampliar o limite, conforme o produto abre.
+                Não. Durante o beta não existe cobrança nem cartão. Você pede acesso pela lista do
+                beta e entra acompanhado — o time monta com você o primeiro app operante.
+              </p>
+            </div>
+            <div className="qa">
+              <h4>Quanto vai custar depois do beta?</h4>
+              <p>
+                As faixas finais estão sendo definidas com os primeiros clientes — preferimos não
+                publicar um número que ainda pode mudar. O desenho, esse já está definido:
+                assinatura + uso, com os modelos de fronteira inclusos e uma única fatura em reais.
+              </p>
+            </div>
+            <div className="qa">
+              <h4>Preciso contratar um provedor de IA por fora?</h4>
+              <p>
+                Não. Os modelos de fronteira vêm embutidos na plataforma: ela cuida das contas, das
+                chaves e dos limites — você recebe uma fatura só, em reais.
               </p>
             </div>
             <div className="qa">
               <h4>Como eu controlo o quanto vou gastar?</h4>
               <p>
-                Você vê seu uso e seu limite na conta o tempo todo. Nada é cobrado além do que você
-                escolher — sem fatura surpresa.
+                Você acompanha o consumo na sua conta, e nada muda de faixa sozinho: para ampliar a
+                capacidade, você fala com o time.
               </p>
             </div>
             <div className="qa">
               <h4>Posso cancelar quando quiser?</h4>
-              <p>Sim. Sem fidelidade e sem multa — você fica no controle.</p>
+              <p>
+                Sim. O beta não tem custo nem compromisso. E depois o modelo é assinatura — você não
+                fica preso a um projeto de meses.
+              </p>
+            </div>
+            <div className="qa">
+              <h4>Sou uma empresa maior — como funciona a adoção?</h4>
+              <p>
+                Com o time do seu lado: isolamento dedicado, governança e onboarding guiado. Veja
+                como funciona em <Link href="/acelere">Acelere</Link> ou{' '}
+                <a href={PLATFORM_CONTACT}>fale com o time</a>.
+              </p>
             </div>
           </div>
         </div>
@@ -169,17 +202,22 @@ export default function Precos() {
           <div className="kick" style={{ color: 'var(--sky)' }}>
             Comece agora
           </div>
-          <h2>Peça seu acesso ao beta</h2>
-          <p className="lead">Grátis no beta. Em minutos você vê funcionando.</p>
+          <h2>Entre pela lista do beta</h2>
+          <p className="lead">
+            Sem cartão, acompanhado pelo time — do problema descrito ao app operante rodando.
+          </p>
           <div className="offerbtns">
-            <a className="btn btn-primary btn-lg" href={PLATFORM_SIGNUP}>
-              Criar meu sistema
+            <a className="btn btn-primary btn-lg" href={PLATFORM_BETA}>
+              {CTA.beta}
+            </a>
+            <a className="btn btn-ghost btn-lg" href={PLATFORM_CONTACT}>
+              {CTA.contact}
             </a>
           </div>
         </div>
       </section>
 
-      <SiteFooter tagline="Grátis no beta. Depois, pague só pelo que usa." />
+      <SiteFooter tagline="No beta, sem cartão. Depois, assinatura + uso — uma fatura em reais." />
     </div>
   );
 }

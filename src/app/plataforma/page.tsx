@@ -2,11 +2,12 @@ import type { Metadata } from 'next';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import { PLATFORM_CONTACT } from '@/lib/platform';
+import { CTA, PHASE, SIGNATURE } from '@/lib/messages';
 
 export const metadata: Metadata = {
-  title: 'Fluxomind — Plataforma: avaliação técnica',
+  title: 'Plataforma',
   description:
-    'AI-first de verdade, multi-tenant, governada e verificável por evidência. Arquitetura, performance, qualidade, governança e segurança, com o status real de cada coisa.',
+    'A prova de execução: plataforma multi-tenant construída — 39 engines em 10 camadas, governada e verificável por evidência. Arquitetura, performance, qualidade, governança e segurança, com o status real de cada coisa.',
 };
 
 // Ícones SVG de traço dos pilares — alinhados ao resto do site (sem emoji colorido).
@@ -44,38 +45,36 @@ const ICON_SEC = (
 export default function Plataforma() {
   return (
     <div className="page-tech">
-      <div className="note">
-        Protótipo da página técnica de aprofundamento (trilha enterprise / due-diligence).
-        Conteúdo demonstrativo.
-      </div>
-
       {/* NAV */}
-      <SiteHeader cta={{ label: 'Avaliar a fundo', href: '#avaliar' }} />
+      <SiteHeader cta={{ label: CTA.demo, href: '/#demo' }} />
 
-      {/* HERO */}
+      {/* HERO — prova de execução */}
       <header className="hero">
         <div className="wrap">
           <div className="kick" style={{ color: 'var(--sky)' }}>
-            Delegue a tarefa. Receba a conclusão com a prova.
+            {SIGNATURE}
           </div>
           <div>
             <span className="pill">Para times técnicos · CTO, Head of Platform, Segurança</span>
           </div>
           <h1>
-            Feita para ser <span className="g">avaliada a fundo.</span>
+            O que a home demonstra, <span className="g">a engenharia sustenta.</span>
           </h1>
           <p className="hsub">
-            AI-first de verdade, multi-tenant, governada e{' '}
-            <strong>verificável por evidência</strong> — não por slide. Esta página é para quem vai
-            abrir o capô: arquitetura, performance, qualidade, governança e segurança, com o status
-            real de cada coisa.
+            Prova de execução, não promessa: a plataforma multi-tenant está construída — 39 engines
+            em 10 camadas, governada e <strong>verificável por evidência</strong>, não por slide.
+            Esta página é para quem vai abrir o capô: arquitetura, performance, qualidade,
+            governança e segurança, com o status real de cada coisa.
+          </p>
+          <p className="hsub" style={{ marginTop: 14, fontSize: '16px' }}>
+            <strong>A fronteira honesta:</strong> {PHASE.next.desc}
           </p>
           <div className="herocta">
-            <a className="btn btn-primary" href="#avaliar">
-              Falar com engenharia
+            <a className="btn btn-primary" href={PLATFORM_CONTACT}>
+              {CTA.contact}
             </a>
-            <a className="btn btn-ghost" href="#avaliar">
-              Solicitar acesso técnico
+            <a className="btn btn-ghost" href="#maturidade">
+              Ver o que está pronto
             </a>
           </div>
           <div className="qnav">
@@ -199,7 +198,8 @@ export default function Plataforma() {
                 <h4>Insight loop</h4>
                 <p>
                   Operar gera dado real; a plataforma lê a operação e devolve a próxima ação — mais
-                  precisa que a anterior.
+                  precisa que a anterior. <em>Maturidade: a volta completa se prova com o dogfood —
+                  próximo capítulo.</em>
                 </p>
               </div>
             </div>
@@ -209,16 +209,17 @@ export default function Plataforma() {
                 <h4>Atlas — o cérebro semântico</h4>
                 <p>
                   Classifica as entidades do negócio automaticamente (embedding + LLM, alinhado a
-                  Schema.org), onde Palantir/Fabric exigem ontologia manual de US$ 1M+/ano.{' '}
-                  <em>Maturidade: em construção (Parcial).</em>
+                  Schema.org) — sem o projeto manual de ontologia que plataformas como
+                  Palantir/Fabric exigem. <em>Maturidade: em construção (Parcial).</em>
                 </p>
               </div>
             </div>
           </div>
           <p className="lead" style={{ marginTop: 18, opacity: 0.85 }}>
-            Quanto mais você usa, mais o Atlas sabe — e mais barato fica entregar a próxima coisa. É
-            o que separa um produto-flywheel de uma ferramenta: a ferramenta entrega o mesmo na
-            milésima vez; o flywheel entrega mais, por menos.
+            A tese: quanto mais você usa, mais o Atlas sabe — e mais barato fica entregar a próxima
+            coisa. É o que separa um produto-flywheel de uma ferramenta: a ferramenta entrega o
+            mesmo na milésima vez; o flywheel entrega mais, por menos. A volta completa é o que o
+            dogfood vai provar.
           </p>
         </div>
       </section>
@@ -413,8 +414,8 @@ export default function Plataforma() {
                 Política declarativa que o runtime aplica em toda a plataforma, com pessoa no
                 circuito quando importa.
               </p>
-              <span className="badge b-impl" style={{ marginTop: 14 }}>
-                <span className="d" /> Implementado
+              <span className="badge b-parc" style={{ marginTop: 14 }}>
+                <span className="d" /> Parcial — núcleo implementado; self-service no roadmap
               </span>
             </div>
             <div>
@@ -659,10 +660,7 @@ export default function Plataforma() {
           </p>
           <div className="ctab">
             <a className="btn btn-primary" href={PLATFORM_CONTACT}>
-              Falar com engenharia
-            </a>
-            <a className="btn btn-ghost" href={PLATFORM_CONTACT}>
-              Solicitar acesso técnico
+              {CTA.contact}
             </a>
           </div>
         </div>

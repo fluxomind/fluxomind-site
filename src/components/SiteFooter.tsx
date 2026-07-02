@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-// Rodapé global — também conecta as 3 trilhas e mantém info legal.
+// Rodapé global — espelha os rótulos do cabeçalho e mantém info legal.
 export default function SiteFooter({ tagline }: { tagline: string }) {
   return (
     <footer>
@@ -17,11 +17,11 @@ export default function SiteFooter({ tagline }: { tagline: string }) {
         </Link>
         <div className="footlinks">
           <Link href="/">Início</Link>
-          <Link href="/o-que-tem">O que tem</Link>
+          <Link href="/o-que-tem">O que faz</Link>
           <Link href="/acelere">Acelere</Link>
+          <Link href="/seguranca">Segurança</Link>
+          <Link href="/plataforma">Plataforma</Link>
           <Link href="/precos">Preços</Link>
-          <Link href="/#seguranca">Segurança</Link>
-          <Link href="/plataforma">Para times técnicos</Link>
           <Link href="/terms">Termos de Uso</Link>
         </div>
         <div className="footmeta">

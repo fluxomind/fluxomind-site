@@ -4,8 +4,8 @@ import { PLATFORM_LOGIN } from '@/lib/platform';
 
 type Cta = { label: string; href: string };
 
-// Cabeçalho global — conecta as 3 trilhas em todas as páginas.
-// O CTA primário muda por trilha (intenção diferente); o resto é consistente.
+// Cabeçalho global. CTA primário de nav é sempre CTA.demo → /#demo
+// (message house §6); rótulos canônicos em src/lib/messages.ts (CTA).
 export default function SiteHeader({ cta }: { cta: Cta }) {
   return (
     <nav>
