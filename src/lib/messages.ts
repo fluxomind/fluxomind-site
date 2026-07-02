@@ -60,6 +60,11 @@ export const PHASE = {
   },
 } as const;
 
+// Propósito canônico (por quê existimos) — linha única; a página /por-que aprofunda.
+// Padrão "change my world": inversão histórica + empoderamento do cliente, sem grandiloquência.
+export const PURPOSE_LINE =
+  'Por 30 anos, as empresas se adaptaram ao software. Existimos para inverter isso: o software se molda ao seu negócio — e trabalha por ele.';
+
 // Rótulos canônicos de CTA (destinos em src/lib/platform.ts).
 export const CTA = {
   demo: 'Veja a Fluxomind trabalhar',

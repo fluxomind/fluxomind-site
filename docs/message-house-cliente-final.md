@@ -15,6 +15,18 @@ Este documento governa toda a copy do site. Strings compartilhadas entre página
 4. **Eixo de diferenciação (anti-Lovable, linguagem de cliente):** *Construir ficou fácil — qualquer IA te entrega um protótipo. Operar é o que falta.* A Fluxomind entrega o processo **rodando**: o app se constrói a partir do seu problema, opera o dia a dia e chama um humano nos casos sensíveis.
 5. **Flywheel:** fica mais inteligente quanto mais você usa.
 
+## 1.5 Propósito (por quê existimos)
+
+**Linha canônica** (`PURPOSE_LINE` em messages.ts): *Por 30 anos, as empresas se adaptaram ao software. Existimos para inverter isso: o software se molda ao seu negócio — e trabalha por ele.*
+
+Fundamento (pesquisa 2026-07): propósito funciona quando é "change my world" (utilidade concreta para o cliente), específico da categoria e ownable; propósito genérico/performático derruba credibilidade abaixo do neutro (JBR 2024, Kantar). Formato vencedor: **home continua outcome-first; propósito = banda curta na home + página narrativa dedicada, assinada pelo fundador com data** (padrão Linear/Notion/Nubank).
+
+Regras:
+- A página é `/por-que` — **nunca rotular "Manifesto"**.
+- Assinada "Ralfo Nunes, fundador" + mês/ano.
+- 3 atos: o jeito antigo (empresa se adapta ao software) → a inversão (IA entende contexto + executa; o privilégio do sob-medida-operado vira acessível) → a aposta (conhecimento vira negócio de software vivo — declarada como visão, honestidade de fase).
+- O corpo carrega a democratização ("o que era privilégio de quem podia pagar projeto e integrador"); a visão de especialistas fecha como aposta, nunca como fato.
+
 ## 2. Negação tripla (atualizada)
 
 > Não é um chatbot que responde. Não é um builder que te entrega código para manter. Não é um projeto de TI de meses.
@@ -84,4 +96,5 @@ A conversão principal do site é **viver a demonstração** — o encantamento 
 | `/plataforma` | Due-diligence técnica (aqui pode "dimensões", engines, RLS) | Engenheiro para engenheiro, honesto |
 | `/seguranca` | As 5 regras da confiança + governança | Sóbrio, verificável |
 | `/precos` | Beta honesto: acompanhado, sem cartão; sem números inventados | Direto, sem fricção |
+| `/por-que` | O propósito, na palavra do fundador (3 atos, assinada e datada) | Pessoal, primeira pessoa, sem hipérbole |
 | `/terms` | Legal | Inalterado em conteúdo; marca "Fluxomind" |

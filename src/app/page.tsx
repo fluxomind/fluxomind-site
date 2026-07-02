@@ -11,6 +11,7 @@ import {
   FACES,
   TRUST_RULES,
   PHASE,
+  PURPOSE_LINE,
   CTA,
 } from '@/lib/messages';
 import { PLATFORM_BETA, PLATFORM_CONTACT } from '@/lib/platform';
@@ -334,6 +335,17 @@ export default function Home() {
         </div>
       </section>
 
+      {/* POR QUE EXISTIMOS — banda de propósito (message house §1.5) */}
+      <section className="fmh-purpose">
+        <div className="wrap center">
+          <div className="kick">Por que existimos</div>
+          <p className="fmh-purpose-line">{PURPOSE_LINE}</p>
+          <Link href="/por-que" className="fmh-purpose-link">
+            Leia por quê, na palavra de quem fundou →
+          </Link>
+        </div>
+      </section>
+
       {/* ROTAS — banda discreta por perfil */}
       <section
         style={{
@@ -354,7 +366,7 @@ export default function Home() {
       </section>
 
       {/* PARA ONDE ISSO VAI — fato, lacuna e aposta */}
-      <section>
+      <section id="para-onde">
         <div className="wrap">
           <div className="center">
             <div className="kick">Para onde isso vai</div>
@@ -474,4 +486,8 @@ const HOME_CSS = `
 .fmh-routes { display: flex; gap: 12px 48px; justify-content: center; flex-wrap: wrap; font-size: 15px; color: var(--slate); }
 .fmh-routes a { color: var(--blue); font-weight: 600; }
 .fmh-routes a:hover { text-decoration: underline; }
+.fmh-purpose { padding: 64px 0; }
+.fmh-purpose-line { margin: 16px auto 0; max-width: 30ch; font-size: clamp(21px, 2.8vw, 30px); font-weight: 750; line-height: 1.35; letter-spacing: -0.01em; }
+.fmh-purpose-link { display: inline-block; margin-top: 18px; color: var(--blue); font-weight: 600; font-size: 15.5px; }
+.fmh-purpose-link:hover { text-decoration: underline; }
 `;
