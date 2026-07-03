@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import Link from 'next/link';
 import { TRUST_RULES, CTA } from '@/lib/messages';
 import { track } from '@/lib/analytics';
@@ -9,10 +9,15 @@ import { track } from '@/lib/analytics';
    A jornada interativa — o visitante CRIA um app conversando.
 
    Diferente da demo narrada da home (DemoBuilder, dois atos), aqui o
-   visitante dirige: entrega uma planilha (ou descreve em prosa), vê o
-   espelho, corrige premissas, manda montar — e recebe um RASCUNHO VIVO
-   que ele opera (kanban, tabela, ficha do lead) ANTES de decidir
-   "ficar com ele". Aprova o que vê, não uma lista técnica.
+   visitante dirige: escolhe um cenário (ou descreve em prosa), entrega
+   uma planilha de exemplo, vê o espelho, corrige premissas, manda montar
+   — e recebe um RASCUNHO VIVO que ele opera (kanban, tabela, ficha) ANTES
+   de decidir "ficar com ele". Aprova o que vê, não uma lista técnica.
+
+   São 3 cenários (leads · fluxo de caixa · atendimento). Todo o conteúdo
+   variável vive no registro CENARIOS; a mecânica é a mesma para os três.
+   O cenário ativo fica em cenarioRef (síncrona) para o replay determinístico
+   — voltar re-executa O MESMO cenário.
 
    As 5 regras da confiança (messages.ts) acendem nos momentos em que
    acontecem — a message house demonstrada, não afirmada.
@@ -34,16 +39,21 @@ const STAGES = [
 ] as const;
 
 type LogE = { who: 'user' | 'agent'; text: string; time: string };
-type Lead = {
+
+type NBA = { text: string; kind?: 'advance' | 'handoff'; log?: string };
+
+type Registro = {
   id: string;
   name: string;
-  company: string;
-  email: string;
+  meta: Record<string, string>;
   stage: string;
   origem: string;
   agent?: boolean;
   log: LogE[];
+  nba?: NBA;
 };
+
+type Seed = { id: string; name: string; meta: Record<string, string>; stage: string; nba?: NBA };
 
 type CardId =
   | 'espelho'
@@ -61,59 +71,470 @@ type Item =
   | { kind: 'build' }
   | { kind: 'card'; card: CardId; resolved?: string };
 
-const SEED: Omit<Lead, 'stage' | 'log' | 'origem'>[] = [
-  { id: 'ana', name: 'Ana Souza', company: 'TechFin', email: 'ana@techfin.com' },
-  { id: 'bruno', name: 'Bruno Lima', company: 'AgroData', email: 'bruno@agrodata.io' },
-  { id: 'carla', name: 'Carla Mendes', company: 'FinOps Lab', email: 'carla@finopslab.com' },
-  { id: 'diego', name: 'Diego Rocha', company: 'EduPlay', email: 'diego@eduplay.com' },
-  { id: 'elisa', name: 'Elisa Prado', company: 'HealthHub', email: 'elisa@healthhub.co' },
-];
+// --------- máscaras: e-mail/CPF/CNPJ protegidos por padrão (como no produto) ---------
+const maskEmail = (email: string) => email.replace(/(.{2}).+(@.+)/, '$1●●●$2');
+const maskCPF = (cpf: string) => cpf.replace(/^(\d{3})\.(\d{3})/, '●●●.●●●');
+const maskCNPJ = (cnpj: string) => cnpj.replace(/^(\d{2})\.(\d{3})\.(\d{3})/, '●●.●●●.●●●');
 
-const BUILD_STEPS = [
-  'Guardando seus dados — 12 leads, 8 criadores, 5 contratos',
-  'Protegendo quem-vê-o-quê no mesmo ato — nada nasce desprotegido',
-  'Montando sua tela de pipeline',
-  'Ligando o assistente e a automação',
-  'Conferindo tudo por dentro — cada peça bate com o desenho',
-];
-
-const DESENHO_ROWS = [
-  { icon: '🗃️', label: 'Seus dados', text: 'Leads, criadores e contratos — ligados entre si, com os 25 registros da sua planilha' },
-  { icon: '🖥️', label: 'Sua tela', text: 'Um pipeline visual por etapa — cada papel da equipe vê a sua versão' },
-  { icon: '🤖', label: 'Seu assistente', text: 'Sugere e executa o próximo passo em cada lead — e pergunta antes do que importa' },
-  { icon: '🔁', label: 'Automação', text: 'Contrato assinado → onboarding dispara sozinho' },
-  { icon: '🔌', label: 'Conexão', text: 'Gmail para enviar propostas e contratos' },
-  { icon: '🛡️', label: 'Quem vê o quê', text: 'Jurídico só vê contratos · CPF e e-mail protegidos' },
-];
-
-const mask = (email: string) => email.replace(/(.{2}).+(@.+)/, '$1●●●$2');
+// --------- **negrito** dentro de strings de conteúdo (premissas, HITL) ---------
+function boldify(text: string): ReactNode {
+  return text.split(/\*\*(.+?)\*\*/g).map((p, i) => (i % 2 === 1 ? <b key={i}>{p}</b> : p));
+}
 
 const INITIAL_ITEMS: Item[] = [
   {
     kind: 'msg',
     who: 'ally',
-    text: 'Oi! 👋 Me conta um problema do seu negócio — escreva aqui embaixo, com as suas palavras — ou me dá uma planilha, que eu leio como você trabalha hoje. Os dois caminhos valem.',
+    text: 'Oi! 👋 Escolha um exemplo aqui embaixo — ou me conta um problema do seu negócio com as suas palavras, que eu leio como você trabalha hoje. Os dois caminhos valem.',
   },
 ];
+
+// ======================= CENÁRIOS =======================
+
+type CenarioId = 'leads' | 'caixa' | 'atendimento';
+
+type Premissa =
+  | { icon: string; text: string }
+  | {
+      icon: string;
+      kind: 'edit';
+      before: string;
+      after: string;
+      userMsg: string;
+      ally: string;
+      addColuna?: string; // leads: acrescenta a coluna ao funil; demais: só texto
+    };
+
+const isEdit = (p: Premissa): p is Extract<Premissa, { kind: 'edit' }> =>
+  'kind' in p && p.kind === 'edit';
+
+type DesenhoRow = { icon: string; label: string; text: string };
+type Field = { label: string; value: string; lock?: boolean };
+type TableCol = {
+  header: string;
+  get?: (r: Registro) => string;
+  lock?: boolean;
+  stage?: boolean;
+  primary?: boolean;
+};
+
+type Cenario = {
+  id: CenarioId;
+  pill: string;
+  tema: string; // roteiro do texto livre
+  // entrada
+  xlsx: string; // "contas-a-receber.xlsx (2 abas · 22 linhas)"
+  planilhaRead: string; // fala do assistente ao ler a planilha
+  espelhoChips: string[];
+  // enquadrar
+  premissas: Premissa[];
+  ajusteLabel: string;
+  // desenho
+  desenho: DesenhoRow[];
+  // build
+  buildSteps: string[];
+  // registros
+  columns: string[];
+  extraN: number;
+  seed: Seed[];
+  autoMove: { id: string; toStage: string; log: string };
+  nbaDefault: (r: Registro) => NBA;
+  // app
+  appTitle: string;
+  boardLabel: string;
+  ctaObj: string;
+  // render dos registros
+  subtitle: (r: Registro) => string;
+  recordFields: (r: Registro) => Field[];
+  tableCols: TableCol[];
+  newForm: {
+    title: string;
+    add: string;
+    fields: { label: string; def: string }[];
+    build: (v: string[]) => { name: string; meta: Record<string, string> };
+  };
+  // magia / operar
+  magic: string; // fala depois de montar
+  touchHint: string; // pedido para mexer antes de decidir
+  // HITL
+  hitl: {
+    text: string;
+    button: string;
+    note: string;
+    lead: string; // primeira frase do assistente depois de aprovar
+    resolveLabel: string;
+    apply: { id: string; toStage: string; log: string };
+  };
+  // evoluir
+  evolve: {
+    userMsg: string;
+    col: string;
+    before: string;
+    allyViaChat: string;
+    doneLabel: string;
+  };
+};
+
+const CENARIOS: Record<CenarioId, Cenario> = {
+  // ---------------------------------------------------------------- LEADS
+  leads: {
+    id: 'leads',
+    pill: '📊 Leads e contratos — hoje é planilha',
+    tema: 'leads e contratos',
+    xlsx: 'leads-criadores.xlsx (3 abas · 25 linhas)',
+    planilhaRead:
+      'Li sua planilha. A aba "Leads" tem 12 leads (colunas viram campos) · "Criadores" tem 8 — detectei CPF e já vou proteger · "Contratos" tem 5, ligados aos criadores. Seus dados entram de verdade, sem redigitar nada.',
+    espelhoChips: ['Leads', 'Criadores', 'Contratos'],
+    premissas: [
+      { icon: '👥', text: 'Quem usa: **Recrutador · Gestor · Jurídico**' },
+      {
+        icon: '🔁',
+        kind: 'edit',
+        before: 'Funil: **Novo → Qualificado → Proposta → Contrato (4 etapas)**',
+        after: 'Funil: **Novo → Qualificado → Proposta → Contrato → Onboarding**',
+        userMsg: 'Falta a etapa de Onboarding no fim do funil.',
+        ally: 'Funil com 5 etapas ✓ — eu proponho, você corrige. É assim que funciona.',
+        addColuna: 'Onboarding',
+      },
+      { icon: '🔒', text: 'E-mail e CPF **protegidos por padrão**' },
+      { icon: '🛡️', text: 'Jurídico vê **só contratos**' },
+      { icon: '⚡', text: 'Contrato só sai **com o seu OK**' },
+    ],
+    ajusteLabel: 'Aceito, com seu ajuste no funil',
+    desenho: [
+      { icon: '🗃️', label: 'Seus dados', text: 'Leads, criadores e contratos — ligados entre si, com os 25 registros da sua planilha' },
+      { icon: '🖥️', label: 'Sua tela', text: 'Um pipeline visual por etapa — cada papel da equipe vê a sua versão' },
+      { icon: '🤖', label: 'Seu assistente', text: 'Sugere e executa o próximo passo em cada lead — e pergunta antes do que importa' },
+      { icon: '🔁', label: 'Automação', text: 'Contrato assinado → onboarding dispara sozinho' },
+      { icon: '🔌', label: 'Conexão', text: 'Gmail para enviar propostas e contratos' },
+      { icon: '🛡️', label: 'Quem vê o quê', text: 'Jurídico só vê contratos · CPF e e-mail protegidos' },
+    ],
+    buildSteps: [
+      'Guardando seus dados — 12 leads, 8 criadores, 5 contratos',
+      'Protegendo quem-vê-o-quê no mesmo ato — nada nasce desprotegido',
+      'Montando sua tela de pipeline',
+      'Ligando o assistente e a automação',
+      'Conferindo tudo por dentro — cada peça bate com o desenho',
+    ],
+    columns: ['Novo', 'Qualificado', 'Proposta', 'Contrato'],
+    extraN: 7,
+    seed: [
+      { id: 'ana', name: 'Ana Souza', stage: 'Novo', meta: { empresa: 'TechFin', email: 'ana@techfin.com' } },
+      { id: 'bruno', name: 'Bruno Lima', stage: 'Novo', meta: { empresa: 'AgroData', email: 'bruno@agrodata.io' } },
+      { id: 'carla', name: 'Carla Mendes', stage: 'Novo', meta: { empresa: 'FinOps Lab', email: 'carla@finopslab.com' } },
+      { id: 'diego', name: 'Diego Rocha', stage: 'Novo', meta: { empresa: 'EduPlay', email: 'diego@eduplay.com' } },
+      { id: 'elisa', name: 'Elisa Prado', stage: 'Novo', meta: { empresa: 'HealthHub', email: 'elisa@healthhub.co' } },
+    ],
+    autoMove: { id: 'bruno', toStage: 'Qualificado', log: 'Assistente qualificou — próximo passo sugerido' },
+    nbaDefault: (r) => ({
+      text:
+        r.stage === 'Novo'
+          ? 'Qualificar este lead — os dados vieram completos.'
+          : r.stage === 'Contrato'
+            ? 'Acompanhar a assinatura — contrato enviado.'
+            : 'Avançar para a próxima etapa do funil.',
+    }),
+    appTitle: 'Pipeline de Leads',
+    boardLabel: 'Pipeline',
+    ctaObj: 'um app',
+    subtitle: (r) => `${r.meta.empresa} · ${maskEmail(r.meta.email)}`,
+    recordFields: (r) => [
+      { label: 'Nome', value: r.name },
+      { label: 'Empresa', value: r.meta.empresa },
+      { label: 'E-mail', value: maskEmail(r.meta.email), lock: true },
+      { label: 'Etapa', value: r.stage },
+      { label: 'Dono', value: 'Recrutador (você)' },
+    ],
+    tableCols: [
+      { header: 'Nome', get: (r) => r.name, primary: true },
+      { header: 'Empresa', get: (r) => r.meta.empresa },
+      { header: 'E-mail', get: (r) => maskEmail(r.meta.email), lock: true },
+      { header: 'Etapa', stage: true },
+    ],
+    newForm: {
+      title: 'Novo lead',
+      add: '+ Novo lead',
+      fields: [
+        { label: 'Nome', def: 'Gustavo Reis' },
+        { label: 'Empresa', def: 'RetailPro' },
+        { label: 'E-mail', def: 'gustavo@retailpro.com' },
+      ],
+      build: (v) => ({
+        name: v[0] || 'Gustavo Reis',
+        meta: { empresa: v[1] || 'RetailPro', email: v[2] || 'gustavo@retailpro.com' },
+      }),
+    },
+    magic:
+      'Os leads da planilha já estão na tela. Mexe à vontade: clique num nome, crie um lead, mova um card.',
+    touchHint: 'cria ou move um lead, abre uma ficha',
+    hitl: {
+      text: 'O contrato da **Ana Souza (TechFin)** está pronto. Envio por Gmail?',
+      button: 'Aprovar envio',
+      note: 'Você aprovou: contrato para Ana Souza',
+      lead: 'Contrato foi.',
+      resolveLabel: 'Você aprovou o envio',
+      apply: { id: 'ana', toStage: 'Contrato', log: 'Contrato enviado por Gmail — aprovado por você' },
+    },
+    evolve: {
+      userMsg: 'Adiciona a etapa Negociação antes de Contrato.',
+      col: 'Negociação',
+      before: 'Contrato',
+      allyViaChat:
+        'É assim que se evolui — pedindo. Nesta demonstração eu aplico um exemplo pronto: a etapa Negociação antes de Contrato. Olha o pipeline:',
+      doneLabel: 'etapa Negociação no pipeline',
+    },
+  },
+
+  // ---------------------------------------------------------------- CAIXA
+  caixa: {
+    id: 'caixa',
+    pill: '💰 Contas a receber e cobrança — hoje é planilha',
+    tema: 'contas a receber e cobrança',
+    xlsx: 'contas-a-receber.xlsx (2 abas · 22 linhas)',
+    planilhaRead:
+      'Li sua planilha. A aba "Faturas" tem 14 faturas (colunas viram campos: cliente, valor, vencimento) · "Clientes" tem 8 — detectei CNPJ e já vou proteger. Entendi: acompanhar faturas a receber, vencimentos e a régua de cobrança — hoje numa planilha. Seus dados entram de verdade, sem redigitar nada.',
+    espelhoChips: ['Faturas', 'Clientes', 'Cobranças'],
+    premissas: [
+      {
+        icon: '🔔',
+        kind: 'edit',
+        before: 'Régua de cobrança em **3 toques** (lembrete → cobrança → proposta de acordo)',
+        after: 'Régua de cobrança em **4 toques** (aviso amigável → lembrete → cobrança → proposta de acordo)',
+        userMsg: 'Antes da cobrança tem um aviso amigável — minha régua tem 4 toques.',
+        ally: 'Régua com 4 toques ✓ — eu proponho, você corrige.',
+      },
+      { icon: '✋', text: 'Desconto acima de **5% só com sua aprovação** (decisão humana)' },
+      { icon: '👁️', text: 'Valores visíveis **só para o papel Financeiro**' },
+      { icon: '🔒', text: 'CNPJ e e-mail **protegidos por padrão**' },
+    ],
+    ajusteLabel: 'Aceito, com seu ajuste na régua',
+    desenho: [
+      { icon: '🗃️', label: 'Seus dados', text: 'Faturas, clientes e cobranças ligados, com os 22 registros da planilha' },
+      { icon: '🖥️', label: 'Sua tela', text: 'Painel de recebíveis por status, com o total em risco no topo' },
+      { icon: '🤖', label: 'Seu assistente', text: 'Prioriza quem cobrar, redige a mensagem — e pergunta antes de enviar' },
+      { icon: '🔁', label: 'Automação', text: 'Vencimento chegou → a régua dispara sozinha' },
+      { icon: '🔌', label: 'Conexão', text: 'Gmail e WhatsApp para lembretes e cobranças' },
+      { icon: '🛡️', label: 'Quem vê o quê', text: 'Valores só para o Financeiro · CNPJ protegido' },
+    ],
+    buildSteps: [
+      'Guardando seus dados — 14 faturas, 8 clientes, cobranças',
+      'Protegendo CNPJ e valores no mesmo ato — nada nasce desprotegido',
+      'Montando sua tela de recebíveis',
+      'Ligando o assistente e a régua de cobrança',
+      'Conferindo tudo por dentro — cada peça bate com o desenho',
+    ],
+    columns: ['A vencer', 'Vencida', 'Em negociação', 'Paga'],
+    extraN: 9,
+    seed: [
+      {
+        id: 'techfin',
+        name: 'TechFin',
+        stage: 'A vencer',
+        meta: { valor: 'R$ 12.400', venc: 'vence amanhã', email: 'financeiro@techfin.com', cnpj: '11.222.333/0001-81' },
+        nba: { text: 'Lembrete amigável — a fatura vence amanhã.' },
+      },
+      { id: 'agro', name: 'AgroData', stage: 'Vencida', meta: { valor: 'R$ 8.900', venc: 'vencida há 12 dias', email: 'financeiro@agrodata.io', cnpj: '44.555.666/0001-72' } },
+      { id: 'finops', name: 'FinOps Lab', stage: 'Em negociação', meta: { valor: 'R$ 21.000', venc: 'em negociação', email: 'contas@finopslab.com', cnpj: '77.888.999/0001-63' } },
+      { id: 'eduplay', name: 'EduPlay', stage: 'A vencer', meta: { valor: 'R$ 5.600', venc: 'vence em 6 dias', email: 'financeiro@eduplay.com', cnpj: '22.333.444/0001-54' } },
+      { id: 'healthhub', name: 'HealthHub', stage: 'Vencida', meta: { valor: 'R$ 3.100', venc: 'vencida há 3 dias', email: 'financeiro@healthhub.co', cnpj: '55.666.777/0001-45' } },
+    ],
+    autoMove: { id: 'healthhub', toStage: 'Em negociação', log: 'Assistente priorizou a cobrança — próximo passo sugerido' },
+    nbaDefault: () => ({ text: 'Enviar o próximo toque da régua — acompanhar o vencimento.' }),
+    appTitle: 'Contas a Receber',
+    boardLabel: 'Recebíveis',
+    ctaObj: 'uma cobrança',
+    subtitle: (r) => `${r.meta.valor} · ${r.meta.venc}`,
+    recordFields: (r) => [
+      { label: 'Cliente', value: r.name },
+      { label: 'Valor', value: r.meta.valor },
+      { label: 'Vencimento', value: r.meta.venc },
+      { label: 'CNPJ', value: maskCNPJ(r.meta.cnpj), lock: true },
+      { label: 'E-mail', value: maskEmail(r.meta.email), lock: true },
+      { label: 'Status', value: r.stage },
+      { label: 'Dono', value: 'Financeiro (você)' },
+    ],
+    tableCols: [
+      { header: 'Cliente', get: (r) => r.name, primary: true },
+      { header: 'Valor', get: (r) => r.meta.valor },
+      { header: 'CNPJ', get: (r) => maskCNPJ(r.meta.cnpj), lock: true },
+      { header: 'Status', stage: true },
+    ],
+    newForm: {
+      title: 'Nova fatura',
+      add: '+ Nova fatura',
+      fields: [
+        { label: 'Cliente', def: 'Contoso' },
+        { label: 'Valor', def: 'R$ 4.200' },
+        { label: 'Vencimento', def: 'vence em 15 dias' },
+      ],
+      build: (v) => ({
+        name: v[0] || 'Contoso',
+        meta: {
+          valor: v[1] || 'R$ 4.200',
+          venc: v[2] || 'vence em 15 dias',
+          email: 'financeiro@contoso.com',
+          cnpj: '99.888.777/0001-66',
+        },
+      }),
+    },
+    magic:
+      'As faturas da planilha já estão na tela. Mexe à vontade: clique num cliente, crie uma fatura, mova um card.',
+    touchHint: 'move uma fatura, abre uma ficha',
+    hitl: {
+      text: 'A fatura da **AgroData (R$ 8.900)** está 12 dias vencida. Preparei a cobrança com proposta de parcelamento em 2x — envio?',
+      button: 'Aprovar envio',
+      note: 'Você aprovou: cobrança para AgroData',
+      lead: 'Cobrança enviada.',
+      resolveLabel: 'Você aprovou o envio',
+      apply: { id: 'agro', toStage: 'Em negociação', log: 'Cobrança enviada com proposta de parcelamento — aprovada por você' },
+    },
+    evolve: {
+      userMsg: 'Adiciona a etapa Acordo antes de Paga.',
+      col: 'Acordo',
+      before: 'Paga',
+      allyViaChat:
+        'É assim que se evolui — pedindo. Nesta demonstração eu aplico um exemplo pronto: a etapa Acordo antes de Paga. Olha o quadro:',
+      doneLabel: 'etapa Acordo no quadro',
+    },
+  },
+
+  // ---------------------------------------------------------------- ATENDIMENTO
+  atendimento: {
+    id: 'atendimento',
+    pill: '📅 Atendimento no WhatsApp que resolve — agenda lotada de mensagens',
+    tema: 'atendimento no WhatsApp',
+    xlsx: 'pacientes.xlsx (2 abas · 20 linhas)',
+    planilhaRead:
+      'Li sua planilha. A aba "Pacientes" tem 15 pacientes (colunas viram campos) · "Convênios" tem 5 — detectei CPF e já vou proteger. Entendi: atender no WhatsApp, agendar e remarcar consultas e confirmar presença — hoje uma pessoa responde tudo, o dia inteiro. Seus dados entram de verdade, sem redigitar nada.',
+    espelhoChips: ['Pacientes', 'Agenda', 'Conversas'],
+    premissas: [
+      {
+        icon: '🕒',
+        kind: 'edit',
+        before: 'Atendimento **seg–sex, 8h–18h**',
+        after: 'Atendimento **seg–sex 8h–18h + sábado até 12h**',
+        userMsg: 'Sábado de manhã também temos agenda.',
+        ally: 'Sábado até 12h ✓ — anotado.',
+      },
+      { icon: '🤖', text: 'O assistente **agenda, remarca e confirma sozinho**' },
+      { icon: '🚨', text: 'Assunto clínico ou urgência → **uma pessoa assume na hora**' },
+      { icon: '🔒', text: 'Dado de saúde **nunca circula no chat**' },
+    ],
+    ajusteLabel: 'Aceito, com seu ajuste no horário',
+    desenho: [
+      { icon: '🗃️', label: 'Seus dados', text: 'Pacientes, agenda e conversas ligados, com os 20 registros da planilha' },
+      { icon: '🖥️', label: 'Sua tela', text: 'Fila de conversas por status, com a agenda do dia ao lado' },
+      { icon: '🤖', label: 'Seu assistente', text: 'Atende e executa: agenda, remarca, confirma — não é um chat que só responde' },
+      { icon: '🔁', label: 'Automação', text: 'Consulta marcada → confirmação automática na véspera' },
+      { icon: '🔌', label: 'Conexão', text: 'WhatsApp e agenda (Google Calendar)' },
+      { icon: '🛡️', label: 'Quem vê o quê', text: 'Assunto clínico só para a equipe · CPF protegido' },
+    ],
+    buildSteps: [
+      'Guardando seus dados — 15 pacientes, agenda, conversas',
+      'Protegendo CPF e dados de saúde no mesmo ato — nada nasce desprotegido',
+      'Montando sua tela de atendimento',
+      'Ligando o assistente e as confirmações automáticas',
+      'Conferindo tudo por dentro — cada peça bate com o desenho',
+    ],
+    columns: ['Novo', 'Em atendimento', 'Aguardando paciente', 'Resolvido'],
+    extraN: 8,
+    seed: [
+      { id: 'marina', name: 'Marina Lopes', stage: 'Novo', meta: { pedido: 'quer remarcar para quinta', cpf: '123.456.789-01' } },
+      { id: 'jose', name: 'José Neto', stage: 'Novo', meta: { pedido: 'primeira consulta, pediu horário', cpf: '234.567.890-12' } },
+      {
+        id: 'paula',
+        name: 'Paula Reis',
+        stage: 'Em atendimento',
+        meta: { pedido: 'perguntou sobre resultado de exame', cpf: '345.678.901-23' },
+        nba: {
+          text: 'Assunto clínico detectado — não respondo isso: passo para a equipe agora.',
+          kind: 'handoff',
+          log: 'Encaminhado para humano — assunto clínico nunca fica com o assistente',
+        },
+      },
+      { id: 'carlos', name: 'Carlos Dias', stage: 'Aguardando paciente', meta: { pedido: 'confirmar presença amanhã', cpf: '456.789.012-34' } },
+      { id: 'rita', name: 'Rita Souza', stage: 'Novo', meta: { pedido: 'dúvida de convênio', cpf: '567.890.123-45' } },
+    ],
+    autoMove: { id: 'rita', toStage: 'Em atendimento', log: 'Assistente respondeu a dúvida de convênio — próximo passo sugerido' },
+    nbaDefault: () => ({ text: 'Responder e agendar — o assistente resolve e confirma.' }),
+    appTitle: 'Atendimento — WhatsApp',
+    boardLabel: 'Conversas',
+    ctaObj: 'um atendimento',
+    subtitle: (r) => r.meta.pedido,
+    recordFields: (r) => [
+      { label: 'Paciente', value: r.name },
+      { label: 'Pedido', value: r.meta.pedido },
+      { label: 'CPF', value: maskCPF(r.meta.cpf), lock: true },
+      { label: 'Status', value: r.stage },
+      { label: 'Dono', value: 'Atendente (você)' },
+    ],
+    tableCols: [
+      { header: 'Paciente', get: (r) => r.name, primary: true },
+      { header: 'Pedido', get: (r) => r.meta.pedido },
+      { header: 'CPF', get: (r) => maskCPF(r.meta.cpf), lock: true },
+      { header: 'Status', stage: true },
+    ],
+    newForm: {
+      title: 'Nova conversa',
+      add: '+ Nova conversa',
+      fields: [
+        { label: 'Paciente', def: 'Lucas Alves' },
+        { label: 'Pedido', def: 'quer marcar avaliação' },
+        { label: 'CPF', def: '678.901.234-56' },
+      ],
+      build: (v) => ({
+        name: v[0] || 'Lucas Alves',
+        meta: { pedido: v[1] || 'quer marcar avaliação', cpf: v[2] || '678.901.234-56' },
+      }),
+    },
+    magic:
+      'As conversas da planilha já estão na tela. Mexe à vontade: clique num nome, abra uma conversa, mova um card.',
+    touchHint: 'move uma conversa, abre uma ficha',
+    hitl: {
+      text: 'O **José pediu primeira consulta amanhã às 10h** — a agenda está livre. Confirmo o agendamento?',
+      button: 'Confirmar agendamento',
+      note: 'Você aprovou: consulta do José confirmada',
+      lead: 'Consulta confirmada.',
+      resolveLabel: 'Você confirmou o agendamento',
+      apply: { id: 'jose', toStage: 'Aguardando paciente', log: 'Consulta confirmada e agendada — aprovada por você' },
+    },
+    evolve: {
+      userMsg: 'Adiciona a coluna Confirmação antes de Resolvido.',
+      col: 'Confirmação',
+      before: 'Resolvido',
+      allyViaChat:
+        'É assim que se evolui — pedindo. Nesta demonstração eu aplico um exemplo pronto: a coluna Confirmação antes de Resolvido. Olha o quadro:',
+      doneLabel: 'coluna Confirmação no quadro',
+    },
+  },
+};
+
+const CENARIO_IDS = Object.keys(CENARIOS) as CenarioId[];
+
+function routeCenario(text: string): CenarioId {
+  const t = text.toLowerCase();
+  if (/fatur|cobran|caixa|receb|boleto|inadimpl/.test(t)) return 'caixa';
+  if (/atend|agend|consult|whatsapp|paciente|marcar/.test(t)) return 'atendimento';
+  return 'leads';
+}
 
 export default function JourneyDemo() {
   const [items, setItems] = useState<Item[]>(INITIAL_ITEMS);
   const [stage, setStage] = useState(0);
   const [typing, setTyping] = useState(false);
   const [started, setStarted] = useState(false);
-  const [funilEditado, setFunilEditado] = useState(false);
+  const [cenarioId, setCenarioId] = useState<CenarioId>('leads');
+  const [premEditada, setPremEditada] = useState(false);
   const [buildDone, setBuildDone] = useState(0);
-  const [stagesK, setStagesK] = useState<string[]>([
-    'Novo', 'Qualificado', 'Proposta', 'Contrato',
-  ]);
-  const [leads, setLeads] = useState<Lead[]>([]);
+  const [stagesK, setStagesK] = useState<string[]>(CENARIOS.leads.columns);
+  const [records, setRecords] = useState<Registro[]>([]);
   const [view, setView] = useState<'kanban' | 'table' | 'record'>('kanban');
   const [recordId, setRecordId] = useState<string | null>(null);
   const [query, setQuery] = useState('');
   const [draft, setDraft] = useState<'none' | 'building' | 'draft' | 'kept' | 'published'>('none');
   const [trust, setTrust] = useState<boolean[]>([false, false, false, false, false]);
-  const [negociacao, setNegociacao] = useState<'none' | 'applied' | 'undone'>('none');
-  const [newLeadOpen, setNewLeadOpen] = useState(false);
+  const [evolveState, setEvolveState] = useState<'none' | 'applied' | 'undone'>('none');
+  const [newOpen, setNewOpen] = useState(false);
   const [chatText, setChatText] = useState('');
   // mobile: um painel por vez (chat ⇄ app), padrão do protótipo DP087
   const [pane, setPane] = useState<'chat' | 'app'>('chat');
@@ -124,6 +545,9 @@ export default function JourneyDemo() {
   const reducedRef = useRef(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const touchedRef = useRef(false);
+  // cenário ativo, síncrono — sobrevive ao resetAll do replay (voltar re-executa
+  // O MESMO cenário). Só muda antes de started (pill) ou via roteamento do texto livre.
+  const cenarioRef = useRef<CenarioId>('leads');
   // trava síncrona de início: 2 cliques no mesmo tick (ou 1 em cada pill de
   // entrada) não podem disparar jornadas paralelas — estado React é assíncrono
   const startedRef = useRef(false);
@@ -178,7 +602,7 @@ export default function JourneyDemo() {
 
   const goStage = (n: number) => {
     setStage(n);
-    track('jornada_stage', { stage: n, label: STAGES[n] });
+    track('jornada_stage', { stage: n, label: STAGES[n], cenario: cenarioRef.current });
   };
 
   const isMobile = () =>
@@ -195,39 +619,36 @@ export default function JourneyDemo() {
   };
 
   // ---------------- E0: entrada ----------------
-  async function startPlanilha() {
+  // Aplica o cenário escolhido (pill ou roteamento) — antes de começar.
+  const aplicarCenario = (id: CenarioId) => {
+    cenarioRef.current = id;
+    setCenarioId(id);
+    setStagesK(CENARIOS[id].columns);
+  };
+
+  async function startPlanilha(id?: CenarioId) {
     if (!beginOnce()) return;
-    track('jornada_start', { entry: 'planilha' });
-    push({ kind: 'msg', who: 'user', text: '📎 leads-criadores.xlsx (3 abas · 25 linhas)' });
-    await ally(
-      'Li sua planilha. A aba "Leads" tem 12 leads (colunas viram campos) · "Criadores" tem 8 — detectei CPF e já vou proteger · "Contratos" tem 5, ligados aos criadores. Seus dados entram de verdade, sem redigitar nada.',
-      900,
-    );
+    const cid = id ?? cenarioRef.current; // replay usa o cenário preservado
+    if (id) aplicarCenario(id);
+    const c = CENARIOS[cid];
+    track('jornada_start', { entry: 'planilha', cenario: cid });
+    push({ kind: 'msg', who: 'user', text: `📎 ${c.xlsx}` });
+    await ally(c.planilhaRead, 900);
     push({ kind: 'card', card: 'espelho' });
   }
 
-  async function startProsa(texto?: string) {
+  async function startProsa(texto: string) {
     if (!beginOnce()) return;
-    const livre = typeof texto === 'string' && texto.trim().length > 0;
-    track('jornada_start', { entry: livre ? 'prosa-livre' : 'prosa' });
-    push({
-      kind: 'msg',
-      who: 'user',
-      text: livre
-        ? texto!.trim()
-        : 'Preciso gerir leads de criadores e contratos — hoje é tudo numa planilha.',
-    });
-    if (livre) {
-      await ally(
-        'Boa! É exatamente assim que funciona: você escreve, eu entendo e monto. Nesta demonstração eu sigo um exemplo pronto — leads e contratos — mas o caminho é o mesmo com o SEU problema. Olha:',
-        800,
-      );
-    } else {
-      await ally(
-        'Entendi: captar leads de criadores, movê-los num pipeline até o contrato e acompanhar o onboarding. (Se tiver uma planilha disso, eu importo seus dados — mas não precisa.)',
-        800,
-      );
-    }
+    const text = texto.trim();
+    const id = routeCenario(text);
+    aplicarCenario(id);
+    const c = CENARIOS[id];
+    track('jornada_start', { entry: 'prosa-livre', cenario: id });
+    push({ kind: 'msg', who: 'user', text });
+    await ally(
+      `Boa! É exatamente assim que funciona: você escreve, eu entendo e monto. Nesta demonstração eu sigo um exemplo pronto — ${c.tema} — mas o caminho é o mesmo com o SEU problema. Olha:`,
+      800,
+    );
     push({ kind: 'card', card: 'espelho' });
   }
 
@@ -240,17 +661,24 @@ export default function JourneyDemo() {
     push({ kind: 'card', card: 'enquadrar' });
   }
 
-  async function editaFunil() {
-    if (!lock('funil')) return;
-    setFunilEditado(true);
-    setStagesK((p) => (p.includes('Onboarding') ? p : [...p, 'Onboarding']));
-    push({ kind: 'msg', who: 'user', text: 'Falta a etapa de Onboarding no fim do funil.' });
-    await ally('Funil com 5 etapas ✓ — eu proponho, você corrige. É assim que funciona.', 450);
+  async function corrigirPremissa() {
+    if (!lock('prem')) return;
+    const c = CENARIOS[cenarioRef.current];
+    const ep = c.premissas.find(isEdit);
+    if (!ep) return;
+    setPremEditada(true);
+    if (ep.addColuna) {
+      const col = ep.addColuna;
+      setStagesK((p) => (p.includes(col) ? p : [...p, col]));
+    }
+    push({ kind: 'msg', who: 'user', text: ep.userMsg });
+    await ally(ep.ally, 450);
   }
 
   async function confirmaEnquadrar() {
     if (!lock('enquadrar')) return;
-    resolveCard('enquadrar', funilEditado ? 'Aceito, com seu ajuste no funil' : 'Aceito como proposto');
+    const c = CENARIOS[cenarioRef.current];
+    resolveCard('enquadrar', premEditada ? c.ajusteLabel : 'Aceito como proposto');
     goStage(2);
     await ally('Desenhei seu app inteiro. Em português, não em jargão:', 650);
     push({ kind: 'card', card: 'desenho' });
@@ -260,40 +688,40 @@ export default function JourneyDemo() {
   // ---------------- E3: rascunho vivo ----------------
   async function montaRascunho() {
     if (!lock('monta')) return;
+    const c = CENARIOS[cenarioRef.current];
     resolveCard('desenho', 'Você mandou montar');
     goStage(3);
     setDraft('building');
     push({ kind: 'build' });
     const gen = ++genRef.current;
-    for (let i = 1; i <= BUILD_STEPS.length; i++) {
+    for (let i = 1; i <= c.buildSteps.length; i++) {
       await delay(520);
       if (genRef.current !== gen) return;
       setBuildDone(i);
     }
-    const seeded: Lead[] = SEED.map((l) => ({
-      ...l,
-      stage: 'Novo',
+    const arquivo = c.xlsx.split(' ')[0];
+    const seeded: Registro[] = c.seed.map((s) => ({
+      ...s,
       origem: 'da sua planilha',
-      log: [{ who: 'user', text: 'Importado da planilha leads-criadores.xlsx', time: '14:31' }],
+      agent: false,
+      log: [{ who: 'user', text: `Importado da planilha ${arquivo}`, time: '14:31' }],
     }));
-    setLeads(seeded);
+    setRecords(seeded);
     setDraft('draft');
     earn(4); // Seus dados, só seus
     goStage(4);
     // no mobile, mostra o app nascendo — o momento-mágico é visual
     if (isMobile()) setPane('app');
-    await ally(
-      '🎉 Seu app está de pé — em rascunho, só seu. Os leads da planilha já estão na tela. Mexe à vontade: clique num nome, crie um lead, mova um card. Depois me diz se é isso.',
-      700,
-    );
+    await ally(`🎉 Seu app está de pé — em rascunho, só seu. ${c.magic} Depois me diz se é isso.`, 700);
     push({ kind: 'card', card: 'gate' });
   }
 
   // ---------------- E4: aprova o que vê ----------------
   async function ficarComEle() {
     if (!lock('ficar')) return;
+    const c = CENARIOS[cenarioRef.current];
     if (!touchedRef.current) {
-      await ally('Experimenta mexer no app primeiro — cria ou move um lead, abre uma ficha. Decidir vendo é o combinado. 😉', 400);
+      await ally(`Experimenta mexer no app primeiro — ${c.touchHint}. Decidir vendo é o combinado. 😉`, 400);
       unlock('ficar');
       return;
     }
@@ -303,16 +731,17 @@ export default function JourneyDemo() {
     track('jornada_keep');
     goStage(5);
     await ally('Agora o assistente assume o dia a dia — e te pergunta antes do que importa. Olha ele trabalhando:', 700);
-    setLeads((p) =>
-      p.map((l) =>
-        l.id === 'bruno'
+    const am = c.autoMove;
+    setRecords((p) =>
+      p.map((r) =>
+        r.id === am.id
           ? {
-              ...l,
-              stage: 'Qualificado',
+              ...r,
+              stage: am.toStage,
               agent: true,
-              log: [...l.log, { who: 'agent', text: 'Assistente qualificou — próximo passo sugerido', time: now() }],
+              log: [...r.log, { who: 'agent', text: am.log, time: now() }],
             }
-          : l,
+          : r,
       ),
     );
     await delay(900);
@@ -321,11 +750,13 @@ export default function JourneyDemo() {
 
   async function ajustar() {
     if (!lock('ajustar')) return;
-    push({ kind: 'msg', who: 'user', text: 'Queria a coluna de Proposta logo depois de Novo.' });
+    const c = CENARIOS[cenarioRef.current];
+    const alvo = c.columns[2]; // 3ª coluna do funil — reordenada para logo depois da 1ª
+    push({ kind: 'msg', who: 'user', text: `Queria a coluna de ${alvo} logo depois de ${c.columns[0]}.` });
     await ally('Troquei — olha a tela. Ajustar rascunho é conversa, não retrabalho. É isso?', 500);
     setStagesK((p) => {
-      const rest = p.filter((s) => s !== 'Proposta');
-      return [rest[0], 'Proposta', ...rest.slice(1)];
+      const rest = p.filter((s) => s !== alvo);
+      return [rest[0], alvo, ...rest.slice(1)];
     });
     markTouched();
   }
@@ -337,24 +768,26 @@ export default function JourneyDemo() {
   // ---------------- E5: operar sob aprovação ----------------
   async function aprovaEnvio() {
     if (!lock('hitl')) return;
-    resolveCard('hitl', 'Você aprovou o envio');
+    const c = CENARIOS[cenarioRef.current];
+    resolveCard('hitl', c.hitl.resolveLabel);
     earn(3); // Humano assume
     track('jornada_hitl_ok');
-    push({ kind: 'note', text: `Você aprovou: contrato para Ana Souza · ${now()}` });
-    setLeads((p) =>
-      p.map((l) =>
-        l.id === 'ana'
+    push({ kind: 'note', text: `${c.hitl.note} · ${now()}` });
+    const ap = c.hitl.apply;
+    setRecords((p) =>
+      p.map((r) =>
+        r.id === ap.id
           ? {
-              ...l,
-              stage: 'Contrato',
+              ...r,
+              stage: ap.toStage,
               agent: true,
-              log: [...l.log, { who: 'agent', text: 'Contrato enviado por Gmail — aprovado por você', time: now() }],
+              log: [...r.log, { who: 'agent', text: ap.log, time: now() }],
             }
-          : l,
+          : r,
       ),
     );
     goStage(6);
-    await ally('Contrato foi. A automação segue até o fim e fica registrada. Antes de abrir pro seu time, eu provo por dentro que cada papel vê só o combinado — aí você publica:', 800);
+    await ally(`${c.hitl.lead} A automação segue até o fim e fica registrada. Antes de abrir pro seu time, eu provo por dentro que cada papel vê só o combinado — aí você publica:`, 800);
     push({ kind: 'card', card: 'publicar' });
   }
 
@@ -369,36 +802,29 @@ export default function JourneyDemo() {
   }
 
   // ---------------- E7: evoluir ----------------
-  async function addNegociacao(viaChat?: string) {
-    if (!lock('neg')) return;
-    push({
-      kind: 'msg',
-      who: 'user',
-      text: viaChat ?? 'Adiciona a etapa Negociação antes de Contrato.',
-    });
-    if (viaChat) {
-      await ally(
-        'É assim que se evolui — pedindo. Nesta demonstração eu aplico um exemplo pronto: a etapa Negociação antes de Contrato. Olha o pipeline:',
-        550,
-      );
-    }
+  async function aplicarEvolucao(viaChat?: string) {
+    if (!lock('evo')) return;
+    const c = CENARIOS[cenarioRef.current];
+    push({ kind: 'msg', who: 'user', text: viaChat ?? c.evolve.userMsg });
+    if (viaChat) await ally(c.evolve.allyViaChat, 550);
     await delay(450);
     setStagesK((p) => {
-      if (p.includes('Negociação')) return p;
-      const i = p.indexOf('Contrato');
+      if (p.includes(c.evolve.col)) return p;
+      const i = p.indexOf(c.evolve.before);
       const cp = [...p];
-      cp.splice(i, 0, 'Negociação');
+      cp.splice(i, 0, c.evolve.col);
       return cp;
     });
-    setNegociacao('applied');
+    setEvolveState('applied');
     await ally('Aplicado ✓ — mudança simples não pede cerimônia. E tem Desfazer, porque errar não pode machucar.', 500);
     track('jornada_done');
     push({ kind: 'card', card: 'cta' });
   }
 
   function desfazer() {
-    setStagesK((p) => p.filter((s) => s !== 'Negociação'));
-    setNegociacao('undone');
+    const c = CENARIOS[cenarioRef.current];
+    setStagesK((p) => p.filter((s) => s !== c.evolve.col));
+    setEvolveState('undone');
     earn(2); // Correção + desfazer
   }
 
@@ -416,8 +842,8 @@ export default function JourneyDemo() {
       await startProsa(text);
       return;
     }
-    if (stage >= 7 && negociacao === 'none') {
-      await addNegociacao(text);
+    if (stage >= 7 && evolveState === 'none') {
+      await aplicarEvolucao(text);
       return;
     }
     push({ kind: 'msg', who: 'user', text });
@@ -431,7 +857,7 @@ export default function JourneyDemo() {
   // ---------------- navegação passo a passo (◀ ▶ na topbar) ----------------
   // Avançar executa a próxima decisão do caminho feliz; Voltar re-executa a
   // jornada do zero, instantânea (reducedRef), até o passo anterior — replay
-  // determinístico, mesmo padrão do protótipo DP087.
+  // determinístico do MESMO cenário, mesmo padrão do protótipo DP087.
   const busyRef = useRef(false);
 
   const CHECKPOINTS: Array<() => Promise<void> | void> = [
@@ -441,14 +867,14 @@ export default function JourneyDemo() {
     () => montaRascunho(),
     async () => {
       if (!touchedRef.current) {
-        moveLead('ana');
+        moveRecord(CENARIOS[cenarioRef.current].seed[0].id);
         await delay(650);
       }
       await ficarComEle();
     },
     () => aprovaEnvio(),
     () => publicar(),
-    () => addNegociacao(),
+    () => aplicarEvolucao(),
   ];
 
   function proximoPasso(): number | null {
@@ -460,7 +886,7 @@ export default function JourneyDemo() {
     if (stage === 4) return 4;
     if (stage === 5) return 5;
     if (stage === 6) return 6;
-    if (stage === 7 && negociacao === 'none') return 7;
+    if (stage === 7 && evolveState === 'none') return 7;
     return null; // jornada completa
   }
 
@@ -492,17 +918,18 @@ export default function JourneyDemo() {
     setStage(0);
     setTyping(false);
     setStarted(false);
-    setFunilEditado(false);
+    setPremEditada(false);
     setBuildDone(0);
-    setStagesK(['Novo', 'Qualificado', 'Proposta', 'Contrato']);
-    setLeads([]);
+    // preserva o cenário ativo — o replay re-executa O MESMO cenário
+    setStagesK(CENARIOS[cenarioRef.current].columns);
+    setRecords([]);
     setView('kanban');
     setRecordId(null);
     setQuery('');
     setDraft('none');
     setTrust([false, false, false, false, false]);
-    setNegociacao('none');
-    setNewLeadOpen(false);
+    setEvolveState('none');
+    setNewOpen(false);
   }
 
   async function voltarPasso() {
@@ -530,40 +957,51 @@ export default function JourneyDemo() {
     setView('record');
     markTouched();
   }
-  function moveLead(id: string) {
-    setLeads((p) =>
-      p.map((l) => {
-        if (l.id !== id) return l;
-        const i = stagesK.indexOf(l.stage);
-        if (i < 0 || i >= stagesK.length - 1) return l;
+  function moveRecord(id: string) {
+    setRecords((p) =>
+      p.map((r) => {
+        if (r.id !== id) return r;
+        const i = stagesK.indexOf(r.stage);
+        if (i < 0 || i >= stagesK.length - 1) return r;
         const next = stagesK[i + 1];
-        return { ...l, stage: next, agent: false, log: [...l.log, { who: 'user', text: `Você moveu para ${next}`, time: now() }] };
+        return { ...r, stage: next, agent: false, log: [...r.log, { who: 'user', text: `Você moveu para ${next}`, time: now() }] };
       }),
     );
     markTouched();
   }
-  function createLead(name: string, company: string, email: string) {
+  function createRecord(vals: string[]) {
+    const c = CENARIOS[cenarioRef.current];
+    const base = c.newForm.build(vals);
     const id = 'novo-' + Date.now().toString(36);
-    setLeads((p) => [
+    setRecords((p) => [
       ...p,
       {
-        id, name: name || 'Gustavo Reis', company: company || 'RetailPro',
-        email: email || 'gustavo@retailpro.com', stage: 'Novo', origem: 'criado por você',
+        id,
+        name: base.name,
+        meta: base.meta,
+        stage: stagesK[0],
+        origem: 'criado por você',
+        agent: false,
         log: [{ who: 'user', text: 'Criado por você, direto na tela do rascunho', time: now() }],
       },
     ]);
-    setNewLeadOpen(false);
+    setNewOpen(false);
     markTouched();
   }
   function nbaAction(id: string) {
-    setLeads((p) =>
-      p.map((l) => {
-        if (l.id !== id) return l;
-        const i = stagesK.indexOf(l.stage);
-        const next = i >= 0 && i < stagesK.length - 1 ? stagesK[i + 1] : l.stage;
+    const c = CENARIOS[cenarioRef.current];
+    setRecords((p) =>
+      p.map((r) => {
+        if (r.id !== id) return r;
+        const nba = r.nba ?? c.nbaDefault(r);
+        if (nba.kind === 'handoff') {
+          return { ...r, log: [...r.log, { who: 'agent', text: nba.log ?? 'Encaminhado para um humano', time: now() }] };
+        }
+        const i = stagesK.indexOf(r.stage);
+        const next = i >= 0 && i < stagesK.length - 1 ? stagesK[i + 1] : r.stage;
         return {
-          ...l, stage: next, agent: true,
-          log: [...l.log, { who: 'agent', text: 'Próximo passo executado pelo assistente — com o seu OK', time: now() }],
+          ...r, stage: next, agent: true,
+          log: [...r.log, { who: 'agent', text: 'Próximo passo executado pelo assistente — com o seu OK', time: now() }],
         };
       }),
     );
@@ -571,9 +1009,11 @@ export default function JourneyDemo() {
   }
 
   // ---------------- render helpers ----------------
-  const record = leads.find((l) => l.id === recordId) ?? null;
-  const filtered = leads.filter((l) =>
-    (l.name + ' ' + l.company).toLowerCase().includes(query.toLowerCase()),
+  const cen = CENARIOS[cenarioId];
+  const entryCol = stagesK[0];
+  const record = records.find((l) => l.id === recordId) ?? null;
+  const filtered = records.filter((r) =>
+    (r.name + ' ' + cen.subtitle(r)).toLowerCase().includes(query.toLowerCase()),
   );
 
   function renderCard(item: Extract<Item, { kind: 'card' }>) {
@@ -585,9 +1025,9 @@ export default function JourneyDemo() {
           <div className={'jd-card' + (done ? ' jd-off' : '')}>
             <div className="jd-kick">Espelho — é isso?</div>
             <div className="jd-chips">
-              <span className="jd-chip on">Leads</span>
-              <span className="jd-chip on">Criadores</span>
-              <span className="jd-chip on">Contratos</span>
+              {cen.espelhoChips.map((ch) => (
+                <span key={ch} className="jd-chip on">{ch}</span>
+              ))}
               <span className="jd-chip">app novo — nada do que você já tem cobre isso</span>
             </div>
             {foot ?? (
@@ -602,23 +1042,24 @@ export default function JourneyDemo() {
           <div className={'jd-card' + (done ? ' jd-off' : '')}>
             <div className="jd-kick">Confirme como funciona — corrija por exceção</div>
             <ul className="jd-prem">
-              <li>👥 Quem usa: <b>Recrutador · Gestor · Jurídico</b></li>
-              <li>
-                🔁 Funil:{' '}
-                {funilEditado ? (
-                  <b>Novo → Qualificado → Proposta → Contrato → Onboarding <span className="jd-mini">(ajustado por você)</span></b>
-                ) : (
-                  <>
-                    <b>Novo → Qualificado → Proposta → Contrato (4 etapas)</b>{' '}
-                    {!done && (
-                      <button className="jd-link" onClick={editaFunil}>corrigir</button>
-                    )}
-                  </>
-                )}
-              </li>
-              <li>🔒 E-mail e CPF <b>protegidos por padrão</b></li>
-              <li>🛡️ Jurídico vê <b>só contratos</b></li>
-              <li>⚡ Contrato só sai <b>com o seu OK</b></li>
+              {cen.premissas.map((p, i) => (
+                <li key={i}>
+                  {isEdit(p) ? (
+                    premEditada ? (
+                      <>{p.icon} {boldify(p.after)} <span className="jd-mini">(ajustado por você)</span></>
+                    ) : (
+                      <>
+                        {p.icon} {boldify(p.before)}{' '}
+                        {!done && (
+                          <button className="jd-link" onClick={corrigirPremissa}>corrigir</button>
+                        )}
+                      </>
+                    )
+                  ) : (
+                    <>{p.icon} {boldify(p.text)}</>
+                  )}
+                </li>
+              ))}
             </ul>
             {foot ?? (
               <div className="jd-btns">
@@ -632,7 +1073,7 @@ export default function JourneyDemo() {
           <div className={'jd-card' + (done ? ' jd-off' : '')}>
             <div className="jd-kick">O desenho do seu app</div>
             <div className="jd-des">
-              {DESENHO_ROWS.map((r) => (
+              {cen.desenho.map((r) => (
                 <div key={r.label} className="jd-des-row">
                   <span className="jd-des-ic">{r.icon}</span>
                   <b>{r.label}</b>
@@ -669,12 +1110,10 @@ export default function JourneyDemo() {
         return (
           <div className={'jd-card jd-gate' + (done ? ' jd-off' : '')}>
             <div className="jd-kick jd-kick-amber">Decisão sua — o assistente espera</div>
-            <p className="jd-p">
-              O contrato da <b>Ana Souza (TechFin)</b> está pronto. Envio por Gmail?
-            </p>
+            <p className="jd-p">{boldify(cen.hitl.text)}</p>
             {foot ?? (
               <div className="jd-btns">
-                <button className="jd-btn jd-ok" onClick={aprovaEnvio}>Aprovar envio</button>
+                <button className="jd-btn jd-ok" onClick={aprovaEnvio}>{cen.hitl.button}</button>
                 <button className="jd-btn" onClick={() => resolveCard('hitl', 'Deixado para depois — fica na sua fila')}>Agora não</button>
               </div>
             )}
@@ -685,8 +1124,8 @@ export default function JourneyDemo() {
           <div className={'jd-card' + (done ? ' jd-off' : '')}>
             <div className="jd-kick">Abrir pro time?</div>
             <p className="jd-p">
-              Provado por dentro antes de expor: cada papel vê exatamente o combinado, CPF
-              protegido, automação conferida — <b>no banco, não no papel</b>.
+              Provado por dentro antes de expor: cada papel vê exatamente o combinado, dados
+              sensíveis protegidos, automação conferida — <b>no banco, não no papel</b>.
             </p>
             {foot ?? (
               <div className="jd-btns">
@@ -699,17 +1138,17 @@ export default function JourneyDemo() {
         return (
           <div className="jd-card">
             <div className="jd-kick">Evoluir é conversar</div>
-            {negociacao === 'none' ? (
+            {evolveState === 'none' ? (
               <div className="jd-btns">
-                <button className="jd-btn" onClick={() => addNegociacao()}>
-                  “adiciona a etapa Negociação antes de Contrato”
+                <button className="jd-btn" onClick={() => aplicarEvolucao()}>
+                  “{cen.evolve.userMsg.charAt(0).toLowerCase() + cen.evolve.userMsg.slice(1)}”
                 </button>
               </div>
             ) : (
               <p className="jd-p">
-                {negociacao === 'applied' ? (
+                {evolveState === 'applied' ? (
                   <>
-                    <b>Aplicado ✓</b> — etapa Negociação no pipeline.{' '}
+                    <b>Aplicado ✓</b> — {cen.evolve.doneLabel}.{' '}
                     <button className="jd-link" onClick={desfazer}>Desfazer</button>
                   </>
                 ) : (
@@ -724,7 +1163,7 @@ export default function JourneyDemo() {
           <div className="jd-card jd-cta">
             <div className="jd-kick">Isso, com os SEUS dados</div>
             <p className="jd-p">
-              Você acabou de criar, aprovar vendo e operar um app — com dados de exemplo.
+              Você acabou de criar, aprovar vendo e operar {cen.ctaObj} — com dados de exemplo.
               Com a sua planilha de verdade, é o mesmo caminho.
             </p>
             <div className="jd-btns">
@@ -807,7 +1246,7 @@ export default function JourneyDemo() {
                   <div key={i} className="jd-card">
                     <div className="jd-kick">Montando seu rascunho — zero perguntas</div>
                     <ul className="jd-build">
-                      {BUILD_STEPS.map((s, k) => (
+                      {cen.buildSteps.map((s, k) => (
                         <li key={s} className={k < buildDone ? 'done' : k === buildDone ? 'run' : ''}>
                           <span className="jd-tick">✓</span> {s}
                         </li>
@@ -827,12 +1266,11 @@ export default function JourneyDemo() {
 
           {!started && (
             <div className="jd-entries">
-              <button className="jd-pill jd-pill-imp" onClick={startPlanilha}>
-                📊 Importar planilha <code>leads-criadores.xlsx</code> <em>— opcional</em>
-              </button>
-              <button className="jd-pill" onClick={() => startProsa()}>
-                💬 “Preciso gerir leads de criadores e contratos”
-              </button>
+              {CENARIO_IDS.map((id) => (
+                <button key={id} className="jd-pill jd-pill-imp" onClick={() => startPlanilha(id)}>
+                  {CENARIOS[id].pill}
+                </button>
+              ))}
             </div>
           )}
 
@@ -868,10 +1306,10 @@ export default function JourneyDemo() {
           ) : (
             <>
               <header className="jd-app-head">
-                <b>Pipeline de Leads</b>
+                <b>{cen.appTitle}</b>
                 {badge && <span className={'jd-badge ' + badge.cls}>{badge.t}</span>}
                 <div className="jd-views" role="group" aria-label="Modo de visualização">
-                  <button className={view === 'kanban' ? 'on' : ''} onClick={() => setView('kanban')}>▦ Pipeline</button>
+                  <button className={view === 'kanban' ? 'on' : ''} onClick={() => setView('kanban')}>▦ {cen.boardLabel}</button>
                   <button className={view === 'table' ? 'on' : ''} onClick={() => { setView('table'); markTouched(); }}>☰ Tabela</button>
                   {record && (
                     <button className={view === 'record' ? 'on' : ''} onClick={() => setView('record')}>👤 {record.name.split(' ')[0]}</button>
@@ -882,25 +1320,25 @@ export default function JourneyDemo() {
               {view === 'kanban' && (
                 <div className="jd-kanban">
                   {stagesK.map((s) => {
-                    const col = leads.filter((l) => l.stage === s);
-                    const extra = s === 'Novo' ? 7 : 0;
+                    const col = records.filter((l) => l.stage === s);
+                    const extra = s === entryCol ? cen.extraN : 0;
                     return (
                       <div key={s} className="jd-kcol">
                         <div className="jd-khead">{s}<span>{col.length + extra}</span></div>
                         {col.map((l) => (
                           <div key={l.id} className="jd-kcard">
                             <button className="jd-kname" onClick={() => openRecord(l.id)}>{l.name}</button>
-                            <div className="jd-ksub">{l.company} · {mask(l.email)}</div>
+                            <div className="jd-ksub">{cen.subtitle(l)}</div>
                             <div className="jd-kfoot">
                               <span className={'jd-ktag' + (l.agent ? ' ag' : '')}>{l.agent ? 'assistente moveu' : l.origem}</span>
-                              <button className="jd-kmove" onClick={() => moveLead(l.id)} aria-label={`Mover ${l.name}`}>mover →</button>
+                              <button className="jd-kmove" onClick={() => moveRecord(l.id)} aria-label={`Mover ${l.name}`}>mover →</button>
                             </div>
                           </div>
                         ))}
-                        {s === 'Novo' && (
+                        {s === entryCol && (
                           <>
                             {extra > 0 && <div className="jd-kmore">+{extra} da planilha</div>}
-                            <button className="jd-kadd" onClick={() => setNewLeadOpen(true)}>+ Novo lead</button>
+                            <button className="jd-kadd" onClick={() => setNewOpen(true)}>{cen.newForm.add}</button>
                           </>
                         )}
                       </div>
@@ -913,73 +1351,84 @@ export default function JourneyDemo() {
                 <div className="jd-table-wrap">
                   <input
                     className="jd-search"
-                    placeholder="Buscar lead…"
+                    placeholder="Buscar…"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
-                    aria-label="Buscar lead"
+                    aria-label="Buscar registro"
                   />
                   <table className="jd-table">
                     <thead>
-                      <tr><th>Nome</th><th>Empresa</th><th>E-mail</th><th>Etapa</th></tr>
+                      <tr>{cen.tableCols.map((c) => <th key={c.header}>{c.header}</th>)}</tr>
                     </thead>
                     <tbody>
                       {filtered.map((l) => (
                         <tr key={l.id} onClick={() => openRecord(l.id)} tabIndex={0}
                           onKeyDown={(e) => e.key === 'Enter' && openRecord(l.id)}>
-                          <td className="jd-tname">{l.name}</td>
-                          <td>{l.company}</td>
-                          <td>{mask(l.email)} 🔒</td>
-                          <td><span className="jd-stagepill">{l.stage}</span></td>
+                          {cen.tableCols.map((c) => (
+                            <td key={c.header} className={c.primary ? 'jd-tname' : undefined}>
+                              {c.stage ? (
+                                <span className="jd-stagepill">{l.stage}</span>
+                              ) : (
+                                <>{c.get?.(l)}{c.lock && ' 🔒'}</>
+                              )}
+                            </td>
+                          ))}
                         </tr>
                       ))}
                     </tbody>
                   </table>
-                  <div className="jd-tcount">{filtered.length} exibidos · {leads.length + 7} no total</div>
+                  <div className="jd-tcount">{filtered.length} exibidos · {records.length + cen.extraN} no total</div>
                 </div>
               )}
 
-              {view === 'record' && record && (
-                <div className="jd-record">
-                  <div className="jd-rec-head">
-                    <b>{record.name}</b>
-                    <span className="jd-stagepill">{record.stage}</span>
-                  </div>
-                  <div className="jd-rec-grid">
-                    <dl className="jd-fields">
-                      <div><dt>Nome</dt><dd>{record.name}</dd></div>
-                      <div><dt>Empresa</dt><dd>{record.company}</dd></div>
-                      <div>
-                        <dt>E-mail</dt>
-                        <dd>{mask(record.email)} <span className="jd-lock" title="Protegido: seu papel vê mascarado — decidido no desenho">🔒</span></dd>
+              {view === 'record' && record && (() => {
+                const nba = record.nba ?? cen.nbaDefault(record);
+                const handoff = nba.kind === 'handoff';
+                return (
+                  <div className="jd-record">
+                    <div className="jd-rec-head">
+                      <b>{record.name}</b>
+                      <span className="jd-stagepill">{record.stage}</span>
+                    </div>
+                    <div className="jd-rec-grid">
+                      <dl className="jd-fields">
+                        {cen.recordFields(record).map((f) => (
+                          <div key={f.label}>
+                            <dt>{f.label}</dt>
+                            <dd>
+                              {f.value}
+                              {f.lock && (
+                                <span className="jd-lock" title="Protegido: seu papel vê mascarado — decidido no desenho"> 🔒</span>
+                              )}
+                            </dd>
+                          </div>
+                        ))}
+                      </dl>
+                      <div className={'jd-nba' + (handoff ? ' jd-nba-hand' : '')}>
+                        <span className="jd-nba-k">{handoff ? '🙋 Humano assume' : '🤖 Próximo passo sugerido'}</span>
+                        <span>{nba.text}</span>
+                        <button className="jd-btn jd-pri" onClick={() => nbaAction(record.id)}>Fazer isso</button>
                       </div>
-                      <div><dt>Etapa</dt><dd>{record.stage}</dd></div>
-                      <div><dt>Dono</dt><dd>Recrutador (você)</dd></div>
-                    </dl>
-                    <div className="jd-nba">
-                      <span className="jd-nba-k">🤖 Próximo passo sugerido</span>
-                      <span>
-                        {record.stage === 'Novo'
-                          ? 'Qualificar este lead — os dados vieram completos.'
-                          : record.stage === 'Contrato'
-                            ? 'Acompanhar a assinatura — contrato enviado.'
-                            : 'Avançar para a próxima etapa do funil.'}
-                      </span>
-                      <button className="jd-btn jd-pri" onClick={() => nbaAction(record.id)}>Fazer isso</button>
+                    </div>
+                    <div className="jd-tl">
+                      <span className="jd-tl-t">Histórico — tudo fica registrado</span>
+                      {record.log.map((e, i) => (
+                        <div key={i} className={'jd-tl-i ' + e.who}>
+                          <span>{e.text}</span><time>{e.time}</time>
+                        </div>
+                      ))}
                     </div>
                   </div>
-                  <div className="jd-tl">
-                    <span className="jd-tl-t">Histórico — tudo fica registrado</span>
-                    {record.log.map((e, i) => (
-                      <div key={i} className={'jd-tl-i ' + e.who}>
-                        <span>{e.text}</span><time>{e.time}</time>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+                );
+              })()}
 
-              {newLeadOpen && (
-                <NewLeadForm onCreate={createLead} onCancel={() => setNewLeadOpen(false)} />
+              {newOpen && (
+                <NewRecordForm
+                  title={cen.newForm.title}
+                  fields={cen.newForm.fields}
+                  onCreate={createRecord}
+                  onCancel={() => setNewOpen(false)}
+                />
               )}
             </>
           )}
@@ -1033,26 +1482,32 @@ export default function JourneyDemo() {
   );
 }
 
-function NewLeadForm({
+function NewRecordForm({
+  title,
+  fields,
   onCreate,
   onCancel,
 }: {
-  onCreate: (n: string, c: string, e: string) => void;
+  title: string;
+  fields: { label: string; def: string }[];
+  onCreate: (vals: string[]) => void;
   onCancel: () => void;
 }) {
-  const [n, setN] = useState('Gustavo Reis');
-  const [c, setC] = useState('RetailPro');
-  const [e, setE] = useState('gustavo@retailpro.com');
+  const [vals, setVals] = useState<string[]>(fields.map((f) => f.def));
+  const setAt = (i: number, v: string) => setVals((p) => p.map((x, k) => (k === i ? v : x)));
   return (
-    <div className="jd-modal" role="dialog" aria-modal="true" aria-label="Criar novo lead">
+    <div className="jd-modal" role="dialog" aria-modal="true" aria-label={title}>
       <div className="jd-modal-card">
-        <b>Novo lead</b>
-        <label>Nome<input value={n} onChange={(ev) => setN(ev.target.value)} /></label>
-        <label>Empresa<input value={c} onChange={(ev) => setC(ev.target.value)} /></label>
-        <label>E-mail<input value={e} onChange={(ev) => setE(ev.target.value)} /></label>
+        <b>{title}</b>
+        {fields.map((f, i) => (
+          <label key={f.label}>
+            {f.label}
+            <input value={vals[i]} onChange={(ev) => setAt(i, ev.target.value)} />
+          </label>
+        ))}
         <span className="jd-mini">🛡️ Vira registro real no seu espaço — protegido e só seu.</span>
         <div className="jd-btns">
-          <button className="jd-btn jd-pri" onClick={() => onCreate(n, c, e)}>Criar</button>
+          <button className="jd-btn jd-pri" onClick={() => onCreate(vals)}>Criar</button>
           <button className="jd-btn" onClick={onCancel}>Cancelar</button>
         </div>
       </div>
@@ -1239,6 +1694,8 @@ const JD_CSS = `
 .jd-lock { cursor:help; font-size:12px; }
 .jd-nba { border:1px solid rgba(77,171,247,.35); background:rgba(77,171,247,.07); border-radius:10px; padding:12px; display:flex; flex-direction:column; gap:8px; font-size:13px; }
 .jd-nba-k { font-size:10.5px; text-transform:uppercase; letter-spacing:.07em; color:var(--jd-blue); font-weight:700; }
+.jd-nba-hand { border-color:rgba(251,191,36,.45); background:rgba(251,191,36,.07); }
+.jd-nba-hand .jd-nba-k { color:var(--jd-amber); }
 .jd-tl { margin-top:16px; }
 .jd-tl-t { display:block; font-size:10.5px; text-transform:uppercase; letter-spacing:.06em; color:var(--jd-mut); font-weight:700; margin-bottom:8px; }
 .jd-tl-i { display:flex; gap:10px; border-left:2px solid var(--jd-line); padding:6px 0 6px 12px; position:relative; font-size:13px; color:var(--jd-mut); }
