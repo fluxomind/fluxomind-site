@@ -67,7 +67,7 @@ export const PURPOSE_LINE =
 
 // Rótulos canônicos de CTA (destinos em src/lib/platform.ts).
 export const CTA = {
-  demo: 'Veja a Fluxomind trabalhar',
+  demo: 'Crie um app conversando',
   beta: 'Quero isso no meu negócio',
   contact: 'Falar com o time',
   login: 'Entrar',
