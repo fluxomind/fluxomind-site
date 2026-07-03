@@ -111,6 +111,15 @@ const INITIAL_ITEMS: Item[] = [
   },
 ];
 
+// Exemplos que ciclam no placeholder da entrada (máquina-de-escrever). Cada um
+// casa com o roteamento por regex (lead→leads · cobran/caixa→caixa · whatsapp→
+// atendimento), então copiar a sugestão e enviar leva ao cenário certo.
+const ENTRY_EXAMPLES = [
+  'meus leads e contratos vivem numa planilha…',
+  'cobrança de clientes em atraso, tudo no caixa…',
+  'minha clínica se afoga em mensagens no WhatsApp…',
+];
+
 // ======================= CENÁRIOS =======================
 
 type CenarioId = 'leads' | 'caixa' | 'atendimento';
@@ -605,6 +614,11 @@ export default function JourneyDemo() {
   const [evolveState, setEvolveState] = useState<'none' | 'applied' | 'undone'>('none');
   const [newOpen, setNewOpen] = useState(false);
   const [chatText, setChatText] = useState('');
+  // digitação emulada (autopilot): mostra a mensagem do VC sendo digitada no
+  // input real antes de virar bolha — dá a sensação de "alguém usando de verdade".
+  const [emulating, setEmulating] = useState(false);
+  // placeholder máquina-de-escrever na tela de entrada (antes de started)
+  const [phText, setPhText] = useState('');
   // mobile: um painel por vez (chat ⇄ app), padrão do protótipo DP087
   const [pane, setPane] = useState<'chat' | 'app'>('chat');
   const [touched, setTouched] = useState(false);
@@ -613,6 +627,9 @@ export default function JourneyDemo() {
   const genRef = useRef(0);
   const reducedRef = useRef(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const emulatingRef = useRef(false); // trava síncrona da emulação de digitação
+  const skipRef = useRef(false); // clique no input → conclui a emulação na hora
   const touchedRef = useRef(false);
   // cenário ativo, síncrono — sobrevive ao resetAll do replay (voltar re-executa
   // O MESMO cenário). Só muda antes de started (pill) ou via roteamento do texto livre.
@@ -647,6 +664,56 @@ export default function JourneyDemo() {
     if (n) n.scrollTop = n.scrollHeight;
   }, [items, typing]);
 
+  // placeholder máquina-de-escrever na entrada: cicla os exemplos dos 3 cenários.
+  // Roda no idle da tela de entrada; para quando o usuário digita (chatText != '')
+  // e retoma se limpar. Respeita prefers-reduced-motion (fica estático).
+  useEffect(() => {
+    if (started || reducedRef.current || chatText !== '') {
+      setPhText('');
+      return;
+    }
+    let cancelled = false;
+    let timer: ReturnType<typeof setTimeout>;
+    let ti = 0; // exemplo
+    let ci = 0; // caractere
+    let mode: 'typing' | 'pause' | 'deleting' = 'typing';
+    const tick = () => {
+      if (cancelled) return;
+      const ex = ENTRY_EXAMPLES[ti];
+      if (mode === 'typing') {
+        ci += 1;
+        setPhText(ex.slice(0, ci));
+        if (ci >= ex.length) {
+          mode = 'pause';
+          timer = setTimeout(tick, 1800);
+        } else {
+          timer = setTimeout(tick, 45 + Math.random() * 30);
+        }
+      } else if (mode === 'pause') {
+        mode = 'deleting';
+        timer = setTimeout(tick, 30);
+      } else {
+        ci -= 2;
+        if (ci <= 1) {
+          // pula pro próximo exemplo já com 1 char — nunca fica vazio (sem flash)
+          ti = (ti + 1) % ENTRY_EXAMPLES.length;
+          ci = 1;
+          mode = 'typing';
+          setPhText(ENTRY_EXAMPLES[ti].slice(0, 1));
+          timer = setTimeout(tick, 220);
+        } else {
+          setPhText(ex.slice(0, ci));
+          timer = setTimeout(tick, 25);
+        }
+      }
+    };
+    timer = setTimeout(tick, 600);
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [started, chatText]);
+
   const now = () => {
     clockRef.current += 1;
     return `14:${String(clockRef.current).padStart(2, '0')}`;
@@ -666,6 +733,47 @@ export default function JourneyDemo() {
     if (genRef.current !== gen) return; // recomeçar/rebuild cancelou esta fala
     setTyping(false);
     push({ kind: 'msg', who: 'ally', text });
+  }
+
+  // Emula digitação humana da mensagem do VC no input real e então a envia como
+  // bolha. Caret fake via CSS (sem foco programático — evita abrir o teclado no
+  // mobile). No replay/reduced-motion, ou se o usuário estiver escrevendo de
+  // verdade, cai direto na bolha. Cancelável pela guarda de época (genRef).
+  async function typeThenPush(text: string) {
+    const gen = genRef.current;
+    const el = inputRef.current;
+    const userBusy = !!(el && (el.value.trim() !== '' || document.activeElement === el));
+    if (reducedRef.current || userBusy) {
+      push({ kind: 'msg', who: 'user', text });
+      return;
+    }
+    const finish = (send: boolean) => {
+      emulatingRef.current = false;
+      setEmulating(false);
+      setChatText('');
+      if (send) push({ kind: 'msg', who: 'user', text });
+    };
+    skipRef.current = false;
+    emulatingRef.current = true;
+    setEmulating(true);
+    const chars = Array.from(text);
+    // ~35ms/char, mas acelera frases longas para caber em ~2,5s
+    const per = chars.length * 35 > 2500 ? Math.max(8, Math.floor(2500 / chars.length)) : 35;
+    let acc = '';
+    for (const ch of chars) {
+      if (genRef.current !== gen) return finish(false); // recomeçar cancelou
+      if (skipRef.current) break; // clique no input → conclui na hora
+      acc += ch;
+      setChatText(acc);
+      let d = per + (Math.random() * 40 - 20); // jitter ±20ms = irregular, humano
+      if (/[.,!?;:—…]/.test(ch)) d += 90; // pausa um pouco maior na pontuação
+      await delay(Math.max(8, d));
+    }
+    if (skipRef.current) setChatText(text);
+    if (genRef.current !== gen) return finish(false);
+    await delay(skipRef.current ? 80 : 250);
+    if (genRef.current !== gen) return finish(false);
+    finish(true);
   }
 
   const earn = (i: number) =>
@@ -703,7 +811,8 @@ export default function JourneyDemo() {
     if (id) aplicarCenario(id);
     const c = CENARIOS[cid];
     track('jornada_start', { entry: 'planilha', cenario: cid });
-    push({ kind: 'msg', who: 'user', text: `📎 ${c.xlsx}` });
+    await typeThenPush(`📎 ${c.xlsx}`);
+    if (genRef.current !== gen) return;
     await ally(c.planilhaRead, 900);
     if (genRef.current !== gen) return;
     push({ kind: 'card', card: 'espelho' });
@@ -747,7 +856,7 @@ export default function JourneyDemo() {
       const col = ep.addColuna;
       setStagesK((p) => (p.includes(col) ? p : [...p, col]));
     }
-    push({ kind: 'msg', who: 'user', text: ep.userMsg });
+    await typeThenPush(ep.userMsg);
     await ally(ep.ally, 450);
   }
 
@@ -840,7 +949,7 @@ export default function JourneyDemo() {
     if (!lock('ajustar')) return;
     const c = CENARIOS[cenarioRef.current];
     const alvo = c.columns[2];
-    push({ kind: 'msg', who: 'user', text: `Queria ${alvo} logo depois de ${c.columns[0]}.` });
+    await typeThenPush(`Queria ${alvo} logo depois de ${c.columns[0]}.`);
     await ally('Troquei — olha a tela. Ajustar rascunho é conversa, não retrabalho. É isso?', 500);
     setStagesK((p) => {
       const rest = p.filter((s) => s !== alvo);
@@ -907,8 +1016,15 @@ export default function JourneyDemo() {
     const c = CENARIOS[cenarioRef.current];
     const gen = genRef.current;
     const ev = c.evolve;
-    push({ kind: 'msg', who: 'user', text: viaChat ?? ev.userMsg });
-    if (viaChat) await ally(ev.allyViaChat, 550);
+    // texto livre (viaChat) já foi digitado pelo usuário → bolha direta;
+    // no autopilot, emula a digitação do pedido do roteiro.
+    if (viaChat) {
+      push({ kind: 'msg', who: 'user', text: viaChat });
+      await ally(ev.allyViaChat, 550);
+    } else {
+      await typeThenPush(ev.userMsg);
+    }
+    if (genRef.current !== gen) return;
     await delay(450);
     if (genRef.current !== gen) return;
     if (ev.col && ev.before) {
@@ -958,6 +1074,7 @@ export default function JourneyDemo() {
 
   // ---------------- chat livre: você escreve, a demo responde ----------------
   async function enviarChat() {
+    if (emulatingRef.current) return; // digitação emulada em curso — ignora envio real
     const text = chatText.trim();
     if (!text || busyRef.current) return;
     setChatText('');
@@ -1032,10 +1149,14 @@ export default function JourneyDemo() {
   }
 
   function resetAll() {
-    genRef.current += 1; // cancela loops de build em andamento
+    genRef.current += 1; // cancela loops de build e digitação emulada em andamento
     lockRef.current.clear();
     startedRef.current = false;
     touchedRef.current = false;
+    emulatingRef.current = false;
+    skipRef.current = false;
+    setEmulating(false);
+    setChatText('');
     setTouched(false);
     setPane('chat');
     clockRef.current = 31;
@@ -1636,20 +1757,33 @@ export default function JourneyDemo() {
           )}
 
           {/* input de chat — a conversa é o modelo de interação, sempre visível */}
-          <div className="jd-input">
-            <input
-              value={chatText}
-              onChange={(e) => setChatText(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') enviarChat();
-              }}
-              placeholder={
-                started
-                  ? 'Escreva aqui — ex.: adiciona uma etapa no funil…'
-                  : 'Ou escreva com as suas palavras o problema do seu negócio…'
-              }
-              aria-label="Mensagem para o assistente"
-            />
+          <div className={'jd-input' + (emulating ? ' jd-input-emul' : '')}>
+            <div className="jd-input-field">
+              <input
+                ref={inputRef}
+                value={chatText}
+                readOnly={emulating}
+                onChange={(e) => setChatText(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') enviarChat();
+                }}
+                onMouseDown={() => {
+                  if (emulatingRef.current) skipRef.current = true; // clique conclui na hora
+                }}
+                placeholder={
+                  started
+                    ? 'Escreva aqui — ex.: adiciona uma etapa no funil…'
+                    : phText || 'Ou escreva com as suas palavras o problema do seu negócio…'
+                }
+                aria-label="Mensagem para o assistente"
+              />
+              {emulating && (
+                <div className="jd-ghost" aria-hidden="true">
+                  <span className="jd-ghost-t">{chatText}</span>
+                  <span className="jd-caret" />
+                </div>
+              )}
+            </div>
             <button className="jd-send" onClick={enviarChat} aria-label="Enviar mensagem">
               ➤
             </button>
@@ -2130,9 +2264,16 @@ const JD_CSS = `
 .jd-trust-chip.on { color:var(--jd-green); border-color:rgba(52,211,153,.4); background:rgba(52,211,153,.08); opacity:1; }
 .jd-honest { font-size:12px; color:var(--jd-mut); text-align:center; padding:10px 16px 14px; margin:0; }
 .jd-input { display:flex; gap:8px; padding:10px 14px; border-top:1px solid var(--jd-line); }
-.jd-input input { flex:1; min-width:0; background:rgba(255,255,255,.05); border:1px solid var(--jd-line); border-radius:10px; padding:9px 13px; color:var(--jd-tx); font:inherit; font-size:13.5px; }
-.jd-input input::placeholder { color:var(--jd-mut); }
-.jd-input input:focus { outline:none; border-color:var(--jd-blue); box-shadow:0 0 0 3px rgba(77,171,247,.18); }
+.jd-input-field { position:relative; flex:1; min-width:0; display:flex; }
+.jd-input-field input { flex:1; min-width:0; background:rgba(255,255,255,.05); border:1px solid var(--jd-line); border-radius:10px; padding:9px 13px; color:var(--jd-tx); font:inherit; font-size:13.5px; }
+.jd-input-field input::placeholder { color:var(--jd-mut); }
+.jd-input-field input:focus { outline:none; border-color:var(--jd-blue); box-shadow:0 0 0 3px rgba(77,171,247,.18); }
+/* digitação emulada: esconde o texto real do input; o ghost mostra com caret fake */
+.jd-input-emul .jd-input-field input { color:transparent; }
+.jd-ghost { position:absolute; inset:0; padding:0 13px; border:1px solid transparent; display:flex; align-items:center; overflow:hidden; pointer-events:none; }
+.jd-ghost-t { font:inherit; font-size:13.5px; color:var(--jd-tx); white-space:pre; }
+.jd-caret { display:inline-block; width:2px; height:1.05em; margin-left:1px; background:var(--jd-blue); animation:jd-caretblink 1.05s step-end infinite; }
+@keyframes jd-caretblink { 0%,50%{opacity:1} 50.01%,100%{opacity:0} }
 .jd-send { border:none; background:var(--jd-blue); color:#fff; width:38px; border-radius:10px; cursor:pointer; font-size:13px; }
 .jd-send:hover { filter:brightness(1.1); }
 .jd :focus-visible { outline:2px solid var(--jd-blue); outline-offset:2px; border-radius:6px; }
