@@ -593,6 +593,21 @@ export default function JourneyDemo() {
     <div className="jd" data-demo-jornada>
       <style>{JD_CSS}</style>
 
+      {/* topbar de sistema — a sensação de estar dentro do produto */}
+      <header className="jd-top">
+        <a href="/" className="jd-top-brand" aria-label="Voltar ao site Fluxomind">
+          <span className="jd-top-dot" />
+          fluxomind
+        </a>
+        <span className="jd-top-crumb">
+          sua-empresa <i>/</i> Assistente — <b>Jornada de criação</b>
+        </span>
+        <span className="jd-top-phase">demonstração · produto em construção</span>
+        <a className="jd-top-cta" href="#beta" data-track="demo-top-beta">
+          {CTA.beta}
+        </a>
+      </header>
+
       {/* progresso */}
       <div className="jd-rail" aria-label="Etapas da jornada">
         {STAGES.map((s, i) => (
@@ -834,11 +849,23 @@ const JD_CSS = `
 .jd-step { font-size:11.5px; color:var(--jd-mut); border:1px solid var(--jd-line); border-radius:999px; padding:3px 10px; white-space:nowrap; }
 .jd-step.done { color:var(--jd-green); border-color:rgba(52,211,153,.35); background:rgba(52,211,153,.08); }
 .jd-step.cur { color:var(--jd-blue); border-color:var(--jd-blue); background:rgba(77,171,247,.1); font-weight:600; }
-.jd-grid { display:grid; grid-template-columns: minmax(320px,42%) 1fr; height: clamp(520px, calc(100vh - 250px), 700px); }
+.jd { display:flex; flex-direction:column; height:100dvh; border-radius:0 !important; }
+.jd-top { display:flex; align-items:center; gap:14px; padding:0 16px; height:52px; min-height:52px; border-bottom:1px solid var(--jd-line); background:rgba(255,255,255,.02); }
+.jd-top-brand { display:flex; align-items:center; gap:7px; font-weight:800; font-size:15px; letter-spacing:-.02em; color:var(--jd-tx); }
+.jd-top-brand:hover { color:#fff; }
+.jd-top-dot { width:9px; height:9px; border-radius:99px; background:var(--jd-blue); box-shadow:0 0 10px 1px rgba(77,171,247,.7); }
+.jd-top-crumb { color:var(--jd-mut); font-size:12.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.jd-top-crumb i { font-style:normal; opacity:.5; margin:0 2px; }
+.jd-top-crumb b { color:var(--jd-tx); font-weight:600; }
+.jd-top-phase { margin-left:auto; font-size:11px; font-weight:600; letter-spacing:.05em; color:var(--jd-amber); border:1px solid rgba(251,191,36,.35); background:rgba(251,191,36,.08); border-radius:999px; padding:3px 10px; white-space:nowrap; }
+.jd-top-cta { font-size:12.5px; font-weight:700; color:#fff; background:var(--jd-blue); border-radius:8px; padding:7px 12px; white-space:nowrap; }
+.jd-top-cta:hover { filter:brightness(1.1); }
+@media (max-width:760px){ .jd-top-crumb{ display:none; } .jd-top-phase{ font-size:10px; } }
+.jd-grid { display:grid; grid-template-columns: minmax(320px,42%) 1fr; flex:1; min-height:0; }
 @media (max-width:860px){
-  .jd-grid{ grid-template-columns:1fr; height:auto; }
-  .jd-chat{ height:min(54vh,480px); border-right:none; }
-  .jd-app{ height:min(58vh,520px); border-top:1px solid var(--jd-line); }
+  .jd-grid{ grid-template-columns:1fr; grid-template-rows: 46% 54%; }
+  .jd-chat{ border-right:none; }
+  .jd-app{ border-top:1px solid var(--jd-line); }
 }
 
 .jd-chat { display:flex; flex-direction:column; border-right:1px solid var(--jd-line); min-height:0; overflow:hidden; }
