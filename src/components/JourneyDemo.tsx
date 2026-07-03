@@ -117,6 +117,15 @@ export default function JourneyDemo() {
   const reducedRef = useRef(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const touchedRef = useRef(false);
+  // trava síncrona de início: 2 cliques no mesmo tick (ou 1 em cada pill de
+  // entrada) não podem disparar jornadas paralelas — estado React é assíncrono
+  const startedRef = useRef(false);
+  const beginOnce = () => {
+    if (startedRef.current) return false;
+    startedRef.current = true;
+    setStarted(true);
+    return true;
+  };
   // trava síncrona anti double-click: um card interativo só age uma vez
   // (clique duplo dispara 2 handlers antes do re-render remover o botão)
   const lockRef = useRef<Set<string>>(new Set());
@@ -174,8 +183,7 @@ export default function JourneyDemo() {
 
   // ---------------- E0: entrada ----------------
   async function startPlanilha() {
-    if (started) return;
-    setStarted(true);
+    if (!beginOnce()) return;
     track('jornada_start', { entry: 'planilha' });
     push({ kind: 'msg', who: 'user', text: '📎 leads-criadores.xlsx (3 abas · 25 linhas)' });
     await ally(
@@ -186,8 +194,7 @@ export default function JourneyDemo() {
   }
 
   async function startProsa() {
-    if (started) return;
-    setStarted(true);
+    if (!beginOnce()) return;
     track('jornada_start', { entry: 'prosa' });
     push({
       kind: 'msg',
@@ -827,12 +834,16 @@ const JD_CSS = `
 .jd-step { font-size:11.5px; color:var(--jd-mut); border:1px solid var(--jd-line); border-radius:999px; padding:3px 10px; white-space:nowrap; }
 .jd-step.done { color:var(--jd-green); border-color:rgba(52,211,153,.35); background:rgba(52,211,153,.08); }
 .jd-step.cur { color:var(--jd-blue); border-color:var(--jd-blue); background:rgba(77,171,247,.1); font-weight:600; }
-.jd-grid { display:grid; grid-template-columns: minmax(320px,42%) 1fr; min-height:520px; }
-@media (max-width:860px){ .jd-grid{grid-template-columns:1fr} .jd-app{border-top:1px solid var(--jd-line)} }
+.jd-grid { display:grid; grid-template-columns: minmax(320px,42%) 1fr; height: clamp(520px, calc(100vh - 250px), 700px); }
+@media (max-width:860px){
+  .jd-grid{ grid-template-columns:1fr; height:auto; }
+  .jd-chat{ height:min(54vh,480px); border-right:none; }
+  .jd-app{ height:min(58vh,520px); border-top:1px solid var(--jd-line); }
+}
 
-.jd-chat { display:flex; flex-direction:column; border-right:1px solid var(--jd-line); min-height:0; }
+.jd-chat { display:flex; flex-direction:column; border-right:1px solid var(--jd-line); min-height:0; overflow:hidden; }
 @media (max-width:860px){ .jd-chat{border-right:none} }
-.jd-scroll { flex:1; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:10px; max-height:560px; }
+.jd-scroll { flex:1; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:10px; min-height:0; }
 .jd-msg { display:flex; gap:8px; max-width:94%; }
 .jd-msg.user { align-self:flex-end; flex-direction:row-reverse; }
 .jd-who { width:26px;height:26px;min-width:26px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;background:rgba(77,171,247,.15);color:var(--jd-blue); }
@@ -886,10 +897,10 @@ const JD_CSS = `
 .jd-pill code { font-size:11px; background:rgba(255,255,255,.08); border-radius:4px; padding:1px 5px; }
 .jd-pill em { font-style:italic; opacity:.8; font-size:11.5px; }
 
-.jd-app { display:flex; flex-direction:column; min-height:0; background:#1F2024; }
+.jd-app { display:flex; flex-direction:column; min-height:0; background:#1F2024; overflow-y:auto; }
 .jd-empty { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; color:var(--jd-mut); padding:40px 20px; text-align:center; min-height:320px; }
 .jd-empty-ic { font-size:34px; opacity:.5; }
-.jd-app-head { display:flex; align-items:center; gap:10px; padding:12px 16px; border-bottom:1px solid var(--jd-line); flex-wrap:wrap; }
+.jd-app-head { display:flex; align-items:center; gap:10px; padding:12px 16px; border-bottom:1px solid var(--jd-line); flex-wrap:wrap; position:sticky; top:0; background:#1F2024; z-index:2; }
 .jd-badge { font-size:11px; border-radius:999px; padding:3px 10px; }
 .jd-b-draft { background:rgba(251,191,36,.12); color:var(--jd-amber); }
 .jd-b-kept { background:rgba(77,171,247,.12); color:var(--jd-blue); }
