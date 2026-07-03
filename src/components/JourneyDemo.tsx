@@ -114,6 +114,9 @@ export default function JourneyDemo() {
   const [negociacao, setNegociacao] = useState<'none' | 'applied' | 'undone'>('none');
   const [newLeadOpen, setNewLeadOpen] = useState(false);
   const [chatText, setChatText] = useState('');
+  // mobile: um painel por vez (chat ⇄ app), padrão do protótipo DP087
+  const [pane, setPane] = useState<'chat' | 'app'>('chat');
+  const [touched, setTouched] = useState(false);
 
   const clockRef = useRef(31);
   const genRef = useRef(0);
@@ -177,10 +180,16 @@ export default function JourneyDemo() {
     track('jornada_stage', { stage: n, label: STAGES[n] });
   };
 
+  const isMobile = () =>
+    typeof window !== 'undefined' && window.matchMedia('(max-width: 860px)').matches;
+
   const markTouched = () => {
     if (!touchedRef.current) {
       touchedRef.current = true;
+      setTouched(true);
       track('jornada_touch');
+      // no mobile, a decisão ("é isso?") espera no chat — volta para lá
+      if (isMobile()) window.setTimeout(() => setPane('chat'), 1100);
     }
   };
 
@@ -270,6 +279,8 @@ export default function JourneyDemo() {
     setDraft('draft');
     earn(4); // Seus dados, só seus
     goStage(4);
+    // no mobile, mostra o app nascendo — o momento-mágico é visual
+    if (isMobile()) setPane('app');
     await ally(
       '🎉 Seu app está de pé — em rascunho, só seu. Os leads da planilha já estão na tela. Mexe à vontade: clique num nome, crie um lead, mova um card. Depois me diz se é isso.',
       700,
@@ -473,6 +484,8 @@ export default function JourneyDemo() {
     lockRef.current.clear();
     startedRef.current = false;
     touchedRef.current = false;
+    setTouched(false);
+    setPane('chat');
     clockRef.current = 31;
     setItems(INITIAL_ITEMS);
     setStage(0);
@@ -727,8 +740,12 @@ export default function JourneyDemo() {
     : draft === 'published' ? { cls: 'jd-b-pub', t: 'publicado para o time' }
     : null;
 
+  const cardPendente = items.some(
+    (i) => i.kind === 'card' && !i.resolved && i.card !== 'cta',
+  );
+
   return (
-    <div className="jd" data-demo-jornada>
+    <div className={`jd jd-pane-${pane}`} data-demo-jornada>
       <style>{JD_CSS}</style>
 
       {/* topbar de sistema — a sensação de estar dentro do produto */}
@@ -977,6 +994,36 @@ export default function JourneyDemo() {
         </section>
       </div>
 
+      {/* mobile: alterna entre conversa e app — um painel por vez, tela cheia */}
+      <div className="jd-panebar" role="tablist" aria-label="Alternar entre conversa e app">
+        <button
+          role="tab"
+          aria-selected={pane === 'chat'}
+          className={pane === 'chat' ? 'on' : ''}
+          onClick={() => {
+            setPane('chat');
+            track('jornada_pane', { pane: 'chat' });
+          }}
+        >
+          💬 Conversa
+          {pane === 'app' && cardPendente && <i className="jd-dot" aria-label="decisão pendente" />}
+        </button>
+        <button
+          role="tab"
+          aria-selected={pane === 'app'}
+          className={pane === 'app' ? 'on' : ''}
+          onClick={() => {
+            setPane('app');
+            track('jornada_pane', { pane: 'app' });
+          }}
+        >
+          ▦ Seu app
+          {pane === 'chat' && draft === 'draft' && !touched && (
+            <i className="jd-dot" aria-label="novidade no app" />
+          )}
+        </button>
+      </div>
+
       <p className="jd-honest">
         Demonstração interativa com dados de exemplo — ilustra a jornada de criação; o app real
         nasce dentro da plataforma, com os seus dados.
@@ -1063,10 +1110,27 @@ const JD_CSS = `
   .jd-top-brand{ font-size:13px; }
 }
 .jd-grid { display:grid; grid-template-columns: minmax(320px,42%) 1fr; flex:1; min-height:0; }
+.jd-panebar { display:none; }
 @media (max-width:860px){
-  .jd-grid{ grid-template-columns:1fr; grid-template-rows: 46% 54%; }
-  .jd-chat{ border-right:none; }
-  .jd-app{ border-top:1px solid var(--jd-line); }
+  .jd-grid{ display:flex; flex-direction:column; }
+  .jd-chat, .jd-app { flex:1; min-height:0; border-right:none; border-top:none; }
+  .jd-pane-chat .jd-app { display:none; }
+  .jd-pane-app .jd-chat { display:none; }
+  .jd-panebar {
+    display:flex; border-top:1px solid var(--jd-line); background:rgba(255,255,255,.02);
+  }
+  .jd-panebar button {
+    position:relative; flex:1; border:none; background:none; color:var(--jd-mut);
+    font:inherit; font-size:13px; font-weight:600; padding:11px 8px; cursor:pointer;
+  }
+  .jd-panebar button.on { color:#fff; box-shadow: inset 0 2px 0 var(--jd-blue); }
+  .jd-dot {
+    position:absolute; top:8px; margin-left:6px; width:8px; height:8px; border-radius:99px;
+    background:var(--jd-amber); box-shadow:0 0 8px 1px rgba(251,191,36,.6);
+    animation: jd-dotpulse 1.6s ease-in-out infinite;
+  }
+  @keyframes jd-dotpulse { 0%,100%{opacity:.5} 50%{opacity:1} }
+  .jd-trust { display:none; } /* statusbar cede espaço; confiança segue nos cards */
 }
 
 .jd-chat { display:flex; flex-direction:column; border-right:1px solid var(--jd-line); min-height:0; overflow:hidden; }
