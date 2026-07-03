@@ -11,13 +11,18 @@ import { track } from '@/lib/analytics';
    Diferente da demo narrada da home (DemoBuilder, dois atos), aqui o
    visitante dirige: escolhe um cenário (ou descreve em prosa), entrega
    uma planilha de exemplo, vê o espelho, corrige premissas, manda montar
-   — e recebe um RASCUNHO VIVO que ele opera (kanban, tabela, ficha) ANTES
-   de decidir "ficar com ele". Aprova o que vê, não uma lista técnica.
+   — e recebe um RASCUNHO VIVO que ele opera ANTES de decidir "ficar com
+   ele". Aprova o que vê, não uma lista técnica.
 
-   São 3 cenários (leads · fluxo de caixa · atendimento). Todo o conteúdo
-   variável vive no registro CENARIOS; a mecânica é a mesma para os três.
-   O cenário ativo fica em cenarioRef (síncrona) para o replay determinístico
-   — voltar re-executa O MESMO cenário.
+   São 3 cenários, e CADA UM materializa uma SUPERFÍCIE diferente — a tese
+   "o software se molda ao seu negócio" tem que ser vista, não afirmada:
+     · leads       → kanban (pipeline é a forma natural)
+     · caixa       → financeiro (faixa de indicadores + tabela de faturas)
+     · atendimento → chats (fila + conversa estilo WhatsApp; o assistente
+                     EXECUTA — agenda, confirma, encaminha o clínico)
+   Todo o conteúdo variável vive no registro CENARIOS; a mecânica (locks,
+   autopilot, replay) é a mesma. O cenário ativo fica em cenarioRef
+   (síncrona) para o replay determinístico — voltar re-executa O MESMO.
 
    As 5 regras da confiança (messages.ts) acendem nos momentos em que
    acontecem — a message house demonstrada, não afirmada.
@@ -38,9 +43,9 @@ const STAGES = [
   'Evoluir',
 ] as const;
 
-type LogE = { who: 'user' | 'agent'; text: string; time: string };
+type LogE = { who: 'user' | 'agent' | 'system'; text: string; time: string };
 
-type NBA = { text: string; kind?: 'advance' | 'handoff'; log?: string };
+type NBA = { text: string; kind?: 'advance' | 'handoff' | 'note'; log?: string };
 
 type Registro = {
   id: string;
@@ -51,9 +56,10 @@ type Registro = {
   agent?: boolean;
   log: LogE[];
   nba?: NBA;
+  nbaDone?: boolean;
 };
 
-type Seed = { id: string; name: string; meta: Record<string, string>; stage: string; nba?: NBA };
+type Seed = { id: string; name: string; meta: Record<string, string>; stage: string; nba?: NBA; thread?: LogE[] };
 
 type CardId =
   | 'espelho'
@@ -81,6 +87,22 @@ function boldify(text: string): ReactNode {
   return text.split(/\*\*(.+?)\*\*/g).map((p, i) => (i % 2 === 1 ? <b key={i}>{p}</b> : p));
 }
 
+// cor por status — pill colorida nas superfícies financeiro e chats
+const STATUS_COLOR: Record<string, string> = {
+  Novo: 'blue',
+  'Em atendimento': 'amber',
+  'Aguardando paciente': 'violet',
+  Resolvido: 'green',
+  'A vencer': 'blue',
+  Vencida: 'red',
+  'Em negociação': 'amber',
+  Acordo: 'violet',
+  Paga: 'green',
+};
+
+const brl = (n: number) => 'R$ ' + n.toLocaleString('pt-BR');
+const valOf = (r: Registro) => Number((r.meta.valor ?? '0').replace(/[^\d]/g, ''));
+
 const INITIAL_ITEMS: Item[] = [
   {
     kind: 'msg',
@@ -92,6 +114,7 @@ const INITIAL_ITEMS: Item[] = [
 // ======================= CENÁRIOS =======================
 
 type CenarioId = 'leads' | 'caixa' | 'atendimento';
+type Surface = 'kanban' | 'financeiro' | 'chats';
 
 type Premissa =
   | { icon: string; text: string }
@@ -120,6 +143,7 @@ type TableCol = {
 
 type Cenario = {
   id: CenarioId;
+  surface: Surface;
   pill: string;
   tema: string; // roteiro do texto livre
   // entrada
@@ -137,13 +161,14 @@ type Cenario = {
   columns: string[];
   extraN: number;
   seed: Seed[];
+  touchId?: string; // superfícies financeiro/chats: id aberto no autopilot (checkpoint 4)
   autoMove: { id: string; toStage: string; log: string };
   nbaDefault: (r: Registro) => NBA;
   // app
   appTitle: string;
   boardLabel: string;
   ctaObj: string;
-  // render dos registros
+  // render dos registros (kanban/financeiro)
   subtitle: (r: Registro) => string;
   recordFields: (r: Registro) => Field[];
   tableCols: TableCol[];
@@ -154,31 +179,34 @@ type Cenario = {
     build: (v: string[]) => { name: string; meta: Record<string, string> };
   };
   // magia / operar
-  magic: string; // fala depois de montar
-  touchHint: string; // pedido para mexer antes de decidir
+  magic: string;
+  touchHint: string;
   // HITL
   hitl: {
     text: string;
     button: string;
     note: string;
-    lead: string; // primeira frase do assistente depois de aprovar
+    lead: string;
     resolveLabel: string;
     apply: { id: string; toStage: string; log: string };
   };
-  // evoluir
+  // evoluir — por superfície: coluna (kanban) · status+move (financeiro) · regra (chats)
   evolve: {
     userMsg: string;
-    col: string;
-    before: string;
     allyViaChat: string;
     doneLabel: string;
+    col?: string;
+    before?: string;
+    move?: { id: string; from: string; to: string; log: string };
+    regra?: string;
   };
 };
 
 const CENARIOS: Record<CenarioId, Cenario> = {
-  // ---------------------------------------------------------------- LEADS
+  // ---------------------------------------------------------------- LEADS (kanban)
   leads: {
     id: 'leads',
+    surface: 'kanban',
     pill: '📊 Leads e contratos — hoje é planilha',
     tema: 'leads e contratos',
     xlsx: 'leads-criadores.xlsx (3 abas · 25 linhas)',
@@ -285,9 +313,10 @@ const CENARIOS: Record<CenarioId, Cenario> = {
     },
   },
 
-  // ---------------------------------------------------------------- CAIXA
+  // ---------------------------------------------------------------- CAIXA (financeiro)
   caixa: {
     id: 'caixa',
+    surface: 'financeiro',
     pill: '💰 Contas a receber e cobrança — hoje é planilha',
     tema: 'contas a receber e cobrança',
     xlsx: 'contas-a-receber.xlsx (2 abas · 22 linhas)',
@@ -331,17 +360,18 @@ const CENARIOS: Record<CenarioId, Cenario> = {
         name: 'TechFin',
         stage: 'A vencer',
         meta: { valor: 'R$ 12.400', venc: 'vence amanhã', email: 'financeiro@techfin.com', cnpj: '11.222.333/0001-81' },
-        nba: { text: 'Lembrete amigável — a fatura vence amanhã.' },
+        nba: { text: 'Lembrete amigável — a fatura vence amanhã.', kind: 'note', log: 'Lembrete enviado ✓ — a fatura vence amanhã.' },
       },
       { id: 'agro', name: 'AgroData', stage: 'Vencida', meta: { valor: 'R$ 8.900', venc: 'vencida há 12 dias', email: 'financeiro@agrodata.io', cnpj: '44.555.666/0001-72' } },
       { id: 'finops', name: 'FinOps Lab', stage: 'Em negociação', meta: { valor: 'R$ 21.000', venc: 'em negociação', email: 'contas@finopslab.com', cnpj: '77.888.999/0001-63' } },
       { id: 'eduplay', name: 'EduPlay', stage: 'A vencer', meta: { valor: 'R$ 5.600', venc: 'vence em 6 dias', email: 'financeiro@eduplay.com', cnpj: '22.333.444/0001-54' } },
       { id: 'healthhub', name: 'HealthHub', stage: 'Vencida', meta: { valor: 'R$ 3.100', venc: 'vencida há 3 dias', email: 'financeiro@healthhub.co', cnpj: '55.666.777/0001-45' } },
     ],
+    touchId: 'techfin',
     autoMove: { id: 'healthhub', toStage: 'Em negociação', log: 'Assistente priorizou a cobrança — próximo passo sugerido' },
-    nbaDefault: () => ({ text: 'Enviar o próximo toque da régua — acompanhar o vencimento.' }),
+    nbaDefault: () => ({ text: 'Enviar o próximo toque da régua — acompanhar o vencimento.', kind: 'note', log: 'Lembrete enviado ✓ — acompanhando o vencimento.' }),
     appTitle: 'Contas a Receber',
-    boardLabel: 'Recebíveis',
+    boardLabel: 'Faturas',
     ctaObj: 'uma cobrança',
     subtitle: (r) => `${r.meta.valor} · ${r.meta.venc}`,
     recordFields: (r) => [
@@ -356,7 +386,7 @@ const CENARIOS: Record<CenarioId, Cenario> = {
     tableCols: [
       { header: 'Cliente', get: (r) => r.name, primary: true },
       { header: 'Valor', get: (r) => r.meta.valor },
-      { header: 'CNPJ', get: (r) => maskCNPJ(r.meta.cnpj), lock: true },
+      { header: 'Vencimento', get: (r) => r.meta.venc },
       { header: 'Status', stage: true },
     ],
     newForm: {
@@ -378,8 +408,8 @@ const CENARIOS: Record<CenarioId, Cenario> = {
       }),
     },
     magic:
-      'As faturas da planilha já estão na tela. Mexe à vontade: clique num cliente, crie uma fatura, mova um card.',
-    touchHint: 'move uma fatura, abre uma ficha',
+      'As faturas da planilha já estão na tela, com o total em risco no topo. Mexe à vontade: clique num stat pra filtrar, abra uma fatura.',
+    touchHint: 'abre uma fatura ou clica num indicador pra filtrar',
     hitl: {
       text: 'A fatura da **AgroData (R$ 8.900)** está 12 dias vencida. Preparei a cobrança com proposta de parcelamento em 2x — envio?',
       button: 'Aprovar envio',
@@ -392,15 +422,17 @@ const CENARIOS: Record<CenarioId, Cenario> = {
       userMsg: 'Adiciona a etapa Acordo antes de Paga.',
       col: 'Acordo',
       before: 'Paga',
+      move: { id: 'finops', from: 'Em negociação', to: 'Acordo', log: 'Movida para Acordo — parcelamento combinado com o cliente' },
       allyViaChat:
-        'É assim que se evolui — pedindo. Nesta demonstração eu aplico um exemplo pronto: a etapa Acordo antes de Paga. Olha o quadro:',
-      doneLabel: 'etapa Acordo no quadro',
+        'É assim que se evolui — pedindo. Nesta demonstração eu aplico um exemplo pronto: o status Acordo antes de Paga. Olha o painel:',
+      doneLabel: 'status Acordo na régua',
     },
   },
 
-  // ---------------------------------------------------------------- ATENDIMENTO
+  // ---------------------------------------------------------------- ATENDIMENTO (chats)
   atendimento: {
     id: 'atendimento',
+    surface: 'chats',
     pill: '📅 Atendimento no WhatsApp que resolve — agenda lotada de mensagens',
     tema: 'atendimento no WhatsApp',
     xlsx: 'pacientes.xlsx (2 abas · 20 linhas)',
@@ -432,33 +464,71 @@ const CENARIOS: Record<CenarioId, Cenario> = {
     buildSteps: [
       'Guardando seus dados — 15 pacientes, agenda, conversas',
       'Protegendo CPF e dados de saúde no mesmo ato — nada nasce desprotegido',
-      'Montando sua tela de atendimento',
+      'Montando sua fila de conversas',
       'Ligando o assistente e as confirmações automáticas',
       'Conferindo tudo por dentro — cada peça bate com o desenho',
     ],
     columns: ['Novo', 'Em atendimento', 'Aguardando paciente', 'Resolvido'],
     extraN: 8,
     seed: [
-      { id: 'marina', name: 'Marina Lopes', stage: 'Novo', meta: { pedido: 'quer remarcar para quinta', cpf: '123.456.789-01' } },
-      { id: 'jose', name: 'José Neto', stage: 'Novo', meta: { pedido: 'primeira consulta, pediu horário', cpf: '234.567.890-12' } },
+      {
+        id: 'marina',
+        name: 'Marina Lopes',
+        stage: 'Novo',
+        meta: { pedido: 'quer remarcar para quinta', cpf: '123.456.789-01' },
+        thread: [
+          { who: 'user', text: 'Oi, preciso remarcar minha consulta 🙏', time: '09:12' },
+          { who: 'user', text: 'Consigo passar para quinta?', time: '09:12' },
+        ],
+        nba: { text: 'Remarcar para quinta às 14h e confirmar no calendário.', kind: 'advance', log: 'Pronto! Remarquei para quinta, 14h ✓ Já atualizei sua agenda.' },
+      },
+      {
+        id: 'jose',
+        name: 'José Neto',
+        stage: 'Novo',
+        meta: { pedido: 'primeira consulta, pediu horário', cpf: '234.567.890-12' },
+        thread: [
+          { who: 'user', text: 'Oi, queria marcar primeira consulta', time: '10:03' },
+          { who: 'agent', text: 'Claro! Tenho amanhã às 10h ou quinta às 14h. Qual fica melhor?', time: '10:03' },
+          { who: 'user', text: 'Amanhã 10h', time: '10:05' },
+        ],
+      },
       {
         id: 'paula',
         name: 'Paula Reis',
         stage: 'Em atendimento',
         meta: { pedido: 'perguntou sobre resultado de exame', cpf: '345.678.901-23' },
+        thread: [{ who: 'user', text: 'Oi, saiu o resultado do meu exame de sangue?', time: '11:20' }],
         nba: {
-          text: 'Assunto clínico detectado — não respondo isso: passo para a equipe agora.',
+          text: 'Assunto clínico — o assistente não responde: encaminhar para a equipe agora.',
           kind: 'handoff',
-          log: 'Encaminhado para humano — assunto clínico nunca fica com o assistente',
+          log: '🙋 Assunto clínico — o assistente não responde: encaminhado para a equipe.',
         },
       },
-      { id: 'carlos', name: 'Carlos Dias', stage: 'Aguardando paciente', meta: { pedido: 'confirmar presença amanhã', cpf: '456.789.012-34' } },
-      { id: 'rita', name: 'Rita Souza', stage: 'Novo', meta: { pedido: 'dúvida de convênio', cpf: '567.890.123-45' } },
+      {
+        id: 'carlos',
+        name: 'Carlos Dias',
+        stage: 'Aguardando paciente',
+        meta: { pedido: 'confirmar presença amanhã', cpf: '456.789.012-34' },
+        thread: [
+          { who: 'agent', text: 'Olá, Carlos! Passando para lembrar da sua consulta amanhã às 15h. Confirma presença?', time: '08:30' },
+          { who: 'user', text: 'Confirmo, estarei lá 👍', time: '08:41' },
+          { who: 'agent', text: 'Perfeito, presença confirmada ✓ Até amanhã!', time: '08:41' },
+        ],
+      },
+      {
+        id: 'rita',
+        name: 'Rita Souza',
+        stage: 'Novo',
+        meta: { pedido: 'dúvida de convênio', cpf: '567.890.123-45' },
+        thread: [{ who: 'user', text: 'Vocês atendem pelo convênio Unimed?', time: '14:02' }],
+      },
     ],
-    autoMove: { id: 'rita', toStage: 'Em atendimento', log: 'Assistente respondeu a dúvida de convênio — próximo passo sugerido' },
-    nbaDefault: () => ({ text: 'Responder e agendar — o assistente resolve e confirma.' }),
+    touchId: 'jose',
+    autoMove: { id: 'rita', toStage: 'Em atendimento', log: 'Sim, atendemos Unimed! Quer que eu já agende? ✓' },
+    nbaDefault: () => ({ text: 'Responder e agendar — o assistente resolve e confirma.', kind: 'advance', log: 'Respondido e encaminhado ✓' }),
     appTitle: 'Atendimento — WhatsApp',
-    boardLabel: 'Conversas',
+    boardLabel: 'Fila',
     ctaObj: 'um atendimento',
     subtitle: (r) => r.meta.pedido,
     recordFields: (r) => [
@@ -471,7 +541,6 @@ const CENARIOS: Record<CenarioId, Cenario> = {
     tableCols: [
       { header: 'Paciente', get: (r) => r.name, primary: true },
       { header: 'Pedido', get: (r) => r.meta.pedido },
-      { header: 'CPF', get: (r) => maskCPF(r.meta.cpf), lock: true },
       { header: 'Status', stage: true },
     ],
     newForm: {
@@ -488,23 +557,22 @@ const CENARIOS: Record<CenarioId, Cenario> = {
       }),
     },
     magic:
-      'As conversas da planilha já estão na tela. Mexe à vontade: clique num nome, abra uma conversa, mova um card.',
-    touchHint: 'move uma conversa, abre uma ficha',
+      'As conversas da planilha já estão na fila. Mexe à vontade: abra uma conversa e veja o assistente atendendo — ele agenda, confirma e passa o clínico pra equipe.',
+    touchHint: 'abre uma conversa da fila',
     hitl: {
       text: 'O **José pediu primeira consulta amanhã às 10h** — a agenda está livre. Confirmo o agendamento?',
       button: 'Confirmar agendamento',
       note: 'Você aprovou: consulta do José confirmada',
       lead: 'Consulta confirmada.',
       resolveLabel: 'Você confirmou o agendamento',
-      apply: { id: 'jose', toStage: 'Aguardando paciente', log: 'Consulta confirmada e agendada — aprovada por você' },
+      apply: { id: 'jose', toStage: 'Aguardando paciente', log: 'Agendado! Amanhã às 10h ✓ Confirmação enviada.' },
     },
     evolve: {
-      userMsg: 'Adiciona a coluna Confirmação antes de Resolvido.',
-      col: 'Confirmação',
-      before: 'Resolvido',
+      userMsg: 'Liga a confirmação automática na véspera.',
+      regra: '🔔 confirma véspera ✓',
       allyViaChat:
-        'É assim que se evolui — pedindo. Nesta demonstração eu aplico um exemplo pronto: a coluna Confirmação antes de Resolvido. Olha o quadro:',
-      doneLabel: 'coluna Confirmação no quadro',
+        'É assim que se evolui — pedindo. Nesta demonstração eu ligo um exemplo pronto: confirmação automática na véspera. Olha as regras do atendimento:',
+      doneLabel: 'confirmação automática na véspera',
     },
   },
 };
@@ -531,6 +599,7 @@ export default function JourneyDemo() {
   const [view, setView] = useState<'kanban' | 'table' | 'record'>('kanban');
   const [recordId, setRecordId] = useState<string | null>(null);
   const [query, setQuery] = useState('');
+  const [statFilter, setStatFilter] = useState<'aberto' | 'vencido' | 'neg' | null>(null);
   const [draft, setDraft] = useState<'none' | 'building' | 'draft' | 'kept' | 'published'>('none');
   const [trust, setTrust] = useState<boolean[]>([false, false, false, false, false]);
   const [evolveState, setEvolveState] = useState<'none' | 'applied' | 'undone'>('none');
@@ -619,7 +688,6 @@ export default function JourneyDemo() {
   };
 
   // ---------------- E0: entrada ----------------
-  // Aplica o cenário escolhido (pill ou roteamento) — antes de começar.
   const aplicarCenario = (id: CenarioId) => {
     cenarioRef.current = id;
     setCenarioId(id);
@@ -701,10 +769,16 @@ export default function JourneyDemo() {
     }
     const arquivo = c.xlsx.split(' ')[0];
     const seeded: Registro[] = c.seed.map((s) => ({
-      ...s,
+      id: s.id,
+      name: s.name,
+      meta: s.meta,
+      stage: s.stage,
+      nba: s.nba,
       origem: 'da sua planilha',
       agent: false,
-      log: [{ who: 'user', text: `Importado da planilha ${arquivo}`, time: '14:31' }],
+      log: s.thread
+        ? s.thread.map((e) => ({ ...e }))
+        : [{ who: 'user', text: `Importado da planilha ${arquivo}`, time: '14:31' }],
     }));
     setRecords(seeded);
     setDraft('draft');
@@ -751,8 +825,8 @@ export default function JourneyDemo() {
   async function ajustar() {
     if (!lock('ajustar')) return;
     const c = CENARIOS[cenarioRef.current];
-    const alvo = c.columns[2]; // 3ª coluna do funil — reordenada para logo depois da 1ª
-    push({ kind: 'msg', who: 'user', text: `Queria a coluna de ${alvo} logo depois de ${c.columns[0]}.` });
+    const alvo = c.columns[2];
+    push({ kind: 'msg', who: 'user', text: `Queria ${alvo} logo depois de ${c.columns[0]}.` });
     await ally('Troquei — olha a tela. Ajustar rascunho é conversa, não retrabalho. É isso?', 500);
     setStagesK((p) => {
       const rest = p.filter((s) => s !== alvo);
@@ -769,6 +843,14 @@ export default function JourneyDemo() {
   async function aprovaEnvio() {
     if (!lock('hitl')) return;
     const c = CENARIOS[cenarioRef.current];
+    // deixa o momento visível: financeiro volta pra tabela (o stat cai);
+    // chats abre a conversa (a bolha de confirmação aparece na thread)
+    if (c.surface === 'financeiro') {
+      setView('kanban');
+    } else if (c.surface === 'chats') {
+      setRecordId(c.hitl.apply.id);
+      setView('record');
+    }
     resolveCard('hitl', c.hitl.resolveLabel);
     earn(3); // Humano assume
     track('jornada_hitl_ok');
@@ -805,16 +887,31 @@ export default function JourneyDemo() {
   async function aplicarEvolucao(viaChat?: string) {
     if (!lock('evo')) return;
     const c = CENARIOS[cenarioRef.current];
-    push({ kind: 'msg', who: 'user', text: viaChat ?? c.evolve.userMsg });
-    if (viaChat) await ally(c.evolve.allyViaChat, 550);
+    const ev = c.evolve;
+    push({ kind: 'msg', who: 'user', text: viaChat ?? ev.userMsg });
+    if (viaChat) await ally(ev.allyViaChat, 550);
     await delay(450);
-    setStagesK((p) => {
-      if (p.includes(c.evolve.col)) return p;
-      const i = p.indexOf(c.evolve.before);
-      const cp = [...p];
-      cp.splice(i, 0, c.evolve.col);
-      return cp;
-    });
+    if (ev.col && ev.before) {
+      const col = ev.col;
+      const before = ev.before;
+      setStagesK((p) => {
+        if (p.includes(col)) return p;
+        const i = p.indexOf(before);
+        const cp = [...p];
+        cp.splice(i < 0 ? cp.length : i, 0, col);
+        return cp;
+      });
+    }
+    if (ev.move) {
+      const mv = ev.move;
+      setRecords((p) =>
+        p.map((r) =>
+          r.id === mv.id
+            ? { ...r, stage: mv.to, agent: true, log: [...r.log, { who: 'agent', text: mv.log, time: now() }] }
+            : r,
+        ),
+      );
+    }
     setEvolveState('applied');
     await ally('Aplicado ✓ — mudança simples não pede cerimônia. E tem Desfazer, porque errar não pode machucar.', 500);
     track('jornada_done');
@@ -823,7 +920,12 @@ export default function JourneyDemo() {
 
   function desfazer() {
     const c = CENARIOS[cenarioRef.current];
-    setStagesK((p) => p.filter((s) => s !== c.evolve.col));
+    const ev = c.evolve;
+    if (ev.col) setStagesK((p) => p.filter((s) => s !== ev.col));
+    if (ev.move) {
+      const mv = ev.move;
+      setRecords((p) => p.map((r) => (r.id === mv.id ? { ...r, stage: mv.from } : r)));
+    }
     setEvolveState('undone');
     earn(2); // Correção + desfazer
   }
@@ -867,7 +969,9 @@ export default function JourneyDemo() {
     () => montaRascunho(),
     async () => {
       if (!touchedRef.current) {
-        moveRecord(CENARIOS[cenarioRef.current].seed[0].id);
+        const c = CENARIOS[cenarioRef.current];
+        if (c.surface === 'kanban') moveRecord(c.seed[0].id);
+        else openRecord(c.touchId ?? c.seed[0].id);
         await delay(650);
       }
       await ficarComEle();
@@ -926,6 +1030,7 @@ export default function JourneyDemo() {
     setView('kanban');
     setRecordId(null);
     setQuery('');
+    setStatFilter(null);
     setDraft('none');
     setTrust([false, false, false, false, false]);
     setEvolveState('none');
@@ -973,19 +1078,19 @@ export default function JourneyDemo() {
     const c = CENARIOS[cenarioRef.current];
     const base = c.newForm.build(vals);
     const id = 'novo-' + Date.now().toString(36);
+    const log: LogE[] =
+      c.surface === 'chats'
+        ? [{ who: 'user', text: base.meta.pedido, time: now() }]
+        : [{ who: 'user', text: 'Criado por você, direto na tela do rascunho', time: now() }];
     setRecords((p) => [
       ...p,
-      {
-        id,
-        name: base.name,
-        meta: base.meta,
-        stage: stagesK[0],
-        origem: 'criado por você',
-        agent: false,
-        log: [{ who: 'user', text: 'Criado por você, direto na tela do rascunho', time: now() }],
-      },
+      { id, name: base.name, meta: base.meta, stage: stagesK[0], origem: 'criado por você', agent: false, log },
     ]);
     setNewOpen(false);
+    markTouched();
+  }
+  function statClick(kind: 'aberto' | 'vencido' | 'neg') {
+    setStatFilter((p) => (p === kind ? null : kind));
     markTouched();
   }
   function nbaAction(id: string) {
@@ -995,13 +1100,16 @@ export default function JourneyDemo() {
         if (r.id !== id) return r;
         const nba = r.nba ?? c.nbaDefault(r);
         if (nba.kind === 'handoff') {
-          return { ...r, log: [...r.log, { who: 'agent', text: nba.log ?? 'Encaminhado para um humano', time: now() }] };
+          return { ...r, nbaDone: true, log: [...r.log, { who: 'system', text: nba.log ?? 'Encaminhado para um humano', time: now() }] };
+        }
+        if (nba.kind === 'note') {
+          return { ...r, nbaDone: true, agent: true, log: [...r.log, { who: 'agent', text: nba.log ?? 'Feito ✓', time: now() }] };
         }
         const i = stagesK.indexOf(r.stage);
         const next = i >= 0 && i < stagesK.length - 1 ? stagesK[i + 1] : r.stage;
         return {
-          ...r, stage: next, agent: true,
-          log: [...r.log, { who: 'agent', text: 'Próximo passo executado pelo assistente — com o seu OK', time: now() }],
+          ...r, stage: next, agent: true, nbaDone: true,
+          log: [...r.log, { who: 'agent', text: nba.log ?? 'Próximo passo executado pelo assistente — com o seu OK', time: now() }],
         };
       }),
     );
@@ -1015,6 +1123,13 @@ export default function JourneyDemo() {
   const filtered = records.filter((r) =>
     (r.name + ' ' + cen.subtitle(r)).toLowerCase().includes(query.toLowerCase()),
   );
+  const statusPill = (s: string) =>
+    cen.surface === 'kanban' ? (
+      <span className="jd-stagepill">{s}</span>
+    ) : (
+      <span className={'jd-spill jd-spill-' + (STATUS_COLOR[s] ?? 'blue')}>{s}</span>
+    );
+  const lastMsg = (r: Registro) => r.log[r.log.length - 1];
 
   function renderCard(item: Extract<Item, { kind: 'card' }>) {
     const done = item.resolved;
@@ -1174,6 +1289,205 @@ export default function JourneyDemo() {
     }
   }
 
+  // ---- superfície: KANBAN (leads) ----
+  function renderKanban() {
+    return (
+      <div className="jd-kanban">
+        {stagesK.map((s) => {
+          const col = records.filter((l) => l.stage === s);
+          const extra = s === entryCol ? cen.extraN : 0;
+          return (
+            <div key={s} className="jd-kcol">
+              <div className="jd-khead">{s}<span>{col.length + extra}</span></div>
+              {col.map((l) => (
+                <div key={l.id} className="jd-kcard">
+                  <button className="jd-kname" onClick={() => openRecord(l.id)}>{l.name}</button>
+                  <div className="jd-ksub">{cen.subtitle(l)}</div>
+                  <div className="jd-kfoot">
+                    <span className={'jd-ktag' + (l.agent ? ' ag' : '')}>{l.agent ? 'assistente moveu' : l.origem}</span>
+                    <button className="jd-kmove" onClick={() => moveRecord(l.id)} aria-label={`Mover ${l.name}`}>mover →</button>
+                  </div>
+                </div>
+              ))}
+              {s === entryCol && (
+                <>
+                  {extra > 0 && <div className="jd-kmore">+{extra} da planilha</div>}
+                  <button className="jd-kadd" onClick={() => setNewOpen(true)}>{cen.newForm.add}</button>
+                </>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+
+  // ---- superfície: FINANCEIRO (caixa) ----
+  function renderFinanceiro() {
+    const emAberto = records.filter((r) => r.stage !== 'Paga').reduce((s, r) => s + valOf(r), 0);
+    const vencido = records.filter((r) => r.stage === 'Vencida').reduce((s, r) => s + valOf(r), 0);
+    const emNeg = records.filter((r) => r.stage === 'Em negociação').reduce((s, r) => s + valOf(r), 0);
+    const rows = records.filter((r) =>
+      statFilter === 'aberto' ? r.stage !== 'Paga'
+      : statFilter === 'vencido' ? r.stage === 'Vencida'
+      : statFilter === 'neg' ? r.stage === 'Em negociação'
+      : true,
+    );
+    return (
+      <div className="jd-fin">
+        <div className="jd-stats">
+          <MoneyStat label="Em aberto" value={emAberto} accent="blue" active={statFilter === 'aberto'} reduced={reducedRef.current} onClick={() => statClick('aberto')} />
+          <MoneyStat label="Vencido" value={vencido} accent="red" active={statFilter === 'vencido'} reduced={reducedRef.current} onClick={() => statClick('vencido')} />
+          <MoneyStat label="Em negociação" value={emNeg} accent="amber" active={statFilter === 'neg'} reduced={reducedRef.current} onClick={() => statClick('neg')} />
+        </div>
+        <div className="jd-fin-tools">
+          {statFilter ? (
+            <button className="jd-link" onClick={() => setStatFilter(null)}>limpar filtro</button>
+          ) : (
+            <span className="jd-mini">{records.length + cen.extraN} faturas · toque num indicador para filtrar</span>
+          )}
+          <button className="jd-finadd" onClick={() => setNewOpen(true)}>{cen.newForm.add}</button>
+        </div>
+        <div className="jd-table-wrap">
+          <table className="jd-table">
+            <thead>
+              <tr><th>Cliente</th><th>Valor</th><th>Vencimento</th><th>Status</th><th></th></tr>
+            </thead>
+            <tbody>
+              {rows.map((r) => (
+                <tr key={r.id} onClick={() => openRecord(r.id)} tabIndex={0}
+                  onKeyDown={(e) => e.key === 'Enter' && openRecord(r.id)}>
+                  <td className="jd-tname">{r.name}</td>
+                  <td>{r.meta.valor}</td>
+                  <td>{r.meta.venc}</td>
+                  <td>{statusPill(r.stage)}</td>
+                  <td className="jd-tright"><span className="jd-openx">abrir →</span></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {statFilter && rows.length === 0 && <div className="jd-tcount">Nenhuma fatura neste filtro.</div>}
+        </div>
+      </div>
+    );
+  }
+
+  // ---- superfície: CHATS (atendimento) ----
+  function renderFila() {
+    return (
+      <div className="jd-fila-wrap">
+        <div className="jd-rules" aria-label="Regras do atendimento">
+          <span className="jd-rule">🤖 agenda sozinho ✓</span>
+          <span className="jd-rule">🙋 clínico → humano ✓</span>
+          {evolveState === 'applied' && (
+            <span className="jd-rule jd-rule-new">{cen.evolve.regra} <b>NOVO</b></span>
+          )}
+        </div>
+        <div className="jd-fila">
+          {records.map((r) => {
+            const m = lastMsg(r);
+            const unread = m?.who === 'user';
+            return (
+              <button key={r.id} className="jd-fila-item" onClick={() => openRecord(r.id)}>
+                <span className="jd-avatar">{r.name.charAt(0)}</span>
+                <span className="jd-fila-main">
+                  <span className="jd-fila-top">
+                    <span className="jd-fila-name">{r.name}</span>
+                    {statusPill(r.stage)}
+                  </span>
+                  <span className="jd-fila-prev">{m?.who === 'agent' ? '✓ ' : ''}{m?.text}</span>
+                </span>
+                <span className="jd-fila-meta">
+                  <span className="jd-fila-time">{m?.time}</span>
+                  {unread && <span className="jd-unread" aria-label="não lida" />}
+                </span>
+              </button>
+            );
+          })}
+          <div className="jd-kmore">+{cen.extraN} conversas da planilha</div>
+          <button className="jd-finadd jd-fila-add" onClick={() => setNewOpen(true)}>{cen.newForm.add}</button>
+        </div>
+      </div>
+    );
+  }
+
+  function renderThread(rec: Registro) {
+    const nbaVisible = rec.nba && !rec.nbaDone;
+    const handoff = rec.nba?.kind === 'handoff';
+    return (
+      <div className="jd-conv">
+        <div className="jd-chat-head">
+          <span className="jd-avatar sm">{rec.name.charAt(0)}</span>
+          <b>{rec.name}</b>
+          {statusPill(rec.stage)}
+        </div>
+        <div className="jd-thread">
+          {rec.log.map((e, i) =>
+            e.who === 'system' ? (
+              <div key={i} className="jd-cb-sys">{e.text}</div>
+            ) : (
+              <div key={i} className={'jd-cb ' + e.who}>
+                <span className="jd-cb-b">{e.text}</span>
+                <time>{e.time}</time>
+              </div>
+            ),
+          )}
+          {nbaVisible && (
+            <div className={'jd-nba jd-nba-inline' + (handoff ? ' jd-nba-hand' : '')}>
+              <span className="jd-nba-k">{handoff ? '🙋 Humano assume' : '🤖 Sugestão do assistente'}</span>
+              <span>{rec.nba!.text}</span>
+              <button className="jd-btn jd-pri" onClick={() => nbaAction(rec.id)}>Fazer isso</button>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  // ---- ficha (kanban/financeiro): campos + NBA + histórico ----
+  function renderFicha(rec: Registro) {
+    const nba = rec.nba ?? cen.nbaDefault(rec);
+    const nbaVisible = !rec.nbaDone;
+    return (
+      <div className="jd-record">
+        <div className="jd-rec-head">
+          <b>{rec.name}</b>
+          {statusPill(rec.stage)}
+        </div>
+        <div className="jd-rec-grid">
+          <dl className="jd-fields">
+            {cen.recordFields(rec).map((f) => (
+              <div key={f.label}>
+                <dt>{f.label}</dt>
+                <dd>
+                  {f.value}
+                  {f.lock && (
+                    <span className="jd-lock" title="Protegido: seu papel vê mascarado — decidido no desenho"> 🔒</span>
+                  )}
+                </dd>
+              </div>
+            ))}
+          </dl>
+          {nbaVisible && (
+            <div className={'jd-nba' + (nba.kind === 'handoff' ? ' jd-nba-hand' : '')}>
+              <span className="jd-nba-k">{nba.kind === 'handoff' ? '🙋 Humano assume' : '🤖 Próximo passo sugerido'}</span>
+              <span>{nba.text}</span>
+              <button className="jd-btn jd-pri" onClick={() => nbaAction(rec.id)}>Fazer isso</button>
+            </div>
+          )}
+        </div>
+        <div className="jd-tl">
+          <span className="jd-tl-t">Histórico — tudo fica registrado</span>
+          {rec.log.map((e, i) => (
+            <div key={i} className={'jd-tl-i ' + e.who}>
+              <span>{e.text}</span><time>{e.time}</time>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   const badge =
     draft === 'draft' ? { cls: 'jd-b-draft', t: 'rascunho — só você vê' }
     : draft === 'kept' ? { cls: 'jd-b-kept', t: 'aprovado por você' }
@@ -1183,6 +1497,9 @@ export default function JourneyDemo() {
   const cardPendente = items.some(
     (i) => i.kind === 'card' && !i.resolved && i.card !== 'cta',
   );
+
+  const listIcon = cen.surface === 'financeiro' ? '📄' : cen.surface === 'chats' ? '📥' : '▦';
+  const recIcon = cen.surface === 'chats' ? '💬' : '👤';
 
   return (
     <div className={`jd jd-pane-${pane}`} data-demo-jornada>
@@ -1295,7 +1612,7 @@ export default function JourneyDemo() {
           </div>
         </section>
 
-        {/* ---- app vivo ---- */}
+        {/* ---- app vivo (superfície por cenário) ---- */}
         <section className="jd-app" aria-label="Seu app">
           {draft === 'none' || draft === 'building' ? (
             <div className="jd-empty">
@@ -1309,118 +1626,59 @@ export default function JourneyDemo() {
                 <b>{cen.appTitle}</b>
                 {badge && <span className={'jd-badge ' + badge.cls}>{badge.t}</span>}
                 <div className="jd-views" role="group" aria-label="Modo de visualização">
-                  <button className={view === 'kanban' ? 'on' : ''} onClick={() => setView('kanban')}>▦ {cen.boardLabel}</button>
-                  <button className={view === 'table' ? 'on' : ''} onClick={() => { setView('table'); markTouched(); }}>☰ Tabela</button>
+                  {cen.surface === 'kanban' ? (
+                    <>
+                      <button className={view === 'kanban' ? 'on' : ''} onClick={() => setView('kanban')}>▦ {cen.boardLabel}</button>
+                      <button className={view === 'table' ? 'on' : ''} onClick={() => { setView('table'); markTouched(); }}>☰ Tabela</button>
+                    </>
+                  ) : (
+                    <button className={view !== 'record' ? 'on' : ''} onClick={() => setView('kanban')}>{listIcon} {cen.boardLabel}</button>
+                  )}
                   {record && (
-                    <button className={view === 'record' ? 'on' : ''} onClick={() => setView('record')}>👤 {record.name.split(' ')[0]}</button>
+                    <button className={view === 'record' ? 'on' : ''} onClick={() => setView('record')}>{recIcon} {record.name.split(' ')[0]}</button>
                   )}
                 </div>
               </header>
 
-              {view === 'kanban' && (
-                <div className="jd-kanban">
-                  {stagesK.map((s) => {
-                    const col = records.filter((l) => l.stage === s);
-                    const extra = s === entryCol ? cen.extraN : 0;
-                    return (
-                      <div key={s} className="jd-kcol">
-                        <div className="jd-khead">{s}<span>{col.length + extra}</span></div>
-                        {col.map((l) => (
-                          <div key={l.id} className="jd-kcard">
-                            <button className="jd-kname" onClick={() => openRecord(l.id)}>{l.name}</button>
-                            <div className="jd-ksub">{cen.subtitle(l)}</div>
-                            <div className="jd-kfoot">
-                              <span className={'jd-ktag' + (l.agent ? ' ag' : '')}>{l.agent ? 'assistente moveu' : l.origem}</span>
-                              <button className="jd-kmove" onClick={() => moveRecord(l.id)} aria-label={`Mover ${l.name}`}>mover →</button>
-                            </div>
-                          </div>
+              {view === 'record' && record ? (
+                cen.surface === 'chats' ? renderThread(record) : renderFicha(record)
+              ) : cen.surface === 'kanban' ? (
+                view === 'table' ? (
+                  <div className="jd-table-wrap">
+                    <input
+                      className="jd-search"
+                      placeholder="Buscar…"
+                      value={query}
+                      onChange={(e) => setQuery(e.target.value)}
+                      aria-label="Buscar registro"
+                    />
+                    <table className="jd-table">
+                      <thead>
+                        <tr>{cen.tableCols.map((c) => <th key={c.header}>{c.header}</th>)}</tr>
+                      </thead>
+                      <tbody>
+                        {filtered.map((l) => (
+                          <tr key={l.id} onClick={() => openRecord(l.id)} tabIndex={0}
+                            onKeyDown={(e) => e.key === 'Enter' && openRecord(l.id)}>
+                            {cen.tableCols.map((c) => (
+                              <td key={c.header} className={c.primary ? 'jd-tname' : undefined}>
+                                {c.stage ? statusPill(l.stage) : <>{c.get?.(l)}{c.lock && ' 🔒'}</>}
+                              </td>
+                            ))}
+                          </tr>
                         ))}
-                        {s === entryCol && (
-                          <>
-                            {extra > 0 && <div className="jd-kmore">+{extra} da planilha</div>}
-                            <button className="jd-kadd" onClick={() => setNewOpen(true)}>{cen.newForm.add}</button>
-                          </>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-
-              {view === 'table' && (
-                <div className="jd-table-wrap">
-                  <input
-                    className="jd-search"
-                    placeholder="Buscar…"
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                    aria-label="Buscar registro"
-                  />
-                  <table className="jd-table">
-                    <thead>
-                      <tr>{cen.tableCols.map((c) => <th key={c.header}>{c.header}</th>)}</tr>
-                    </thead>
-                    <tbody>
-                      {filtered.map((l) => (
-                        <tr key={l.id} onClick={() => openRecord(l.id)} tabIndex={0}
-                          onKeyDown={(e) => e.key === 'Enter' && openRecord(l.id)}>
-                          {cen.tableCols.map((c) => (
-                            <td key={c.header} className={c.primary ? 'jd-tname' : undefined}>
-                              {c.stage ? (
-                                <span className="jd-stagepill">{l.stage}</span>
-                              ) : (
-                                <>{c.get?.(l)}{c.lock && ' 🔒'}</>
-                              )}
-                            </td>
-                          ))}
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                  <div className="jd-tcount">{filtered.length} exibidos · {records.length + cen.extraN} no total</div>
-                </div>
-              )}
-
-              {view === 'record' && record && (() => {
-                const nba = record.nba ?? cen.nbaDefault(record);
-                const handoff = nba.kind === 'handoff';
-                return (
-                  <div className="jd-record">
-                    <div className="jd-rec-head">
-                      <b>{record.name}</b>
-                      <span className="jd-stagepill">{record.stage}</span>
-                    </div>
-                    <div className="jd-rec-grid">
-                      <dl className="jd-fields">
-                        {cen.recordFields(record).map((f) => (
-                          <div key={f.label}>
-                            <dt>{f.label}</dt>
-                            <dd>
-                              {f.value}
-                              {f.lock && (
-                                <span className="jd-lock" title="Protegido: seu papel vê mascarado — decidido no desenho"> 🔒</span>
-                              )}
-                            </dd>
-                          </div>
-                        ))}
-                      </dl>
-                      <div className={'jd-nba' + (handoff ? ' jd-nba-hand' : '')}>
-                        <span className="jd-nba-k">{handoff ? '🙋 Humano assume' : '🤖 Próximo passo sugerido'}</span>
-                        <span>{nba.text}</span>
-                        <button className="jd-btn jd-pri" onClick={() => nbaAction(record.id)}>Fazer isso</button>
-                      </div>
-                    </div>
-                    <div className="jd-tl">
-                      <span className="jd-tl-t">Histórico — tudo fica registrado</span>
-                      {record.log.map((e, i) => (
-                        <div key={i} className={'jd-tl-i ' + e.who}>
-                          <span>{e.text}</span><time>{e.time}</time>
-                        </div>
-                      ))}
-                    </div>
+                      </tbody>
+                    </table>
+                    <div className="jd-tcount">{filtered.length} exibidos · {records.length + cen.extraN} no total</div>
                   </div>
-                );
-              })()}
+                ) : (
+                  renderKanban()
+                )
+              ) : cen.surface === 'financeiro' ? (
+                renderFinanceiro()
+              ) : (
+                renderFila()
+              )}
 
               {newOpen && (
                 <NewRecordForm
@@ -1482,6 +1740,56 @@ export default function JourneyDemo() {
   );
 }
 
+function MoneyStat({
+  label,
+  value,
+  accent,
+  active,
+  reduced,
+  onClick,
+}: {
+  label: string;
+  value: number;
+  accent: 'blue' | 'red' | 'amber';
+  active: boolean;
+  reduced: boolean;
+  onClick: () => void;
+}) {
+  const [disp, setDisp] = useState(0);
+  const fromRef = useRef(0);
+  const rafRef = useRef(0);
+  useEffect(() => {
+    if (reduced) {
+      setDisp(value);
+      fromRef.current = value;
+      return;
+    }
+    const from = fromRef.current;
+    const to = value;
+    if (from === to) return;
+    const start = performance.now();
+    const dur = 700;
+    const tick = (n: number) => {
+      const p = Math.min((n - start) / dur, 1);
+      setDisp(Math.round(from + (to - from) * p));
+      if (p < 1) rafRef.current = requestAnimationFrame(tick);
+      else fromRef.current = to;
+    };
+    rafRef.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [value, reduced]);
+  return (
+    <button
+      className={'jd-stat jd-stat-' + accent + (active ? ' on' : '')}
+      onClick={onClick}
+      aria-pressed={active}
+    >
+      <span className="jd-stat-v">{brl(disp)}</span>
+      <span className="jd-stat-k">{label}</span>
+    </button>
+  );
+}
+
 function NewRecordForm({
   title,
   fields,
@@ -1517,7 +1825,7 @@ function NewRecordForm({
 
 const JD_CSS = `
 .jd { --jd-bg:#1A1B1E; --jd-panel:#25262B; --jd-line:#33353B; --jd-tx:#E5E7EB; --jd-mut:#9CA3AF;
-  --jd-blue:#4DABF7; --jd-green:#34D399; --jd-amber:#FBBF24; --jd-red:#F87171;
+  --jd-blue:#4DABF7; --jd-green:#34D399; --jd-amber:#FBBF24; --jd-red:#F87171; --jd-violet:#A78BFA;
   background: var(--jd-bg); border: 1px solid var(--jd-line); border-radius: 16px;
   color: var(--jd-tx); overflow: hidden; font-size: 14.5px; }
 .jd * { box-sizing: border-box; }
@@ -1602,7 +1910,7 @@ const JD_CSS = `
 .jd-typing i{width:6px;height:6px;border-radius:99px;background:var(--jd-mut);animation:jdb 1.2s infinite}
 .jd-typing i:nth-child(2){animation-delay:.2s}.jd-typing i:nth-child(3){animation-delay:.4s}
 @keyframes jdb{0%,100%{opacity:.25}50%{opacity:1}}
-.jd-note { align-self:center; font-size:11.5px; color:var(--jd-mut); border:1px dashed var(--jd-line); border-radius:999px; padding:3px 12px; }
+.jd-note { align-self:center; font-size:11.5px; color:var(--jd-mut); border:1px dashed var(--jd-line); border-radius:999px; padding:3px 12px; text-align:center; }
 
 .jd-card { border:1px solid var(--jd-line); border-radius:14px; background:var(--jd-panel); padding:14px; display:flex; flex-direction:column; gap:10px; }
 .jd-card.jd-gate { border-color:rgba(251,191,36,.5); box-shadow:0 0 0 3px rgba(251,191,36,.08); }
@@ -1642,10 +1950,8 @@ const JD_CSS = `
 .jd-pill { border:1px dashed var(--jd-line); background:none; color:var(--jd-mut); border-radius:999px; padding:9px 14px; font-size:13px; cursor:pointer; text-align:left; }
 .jd-pill:hover { border-color:var(--jd-blue); color:var(--jd-blue); }
 .jd-pill-imp { border-style:solid; border-color:rgba(77,171,247,.4); background:rgba(77,171,247,.08); color:var(--jd-blue); }
-.jd-pill code { font-size:11px; background:rgba(255,255,255,.08); border-radius:4px; padding:1px 5px; }
-.jd-pill em { font-style:italic; opacity:.8; font-size:11.5px; }
 
-.jd-app { display:flex; flex-direction:column; min-height:0; background:#1F2024; overflow-y:auto; }
+.jd-app { display:flex; flex-direction:column; min-height:0; background:#1F2024; overflow-y:auto; position:relative; }
 .jd-empty { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; color:var(--jd-mut); padding:40px 20px; text-align:center; min-height:320px; }
 .jd-empty-ic { font-size:34px; opacity:.5; }
 .jd-app-head { display:flex; align-items:center; gap:10px; padding:12px 16px; border-bottom:1px solid var(--jd-line); flex-wrap:wrap; position:sticky; top:0; background:#1F2024; z-index:2; }
@@ -1656,6 +1962,16 @@ const JD_CSS = `
 .jd-views { margin-left:auto; display:flex; gap:2px; background:#2A2B30; border-radius:8px; padding:2px; }
 .jd-views button { border:none; background:none; color:var(--jd-mut); font-size:12px; padding:5px 11px; border-radius:6px; cursor:pointer; white-space:nowrap; }
 .jd-views button.on { background:var(--jd-panel); color:var(--jd-tx); }
+
+/* status pill colorida (financeiro/chats) */
+.jd-spill { font-size:11px; border-radius:999px; padding:2px 9px; white-space:nowrap; }
+.jd-spill-blue { background:rgba(77,171,247,.15); color:var(--jd-blue); }
+.jd-spill-red { background:rgba(248,113,113,.15); color:var(--jd-red); }
+.jd-spill-amber { background:rgba(251,191,36,.15); color:var(--jd-amber); }
+.jd-spill-violet { background:rgba(167,139,250,.18); color:var(--jd-violet); }
+.jd-spill-green { background:rgba(52,211,153,.15); color:var(--jd-green); }
+
+/* kanban (leads) */
 .jd-kanban { display:flex; gap:10px; padding:14px 16px; overflow-x:auto; flex:1; align-items:flex-start; }
 .jd-kcol { min-width:168px; flex:1; background:#26272C; border-radius:10px; padding:8px; }
 .jd-khead { display:flex; justify-content:space-between; font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--jd-mut); padding:2px 4px 8px; }
@@ -1672,6 +1988,26 @@ const JD_CSS = `
 .jd-kadd { width:100%; border:1px dashed var(--jd-line); background:none; color:var(--jd-mut); border-radius:8px; padding:8px; font-size:12px; cursor:pointer; }
 .jd-kadd:hover { color:var(--jd-blue); border-color:var(--jd-blue); }
 .jd-kmore { font-size:11px; color:var(--jd-mut); text-align:center; padding:6px 0; }
+
+/* financeiro (caixa) */
+.jd-fin { display:flex; flex-direction:column; min-height:0; }
+.jd-stats { display:flex; gap:10px; padding:14px 16px 6px; flex-wrap:wrap; }
+.jd-stat { flex:1; min-width:104px; text-align:left; background:var(--jd-panel); border:1px solid var(--jd-line); border-left:3px solid var(--jd-line); border-radius:10px; padding:10px 12px; cursor:pointer; display:flex; flex-direction:column; gap:3px; }
+.jd-stat:hover { background:#2C2E33; }
+.jd-stat.on { box-shadow:0 0 0 2px rgba(77,171,247,.3); }
+.jd-stat-v { font-size:17px; font-weight:700; letter-spacing:-.01em; }
+.jd-stat-k { font-size:10px; text-transform:uppercase; letter-spacing:.05em; color:var(--jd-mut); }
+.jd-stat-blue { border-left-color:var(--jd-blue); }
+.jd-stat-red { border-left-color:var(--jd-red); }
+.jd-stat-amber { border-left-color:var(--jd-amber); }
+.jd-fin-tools { display:flex; align-items:center; gap:10px; padding:4px 16px 6px; }
+.jd-finadd { margin-left:auto; border:1px dashed var(--jd-line); background:none; color:var(--jd-mut); border-radius:8px; padding:6px 11px; font-size:12px; cursor:pointer; white-space:nowrap; }
+.jd-finadd:hover { color:var(--jd-blue); border-color:var(--jd-blue); }
+.jd-tright { text-align:right; }
+.jd-openx { color:var(--jd-mut); font-size:11.5px; }
+.jd-table tbody tr:hover .jd-openx { color:var(--jd-blue); }
+
+/* tabela (leads/financeiro) */
 .jd-table-wrap { padding:14px 16px; overflow-x:auto; }
 .jd-search { width:100%; max-width:280px; margin-bottom:10px; padding:8px 12px; border-radius:8px; border:1px solid var(--jd-line); background:var(--jd-panel); color:var(--jd-tx); font:inherit; font-size:13px; }
 .jd-table { width:100%; border-collapse:collapse; font-size:13px; }
@@ -1682,6 +2018,39 @@ const JD_CSS = `
 .jd-tname { color:var(--jd-blue); font-weight:600; }
 .jd-stagepill { font-size:11px; border-radius:999px; padding:2px 9px; background:rgba(77,171,247,.12); color:var(--jd-blue); white-space:nowrap; }
 .jd-tcount { font-size:11.5px; color:var(--jd-mut); margin-top:8px; }
+
+/* chats (atendimento) */
+.jd-fila-wrap { display:flex; flex-direction:column; min-height:0; }
+.jd-rules { display:flex; gap:6px; flex-wrap:wrap; padding:10px 16px; border-bottom:1px solid var(--jd-line); background:rgba(255,255,255,.02); }
+.jd-rule { font-size:11px; border:1px solid var(--jd-line); border-radius:999px; padding:3px 9px; color:var(--jd-mut); }
+.jd-rule-new { color:var(--jd-green); border-color:rgba(52,211,153,.4); background:rgba(52,211,153,.08); }
+.jd-rule-new b { font-size:9px; letter-spacing:.06em; margin-left:2px; }
+.jd-fila { display:flex; flex-direction:column; }
+.jd-fila-item { display:flex; gap:11px; align-items:center; padding:11px 16px; border:none; border-bottom:1px solid var(--jd-line); background:none; color:inherit; font:inherit; width:100%; text-align:left; cursor:pointer; }
+.jd-fila-item:hover { background:rgba(255,255,255,.03); }
+.jd-avatar { width:38px; height:38px; min-width:38px; border-radius:99px; background:rgba(77,171,247,.15); color:var(--jd-blue); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:15px; }
+.jd-avatar.sm { width:30px; height:30px; min-width:30px; font-size:13px; }
+.jd-fila-main { flex:1; min-width:0; display:flex; flex-direction:column; gap:3px; }
+.jd-fila-top { display:flex; align-items:center; gap:8px; }
+.jd-fila-name { font-weight:600; font-size:13.5px; }
+.jd-fila-prev { font-size:12px; color:var(--jd-mut); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100%; }
+.jd-fila-meta { display:flex; flex-direction:column; align-items:flex-end; gap:5px; min-width:44px; }
+.jd-fila-time { font-size:10.5px; color:var(--jd-mut); }
+.jd-unread { width:9px; height:9px; border-radius:99px; background:var(--jd-blue); box-shadow:0 0 8px 1px rgba(77,171,247,.5); }
+.jd-fila-add { margin:10px 16px; }
+.jd-conv { display:flex; flex-direction:column; min-height:0; }
+.jd-chat-head { display:flex; align-items:center; gap:10px; padding:11px 16px; border-bottom:1px solid var(--jd-line); position:sticky; top:0; background:#1F2024; }
+.jd-thread { padding:16px; display:flex; flex-direction:column; gap:9px; }
+.jd-cb { display:flex; flex-direction:column; max-width:80%; gap:2px; }
+.jd-cb.user { align-self:flex-start; align-items:flex-start; }
+.jd-cb.agent { align-self:flex-end; align-items:flex-end; }
+.jd-cb-b { padding:8px 12px; border-radius:13px; line-height:1.45; font-size:13.5px; }
+.jd-cb.user .jd-cb-b { background:#2A2B30; border:1px solid var(--jd-line); border-bottom-left-radius:4px; }
+.jd-cb.agent .jd-cb-b { background:rgba(52,211,153,.13); border:1px solid rgba(52,211,153,.3); color:#D1FAE5; border-bottom-right-radius:4px; }
+.jd-cb time { font-size:10px; color:var(--jd-mut); padding:0 4px; }
+.jd-cb-sys { align-self:center; text-align:center; max-width:90%; font-size:12px; color:var(--jd-amber); background:rgba(251,191,36,.1); border:1px solid rgba(251,191,36,.3); border-radius:10px; padding:8px 12px; line-height:1.4; }
+.jd-nba-inline { margin:6px 0 2px; }
+
 .jd-record { padding:14px 16px; overflow-y:auto; }
 .jd-rec-head { display:flex; align-items:center; gap:10px; margin-bottom:12px; font-size:16px; }
 .jd-rec-grid { display:grid; grid-template-columns:1fr 240px; gap:14px; align-items:start; }
@@ -1702,12 +2071,12 @@ const JD_CSS = `
 .jd-tl-i::before { content:''; position:absolute; left:-5px; top:12px; width:8px; height:8px; border-radius:99px; background:var(--jd-line); }
 .jd-tl-i.agent::before { background:#A78BFA; }
 .jd-tl-i.user::before { background:var(--jd-blue); }
+.jd-tl-i.system::before { background:var(--jd-amber); }
 .jd-tl-i time { margin-left:auto; font-size:11px; white-space:nowrap; }
 .jd-modal { position:absolute; inset:0; background:rgba(0,0,0,.55); display:flex; align-items:center; justify-content:center; z-index:5; border-radius:0 0 16px 0; }
 .jd-modal-card { width:min(360px, calc(100% - 32px)); background:var(--jd-panel); border:1px solid var(--jd-line); border-radius:12px; padding:18px; display:flex; flex-direction:column; gap:10px; }
 .jd-modal-card label { font-size:11px; color:var(--jd-mut); display:flex; flex-direction:column; gap:4px; }
 .jd-modal-card input { padding:8px 11px; border-radius:8px; border:1px solid var(--jd-line); background:#1F2024; color:var(--jd-tx); font:inherit; font-size:13.5px; }
-.jd-app { position:relative; }
 .jd-trust { display:flex; gap:6px; flex-wrap:wrap; padding:10px 16px; border-top:1px solid var(--jd-line); margin-top:auto; }
 .jd-trust-chip { font-size:11px; border:1px solid var(--jd-line); border-radius:999px; padding:3px 10px; color:var(--jd-mut); opacity:.6; transition:all .25s; }
 .jd-trust-chip.on { color:var(--jd-green); border-color:rgba(52,211,153,.4); background:rgba(52,211,153,.08); opacity:1; }
