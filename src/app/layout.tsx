@@ -39,6 +39,23 @@ export const metadata: Metadata = {
   },
 };
 
+// JSON-LD (schema.org) — dados estruturados da organização e do site.
+const ORGANIZATION_JSONLD = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Fluxomind',
+  url: 'https://www.fluxomind.com',
+  logo: 'https://www.fluxomind.com/logoSVG/logo-dark.svg',
+  email: 'contato@fluxomind.com',
+};
+
+const WEBSITE_JSONLD = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'Fluxomind',
+  url: 'https://www.fluxomind.com',
+};
+
 export default function RootLayout({
   children,
 }: {
@@ -47,6 +64,14 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className={inter.variable}>
       <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(ORGANIZATION_JSONLD) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(WEBSITE_JSONLD) }}
+        />
         {children}
         <Analytics />
       </body>
