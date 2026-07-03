@@ -1,20 +1,42 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
+import Analytics from "@/components/Analytics";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "FluxoMind - Consultoria em IA",
-  description: "Transformamos ideias em soluções inteligentes através da Inteligência Artificial",
+  metadataBase: new URL("https://www.fluxomind.com"),
+  title: {
+    default: "Fluxomind — delegue a tarefa, receba a conclusão com a prova",
+    template: "%s · Fluxomind",
+  },
+  description:
+    "Um app que resolve o seu problema e se opera sozinho — integrado ao que você já tem, governado, em semanas. Se constrói a partir do que você pede e fica mais inteligente quanto mais você usa.",
+  openGraph: {
+    type: "website",
+    locale: "pt_BR",
+    siteName: "Fluxomind",
+    title: "Fluxomind — delegue a tarefa, receba a conclusão com a prova",
+    description:
+      "Um app que resolve o seu problema e se opera sozinho — integrado ao que você já tem, governado, em semanas.",
+    images: [
+      {
+        url: "/og.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Fluxomind",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/og.jpg"],
+  },
 };
 
 export default function RootLayout({
@@ -23,9 +45,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="pt" className={`${geistSans.variable} ${geistMono.variable}`}>
-      <head />
-      <body>{children}</body>
+    <html lang="pt-BR" className={inter.variable}>
+      <body>
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }
