@@ -234,8 +234,8 @@ export default function Plataforma() {
               39 engines organizadas em 10 camadas (verificável em{' '}
               <span className="mono">src/engine/</span>) — abaixo, as camadas com engines
               representativas de cada uma. Cada engine é um módulo isolado com boundaries estritos —
-              import indevido entre internals <strong>não passa no CI</strong>. Evolução por camada,
-              sem ruptura.
+              import indevido entre internals <strong>é bloqueado pelo verificador de
+              boundaries</strong>, que roda no pipeline de deploy. Evolução por camada, sem ruptura.
             </p>
           </div>
           <div className="layers">
@@ -350,8 +350,8 @@ export default function Plataforma() {
               <div className="kick">④ Qualidade &amp; correção</div>
               <h3>Correção verificada por máquina, não por confiança</h3>
               <p style={{ color: 'var(--slate)', fontSize: '14.5px', marginTop: 10 }}>
-                O princípio é “confiança conquistada por evidência”: a plataforma se autoverifica a
-                cada mudança.
+                O princípio é “confiança conquistada por evidência”: a plataforma se verifica por
+                código — suítes que provam isolamento, integridade e contratos, não checklist.
               </p>
               <span className="badge b-impl" style={{ marginTop: 14 }}>
                 <span className="d" /> Implementado
@@ -365,7 +365,8 @@ export default function Plataforma() {
                   <p>
                     Isolamento (probes cross-tenant + RLS via pgTAP), integridade, contratos,
                     resiliência, compliance e evolvability. Boundaries, testes e gate de eval
-                    rodam em cada PR; a suíte de isolamento, em workflow dedicado.
+                    rodam sob demanda e no pipeline de deploy; a suíte de isolamento, em
+                    workflow dedicado.
                   </p>
                   <div className="src">
                     trilha: <code>validationEngine</code>
