@@ -81,7 +81,7 @@ export default function Home() {
       <style>{HOME_CSS}</style>
 
       {/* NAV — CTA primário leva à demonstração (a conversão é viver a demo) */}
-      <SiteHeader cta={{ label: CTA.demo, href: '#demo' }} />
+      <SiteHeader cta={{ label: CTA.demo, href: '/demo' }} />
 
       {/* HERO */}
       <header className="hero">
@@ -97,8 +97,11 @@ export default function Home() {
             mais você usa.
           </p>
           <div className="herocta" style={{ justifyContent: 'center' }}>
-            <a className="btn btn-primary btn-lg" href="#demo">
-              {CTA.demo} ↓
+            <Link className="btn btn-primary btn-lg" href="/demo">
+              {CTA.demo}
+            </Link>
+            <a className="btn btn-ghost btn-lg" href="#demo">
+              Prévia em 1 minuto ↓
             </a>
           </div>
           <div className="reassure" style={{ justifyContent: 'center' }}>

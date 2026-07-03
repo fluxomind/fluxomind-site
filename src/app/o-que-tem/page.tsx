@@ -87,7 +87,7 @@ const CARDS = FACES.map((f) => ({ ...f, ...FACE_DETAILS[f.key] }));
 export default function OQueTem() {
   return (
     <div className="page-feats">
-      <SiteHeader cta={{ label: CTA.demo, href: '/#demo' }} />
+      <SiteHeader cta={{ label: CTA.demo, href: '/demo' }} />
 
       {/* HERO */}
       <header className="hero">
@@ -105,7 +105,7 @@ export default function OQueTem() {
               parado: <strong>passa a operar o dia a dia</strong>.
             </p>
             <div className="herocta" style={{ justifyContent: 'center', marginTop: 26 }}>
-              <Link className="btn btn-primary" href="/#demo">
+              <Link className="btn btn-primary" href="/demo">
                 {CTA.demo}
               </Link>
               <a className="btn btn-ghost" href="#perguntas">

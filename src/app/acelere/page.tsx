@@ -111,7 +111,7 @@ export default function Acelere() {
   return (
     <div className="page-ent">
       {/* NAV */}
-      <SiteHeader cta={{ label: CTA.demo, href: '/#demo' }} />
+      <SiteHeader cta={{ label: CTA.demo, href: '/demo' }} />
 
       {/* HERO — dor primeiro */}
       <header className="hero">

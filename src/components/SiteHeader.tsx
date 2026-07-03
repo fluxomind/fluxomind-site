@@ -3,8 +3,8 @@ import Link from 'next/link';
 
 type Cta = { label: string; href: string };
 
-// Cabeçalho global. CTA primário de nav é sempre CTA.demo → /#demo
-// (message house §6); rótulos canônicos em src/lib/messages.ts (CTA).
+// Cabeçalho global. CTA primário de nav é sempre CTA.demo → /demo
+// (message house §6; exceção: /demo usa CTA.beta → #beta).
 // "Entrar" (PLATFORM_LOGIN) omitido enquanto a plataforma não lança
 // (decisão do fundador 2026-07-02) — betas recebem a URL do time.
 export default function SiteHeader({ cta }: { cta: Cta }) {
