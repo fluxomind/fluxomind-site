@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { clientIp, rateLimited } from '@/lib/ratelimit';
+import { appendLead } from '@/lib/leadstore';
 
 // Captura de leads do form da lista do beta (src/components/BetaForm.tsx).
 // O lead é SEMPRE logado (backup nos logs do host — atenção à retenção curta
@@ -39,10 +40,18 @@ export async function POST(req: Request) {
   // Logado mesmo assim: autofill pode pegar humano real — falso positivo
   // vira recuperável e a taxa de honeypot fica observável.
   if (typeof body.site === 'string' && body.site.trim() !== '') {
-    console.log(
-      '[fm-lead-hp]',
-      JSON.stringify({ email: body.email, processo: body.processo, ts: new Date().toISOString() }),
-    );
+    const hpLead = {
+      email: typeof body.email === 'string' ? body.email.slice(0, 254) : '',
+      processo: typeof body.processo === 'string' ? body.processo.slice(0, 2000) : '',
+      ts: new Date().toISOString(),
+      hp: true,
+    };
+    console.log('[fm-lead-hp]', JSON.stringify(hpLead));
+    try {
+      await appendLead(hpLead);
+    } catch {
+      // arquivo indisponível (serverless efêmero) — log já registrou
+    }
     return NextResponse.json({ ok: true });
   }
 
@@ -71,8 +80,14 @@ export async function POST(req: Request) {
     source: 'site-beta-form',
   };
 
-  // Backup incondicional nos logs do host.
+  // Backup incondicional nos logs do host + arquivo local (o "banco" do beta).
   console.log('[fm-lead]', JSON.stringify(lead));
+  try {
+    await appendLead(lead);
+  } catch (err) {
+    // arquivo indisponível (serverless efêmero) — log e webhook seguem valendo
+    console.error('[fm-lead] arquivo indisponível:', err);
+  }
 
   const webhook = process.env.LEAD_WEBHOOK_URL;
   if (webhook) {

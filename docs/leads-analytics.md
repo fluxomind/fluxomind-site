@@ -71,6 +71,21 @@ Se o webhook falhar, a API devolve 502 e o form oferece o fallback por e-mail
 `pageview(/)` → `demo_run` → `demo_built` → `demo_ops_run` → `demo_ops_done` →
 `demo_beta_click` → `beta_form_submitted`.
 
+## Ver os leads
+
+Três formas, da mais direta à mais durável:
+
+1. **`/admin/leads`** — tabela interna (não linkada, noindex). Lê o arquivo local
+   `data/leads.ndjson`, onde `/api/beta` grava todo lead (inclusive honeypot, marcado).
+   Em dev: acesso direto. Em produção: exige `?token=<ADMIN_TOKEN>` (env) — sem
+   `ADMIN_TOKEN` configurado, a página retorna 404. **Requer filesystem persistente**
+   (VM, Cloud Run com volume); na Vercel o arquivo não persiste entre execuções.
+2. **Logs do host** — tag `[fm-lead]` (`[fm-lead-hp]` para honeypot). Efêmeros.
+3. **Planilha/CRM via `LEAD_WEBHOOK_URL`** — o destino durável recomendado (abaixo).
+
+Env extra: `ADMIN_TOKEN` (token da página interna) e `LEADS_FILE` (caminho do NDJSON;
+padrão `<projeto>/data/leads.ndjson`).
+
 ## Deploy
 
 - As rotas `/api/*` convertem o site de 100% estático para **serverful**: as páginas
