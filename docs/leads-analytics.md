@@ -68,6 +68,7 @@ Se o webhook falhar, a API devolve 502 e o form oferece o fallback por e-mail
 | `jornada_hitl_ok` | Aprovou a 1ª ação do assistente | — |
 | `jornada_publish` | Publicou o app para o time | — |
 | `jornada_done` | Jornada completa (evoluiu por conversa) | — |
+| `jornada_recomecar` | Reiniciou a demo pela topbar (escolher outro exemplo) | `cenario` (o que estava ativo) |
 | `jornada_beta_click` | CTA ao fim da jornada | — |
 | `beta_form_submitted` / `beta_form_error` | Form do beta | — |
 

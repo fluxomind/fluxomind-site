@@ -660,8 +660,10 @@ export default function JourneyDemo() {
   }, []);
 
   async function ally(text: string, ms = 700) {
+    const gen = genRef.current;
     setTyping(true);
     await delay(ms);
+    if (genRef.current !== gen) return; // recomeçar/rebuild cancelou esta fala
     setTyping(false);
     push({ kind: 'msg', who: 'ally', text });
   }
@@ -696,17 +698,20 @@ export default function JourneyDemo() {
 
   async function startPlanilha(id?: CenarioId) {
     if (!beginOnce()) return;
+    const gen = genRef.current;
     const cid = id ?? cenarioRef.current; // replay usa o cenário preservado
     if (id) aplicarCenario(id);
     const c = CENARIOS[cid];
     track('jornada_start', { entry: 'planilha', cenario: cid });
     push({ kind: 'msg', who: 'user', text: `📎 ${c.xlsx}` });
     await ally(c.planilhaRead, 900);
+    if (genRef.current !== gen) return;
     push({ kind: 'card', card: 'espelho' });
   }
 
   async function startProsa(texto: string) {
     if (!beginOnce()) return;
+    const gen = genRef.current;
     const text = texto.trim();
     const id = routeCenario(text);
     aplicarCenario(id);
@@ -717,15 +722,18 @@ export default function JourneyDemo() {
       `Boa! É exatamente assim que funciona: você escreve, eu entendo e monto. Nesta demonstração eu sigo um exemplo pronto — ${c.tema} — mas o caminho é o mesmo com o SEU problema. Olha:`,
       800,
     );
+    if (genRef.current !== gen) return;
     push({ kind: 'card', card: 'espelho' });
   }
 
   async function confirmaEspelho() {
     if (!lock('espelho')) return;
+    const gen = genRef.current;
     resolveCard('espelho', 'Confirmado por você');
     earn(0); // Enquadramento
     goStage(1);
     await ally('Então deixa eu confirmar como seu negócio funciona — corrija só o que estiver errado:', 600);
+    if (genRef.current !== gen) return;
     push({ kind: 'card', card: 'enquadrar' });
   }
 
@@ -746,9 +754,11 @@ export default function JourneyDemo() {
   async function confirmaEnquadrar() {
     if (!lock('enquadrar')) return;
     const c = CENARIOS[cenarioRef.current];
+    const gen = genRef.current;
     resolveCard('enquadrar', premEditada ? c.ajusteLabel : 'Aceito como proposto');
     goStage(2);
     await ally('Desenhei seu app inteiro. Em português, não em jargão:', 650);
+    if (genRef.current !== gen) return;
     push({ kind: 'card', card: 'desenho' });
     earn(1); // Coerência
   }
@@ -787,6 +797,7 @@ export default function JourneyDemo() {
     // no mobile, mostra o app nascendo — o momento-mágico é visual
     if (isMobile()) setPane('app');
     await ally(`🎉 Seu app está de pé — em rascunho, só seu. ${c.magic} Depois me diz se é isso.`, 700);
+    if (genRef.current !== gen) return;
     push({ kind: 'card', card: 'gate' });
   }
 
@@ -794,6 +805,7 @@ export default function JourneyDemo() {
   async function ficarComEle() {
     if (!lock('ficar')) return;
     const c = CENARIOS[cenarioRef.current];
+    const gen = genRef.current;
     if (!touchedRef.current) {
       await ally(`Experimenta mexer no app primeiro — ${c.touchHint}. Decidir vendo é o combinado. 😉`, 400);
       unlock('ficar');
@@ -805,6 +817,7 @@ export default function JourneyDemo() {
     track('jornada_keep');
     goStage(5);
     await ally('Agora o assistente assume o dia a dia — e te pergunta antes do que importa. Olha ele trabalhando:', 700);
+    if (genRef.current !== gen) return;
     const am = c.autoMove;
     setRecords((p) =>
       p.map((r) =>
@@ -819,6 +832,7 @@ export default function JourneyDemo() {
       ),
     );
     await delay(900);
+    if (genRef.current !== gen) return;
     push({ kind: 'card', card: 'hitl' });
   }
 
@@ -843,6 +857,7 @@ export default function JourneyDemo() {
   async function aprovaEnvio() {
     if (!lock('hitl')) return;
     const c = CENARIOS[cenarioRef.current];
+    const gen = genRef.current;
     // deixa o momento visível: financeiro volta pra tabela (o stat cai);
     // chats abre a conversa (a bolha de confirmação aparece na thread)
     if (c.surface === 'financeiro') {
@@ -870,16 +885,19 @@ export default function JourneyDemo() {
     );
     goStage(6);
     await ally(`${c.hitl.lead} A automação segue até o fim e fica registrada. Antes de abrir pro seu time, eu provo por dentro que cada papel vê só o combinado — aí você publica:`, 800);
+    if (genRef.current !== gen) return;
     push({ kind: 'card', card: 'publicar' });
   }
 
   async function publicar() {
     if (!lock('pub')) return;
+    const gen = genRef.current;
     resolveCard('publicar', 'Publicado para o time');
     setDraft('published');
     track('jornada_publish');
     goStage(7);
     await ally('🏁 App vivo, governado e trabalhando. Daqui pra frente, evoluir é só conversar — experimenta:', 600);
+    if (genRef.current !== gen) return;
     push({ kind: 'card', card: 'evoluir' });
   }
 
@@ -887,10 +905,12 @@ export default function JourneyDemo() {
   async function aplicarEvolucao(viaChat?: string) {
     if (!lock('evo')) return;
     const c = CENARIOS[cenarioRef.current];
+    const gen = genRef.current;
     const ev = c.evolve;
     push({ kind: 'msg', who: 'user', text: viaChat ?? ev.userMsg });
     if (viaChat) await ally(ev.allyViaChat, 550);
     await delay(450);
+    if (genRef.current !== gen) return;
     if (ev.col && ev.before) {
       const col = ev.col;
       const before = ev.before;
@@ -914,6 +934,7 @@ export default function JourneyDemo() {
     }
     setEvolveState('applied');
     await ally('Aplicado ✓ — mudança simples não pede cerimônia. E tem Desfazer, porque errar não pode machucar.', 500);
+    if (genRef.current !== gen) return;
     track('jornada_done');
     push({ kind: 'card', card: 'cta' });
   }
@@ -1035,6 +1056,19 @@ export default function JourneyDemo() {
     setTrust([false, false, false, false, false]);
     setEvolveState('none');
     setNewOpen(false);
+  }
+
+  // Recomeçar: volta ao estado de entrada COMPLETO e libera a escolha de outro
+  // exemplo — sem recarregar a página. resetAll() zera stage/chat/app e destrava
+  // startedRef/beginOnce; aqui também soltamos o cenário (volta ao neutro 'leads',
+  // como no load inicial) — diferente do replay, que preserva cenarioRef. A guarda
+  // de época (genRef) já cancela qualquer fala/card em voo do cenário anterior.
+  function recomecar() {
+    if (busyRef.current) return; // não reinicia no meio de um passo do autopilot
+    track('jornada_recomecar', { cenario: cenarioRef.current });
+    cenarioRef.current = 'leads';
+    setCenarioId('leads');
+    resetAll();
   }
 
   async function voltarPasso() {
@@ -1528,6 +1562,16 @@ export default function JourneyDemo() {
             ▶
           </button>
         </div>
+        {started && (
+          <button
+            className="jd-top-restart"
+            onClick={recomecar}
+            aria-label="Reiniciar a demonstração e escolher outro exemplo"
+            title="Reiniciar a demonstração e escolher outro exemplo"
+          >
+            ↺<span className="jd-restart-lbl"> Recomeçar</span>
+          </button>
+        )}
         <span className="jd-top-phase">demonstração · produto em construção</span>
         <span className="jd-top-phase jd-top-phase-s">em construção</span>
         <a className="jd-top-cta" href="#beta" data-track="demo-top-beta">
@@ -1848,6 +1892,8 @@ const JD_CSS = `
 .jd-top-nav button:disabled { color:var(--jd-mut); opacity:.4; cursor:default; }
 .jd-top-nav-lbl { font-size:10.5px; color:var(--jd-mut); letter-spacing:.04em; padding:0 2px; }
 @media (max-width:560px){ .jd-top-nav-lbl{ display:none; } }
+.jd-top-restart { display:flex; align-items:center; gap:4px; border:1px solid var(--jd-line); background:none; color:var(--jd-tx); font:inherit; font-size:12px; font-weight:600; border-radius:999px; padding:5px 11px; cursor:pointer; white-space:nowrap; }
+.jd-top-restart:hover { background:rgba(255,255,255,.08); border-color:var(--jd-blue); color:#fff; }
 .jd-top-phase { font-size:11px; font-weight:600; letter-spacing:.05em; color:var(--jd-amber); border:1px solid rgba(251,191,36,.35); background:rgba(251,191,36,.08); border-radius:999px; padding:3px 10px; white-space:nowrap; }
 .jd-top-phase-s { display:none; }
 .jd-top-cta { font-size:12.5px; font-weight:700; color:#fff; background:var(--jd-blue); border-radius:8px; padding:7px 12px; white-space:nowrap; }
@@ -1862,6 +1908,8 @@ const JD_CSS = `
   .jd-top-phase-s{ display:inline-block; }
   .jd-top-cta{ font-size:11.5px; padding:6px 9px; }
   .jd-top-brand{ font-size:14px; }
+  .jd-restart-lbl{ display:none; } /* vira só "↺" nos tiers apertados */
+  .jd-top-restart{ padding:5px 9px; }
 }
 .jd-cta-s { display:none; }
 @media (max-width:430px){
