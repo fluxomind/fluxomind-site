@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
 import { TRUST_RULES, CTA } from '@/lib/messages';
 import { track } from '@/lib/analytics';
 
@@ -750,10 +751,10 @@ export default function JourneyDemo() {
 
       {/* topbar de sistema — a sensação de estar dentro do produto */}
       <header className="jd-top">
-        <a href="/" className="jd-top-brand" aria-label="Voltar ao site Fluxomind">
+        <Link href="/" className="jd-top-brand" aria-label="Voltar ao site Fluxomind">
           <span className="jd-top-dot" />
           fluxomind
-        </a>
+        </Link>
         <span className="jd-top-crumb">
           sua-empresa <i>/</i> Assistente — <b>Jornada de criação</b>
         </span>
