@@ -755,8 +755,10 @@ export default function JourneyDemo() {
           </button>
         </div>
         <span className="jd-top-phase">demonstração · produto em construção</span>
+        <span className="jd-top-phase jd-top-phase-s">em construção</span>
         <a className="jd-top-cta" href="#beta" data-track="demo-top-beta">
-          {CTA.beta}
+          <span className="jd-cta-full">{CTA.beta}</span>
+          <span className="jd-cta-s">Quero isso</span>
         </a>
       </header>
 
@@ -1036,9 +1038,30 @@ const JD_CSS = `
 .jd-top-nav-lbl { font-size:10.5px; color:var(--jd-mut); letter-spacing:.04em; padding:0 2px; }
 @media (max-width:560px){ .jd-top-nav-lbl{ display:none; } }
 .jd-top-phase { font-size:11px; font-weight:600; letter-spacing:.05em; color:var(--jd-amber); border:1px solid rgba(251,191,36,.35); background:rgba(251,191,36,.08); border-radius:999px; padding:3px 10px; white-space:nowrap; }
+.jd-top-phase-s { display:none; }
 .jd-top-cta { font-size:12.5px; font-weight:700; color:#fff; background:var(--jd-blue); border-radius:8px; padding:7px 12px; white-space:nowrap; }
 .jd-top-cta:hover { filter:brightness(1.1); }
-@media (max-width:760px){ .jd-top-crumb{ display:none; } .jd-top-phase{ font-size:10px; } }
+/* topbar responsiva: itens cedem por prioridade — nunca alargar o shell
+   (nowrap + overflow:hidden do root cortaria o conteúdo inteiro) */
+.jd-top { min-width:0; }
+@media (max-width:960px){ .jd-top-crumb{ display:none; } }
+@media (max-width:700px){
+  .jd-top{ gap:8px; padding:0 10px; }
+  .jd-top-phase{ display:none; }
+  .jd-top-phase-s{ display:inline-block; }
+  .jd-top-cta{ font-size:11.5px; padding:6px 9px; }
+  .jd-top-brand{ font-size:14px; }
+}
+.jd-cta-s { display:none; }
+@media (max-width:430px){
+  .jd-top{ gap:6px; }
+  .jd-top-nav{ padding:2px; }
+  .jd-top-nav button{ width:22px; }
+  .jd-top-cta{ font-size:11px; padding:6px 8px; }
+  .jd-cta-full{ display:none; }
+  .jd-cta-s{ display:inline; }
+  .jd-top-brand{ font-size:13px; }
+}
 .jd-grid { display:grid; grid-template-columns: minmax(320px,42%) 1fr; flex:1; min-height:0; }
 @media (max-width:860px){
   .jd-grid{ grid-template-columns:1fr; grid-template-rows: 46% 54%; }
