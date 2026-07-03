@@ -87,14 +87,16 @@ const DESENHO_ROWS = [
 
 const mask = (email: string) => email.replace(/(.{2}).+(@.+)/, '$1●●●$2');
 
+const INITIAL_ITEMS: Item[] = [
+  {
+    kind: 'msg',
+    who: 'ally',
+    text: 'Oi! 👋 Me conta um problema do seu negócio — escreva aqui embaixo, com as suas palavras — ou me dá uma planilha, que eu leio como você trabalha hoje. Os dois caminhos valem.',
+  },
+];
+
 export default function JourneyDemo() {
-  const [items, setItems] = useState<Item[]>([
-    {
-      kind: 'msg',
-      who: 'ally',
-      text: 'Oi! 👋 Me conta um problema do seu negócio — ou me dá uma planilha, que eu leio como você trabalha hoje. Os dois caminhos valem.',
-    },
-  ]);
+  const [items, setItems] = useState<Item[]>(INITIAL_ITEMS);
   const [stage, setStage] = useState(0);
   const [typing, setTyping] = useState(false);
   const [started, setStarted] = useState(false);
@@ -111,6 +113,7 @@ export default function JourneyDemo() {
   const [trust, setTrust] = useState<boolean[]>([false, false, false, false, false]);
   const [negociacao, setNegociacao] = useState<'none' | 'applied' | 'undone'>('none');
   const [newLeadOpen, setNewLeadOpen] = useState(false);
+  const [chatText, setChatText] = useState('');
 
   const clockRef = useRef(31);
   const genRef = useRef(0);
@@ -193,18 +196,28 @@ export default function JourneyDemo() {
     push({ kind: 'card', card: 'espelho' });
   }
 
-  async function startProsa() {
+  async function startProsa(texto?: string) {
     if (!beginOnce()) return;
-    track('jornada_start', { entry: 'prosa' });
+    const livre = typeof texto === 'string' && texto.trim().length > 0;
+    track('jornada_start', { entry: livre ? 'prosa-livre' : 'prosa' });
     push({
       kind: 'msg',
       who: 'user',
-      text: 'Preciso gerir leads de criadores e contratos — hoje é tudo numa planilha.',
+      text: livre
+        ? texto!.trim()
+        : 'Preciso gerir leads de criadores e contratos — hoje é tudo numa planilha.',
     });
-    await ally(
-      'Entendi: captar leads de criadores, movê-los num pipeline até o contrato e acompanhar o onboarding. (Se tiver uma planilha disso, eu importo seus dados — mas não precisa.)',
-      800,
-    );
+    if (livre) {
+      await ally(
+        'Boa! É exatamente assim que funciona: você escreve, eu entendo e monto. Nesta demonstração eu sigo um exemplo pronto — leads e contratos — mas o caminho é o mesmo com o SEU problema. Olha:',
+        800,
+      );
+    } else {
+      await ally(
+        'Entendi: captar leads de criadores, movê-los num pipeline até o contrato e acompanhar o onboarding. (Se tiver uma planilha disso, eu importo seus dados — mas não precisa.)',
+        800,
+      );
+    }
     push({ kind: 'card', card: 'espelho' });
   }
 
@@ -344,9 +357,19 @@ export default function JourneyDemo() {
   }
 
   // ---------------- E7: evoluir ----------------
-  async function addNegociacao() {
+  async function addNegociacao(viaChat?: string) {
     if (!lock('neg')) return;
-    push({ kind: 'msg', who: 'user', text: 'Adiciona a etapa Negociação antes de Contrato.' });
+    push({
+      kind: 'msg',
+      who: 'user',
+      text: viaChat ?? 'Adiciona a etapa Negociação antes de Contrato.',
+    });
+    if (viaChat) {
+      await ally(
+        'É assim que se evolui — pedindo. Nesta demonstração eu aplico um exemplo pronto: a etapa Negociação antes de Contrato. Olha o pipeline:',
+        550,
+      );
+    }
     await delay(450);
     setStagesK((p) => {
       if (p.includes('Negociação')) return p;
@@ -370,6 +393,121 @@ export default function JourneyDemo() {
   function ctaClick() {
     track('jornada_beta_click');
     document.getElementById('beta')?.scrollIntoView({ behavior: reducedRef.current ? 'auto' : 'smooth' });
+  }
+
+  // ---------------- chat livre: você escreve, a demo responde ----------------
+  async function enviarChat() {
+    const text = chatText.trim();
+    if (!text || busyRef.current) return;
+    setChatText('');
+    if (!startedRef.current) {
+      await startProsa(text);
+      return;
+    }
+    if (stage >= 7 && negociacao === 'none') {
+      await addNegociacao(text);
+      return;
+    }
+    push({ kind: 'msg', who: 'user', text });
+    track('jornada_chat', { stage });
+    await ally(
+      'Anotei! No produto é assim mesmo: você escreve, eu faço. Nesta demonstração eu sigo um roteiro — a próxima decisão está no card aqui em cima (ou use as setas ▶ lá no topo).',
+      600,
+    );
+  }
+
+  // ---------------- navegação passo a passo (◀ ▶ na topbar) ----------------
+  // Avançar executa a próxima decisão do caminho feliz; Voltar re-executa a
+  // jornada do zero, instantânea (reducedRef), até o passo anterior — replay
+  // determinístico, mesmo padrão do protótipo DP087.
+  const busyRef = useRef(false);
+
+  const CHECKPOINTS: Array<() => Promise<void> | void> = [
+    () => startPlanilha(),
+    () => confirmaEspelho(),
+    () => confirmaEnquadrar(),
+    () => montaRascunho(),
+    async () => {
+      if (!touchedRef.current) {
+        moveLead('ana');
+        await delay(650);
+      }
+      await ficarComEle();
+    },
+    () => aprovaEnvio(),
+    () => publicar(),
+    () => addNegociacao(),
+  ];
+
+  function proximoPasso(): number | null {
+    if (!startedRef.current) return 0;
+    if (stage === 0) return 1;
+    if (stage === 1) return 2;
+    if (stage === 2) return 3;
+    if (stage === 3) return null; // montando — aguarde a animação
+    if (stage === 4) return 4;
+    if (stage === 5) return 5;
+    if (stage === 6) return 6;
+    if (stage === 7 && negociacao === 'none') return 7;
+    return null; // jornada completa
+  }
+
+  async function avancarPasso() {
+    if (busyRef.current) return;
+    const i = proximoPasso();
+    if (i === null) {
+      if (stage >= 7) ctaClick();
+      return;
+    }
+    busyRef.current = true;
+    track('jornada_nav', { dir: 'avancar', passo: i });
+    try {
+      await CHECKPOINTS[i]();
+    } finally {
+      busyRef.current = false;
+    }
+  }
+
+  function resetAll() {
+    genRef.current += 1; // cancela loops de build em andamento
+    lockRef.current.clear();
+    startedRef.current = false;
+    touchedRef.current = false;
+    clockRef.current = 31;
+    setItems(INITIAL_ITEMS);
+    setStage(0);
+    setTyping(false);
+    setStarted(false);
+    setFunilEditado(false);
+    setBuildDone(0);
+    setStagesK(['Novo', 'Qualificado', 'Proposta', 'Contrato']);
+    setLeads([]);
+    setView('kanban');
+    setRecordId(null);
+    setQuery('');
+    setDraft('none');
+    setTrust([false, false, false, false, false]);
+    setNegociacao('none');
+    setNewLeadOpen(false);
+  }
+
+  async function voltarPasso() {
+    if (busyRef.current || !startedRef.current) return;
+    const cur = proximoPasso();
+    const fim = stage === 3 ? 4 : cur === null ? CHECKPOINTS.length : cur;
+    const alvo = fim - 1;
+    if (alvo < 0) return;
+    busyRef.current = true;
+    track('jornada_nav', { dir: 'voltar', passo: alvo });
+    const prevReduced = reducedRef.current;
+    reducedRef.current = true;
+    resetAll();
+    try {
+      for (let i = 0; i < alvo; i++) await CHECKPOINTS[i]();
+    } finally {
+      reducedRef.current = prevReduced;
+      busyRef.current = false;
+    }
   }
 
   // ---------------- interações do app vivo ----------------
@@ -549,7 +687,7 @@ export default function JourneyDemo() {
             <div className="jd-kick">Evoluir é conversar</div>
             {negociacao === 'none' ? (
               <div className="jd-btns">
-                <button className="jd-btn" onClick={addNegociacao}>
+                <button className="jd-btn" onClick={() => addNegociacao()}>
                   “adiciona a etapa Negociação antes de Contrato”
                 </button>
               </div>
@@ -602,6 +740,20 @@ export default function JourneyDemo() {
         <span className="jd-top-crumb">
           sua-empresa <i>/</i> Assistente — <b>Jornada de criação</b>
         </span>
+        <div className="jd-top-nav" role="group" aria-label="Navegar pela jornada passo a passo">
+          <button
+            onClick={voltarPasso}
+            aria-label="Voltar um passo"
+            title="Voltar um passo"
+            disabled={!started}
+          >
+            ◀
+          </button>
+          <span className="jd-top-nav-lbl">passo a passo</span>
+          <button onClick={avancarPasso} aria-label="Avançar um passo" title="Avançar um passo">
+            ▶
+          </button>
+        </div>
         <span className="jd-top-phase">demonstração · produto em construção</span>
         <a className="jd-top-cta" href="#beta" data-track="demo-top-beta">
           {CTA.beta}
@@ -658,11 +810,31 @@ export default function JourneyDemo() {
               <button className="jd-pill jd-pill-imp" onClick={startPlanilha}>
                 📊 Importar planilha <code>leads-criadores.xlsx</code> <em>— opcional</em>
               </button>
-              <button className="jd-pill" onClick={startProsa}>
+              <button className="jd-pill" onClick={() => startProsa()}>
                 💬 “Preciso gerir leads de criadores e contratos”
               </button>
             </div>
           )}
+
+          {/* input de chat — a conversa é o modelo de interação, sempre visível */}
+          <div className="jd-input">
+            <input
+              value={chatText}
+              onChange={(e) => setChatText(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') enviarChat();
+              }}
+              placeholder={
+                started
+                  ? 'Escreva aqui — ex.: adiciona uma etapa no funil…'
+                  : 'Ou escreva com as suas palavras o problema do seu negócio…'
+              }
+              aria-label="Mensagem para o assistente"
+            />
+            <button className="jd-send" onClick={enviarChat} aria-label="Enviar mensagem">
+              ➤
+            </button>
+          </div>
         </section>
 
         {/* ---- app vivo ---- */}
@@ -857,7 +1029,13 @@ const JD_CSS = `
 .jd-top-crumb { color:var(--jd-mut); font-size:12.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .jd-top-crumb i { font-style:normal; opacity:.5; margin:0 2px; }
 .jd-top-crumb b { color:var(--jd-tx); font-weight:600; }
-.jd-top-phase { margin-left:auto; font-size:11px; font-weight:600; letter-spacing:.05em; color:var(--jd-amber); border:1px solid rgba(251,191,36,.35); background:rgba(251,191,36,.08); border-radius:999px; padding:3px 10px; white-space:nowrap; }
+.jd-top-nav { margin-left:auto; display:flex; align-items:center; gap:2px; border:1px solid var(--jd-line); border-radius:999px; padding:2px 4px; }
+.jd-top-nav button { border:none; background:none; color:var(--jd-tx); font-size:12px; width:26px; height:24px; border-radius:99px; cursor:pointer; }
+.jd-top-nav button:hover:not(:disabled) { background:rgba(255,255,255,.08); }
+.jd-top-nav button:disabled { color:var(--jd-mut); opacity:.4; cursor:default; }
+.jd-top-nav-lbl { font-size:10.5px; color:var(--jd-mut); letter-spacing:.04em; padding:0 2px; }
+@media (max-width:560px){ .jd-top-nav-lbl{ display:none; } }
+.jd-top-phase { font-size:11px; font-weight:600; letter-spacing:.05em; color:var(--jd-amber); border:1px solid rgba(251,191,36,.35); background:rgba(251,191,36,.08); border-radius:999px; padding:3px 10px; white-space:nowrap; }
 .jd-top-cta { font-size:12.5px; font-weight:700; color:#fff; background:var(--jd-blue); border-radius:8px; padding:7px 12px; white-space:nowrap; }
 .jd-top-cta:hover { filter:brightness(1.1); }
 @media (max-width:760px){ .jd-top-crumb{ display:none; } .jd-top-phase{ font-size:10px; } }
@@ -989,6 +1167,12 @@ const JD_CSS = `
 .jd-trust-chip { font-size:11px; border:1px solid var(--jd-line); border-radius:999px; padding:3px 10px; color:var(--jd-mut); opacity:.6; transition:all .25s; }
 .jd-trust-chip.on { color:var(--jd-green); border-color:rgba(52,211,153,.4); background:rgba(52,211,153,.08); opacity:1; }
 .jd-honest { font-size:12px; color:var(--jd-mut); text-align:center; padding:10px 16px 14px; margin:0; }
+.jd-input { display:flex; gap:8px; padding:10px 14px; border-top:1px solid var(--jd-line); }
+.jd-input input { flex:1; min-width:0; background:rgba(255,255,255,.05); border:1px solid var(--jd-line); border-radius:10px; padding:9px 13px; color:var(--jd-tx); font:inherit; font-size:13.5px; }
+.jd-input input::placeholder { color:var(--jd-mut); }
+.jd-input input:focus { outline:none; border-color:var(--jd-blue); box-shadow:0 0 0 3px rgba(77,171,247,.18); }
+.jd-send { border:none; background:var(--jd-blue); color:#fff; width:38px; border-radius:10px; cursor:pointer; font-size:13px; }
+.jd-send:hover { filter:brightness(1.1); }
 .jd :focus-visible { outline:2px solid var(--jd-blue); outline-offset:2px; border-radius:6px; }
 @media (prefers-reduced-motion: reduce){ .jd *{animation:none!important;transition:none!important} }
 `;
