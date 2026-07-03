@@ -71,7 +71,7 @@ A conversão principal do site é **viver a demonstração** — o encantamento 
 
 | Papel | Rótulo canônico | Destino |
 |---|---|---|
-| Primário (nav + hero) | **Veja a Fluxomind trabalhar** | `/#demo` |
+| Primário (nav + hero) | **Veja a Fluxomind trabalhar** | `/#demo` — exceção: em `/demo` o nav CTA é `CTA.beta → #beta` (visitante já está na demo) |
 | Pós-demonstração / decisão | **Quero isso no meu negócio** | Form da lista do beta (`BetaForm` em `/#comecar`); todo CTA de beta ancora lá. `PLATFORM_BETA` (mailto) é só fallback de erro do form |
 | Humano / escala | **Falar com o time** | `PLATFORM_CONTACT` |
 | Quem já é beta | **Entrar** | `PLATFORM_LOGIN` — **omitido do site enquanto a plataforma não lança** (decisão 2026-07-02); betas recebem a URL do time |
@@ -97,4 +97,5 @@ A conversão principal do site é **viver a demonstração** — o encantamento 
 | `/seguranca` | As 5 regras da confiança + governança | Sóbrio, verificável |
 | `/precos` | Beta honesto: acompanhado, sem cartão; sem números inventados | Direto, sem fricção |
 | `/por-que` | O propósito, na palavra do fundador (3 atos, assinada e datada) | Pessoal, primeira pessoa, sem hipérbole |
+| `/demo` | Jornada interativa dirigida pelo visitante (espelho → aprova-o-que-vê → operar → evoluir) | Encantamento com moldura de fase ("o produto que estamos construindo"); persona = "assistente" (Ally é interno até decisão do fundador) |
 | `/terms` | Legal | Inalterado em conteúdo; marca "Fluxomind" |

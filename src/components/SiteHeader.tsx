@@ -23,6 +23,7 @@ export default function SiteHeader({ cta }: { cta: Cta }) {
         </Link>
         <div className="navlinks">
           <Link href="/#usos">O que resolvo</Link>
+          <Link href="/demo">Experimente</Link>
           <Link href="/acelere">Acelere</Link>
           <Link href="/por-que">Por quê</Link>
           <Link href="/o-que-tem">O que faz</Link>
