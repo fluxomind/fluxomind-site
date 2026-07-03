@@ -77,7 +77,7 @@ h3 { font-size: 20px; font-weight: 700; letter-spacing: -.01em; }
 
 /* ---------- nav ---------- */
 nav { position: sticky; top: 0; z-index: 50; background: rgba(14,15,17,.8); backdrop-filter: blur(14px); border-bottom: 1px solid rgba(255,255,255,.08); }
-nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; max-width: 1280px; }
 .brand { display: flex; align-items: center; gap: 10px; color: #fff; font-weight: 800; font-size: 20px; letter-spacing: -.02em; }
 .brand .dot { width: 11px; height: 11px; border-radius: 50%; background: var(--blue); box-shadow: 0 0 16px 2px rgba(43,102,221,.9); }
 .brand .brandlogo { height: 26px; width: auto; display: block; }
@@ -85,8 +85,10 @@ nav .wrap { display: flex; align-items: center; justify-content: space-between; 
 .navlinks a { color: #C7CBD1; font-size: 14.5px; font-weight: 500; }
 .navlinks a:hover { color: #fff; }
 .nav-cta { padding: 10px 20px; font-size: 15px; white-space: nowrap; }
-@media (max-width: 1180px) { .navlinks { gap: 14px; } .navlinks a { font-size: 13.5px; } .nav-cta { padding: 9px 14px; font-size: 14px; } }
-@media (max-width: 980px) { .navlinks { display: none; } }
+.navright { display: flex; align-items: center; }
+@media (max-width: 1300px) { .navlinks { gap: 14px; } .navlinks a { font-size: 13.5px; } .nav-cta { padding: 9px 14px; font-size: 14px; } }
+@media (max-width: 1040px) { .navlinks { display: none; } }
+@media (max-width: 480px) { .brand .brandlogo { height: 20px; } .nav-cta { display: none; } }
 
 /* ---------- hero (base) ---------- */
 .hero { position: relative; background: radial-gradient(1100px 520px at 80% -10%, rgba(43,102,221,.4), transparent 60%), var(--ink); color: #fff; overflow: hidden; }

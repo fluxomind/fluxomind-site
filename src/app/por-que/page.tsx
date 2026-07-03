@@ -16,7 +16,7 @@ export default function PorQue() {
     <div className="page-porque">
       <style>{PQ_CSS}</style>
 
-      <SiteHeader cta={{ label: CTA.demo, href: '/#demo' }} />
+      <SiteHeader cta={{ label: CTA.demo, href: '/demo' }} />
 
       {/* ABERTURA */}
       <header className="hero">
@@ -136,7 +136,7 @@ export default function PorQue() {
             {PURPOSE_LINE}
           </p>
           <div className="offerbtns">
-            <Link className="btn btn-primary btn-lg" href="/#demo">
+            <Link className="btn btn-primary btn-lg" href="/demo">
               {CTA.demo}
             </Link>
             <Link className="btn btn-ghost btn-lg" href="/#comecar" data-track="porque-beta-cta">
