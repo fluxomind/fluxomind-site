@@ -72,7 +72,7 @@ A conversão principal do site é **viver a demonstração** — o encantamento 
 | Papel | Rótulo canônico | Destino |
 |---|---|---|
 | Primário (nav + hero) | **Veja a Fluxomind trabalhar** | `/#demo` |
-| Pós-demonstração / decisão | **Quero isso no meu negócio** | `PLATFORM_BETA` (lista do beta) |
+| Pós-demonstração / decisão | **Quero isso no meu negócio** | Form da lista do beta (`BetaForm` em `/#comecar`); todo CTA de beta ancora lá. `PLATFORM_BETA` (mailto) é só fallback de erro do form |
 | Humano / escala | **Falar com o time** | `PLATFORM_CONTACT` |
 | Quem já é beta | **Entrar** | `PLATFORM_LOGIN` — **omitido do site enquanto a plataforma não lança** (decisão 2026-07-02); betas recebem a URL do time |
 

@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { CTA } from '@/lib/messages';
-import { PLATFORM_BETA, PLATFORM_CONTACT } from '@/lib/platform';
+import { PLATFORM_CONTACT } from '@/lib/platform';
+import { track } from '@/lib/analytics';
 
 /* ------------------------------------------------------------------
    A demonstração da home, em dois atos.
@@ -355,6 +356,7 @@ export default function DemoBuilder() {
     setShowDone(false);
     setMetricText(sc.metrics.map((m) => formatMetric(0, m.format)));
     setRunning(true);
+    track('demo_run', { scenario: sc.id, matched });
 
     // reset do Ato 2 (permite rodar de novo com outro problema)
     setOpsStarted(false);
@@ -369,6 +371,7 @@ export default function DemoBuilder() {
       setShowPreview(true);
       setShowDone(true);
       setRunning(false);
+      track('demo_built', { scenario: sc.id });
       return;
     }
 
@@ -393,6 +396,7 @@ export default function DemoBuilder() {
     after(total + 300, () => {
       setShowDone(true);
       setRunning(false);
+      track('demo_built', { scenario: sc.id });
     });
   }, [intent, clearTimers, startCount]);
 
@@ -407,6 +411,7 @@ export default function DemoBuilder() {
     setShowOpsDone(false);
     setOpsMetricText(sc.ops.metrics.map((m) => formatMetric(m.from, m.format)));
     setRunning(true);
+    track('demo_ops_run', { scenario: sc.id });
 
     if (prefersReducedMotion()) {
       setOpsShown(sc.ops.events.length);
@@ -414,6 +419,7 @@ export default function DemoBuilder() {
       setShowOpsPanel(true);
       setShowOpsDone(true);
       setRunning(false);
+      track('demo_ops_done', { scenario: sc.id });
       return;
     }
 
@@ -433,6 +439,7 @@ export default function DemoBuilder() {
     after(total + COUNT_DURATION + 500, () => {
       setShowOpsDone(true);
       setRunning(false);
+      track('demo_ops_done', { scenario: sc.id });
     });
   }, [scenario, clearTimers, startOpsCount]);
 
@@ -454,7 +461,7 @@ export default function DemoBuilder() {
           value={intent}
           onChange={(e) => setIntent(e.target.value)}
           onKeyDown={(e) => {
-            if (e.key === 'Enter') run();
+            if (e.key === 'Enter' && !running) run();
           }}
           autoComplete="off"
           placeholder="ex.: controlar meus clientes em atraso"
@@ -588,10 +595,18 @@ export default function DemoBuilder() {
                   <div className="ok">
                     <b>Isso é operar.</b> {scenario.ops.done}
                   </div>
-                  <a className="btn btn-primary" href={PLATFORM_BETA}>
+                  <a
+                    className="btn btn-primary"
+                    href="#comecar"
+                    onClick={() => track('demo_beta_click')}
+                  >
                     {CTA.beta} →
                   </a>
-                  <a className="btn btn-ghost" href={PLATFORM_CONTACT}>
+                  <a
+                    className="btn btn-ghost"
+                    href={PLATFORM_CONTACT}
+                    onClick={() => track('demo_contact_click')}
+                  >
                     {CTA.contact}
                   </a>
                 </div>

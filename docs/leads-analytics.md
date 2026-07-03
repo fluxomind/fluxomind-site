@@ -1,0 +1,93 @@
+# Leads & Analytics do site
+
+O site captura leads e eventos de funil **first-party** — sem vendor, sem cookies, sem
+banner de consentimento. Dois endpoints (`/api/beta`, `/api/event`) logam sempre no host
+e repassam a webhooks quando configurados.
+
+## Configuração (env)
+
+| Variável | O que recebe | Obrigatória? |
+|---|---|---|
+| `LEAD_WEBHOOK_URL` | POST JSON de cada lead do form do beta | **Obrigatória de fato antes de publicar** — sem ela, leads existem só nos logs do host, que na Vercel são apagados em ~1h (Hobby) a 1 dia (Pro) |
+| `EVENTS_WEBHOOK_URL` | POST JSON de cada evento de analytics | Opcional (perder eventos dói menos que perder lead) |
+
+Qualquer receptor de JSON serve: Google Apps Script → Sheets, Slack incoming webhook,
+CRM, PostHog capture endpoint. Trocar de destino = trocar a env, zero código.
+
+### Receptor mínimo — Google Sheets (Apps Script)
+
+1. Numa planilha, Extensões → Apps Script, cole:
+
+```js
+function doPost(e) {
+  const d = JSON.parse(e.postData.contents);
+  // sanitiza contra injeção de fórmula: célula começando com = + - @
+  // seria executada pelo Sheets ao abrir a planilha
+  const s = (v) =>
+    typeof v === 'string' && /^[=+\-@]/.test(v) ? "'" + v : v;
+  SpreadsheetApp.getActiveSpreadsheet().getSheets()[0].appendRow([
+    s(d.ts), s(d.nome || ''), s(d.email || d.event || ''), s(d.empresa || ''),
+    s(d.processo || JSON.stringify(d.props || {})), s(d.source || d.path || ''),
+  ]);
+  return ContentService.createTextOutput(JSON.stringify({ ok: true }))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+```
+
+> Os campos vêm de um form público — a sanitização acima não é opcional.
+
+2. Implantar → App da Web → executar como você, acesso "Qualquer pessoa".
+3. A URL gerada é o valor de `LEAD_WEBHOOK_URL`.
+
+## Formato do lead (`/api/beta`)
+
+```json
+{ "nome": "…", "email": "…", "empresa": "…", "processo": "…",
+  "ts": "2026-07-03T12:00:00.000Z", "source": "site-beta-form" }
+```
+
+Proteções: honeypot (campo `site`), validação de e-mail, rate-limit 5/h por IP.
+Se o webhook falhar, a API devolve 502 e o form oferece o fallback por e-mail
+(`PLATFORM_BETA`); o lead já ficou registrado no log (`[fm-lead]`).
+
+## Taxonomia de eventos (`/api/event`)
+
+| Evento | Quando | Props |
+|---|---|---|
+| `pageview` | Toda troca de rota | — |
+| `click` | Clique em elemento com `data-track` | `id` |
+| `demo_run` | Visitante rodou o Ato 1 | `scenario`, `matched` |
+| `demo_built` | Ato 1 concluído (app "pronto") | `scenario` |
+| `demo_ops_run` | Visitante iniciou o Ato 2 (operar) | `scenario` |
+| `demo_ops_done` | Ato 2 concluído — o momento de convicção | `scenario` |
+| `demo_beta_click` / `demo_contact_click` | CTA ao fim da demo | — |
+| `beta_form_submitted` / `beta_form_error` | Form do beta | — |
+
+`data-track` em uso: `como-beta-cta`, `home-contact-cta`, `precos-beta-cta`,
+`oquetem-beta-cta`, `porque-beta-cta`, `beta-mailto-fallback`,
+`acelere-contact-cta`, `plataforma-contact-cta`, `seguranca-contact-cta`.
+
+**O funil que importa** (BCM: instrumentar tudo):
+`pageview(/)` → `demo_run` → `demo_built` → `demo_ops_run` → `demo_ops_done` →
+`demo_beta_click` → `beta_form_submitted`.
+
+## Deploy
+
+- As rotas `/api/*` convertem o site de 100% estático para **serverful**: as páginas
+  seguem estáticas, mas o host precisa executar funções (Vercel serverless, Cloud Run
+  etc.). Export estático puro (`output: 'export'`) deixa de funcionar.
+- **Logs não são armazenamento.** Na Vercel, runtime logs sem Log Drain são retidos por
+  ~1h (Hobby) a 1 dia (Pro). O `[fm-lead]` no log é um amortecedor de falha do webhook,
+  não um banco — por isso `LEAD_WEBHOOK_URL` é obrigatória de fato. Se configurar um
+  Log Drain como backup, lembre: ele passa a reter PII → definir retenção (LGPD).
+- O rate-limit é **em memória, por instância** serverless (melhor esforço): instâncias
+  frias/paralelas têm contadores próprios. Suficiente contra flood barato no beta;
+  para garantia real, mover para um store compartilhado (KV/Redis) quando houver deploy
+  definitivo.
+
+## Privacidade
+
+Sem cookies. Identificador de sessão anônimo em `sessionStorage` (morre com a aba).
+Eventos não carregam PII; o lead carrega os dados que a pessoa digitou, com
+consentimento declarado no form (link para /terms). Se um dia entrar vendor com
+cookies, aí sim revisar consentimento.

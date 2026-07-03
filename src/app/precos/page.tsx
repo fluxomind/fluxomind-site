@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import { CTA } from '@/lib/messages';
-import { PLATFORM_BETA, PLATFORM_CONTACT } from '@/lib/platform';
+import { PLATFORM_CONTACT } from '@/lib/platform';
 
 export const metadata: Metadata = {
   title: 'Preços',
@@ -64,9 +64,9 @@ export default function Precos() {
                   <span className="ck">✓</span> Seus dados isolados desde o primeiro dia
                 </li>
               </ul>
-              <a className="btn btn-primary" href={PLATFORM_BETA}>
+              <Link className="btn btn-primary" href="/#comecar" data-track="precos-beta-cta">
                 {CTA.beta}
-              </a>
+              </Link>
             </div>
 
             {/* ASSINATURA + USO */}
@@ -99,9 +99,9 @@ export default function Precos() {
                   time
                 </li>
               </ul>
-              <a className="btn btn-primary" href={PLATFORM_BETA}>
+              <Link className="btn btn-primary" href="/#comecar" data-track="precos-beta-cta">
                 {CTA.beta}
-              </a>
+              </Link>
             </div>
 
             {/* ESCALA */}
@@ -207,9 +207,9 @@ export default function Precos() {
             Sem cartão, acompanhado pelo time — do problema descrito ao app operante rodando.
           </p>
           <div className="offerbtns">
-            <a className="btn btn-primary btn-lg" href={PLATFORM_BETA}>
+            <Link className="btn btn-primary btn-lg" href="/#comecar" data-track="precos-beta-cta">
               {CTA.beta}
-            </a>
+            </Link>
             <a className="btn btn-ghost btn-lg" href={PLATFORM_CONTACT}>
               {CTA.contact}
             </a>

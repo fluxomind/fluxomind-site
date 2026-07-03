@@ -3,7 +3,6 @@ import type { Metadata } from 'next';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import { SIGNATURE, PURPOSE_LINE, CTA } from '@/lib/messages';
-import { PLATFORM_BETA } from '@/lib/platform';
 
 export const metadata: Metadata = {
   title: 'Por quê',
@@ -140,9 +139,9 @@ export default function PorQue() {
             <Link className="btn btn-primary btn-lg" href="/#demo">
               {CTA.demo}
             </Link>
-            <a className="btn btn-ghost btn-lg" href={PLATFORM_BETA}>
+            <Link className="btn btn-ghost btn-lg" href="/#comecar" data-track="porque-beta-cta">
               {CTA.beta}
-            </a>
+            </Link>
           </div>
         </div>
       </section>

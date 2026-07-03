@@ -123,7 +123,7 @@ export default function Seguranca() {
               <a className="btn btn-primary" href="#regras">
                 Ver as cinco regras
               </a>
-              <a className="btn btn-ghost" href={PLATFORM_CONTACT}>
+              <a className="btn btn-ghost" href={PLATFORM_CONTACT} data-track="seguranca-contact-cta">
                 {CTA.contact}
               </a>
             </div>
@@ -373,7 +373,7 @@ export default function Seguranca() {
             de arquitetura com engenharia — onde cada garantia acima é demonstrada, não afirmada.
           </p>
           <div className="offerbtns">
-            <a className="btn btn-primary btn-lg" href={PLATFORM_CONTACT}>
+            <a className="btn btn-primary btn-lg" href={PLATFORM_CONTACT} data-track="seguranca-contact-cta">
               {CTA.contact}
             </a>
             <Link className="btn btn-ghost btn-lg" href="/plataforma#seguranca">

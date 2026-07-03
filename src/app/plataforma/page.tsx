@@ -70,7 +70,7 @@ export default function Plataforma() {
             <strong>A fronteira honesta:</strong> {PHASE.next.desc}
           </p>
           <div className="herocta">
-            <a className="btn btn-primary" href={PLATFORM_CONTACT}>
+            <a className="btn btn-primary" href={PLATFORM_CONTACT} data-track="plataforma-contact-cta">
               {CTA.contact}
             </a>
             <a className="btn btn-ghost" href="#maturidade">
@@ -659,7 +659,7 @@ export default function Plataforma() {
             arquitetura com engenharia e um ambiente de avaliação isolado.
           </p>
           <div className="ctab">
-            <a className="btn btn-primary" href={PLATFORM_CONTACT}>
+            <a className="btn btn-primary" href={PLATFORM_CONTACT} data-track="plataforma-contact-cta">
               {CTA.contact}
             </a>
           </div>

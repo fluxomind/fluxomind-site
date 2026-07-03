@@ -130,7 +130,7 @@ export default function Acelere() {
             entrega.</strong>
           </p>
           <div className="herocta">
-            <a className="btn btn-primary" href={PLATFORM_CONTACT}>
+            <a className="btn btn-primary" href={PLATFORM_CONTACT} data-track="acelere-contact-cta">
               {CTA.contact}
             </a>
             <a className="btn btn-ghost" href="#operado">
@@ -316,7 +316,7 @@ export default function Acelere() {
               operante da sua empresa — e você acompanha cada conclusão, com a prova.
             </p>
             <div className="ctab">
-              <a className="btn btn-primary" href={PLATFORM_CONTACT}>
+              <a className="btn btn-primary" href={PLATFORM_CONTACT} data-track="acelere-contact-cta">
                 {CTA.contact}
               </a>
               <Link className="btn btn-ghost" href="/plataforma">

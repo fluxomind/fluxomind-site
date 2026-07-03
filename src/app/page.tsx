@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import DemoBuilder from '@/components/DemoBuilder';
+import BetaForm from '@/components/BetaForm';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import HexAgono360 from '@/components/HexAgono360';
@@ -14,7 +15,7 @@ import {
   PURPOSE_LINE,
   CTA,
 } from '@/lib/messages';
-import { PLATFORM_BETA, PLATFORM_CONTACT } from '@/lib/platform';
+import { PLATFORM_CONTACT } from '@/lib/platform';
 
 export const metadata: Metadata = {
   title: { absolute: 'Fluxomind — delegue a tarefa, receba a conclusão com a prova' },
@@ -256,7 +257,7 @@ export default function Home() {
             </div>
           </div>
           <div className="center" style={{ marginTop: 44 }}>
-            <a className="btn btn-primary btn-lg" href={PLATFORM_BETA}>
+            <a className="btn btn-primary btn-lg" href="#comecar" data-track="como-beta-cta">
               {CTA.beta}
             </a>
           </div>
@@ -443,7 +444,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA FINAL */}
+      {/* CTA FINAL — captura primária (BetaForm; mailto vira fallback) */}
       <section className="offer" id="comecar">
         <div className="wrap">
           <div className="kick" style={{ color: 'var(--sky)' }}>
@@ -454,12 +455,14 @@ export default function Home() {
             Conte qual problema você quer tirar das costas. No beta, montamos o primeiro app
             operante com você — e você recebe a conclusão com a prova.
           </p>
-          <div className="offerbtns">
-            <a className="btn btn-primary btn-lg" href={PLATFORM_BETA}>
-              {CTA.beta}
-            </a>
-            <a className="btn btn-ghost btn-lg" href={PLATFORM_CONTACT}>
-              {CTA.contact}
+          <BetaForm />
+          <div className="offerbtns" style={{ marginTop: 18 }}>
+            <a
+              className="btn btn-ghost btn-lg"
+              href={PLATFORM_CONTACT}
+              data-track="home-contact-cta"
+            >
+              Prefere conversar antes? {CTA.contact}
             </a>
           </div>
           <div className="scar">Beta acompanhado · sem cartão · em semanas, não meses</div>

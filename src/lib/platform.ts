@@ -15,8 +15,9 @@ export const PLATFORM_LOGIN = `${PLATFORM_BASE}/auth/login`;
 
 const CONTACT_EMAIL = 'contato@fluxomind.com';
 
-// Pedido de acesso ao beta (pós-demonstração). Sem backend de captura no site
-// ainda, o destino é um mailto; quando houver rota/form, troca-se só aqui.
+// Pedido de acesso ao beta por e-mail. Desde 2026-07-03 a captura primária é
+// o form (BetaForm → /api/beta em /#comecar); este mailto é só o fallback
+// exibido quando a entrega do form falha.
 export const PLATFORM_BETA =
   `mailto:${CONTACT_EMAIL}` +
   '?subject=' +
@@ -26,9 +27,6 @@ export const PLATFORM_BETA =
     'Olá! Vi a demonstração e quero a Fluxomind operando no meu negócio.\n\n' +
       'Empresa:\nO processo que eu quero delegar:\n',
   );
-
-// Compat: rótulo antigo da mesma captura (páginas antigas). Preferir PLATFORM_BETA.
-export const PLATFORM_WAITLIST = PLATFORM_BETA;
 
 // Contato do time (adoção em escala / avaliação técnica / segurança).
 export const PLATFORM_CONTACT =

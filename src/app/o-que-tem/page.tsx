@@ -5,7 +5,7 @@ import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import HexAgono360 from '@/components/HexAgono360';
 import { CTA, FACES, SIGNATURE, type FaceKey } from '@/lib/messages';
-import { PLATFORM_BETA, PLATFORM_CONTACT } from '@/lib/platform';
+import { PLATFORM_CONTACT } from '@/lib/platform';
 
 export const metadata: Metadata = {
   title: 'O que faz',
@@ -215,9 +215,9 @@ export default function OQueTem() {
             você. Ou fale direto com a gente.
           </p>
           <div className="offerbtns">
-            <a className="btn btn-primary btn-lg" href={PLATFORM_BETA}>
+            <Link className="btn btn-primary btn-lg" href="/#comecar" data-track="oquetem-beta-cta">
               {CTA.beta}
-            </a>
+            </Link>
             <a className="btn btn-ghost btn-lg" href={PLATFORM_CONTACT}>
               {CTA.contact}
             </a>
