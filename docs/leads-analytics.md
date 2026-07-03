@@ -61,13 +61,14 @@ Se o webhook falhar, a API devolve 502 e o form oferece o fallback por e-mail
 | `demo_ops_run` | Visitante iniciou o Ato 2 (operar) | `scenario` |
 | `demo_ops_done` | Ato 2 concluído — o momento de convicção | `scenario` |
 | `demo_beta_click` / `demo_contact_click` | CTA ao fim da demo | — |
-| `jornada_start` | Iniciou a jornada interativa (/demo) | `entry` (planilha \| prosa) |
-| `jornada_stage` | Avançou de etapa na jornada | `stage` (0-7), `label` |
+| `jornada_start` | Iniciou a jornada interativa (/demo) | `entry` (planilha \| prosa-livre), `cenario` (leads \| caixa \| atendimento) |
+| `jornada_stage` | Avançou de etapa na jornada | `stage` (0-7), `label`, `cenario` (leads \| caixa \| atendimento) |
 | `jornada_touch` | Operou o rascunho vivo (1ª interação no app) | — |
 | `jornada_keep` | "Ficar com ele" — aprovou vendo (convicção) | — |
 | `jornada_hitl_ok` | Aprovou a 1ª ação do assistente | — |
 | `jornada_publish` | Publicou o app para o time | — |
 | `jornada_done` | Jornada completa (evoluiu por conversa) | — |
+| `jornada_recomecar` | Reiniciou a demo pela topbar (escolher outro exemplo) | `cenario` (o que estava ativo) |
 | `jornada_beta_click` | CTA ao fim da jornada | — |
 | `beta_form_submitted` / `beta_form_error` | Form do beta | — |
 
