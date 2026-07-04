@@ -64,6 +64,14 @@ registra **decisões e infraestrutura externa** que o git não mostra.
   objeções reais (§9) com correção de honestidade no claim de ERP/API da
   cobrança (escopo v1: baixa manual), cards do hub com o dor_hook.
   Contrato fontes-upstream registra o mapeamento package→página.
+- **#39** — Site multi-idioma, fase 1 (ADR-0006): árvores paralelas por
+  locale (pt na raiz intocada; /en com slugs localizados; /es futuro).
+  Lei de copy EN em docs/message-house-en.md (PROPOSTA ratificada) com o
+  termo da categoria em inglês: **self-operating app** (sem dono em busca,
+  verificado). Páginas EN: /en (landing, hero espelho da home),
+  /en/self-operating-app (categoria, FAQPage + DefinedTerm) e /en/pricing;
+  chrome EN (SiteHeaderEn/SiteFooterEn), hreflang em todos os pares,
+  sitemap 18 rotas. Demo segue pt com moldura "in Portuguese".
 
 ## Infraestrutura externa (não versionada)
 
