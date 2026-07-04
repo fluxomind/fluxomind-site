@@ -9,6 +9,10 @@ export const metadata: Metadata = {
   title: 'Acelere — do piloto à produção',
   description:
     'Para a empresa que já tentou IA e viu pilotos morrerem: 79% adotaram agentes (PwC, 2025), só 11% os têm implantados (KPMG, 2025). A Fluxomind entrega o processo operado — o agente roda o dia a dia, um humano decide nos casos sensíveis, integrado ao que você já tem.',
+  alternates: {
+    canonical: '/acelere',
+    languages: { 'pt-BR': '/acelere', en: '/en/accelerate' },
+  },
 };
 
 const ICON_PROPS = {
