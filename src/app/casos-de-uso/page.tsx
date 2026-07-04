@@ -30,9 +30,10 @@ export default function CasosDeUso() {
             Qual processo você quer <span className="g">tirar das suas costas?</span>
           </h1>
           <p className="hsub">
-            Um app operante se constrói a partir do seu problema — a sua planilha entra de
-            verdade — e passa a operar o dia a dia daquele processo, escalando para uma pessoa
-            nos casos que exigem decisão. Estes são os casos que você pode{' '}
+            Um <Link href="/app-operante" style={{ textDecoration: 'underline' }}>app operante</Link>{' '}
+            se constrói a partir do seu problema — a sua planilha entra de verdade — e passa a
+            operar o dia a dia daquele processo, escalando para uma pessoa nos casos que exigem
+            decisão. Estes são os casos que você pode{' '}
             <strong>viver agora na demonstração</strong>, com dados de exemplo:
           </p>
         </div>
