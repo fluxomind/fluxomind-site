@@ -17,6 +17,7 @@ export default function SiteFooter({ tagline }: { tagline: string }) {
         </Link>
         <div className="footlinks">
           <Link href="/">Início</Link>
+          <Link href="/casos-de-uso">O que resolvo</Link>
           <Link href="/o-que-tem">O que faz</Link>
           <Link href="/seguranca">Segurança</Link>
           <Link href="/acelere">Acelere</Link>

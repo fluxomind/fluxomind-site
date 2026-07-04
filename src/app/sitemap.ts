@@ -8,6 +8,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     { url: `${BASE_URL}/`, changeFrequency: 'weekly', priority: 1 },
     { url: `${BASE_URL}/demo`, changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${BASE_URL}/casos-de-uso`, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${BASE_URL}/casos-de-uso/gestao-de-leads`, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${BASE_URL}/casos-de-uso/cobranca-e-contas-a-receber`, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${BASE_URL}/casos-de-uso/atendimento-whatsapp`, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${BASE_URL}/o-que-tem`, changeFrequency: 'monthly', priority: 0.8 },
     { url: `${BASE_URL}/plataforma`, changeFrequency: 'monthly', priority: 0.8 },
     { url: `${BASE_URL}/acelere`, changeFrequency: 'monthly', priority: 0.7 },

@@ -4,7 +4,9 @@
 // faz? confio?), depois os desvios de público (Acelere, Plataforma), a
 // camada de marca (Por quê) e Preços na ponta direita (convenção).
 export const NAV_LINKS = [
-  { href: '/#usos', label: 'O que resolvo' },
+  // "O que resolvo" apontava para /#usos (seção-teaser da home); com o hub
+  // de casos de uso ele leva às páginas completas — a seção da home segue lá.
+  { href: '/casos-de-uso', label: 'O que resolvo' },
   { href: '/o-que-tem', label: 'O que faz' },
   { href: '/seguranca', label: 'Segurança' },
   { href: '/acelere', label: 'Acelere' },
