@@ -75,6 +75,13 @@ Se o webhook falhar, a API devolve 502 e o form oferece o fallback por e-mail
 `data-track` em uso: `como-beta-cta`, `home-contact-cta`, `precos-beta-cta`,
 `oquetem-beta-cta`, `porque-beta-cta`, `beta-mailto-fallback`,
 `acelere-contact-cta`, `plataforma-contact-cta`, `seguranca-contact-cta`.
+Casos de uso: `casos-hub-<slug>` (card do hub), `casos-hub-demo-cta`,
+`casos-hub-beta-cta`, `caso-<slug>-demo-cta`, `caso-<slug>-beta-cta`
+(slugs: `gestao-de-leads` | `cobranca-e-contas-a-receber` |
+`atendimento-whatsapp`). Home §usos: `home-uso-cobranca` | `home-uso-leads` |
+`home-uso-atendimento` (→ página do caso), `home-uso-onboarding` |
+`home-uso-aprovacoes` | `home-uso-paineis` (→ hub, sem página própria ainda),
+`home-usos-todos` (link "todos os casos").
 
 **O funil que importa** (BCM: instrumentar tudo):
 `pageview(/)` → `demo_run` → `demo_built` → `demo_ops_run` → `demo_ops_done` →
@@ -88,6 +95,10 @@ Se o webhook falhar, a API devolve 502 e o form oferece o fallback por e-mail
 **Deep-link da demo**: `/demo?cenario=leads|caixa|atendimento` inicia a jornada
 automaticamente naquele cenário com `entry: link` — é como as páginas de caso
 de uso alimentam a demo, e o que separa esse tráfego no funil.
+
+**O funil dos casos de uso** (SEO/GEO → demo → lead):
+`pageview(/casos-de-uso/<slug>)` → `caso-<slug>-demo-cta` →
+`jornada_start(entry: link)` → … → `beta_form_submitted`.
 
 ## Ver os leads
 

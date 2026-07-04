@@ -208,7 +208,7 @@ export default function Home() {
             </p>
           </div>
           <div className="uc">
-            <div className="ucc">
+            <Link className="ucc" href="/casos-de-uso/cobranca-e-contas-a-receber" data-track="home-uso-cobranca">
               <div className="ui" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="12" cy="12" r="9" />
@@ -218,8 +218,8 @@ export default function Home() {
               </div>
               <h4>Cobrança e inadimplência</h4>
               <p>“Cobra os 5 maiores em atraso, tom firme” — ela compõe as mensagens, mostra o preview e dispara só com o seu OK.</p>
-            </div>
-            <div className="ucc">
+            </Link>
+            <Link className="ucc" href="/casos-de-uso/gestao-de-leads" data-track="home-uso-leads">
               <div className="ui" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M3 5h18l-7 8.2V20l-4 1.5v-8.3L3 5z" />
@@ -227,8 +227,8 @@ export default function Home() {
               </div>
               <h4>Funil de vendas</h4>
               <p>“Quais oportunidades pararam há 7 dias?” — ela cruza, te responde e agenda os follow-ups.</p>
-            </div>
-            <div className="ucc">
+            </Link>
+            <Link className="ucc" href="/casos-de-uso" data-track="home-uso-onboarding">
               <div className="ui" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="9" cy="8" r="3.3" />
@@ -238,8 +238,8 @@ export default function Home() {
               </div>
               <h4>Onboarding de clientes</h4>
               <p>“Monta o onboarding do cliente novo” — checklist, prazos e avisos, sem ninguém cair no esquecimento.</p>
-            </div>
-            <div className="ucc">
+            </Link>
+            <Link className="ucc" href="/casos-de-uso" data-track="home-uso-aprovacoes">
               <div className="ui" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M7 3.5h7l4 4V20a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4.5a1 1 0 0 1 1-1z" />
@@ -249,8 +249,8 @@ export default function Home() {
               </div>
               <h4>Aprovações e contratos</h4>
               <p>“Aprovação em 2 níveis acima de um limite” — fluxo montado, histórico guardado, nada perdido no e-mail.</p>
-            </div>
-            <div className="ucc">
+            </Link>
+            <Link className="ucc" href="/casos-de-uso/atendimento-whatsapp" data-track="home-uso-atendimento">
               <div className="ui" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M21 11.4a8.4 8.4 0 0 1-12.3 7.5L4 20l1.1-4.2A8.4 8.4 0 1 1 21 11.4z" />
@@ -258,8 +258,8 @@ export default function Home() {
               </div>
               <h4>Atendimento no WhatsApp</h4>
               <p>Atende no WhatsApp e executa de verdade — responde, registra e age sobre os seus dados, não só conversa.</p>
-            </div>
-            <div className="ucc">
+            </Link>
+            <Link className="ucc" href="/casos-de-uso" data-track="home-uso-paineis">
               <div className="ui" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M4 4v16h16" />
@@ -270,7 +270,12 @@ export default function Home() {
               </div>
               <h4>Painéis e relatórios</h4>
               <p>“Monta um painel de risco por faixa de atraso” — números ao vivo, sem ninguém montar planilha no fim do mês.</p>
-            </div>
+            </Link>
+          </div>
+          <div className="fitlink" style={{ textAlign: 'center' }}>
+            <Link href="/casos-de-uso" data-track="home-usos-todos">
+              Todos os casos de uso, com demonstração ao vivo →
+            </Link>
           </div>
         </div>
       </section>
