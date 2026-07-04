@@ -75,6 +75,55 @@ const PHASE_CARDS = [
   { badge: 'b-road', ...PHASE.vision },
 ];
 
+// JSON-LD (schema.org) da seção de FAQ — espelha as perguntas e respostas
+// renderizadas abaixo; ao mudar a copy da seção, atualize aqui também.
+const FAQ_JSONLD = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'Preciso saber programar?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Não. Você descreve o problema em português; o app se constrói e, para mudar, você conversa. Sem dev no caminho.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Meus dados ficam seguros?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Cada empresa fica isolada de verdade, os dados são criptografados e toda ação fica numa trilha à prova de adulteração. Quem exige pode trazer a própria chave. Os detalhes estão na página de Segurança.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Vou ter que largar minha planilha ou meu CRM?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Não. O app nasce integrado ao que você já tem — WhatsApp, e-mail, API, seus sistemas — e você migra no seu ritmo.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Em quanto tempo estou rodando?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Em semanas, não num projeto de meses. No beta, o time acompanha de perto: o primeiro caso a gente monta com você.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Quanto custa?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Durante o beta, ninguém pede cartão: o acesso é acompanhado e sem custo para começar. Os planos estão na página de Preços.',
+      },
+    },
+  ],
+};
+
 export default function Home() {
   return (
     <div className="page-home">
@@ -400,6 +449,10 @@ export default function Home() {
       </section>
 
       {/* FAQ */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_JSONLD) }}
+      />
       <section id="faq" style={{ paddingTop: 0 }}>
         <div className="wrap">
           <div className="center">
