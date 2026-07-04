@@ -9,7 +9,7 @@ import { CASOS_EN } from '@/lib/casos-en';
 export const metadata: Metadata = {
   title: 'Use cases — what a self-operating app resolves in your business',
   description:
-    'Fluxomind use cases by business process: lead management, collections and accounts receivable, WhatsApp support. Each case shows what runs on its own, where a human decides — and you can live the case in the interactive demo.',
+    'Fluxomind use cases by business process: lead management, collections and accounts receivable, WhatsApp support. Each case shows what runs on its own, where a human decides — and you can experience the case in the interactive demo.',
   alternates: {
     canonical: '/en/use-cases',
     languages: { 'pt-BR': '/casos-de-uso', en: '/en/use-cases' },
@@ -33,10 +33,9 @@ export default function UseCasesEn() {
           </h1>
           <p className="hsub">
             A <Link href="/en/self-operating-app" style={{ textDecoration: 'underline' }}>self-operating app</Link>{' '}
-            builds itself from your problem — your spreadsheet really comes in — and starts
-            running the day-to-day of that process, handing off to a person in the cases that
+            builds itself from your problem — your spreadsheet imports as-is — and starts running that process day to day, handing off to a person in the cases that
             require a decision. These are the cases you can{' '}
-            <strong>live right now in the demo</strong>, with sample data:
+            <strong>experience right now in the demo</strong>, with sample data:
           </p>
         </div>
       </header>
@@ -70,7 +69,7 @@ export default function UseCasesEn() {
             <b>Transparency.</b> The three cases above are the ones the interactive demo covers
             today, with sample data — the demo runs in Portuguese. {PHASE_EN.exists} Your
             process is not on the list? Tell us which one — in the beta, the first
-            self-operating app is born from <em>your</em> problem, accompanied by our team.
+            self-operating app is born from <em>your</em> problem, guided by our team.
           </div>
         </div>
       </section>

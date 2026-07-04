@@ -8,7 +8,7 @@ import { PLATFORM_CONTACT_EN } from '@/lib/platform';
 export const metadata: Metadata = {
   title: 'Pricing',
   description:
-    'During the beta, access is accompanied and card-free — you join through the beta list. Afterwards, subscription + usage with frontier AI models included: one invoice, no AI provider accounts or keys to manage.',
+    'During the beta, you get hands-on support and no card is required — you join through the beta list. Afterwards, subscription + usage with frontier AI models included: one invoice, no AI provider accounts or keys to manage.',
   alternates: {
     canonical: '/en/pricing',
     languages: { 'pt-BR': '/precos', en: '/en/pricing' },
@@ -33,7 +33,7 @@ export default function PricingEn() {
               In beta: no card. <span className="g">After: subscription + usage.</span>
             </h1>
             <p className="hsub" style={{ margin: '18px auto 0', maxWidth: '56ch' }}>
-              During the beta, access is accompanied — our team joins you, with no card and no
+              During the beta, you get hands-on support — our team works alongside you, with no card and no
               charges. Afterwards, the design is simple: a subscription plus usage, with frontier
               AI models already included in a single invoice.
             </p>
@@ -46,17 +46,17 @@ export default function PricingEn() {
           <div className="plans">
             <div className="plan">
               <div className="ptag">Today · beta</div>
-              <h3>Accompanied beta</h3>
+              <h3>Guided beta</h3>
               <div className="price">
                 <b>No card</b>
                 no cost during the beta
               </div>
               <p className="desc">
-                You don&apos;t go in alone: the team accompanies you and builds your first
-                self-operating app with you.
+                You don&apos;t go in alone: the team works with you and builds your first
+                self-operating app.
               </p>
               <ul>
-                <li><span className="ck">✓</span> Access through the beta list, accompanied by the team</li>
+                <li><span className="ck">✓</span> Access through the beta list, guided by the team</li>
                 <li><span className="ck">✓</span> No card and no charges for the duration of the beta</li>
                 <li><span className="ck">✓</span> A real self-operating app, on your process</li>
                 <li><span className="ck">✓</span> Your data isolated from day one</li>
@@ -127,8 +127,8 @@ export default function PricingEn() {
             <div className="qa">
               <h4>Do I need a card to start?</h4>
               <p>
-                No. During the beta there are no charges and no card. You request access and go
-                in accompanied — the team builds your first self-operating app with you.
+                No. During the beta there are no charges and no card. You request access and get
+                onboarded with the team — they build your first self-operating app with you.
               </p>
             </div>
             <div className="qa">
