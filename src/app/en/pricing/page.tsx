@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import SiteHeaderEn from '@/components/SiteHeaderEn';
 import SiteFooterEn from '@/components/SiteFooterEn';
 import { CTA_EN } from '@/lib/messages-en';
-import { PLATFORM_CONTACT } from '@/lib/platform';
+import { PLATFORM_CONTACT_EN } from '@/lib/platform';
 
 export const metadata: Metadata = {
   title: 'Pricing',
@@ -61,7 +61,7 @@ export default function PricingEn() {
                 <li><span className="ck">✓</span> A real self-operating app, on your process</li>
                 <li><span className="ck">✓</span> Your data isolated from day one</li>
               </ul>
-              <a className="btn btn-primary" href={PLATFORM_CONTACT} data-track="en-pricing-contact-cta">
+              <a className="btn btn-primary" href={PLATFORM_CONTACT_EN} data-track="en-pricing-contact-cta">
                 {CTA_EN.contact}
               </a>
             </div>
@@ -84,7 +84,7 @@ export default function PricingEn() {
                 <li><span className="ck">✓</span> No provider accounts, keys or limits to manage</li>
                 <li><span className="ck">✓</span> Usage visible in your account; to expand, talk to the team</li>
               </ul>
-              <a className="btn btn-primary" href={PLATFORM_CONTACT} data-track="en-pricing-contact-cta">
+              <a className="btn btn-primary" href={PLATFORM_CONTACT_EN} data-track="en-pricing-contact-cta">
                 {CTA_EN.contact}
               </a>
             </div>
@@ -106,7 +106,7 @@ export default function PricingEn() {
                 <li><span className="ck">✓</span> Guided onboarding, side by side with the team</li>
                 <li><span className="ck">✓</span> A person decides the sensitive cases</li>
               </ul>
-              <a className="btn btn-ghost-d" href={PLATFORM_CONTACT}>
+              <a className="btn btn-ghost-d" href={PLATFORM_CONTACT_EN}>
                 {CTA_EN.contact}
               </a>
             </div>
@@ -164,7 +164,7 @@ export default function PricingEn() {
               <h4>We are a larger company — how does adoption work?</h4>
               <p>
                 With the team at your side: dedicated isolation, governance and guided
-                onboarding. <a href={PLATFORM_CONTACT}>Talk to the team</a>.
+                onboarding. <a href={PLATFORM_CONTACT_EN}>Talk to the team</a>.
               </p>
             </div>
           </div>
@@ -185,7 +185,7 @@ export default function PricingEn() {
             <Link className="btn btn-primary btn-lg" href="/demo" data-track="en-pricing-demo-cta">
               {CTA_EN.demo}
             </Link>
-            <a className="btn btn-ghost btn-lg" href={PLATFORM_CONTACT}>
+            <a className="btn btn-ghost btn-lg" href={PLATFORM_CONTACT_EN}>
               {CTA_EN.contact}
             </a>
           </div>

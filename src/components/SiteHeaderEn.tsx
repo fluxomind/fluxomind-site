@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import MobileNav from '@/components/MobileNav';
 import { CTA_EN } from '@/lib/messages-en';
 
 // Chrome EN — mesmo padrão visual do SiteHeader pt (nav escura sticky do
@@ -11,6 +12,7 @@ const NAV_EN = [
   { href: '/en/what-it-does', label: 'What it does' },
   { href: '/en/security', label: 'Security' },
   { href: '/en/accelerate', label: 'Accelerate' },
+  { href: '/en/platform', label: 'Platform' },
   { href: '/en/pricing', label: 'Pricing' },
 ] as const;
 
@@ -42,6 +44,11 @@ export default function SiteHeaderEn({ ptHref }: { ptHref: string }) {
           <Link className="btn btn-primary nav-cta" href="/demo">
             {CTA_EN.demo}
           </Link>
+          <MobileNav
+            cta={{ label: CTA_EN.demo, href: '/demo' }}
+            links={[...NAV_EN, { href: ptHref, label: 'Português' }]}
+            labels={{ open: 'Open menu', close: 'Close menu', dialog: 'Navigation menu' }}
+          />
         </div>
       </div>
     </nav>

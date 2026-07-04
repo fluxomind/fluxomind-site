@@ -8,6 +8,10 @@ export const metadata: Metadata = {
   title: 'Plataforma',
   description:
     'A prova de execução: plataforma multi-tenant construída — 39 engines em 10 camadas, governada e verificável por evidência. Arquitetura, performance, qualidade, governança e segurança, com o status real de cada coisa.',
+  alternates: {
+    canonical: '/plataforma',
+    languages: { 'pt-BR': '/plataforma', en: '/en/platform' },
+  },
 };
 
 // Ícones SVG de traço dos pilares — alinhados ao resto do site (sem emoji colorido).
