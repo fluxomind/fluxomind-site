@@ -117,7 +117,7 @@ What kills me is the follow-through: I want the system to chase follow-ups on it
     comApp: {
       titulo: 'With a self-operating app: the funnel runs — and you decide',
       itens: [
-        { face: 'Domain', texto: 'Your lead and contract spreadsheet really comes in: columns become fields, every row becomes a living record.' },
+        { face: 'Domain', texto: 'Your lead and contract spreadsheet imports as-is: columns become fields, every row becomes a living record.' },
         { face: 'Process', texto: 'Follow-ups are scheduled and chased on their own; a stalled proposal raises a warning before it goes cold.' },
         { face: 'Intelligence', texto: 'Ask "which deals have stalled?" and get the answer with proposed next steps.' },
         { face: 'Trust', texto: 'Every conclusion arrives with proof of what was done — nothing critical goes out without your OK.' },
@@ -128,7 +128,7 @@ What kills me is the follow-through: I want the system to chase follow-ups on it
     faq: [
       {
         q: 'Do I need to replace my CRM or my spreadsheet?',
-        a: 'No. The app is born from your spreadsheet (it really comes in, no retyping) and coexists with what you already use — the operation integrates via e-mail, WhatsApp and API.',
+        a: 'No. The app is born from your spreadsheet (it imports as-is, no retyping) and coexists with what you already use — the operation integrates via email, WhatsApp and API.',
       },
       {
         q: 'Do I need to know how to code?',
