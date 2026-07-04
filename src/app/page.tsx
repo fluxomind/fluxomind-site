@@ -134,7 +134,7 @@ export default function Home() {
       <style>{HOME_CSS}</style>
 
       {/* NAV — CTA primário leva à demonstração (a conversão é viver a demo) */}
-      <SiteHeader cta={{ label: CTA.demo, href: '/demo' }} />
+      <SiteHeader cta={{ label: CTA.demo, href: '/demo' }} enHref="/en" />
 
       {/* HERO */}
       <header className="hero">

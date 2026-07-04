@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import MobileNav from '@/components/MobileNav';
+import LangSwitch from '@/components/LangSwitch';
 import { CTA_EN } from '@/lib/messages-en';
 
 // Chrome EN — mesmo padrão visual do SiteHeader pt (nav escura sticky do
@@ -37,11 +38,9 @@ export default function SiteHeaderEn({ ptHref }: { ptHref: string }) {
               {l.label}
             </Link>
           ))}
-          <Link href={ptHref} lang="pt-BR">
-            Português
-          </Link>
         </div>
         <div className="navright">
+          <LangSwitch href={ptHref} target="PT" />
           <Link className="btn btn-primary nav-cta" href="/demo">
             {CTA_EN.demo}
           </Link>

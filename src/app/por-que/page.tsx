@@ -20,7 +20,7 @@ export default function PorQue() {
     <div className="page-porque">
       <style>{PQ_CSS}</style>
 
-      <SiteHeader cta={{ label: CTA.demo, href: '/demo' }} />
+      <SiteHeader cta={{ label: CTA.demo, href: '/demo' }} enHref="/en/why" />
 
       {/* ABERTURA */}
       <header className="hero">
