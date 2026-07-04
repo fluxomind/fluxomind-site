@@ -206,7 +206,7 @@ export default function SecurityEn() {
             </div>
           </div>
           <p style={{ marginTop: 18 }}>
-            <Link href="/demo" style={{ color: 'var(--blue)', fontWeight: 600, fontSize: 15 }}>
+            <Link href="/en/demo" style={{ color: 'var(--blue)', fontWeight: 600, fontSize: 15 }}>
               {CTA_EN.demo} → <span style={{ color: 'var(--slate)', fontWeight: 400 }}>({CTA_EN.demoNote})</span>
             </Link>
           </p>

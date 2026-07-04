@@ -67,7 +67,7 @@ export default function UseCasesEn() {
         <div className="wrap">
           <div className="honest">
             <b>Transparency.</b> The three cases above are the ones the interactive demo covers
-            today, with sample data — the demo runs in Portuguese. {PHASE_EN.exists} Your
+            today, with sample data. {PHASE_EN.exists} Your
             process is not on the list? Tell us which one — in the beta, the first
             self-operating app is born from <em>your</em> problem, guided by our team.
           </div>
@@ -86,7 +86,7 @@ export default function UseCasesEn() {
               spreadsheet, operate the process and approve what you see. {CTA_EN.demoNote}.
             </p>
             <div className="ctab">
-              <Link className="btn btn-primary" href="/demo" data-track="en-cases-hub-demo-cta">
+              <Link className="btn btn-primary" href="/en/demo" data-track="en-cases-hub-demo-cta">
                 {CTA_EN.demo}
               </Link>
               <a className="btn btn-ghost" href={PLATFORM_CONTACT_EN} data-track="en-cases-hub-contact-cta">
