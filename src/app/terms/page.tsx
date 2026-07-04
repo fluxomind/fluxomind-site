@@ -4,6 +4,10 @@ import Link from 'next/link';
 export const metadata: Metadata = {
   title: 'Termos de Uso',
   description: 'Termos de Uso e Condições de Serviço da Fluxomind',
+  alternates: {
+    canonical: '/terms',
+    languages: { 'pt-BR': '/terms', en: '/en/terms' },
+  },
 };
 
 export default function TermsOfService() {

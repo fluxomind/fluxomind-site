@@ -7,6 +7,10 @@ import { SIGNATURE, PURPOSE_LINE, CTA } from '@/lib/messages';
 export const metadata: Metadata = {
   title: 'Por quê',
   description: `${PURPOSE_LINE} Na palavra de quem fundou.`,
+  alternates: {
+    canonical: '/por-que',
+    languages: { 'pt-BR': '/por-que', en: '/en/why' },
+  },
 };
 
 // Ensaio de propósito (message house §1.5): 3 atos, assinado pelo fundador,
