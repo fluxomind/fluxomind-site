@@ -58,6 +58,12 @@ registra **decisões e infraestrutura externa** que o git não mostra.
   FAQPage e DefinedTerm JSON-LD; copy 100% derivada de `messages.ts`;
   linkada no footer e no hub de casos; 15ª rota do sitemap. Ativo GEO
   central: a fonte a ser citada quando IAs definirem o termo.
+- **#37** — Casos enriquecidos com o material dos packages dos UCs (28
+  pacotes gerados pela skill da plataforma): bloco "O pedido, em português"
+  (§2 do package como citação → demo do cenário), FAQ regenerado das
+  objeções reais (§9) com correção de honestidade no claim de ERP/API da
+  cobrança (escopo v1: baixa manual), cards do hub com o dor_hook.
+  Contrato fontes-upstream registra o mapeamento package→página.
 
 ## Infraestrutura externa (não versionada)
 
