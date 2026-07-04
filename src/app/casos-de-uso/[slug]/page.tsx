@@ -108,6 +108,50 @@ export default async function CasoDeUsoPage({
         </div>
       </section>
 
+      {/* O PEDIDO, EM PORTUGUÊS — o prompt de autoria do UC (§2 do package),
+          exibido como citação: o visitante lê alguém como ele pedindo o app */}
+      <section style={{ paddingTop: 0 }}>
+        <div className="wrap">
+          <div className="center">
+            <div className="kick">O pedido, em português</div>
+            <h2>É assim que esse app nasce: alguém descreve o problema</h2>
+            <p className="lead" style={{ marginTop: 14 }}>
+              Um pedido real, do jeito que um dono de negócio escreve — sem menu, sem código:
+            </p>
+          </div>
+          <blockquote
+            style={{
+              maxWidth: 760,
+              margin: '28px auto 0',
+              padding: '24px 28px',
+              borderLeft: '3px solid var(--blue)',
+              border: '1px solid var(--line)',
+              borderLeftWidth: 3,
+              borderLeftColor: 'var(--blue)',
+              borderRadius: 14,
+              color: 'var(--slate)',
+              fontSize: 15.5,
+              lineHeight: 1.65,
+            }}
+          >
+            {caso.pedido.split('\n\n').map((par) => (
+              <p key={par.slice(0, 40)} style={{ marginTop: 10 }}>
+                {par}
+              </p>
+            ))}
+          </blockquote>
+          <p style={{ textAlign: 'center', marginTop: 18 }}>
+            <Link
+              href={`/demo?cenario=${caso.cenario}`}
+              data-track={`caso-${caso.slug}-pedido-demo-cta`}
+              style={{ textDecoration: 'underline' }}
+            >
+              Veja um pedido assim virar app, na sua frente →
+            </Link>
+          </p>
+        </div>
+      </section>
+
       {/* COM UM APP OPERANTE — o que roda sozinho */}
       <section id="como" style={{ paddingTop: 0 }}>
         <div className="wrap">
