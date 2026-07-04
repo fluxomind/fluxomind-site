@@ -1671,6 +1671,7 @@ export default function JourneyDemo() {
         </span>
         <div className="jd-top-nav" role="group" aria-label="Navegar pela jornada passo a passo">
           <button
+            className="jd-nav-back"
             onClick={voltarPasso}
             aria-label="Voltar um passo"
             title="Voltar um passo"
@@ -1679,7 +1680,12 @@ export default function JourneyDemo() {
             ◀
           </button>
           <span className="jd-top-nav-lbl">passo a passo</span>
-          <button onClick={avancarPasso} aria-label="Avançar um passo" title="Avançar um passo">
+          <button
+            className="jd-nav-fwd"
+            onClick={avancarPasso}
+            aria-label="Avançar um passo"
+            title="Avançar um passo"
+          >
             ▶
           </button>
         </div>
@@ -2021,9 +2027,12 @@ const JD_CSS = `
 .jd-top-crumb i { font-style:normal; opacity:.5; margin:0 2px; }
 .jd-top-crumb b { color:var(--jd-tx); font-weight:600; }
 .jd-top-nav { margin-left:auto; display:flex; align-items:center; gap:2px; border:1px solid var(--jd-line); border-radius:999px; padding:2px 4px; }
-.jd-top-nav button { border:none; background:none; color:var(--jd-tx); font-size:12px; width:26px; height:24px; border-radius:99px; cursor:pointer; }
-.jd-top-nav button:hover:not(:disabled) { background:rgba(255,255,255,.08); }
-.jd-top-nav button:disabled { color:var(--jd-mut); opacity:.4; cursor:default; }
+.jd-top-nav button { border:none; font-size:12px; width:26px; height:24px; border-radius:99px; cursor:pointer; color:#fff; }
+.jd-top-nav button.jd-nav-fwd { background:#2B66DD; }
+.jd-top-nav button.jd-nav-fwd:hover:not(:disabled) { background:#3d76ec; }
+.jd-top-nav button.jd-nav-back { background:#b83a3a; }
+.jd-top-nav button.jd-nav-back:hover:not(:disabled) { background:#cc4a4a; }
+.jd-top-nav button:disabled { background:rgba(255,255,255,.06); color:var(--jd-mut); opacity:.4; cursor:default; }
 .jd-top-nav-lbl { font-size:10.5px; color:var(--jd-mut); letter-spacing:.04em; padding:0 2px; }
 @media (max-width:560px){ .jd-top-nav-lbl{ display:none; } }
 .jd-top-restart { display:flex; align-items:center; gap:4px; border:1px solid var(--jd-line); background:none; color:var(--jd-tx); font:inherit; font-size:12px; font-weight:600; border-radius:999px; padding:5px 11px; cursor:pointer; white-space:nowrap; }
