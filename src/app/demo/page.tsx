@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import SiteFooter from '@/components/SiteFooter';
 import BetaForm from '@/components/BetaForm';
-import JourneyDemo from '@/components/JourneyDemo';
+import DemoPt from '@/components/DemoPt';
 import { SIGNATURE } from '@/lib/messages';
 
 export const metadata: Metadata = {
@@ -33,7 +33,7 @@ export default function DemoPage() {
         Experimente — crie um app conversando
       </h1>
 
-      <JourneyDemo />
+      <DemoPt />
 
       <section className="offer" id="beta">
         <div className="wrap">

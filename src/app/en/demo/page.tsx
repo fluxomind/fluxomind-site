@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import SiteFooterEn from '@/components/SiteFooterEn';
-import JourneyDemoEn from '@/components/JourneyDemoEn';
+import DemoEn from '@/components/DemoEn';
 import { CTA_EN } from '@/lib/messages-en';
 import { PLATFORM_CONTACT_EN } from '@/lib/platform';
 
@@ -15,8 +15,8 @@ export const metadata: Metadata = {
 };
 
 // Espelho EN de /demo (ADR-0006): tela cheia como um sistema, sem chrome de
-// marketing — a topbar do JourneyDemoEn faz o papel de header. O fecho usa o
-// contato EN (o BetaForm é pt; form EN é evolução futura).
+// marketing — a topbar do JourneyDemo (copy EN) faz o papel de header. O fecho
+// usa o contato EN (o BetaForm é pt; form EN é evolução futura).
 export default function DemoPageEn() {
   return (
     <div className="page-demo" lang="en">
@@ -32,7 +32,7 @@ export default function DemoPageEn() {
         Try it — create an app by talking
       </h1>
 
-      <JourneyDemoEn />
+      <DemoEn />
 
       <section className="offer" id="beta">
         <div className="wrap">
