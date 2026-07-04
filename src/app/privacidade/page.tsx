@@ -4,6 +4,10 @@ import Link from 'next/link';
 export const metadata: Metadata = {
   title: 'Política de Privacidade',
   description: 'Política de Privacidade da Fluxomind — como coletamos, usamos e protegemos seus dados pessoais (LGPD)',
+  alternates: {
+    canonical: '/privacidade',
+    languages: { 'pt-BR': '/privacidade', en: '/en/privacy' },
+  },
 };
 
 export default function PrivacyPolicy() {

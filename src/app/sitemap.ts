@@ -26,6 +26,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE_URL}/en/security`, changeFrequency: 'monthly', priority: 0.5 },
     { url: `${BASE_URL}/en/accelerate`, changeFrequency: 'monthly', priority: 0.5 },
     { url: `${BASE_URL}/en/platform`, changeFrequency: 'monthly', priority: 0.5 },
+    { url: `${BASE_URL}/en/why`, changeFrequency: 'monthly', priority: 0.5 },
+    { url: `${BASE_URL}/en/use-cases`, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${BASE_URL}/en/use-cases/collections-and-accounts-receivable`, changeFrequency: 'monthly', priority: 0.5 },
+    { url: `${BASE_URL}/en/use-cases/lead-management`, changeFrequency: 'monthly', priority: 0.5 },
+    { url: `${BASE_URL}/en/use-cases/whatsapp-support`, changeFrequency: 'monthly', priority: 0.5 },
+    { url: `${BASE_URL}/en/terms`, changeFrequency: 'yearly', priority: 0.3 },
+    { url: `${BASE_URL}/en/privacy`, changeFrequency: 'yearly', priority: 0.3 },
     { url: `${BASE_URL}/terms`, changeFrequency: 'yearly', priority: 0.3 },
     { url: `${BASE_URL}/privacidade`, changeFrequency: 'yearly', priority: 0.3 },
   ];

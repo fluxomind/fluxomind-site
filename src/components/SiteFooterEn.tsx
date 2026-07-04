@@ -14,14 +14,16 @@ export default function SiteFooterEn() {
         </div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, fontSize: 14 }}>
           <Link href="/en">English home</Link>
+          <Link href="/en/use-cases">Use cases</Link>
           <Link href="/en/self-operating-app">Self-operating app</Link>
+          <Link href="/en/why">Why</Link>
           <Link href="/en/what-it-does">What it does</Link>
           <Link href="/en/security">Security</Link>
           <Link href="/en/accelerate">Accelerate</Link>
           <Link href="/en/platform">Platform</Link>
           <Link href="/en/pricing">Pricing</Link>
-          <Link href="/terms" lang="pt-BR">Termos de Uso</Link>
-          <Link href="/privacidade" lang="pt-BR">Privacidade</Link>
+          <Link href="/en/terms">Terms</Link>
+          <Link href="/en/privacy">Privacy</Link>
           <Link href="/" lang="pt-BR">Português</Link>
         </div>
       </div>

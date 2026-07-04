@@ -9,6 +9,10 @@ export const metadata: Metadata = {
   title: 'Casos de uso — o que um app operante resolve no seu negócio',
   description:
     'Casos de uso da Fluxomind por processo de negócio: gestão de leads, cobrança e contas a receber, atendimento no WhatsApp. Cada caso mostra o que roda sozinho, onde um humano decide — e você pode viver o caso na demonstração interativa.',
+  alternates: {
+    canonical: '/casos-de-uso',
+    languages: { 'pt-BR': '/casos-de-uso', en: '/en/use-cases' },
+  },
 };
 
 // Hub dos casos de uso. Formato GEO: abertura definicional, cards por dor,

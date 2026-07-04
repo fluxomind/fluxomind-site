@@ -87,7 +87,9 @@ português": `caso-<slug>-pedido-demo-cta`. Páginas EN: `en-home-demo-cta`,
 `en-home-contact-cta`, `en-soa-demo-cta`, `en-soa-contact-cta`,
 `en-pricing-demo-cta`, `en-pricing-contact-cta`, `en-wid-demo-cta`,
 `en-wid-contact-cta`, `en-security-contact-cta`, `en-accelerate-contact-cta`,
-`en-platform-contact-cta`.
+`en-platform-contact-cta`, `en-why-{demo,contact}-cta`,
+`en-cases-hub-<slug|demo-cta|contact-cta>`,
+`en-case-<slug>-{demo,request-demo,contact}-cta`.
 
 **O funil que importa** (BCM: instrumentar tudo):
 `pageview(/)` → `demo_run` → `demo_built` → `demo_ops_run` → `demo_ops_done` →

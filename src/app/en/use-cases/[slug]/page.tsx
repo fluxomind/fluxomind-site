@@ -1,19 +1,18 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import SiteHeader from '@/components/SiteHeader';
-import SiteFooter from '@/components/SiteFooter';
-import { SIGNATURE, PHASE, CTA } from '@/lib/messages';
-import { CASOS, getCaso } from '@/lib/casos';
-import { CASO_EN_SLUG_BY_PT } from '@/lib/casos-en';
+import SiteHeaderEn from '@/components/SiteHeaderEn';
+import SiteFooterEn from '@/components/SiteFooterEn';
+import { SIGNATURE_EN, PHASE_EN, CTA_EN } from '@/lib/messages-en';
+import { PLATFORM_CONTACT_EN } from '@/lib/platform';
+import { CASOS_EN, getCasoEn } from '@/lib/casos-en';
 
-// Página de caso de uso — formato GEO: h1 como pergunta, primeira frase
-// definicional, seções autocontidas, FAQ visível espelhado em FAQPage
-// JSON-LD, data de atualização visível. O CTA primário leva à demo já no
-// cenário do caso (/demo?cenario=X — deep-link do PR #31).
+// Página de caso EN — espelho de /casos-de-uso/[slug] (formato GEO:
+// h1-pergunta, definição na 1ª frase, "The request, in plain words",
+// FAQ + FAQPage JSON-LD). CTA da demo leva ao cenário pt com moldura.
 
 export function generateStaticParams() {
-  return CASOS.map((c) => ({ slug: c.slug }));
+  return CASOS_EN.map((c) => ({ slug: c.slug }));
 }
 
 export async function generateMetadata({
@@ -21,28 +20,27 @@ export async function generateMetadata({
 }: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const caso = getCaso((await params).slug);
+  const caso = getCasoEn((await params).slug);
   if (!caso) return {};
-  const enSlug = CASO_EN_SLUG_BY_PT[caso.slug];
   return {
     title: caso.titleSeO,
     description: caso.descriptionSeO,
     alternates: {
-      canonical: `/casos-de-uso/${caso.slug}`,
+      canonical: `/en/use-cases/${caso.slug}`,
       languages: {
-        'pt-BR': `/casos-de-uso/${caso.slug}`,
-        ...(enSlug ? { en: `/en/use-cases/${enSlug}` } : {}),
+        'pt-BR': `/casos-de-uso/${caso.ptSlug}`,
+        en: `/en/use-cases/${caso.slug}`,
       },
     },
   };
 }
 
-export default async function CasoDeUsoPage({
+export default async function UseCasePageEn({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  const caso = getCaso((await params).slug);
+  const caso = getCasoEn((await params).slug);
   if (!caso) notFound();
 
   const faqJsonLd = {
@@ -56,32 +54,28 @@ export default async function CasoDeUsoPage({
   };
 
   return (
-    <div className="page-ent">
+    <div className="page-ent" lang="en">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
-      <SiteHeader cta={{ label: CTA.demo, href: `/demo?cenario=${caso.cenario}` }} />
+      <SiteHeaderEn ptHref={`/casos-de-uso/${caso.ptSlug}`} />
 
       <header className="hero">
         <div className="wrap">
           <div>
-            <span className="pill">
-              Caso de uso · {caso.area}
-            </span>
+            <span className="pill">Use case · {caso.area}</span>
           </div>
-          <div className="kick" style={{ marginTop: 18 }}>{SIGNATURE}</div>
+          <div className="kick" style={{ marginTop: 18 }}>{SIGNATURE_EN}</div>
           <h1 style={{ maxWidth: '26ch' }}>{caso.h1}</h1>
-          {/* 1ª menção do termo linka a definição canônica (/app-operante) —
-              acoplado ao prefixo padrão das definições em casos.ts */}
           <p className="hsub">
-            {caso.definicao.startsWith('Um app operante') ? (
+            {caso.definicao.startsWith('A self-operating') ? (
               <>
-                Um{' '}
-                <Link href="/app-operante" style={{ textDecoration: 'underline' }}>
-                  app operante
+                A{' '}
+                <Link href="/en/self-operating-app" style={{ textDecoration: 'underline' }}>
+                  self-operating
                 </Link>
-                {caso.definicao.slice('Um app operante'.length)}
+                {caso.definicao.slice('A self-operating'.length)}
               </>
             ) : (
               caso.definicao
@@ -91,22 +85,22 @@ export default async function CasoDeUsoPage({
             <Link
               className="btn btn-primary"
               href={`/demo?cenario=${caso.cenario}`}
-              data-track={`caso-${caso.slug}-demo-cta`}
+              data-track={`en-case-${caso.slug}-demo-cta`}
             >
-              Veja este caso ao vivo — {CTA.demo.toLowerCase()}
+              See this case live — {CTA_EN.demo.toLowerCase()}
             </Link>
-            <a className="btn btn-ghost" href="#como">
-              Como funciona
+            <a className="btn btn-ghost" href="#how">
+              How it works
             </a>
           </div>
+          <p style={{ marginTop: 10, fontSize: 13.5, color: 'var(--slate)' }}>{CTA_EN.demoNote}</p>
         </div>
       </header>
 
-      {/* HOJE — a dor, nomeada */}
-      <section id="hoje" style={{ paddingTop: 0 }}>
+      <section id="today" style={{ paddingTop: 0 }}>
         <div className="wrap">
           <div className="center">
-            <div className="kick">O problema</div>
+            <div className="kick">The problem</div>
             <h2>{caso.hoje.titulo}</h2>
           </div>
           <div className="faq" style={{ marginTop: 26 }}>
@@ -120,15 +114,14 @@ export default async function CasoDeUsoPage({
         </div>
       </section>
 
-      {/* O PEDIDO, EM PORTUGUÊS — o prompt de autoria do UC (§2 do package),
-          exibido como citação: o visitante lê alguém como ele pedindo o app */}
+      {/* THE REQUEST, IN PLAIN WORDS */}
       <section style={{ paddingTop: 0 }}>
         <div className="wrap">
           <div className="center">
-            <div className="kick">O pedido, em português</div>
-            <h2>É assim que esse app nasce: alguém descreve o problema</h2>
+            <div className="kick">The request, in plain words</div>
+            <h2>This is how the app is born: someone describes the problem</h2>
             <p className="lead" style={{ marginTop: 14 }}>
-              Um pedido real, do jeito que um dono de negócio escreve — sem menu, sem código:
+              A real request, the way a business owner writes it — no menus, no code:
             </p>
           </div>
           <blockquote
@@ -136,7 +129,6 @@ export default async function CasoDeUsoPage({
               maxWidth: 760,
               margin: '28px auto 0',
               padding: '24px 28px',
-              borderLeft: '3px solid var(--blue)',
               border: '1px solid var(--line)',
               borderLeftWidth: 3,
               borderLeftColor: 'var(--blue)',
@@ -155,20 +147,19 @@ export default async function CasoDeUsoPage({
           <p style={{ textAlign: 'center', marginTop: 18 }}>
             <Link
               href={`/demo?cenario=${caso.cenario}`}
-              data-track={`caso-${caso.slug}-pedido-demo-cta`}
+              data-track={`en-case-${caso.slug}-request-demo-cta`}
               style={{ textDecoration: 'underline' }}
             >
-              Veja um pedido assim virar app, na sua frente →
+              Watch a request like this become an app, in front of you →
             </Link>
           </p>
         </div>
       </section>
 
-      {/* COM UM APP OPERANTE — o que roda sozinho */}
-      <section id="como" style={{ paddingTop: 0 }}>
+      <section id="how" style={{ paddingTop: 0 }}>
         <div className="wrap">
           <div className="center">
-            <div className="kick">Com um app operante</div>
+            <div className="kick">With a self-operating app</div>
             <h2>{caso.comApp.titulo}</h2>
           </div>
           <div className="ways">
@@ -182,15 +173,14 @@ export default async function CasoDeUsoPage({
         </div>
       </section>
 
-      {/* ONDE UM HUMANO ASSUME */}
       <section style={{ paddingTop: 0 }}>
         <div className="wrap">
           <div className="fit">
             <div className="kick" style={{ color: 'var(--sky)' }}>
-              Onde um humano assume
+              Where a human takes over
             </div>
             <h2 style={{ color: '#fff', maxWidth: '26ch' }}>
-              O app opera o dia a dia. Nos casos sensíveis, uma pessoa decide.
+              The app runs the day-to-day. In the sensitive cases, a person decides.
             </h2>
             <p style={{ marginTop: 18, fontSize: 17, color: '#A9AEB8', maxWidth: '62ch', lineHeight: 1.6 }}>
               {caso.humano}
@@ -199,12 +189,11 @@ export default async function CasoDeUsoPage({
         </div>
       </section>
 
-      {/* FAQ — visível + JSON-LD */}
       <section id="faq" style={{ paddingTop: 0 }}>
         <div className="wrap">
           <div className="center">
-            <div className="kick">Dúvidas comuns</div>
-            <h2>O que costumam perguntar sobre este caso</h2>
+            <div className="kick">Common questions</div>
+            <h2>What people ask about this case</h2>
           </div>
           <div className="faq">
             {caso.faq.map((f) => (
@@ -217,55 +206,52 @@ export default async function CasoDeUsoPage({
         </div>
       </section>
 
-      {/* TRANSPARÊNCIA DE FASE */}
       <section style={{ paddingTop: 0 }}>
         <div className="wrap">
           <div className="honest">
-            <b>Transparência.</b> A demonstração deste caso usa dados de exemplo — o app real
-            nasce dentro da plataforma, com os seus dados. {PHASE.exists.title}:{' '}
-            {PHASE.exists.desc} Estamos em beta: a adoção acontece acompanhada de perto pelo
-            nosso time, em semanas — não num projeto de meses.
+            <b>Transparency.</b> The demo of this case uses sample data and runs in Portuguese —
+            the real app is born inside the platform, with your data. {PHASE_EN.exists} We are
+            in beta: adoption happens closely accompanied by our team, in weeks — not a
+            months-long project.
           </div>
           <p style={{ textAlign: 'center', marginTop: 14, fontSize: 13.5, color: 'var(--slate)' }}>
-            Atualizado em {caso.atualizado} ·{' '}
-            <Link href="/casos-de-uso">todos os casos de uso</Link>
+            Updated {caso.atualizado} · <Link href="/en/use-cases">all use cases</Link>
           </p>
         </div>
       </section>
 
-      {/* CTA FINAL */}
       <section style={{ paddingTop: 0 }}>
         <div className="wrap">
           <div className="cta-card">
             <div className="kick" style={{ color: 'var(--sky)' }}>
-              Viva este caso agora
+              Live this case now
             </div>
-            <h2>Veja o app nascer da planilha — e opere você</h2>
+            <h2>Watch the app be born from a spreadsheet — and operate it yourself</h2>
             <p className="lead">
-              A demonstração interativa abre já neste caso: o app se constrói na sua frente,
-              você opera o processo e aprova o que vê.
+              The interactive demo opens right on this case: the app builds itself in front of
+              you, you operate the process and approve what you see. {CTA_EN.demoNote}.
             </p>
             <div className="ctab">
               <Link
                 className="btn btn-primary"
                 href={`/demo?cenario=${caso.cenario}`}
-                data-track={`caso-${caso.slug}-demo-cta`}
+                data-track={`en-case-${caso.slug}-demo-cta`}
               >
-                {CTA.demo}
+                {CTA_EN.demo}
               </Link>
-              <Link
+              <a
                 className="btn btn-ghost"
-                href="/#comecar"
-                data-track={`caso-${caso.slug}-beta-cta`}
+                href={PLATFORM_CONTACT_EN}
+                data-track={`en-case-${caso.slug}-contact-cta`}
               >
-                {CTA.beta}
-              </Link>
+                {CTA_EN.contact}
+              </a>
             </div>
           </div>
         </div>
       </section>
 
-      <SiteFooter tagline={SIGNATURE} />
+      <SiteFooterEn />
     </div>
   );
 }
