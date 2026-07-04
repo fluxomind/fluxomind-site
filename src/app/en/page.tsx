@@ -26,35 +26,49 @@ export const metadata: Metadata = {
 
 // Landing EN — escopo credibilidade (message-house-en.md, PROPOSTA):
 // condensa a home pt; a demo permanece em português com moldura honesta.
+// Assinatura fatiada como na home pt (head branco, tail azul).
+const SIG_BREAK = SIGNATURE_EN.indexOf('. ') + 1;
+const SIG_HEAD = SIGNATURE_EN.slice(0, SIG_BREAK);
+const SIG_TAIL = SIGNATURE_EN.slice(SIG_BREAK + 1);
+
 export default function HomeEn() {
   return (
     <div className="page-ent" lang="en">
       <SiteHeaderEn ptHref="/" />
 
+      {/* HERO — espelho do hero da home pt: centrado, assinatura como h1
+          (lei §1: assinatura = h1 canônico) */}
       <header className="hero">
-        <div className="wrap">
-          <div>
-            <span className="pill">Fluxomind · self-operating apps</span>
-          </div>
-          <div className="kick" style={{ marginTop: 18 }}>{SIGNATURE_EN}</div>
-          <h1 style={{ maxWidth: '24ch' }}>
-            An app that solves your problem — <span className="g">and runs itself.</span>
+        <div className="wrap" style={{ textAlign: 'center', paddingBottom: 48 }}>
+          <span className="pill">
+            <span className="lz" /> Platform in beta · self-operating apps
+          </span>
+          <h1 style={{ maxWidth: '24ch', margin: '0 auto' }}>
+            {SIG_HEAD} <span className="g">{SIG_TAIL}</span>
           </h1>
-          <p className="hsub">
+          <p className="hsub" style={{ maxWidth: '62ch', margin: '18px auto 0' }}>
             {PROMISE_EN} You describe the problem in plain language; the app builds itself —
             and to change it, you just talk.
           </p>
-          <div className="herocta">
-            <Link className="btn btn-primary" href="/demo" data-track="en-home-demo-cta">
+          <div className="herocta" style={{ justifyContent: 'center' }}>
+            <Link className="btn btn-primary btn-lg" href="/demo" data-track="en-home-demo-cta">
               {CTA_EN.demo}
             </Link>
-            <a className="btn btn-ghost" href={PLATFORM_CONTACT} data-track="en-home-contact-cta">
+            <a className="btn btn-ghost btn-lg" href={PLATFORM_CONTACT} data-track="en-home-contact-cta">
               {CTA_EN.contact}
             </a>
           </div>
-          <p style={{ marginTop: 10, fontSize: 13.5, color: 'var(--slate)' }}>
-            {CTA_EN.demoNote}
-          </p>
+          <div className="reassure" style={{ justifyContent: 'center' }}>
+            <span>
+              <b>✓</b> Watch without signing up
+            </span>
+            <span>
+              <b>✓</b> Proof on screen, every step
+            </span>
+            <span>
+              <b>✓</b> {CTA_EN.demoNote}
+            </span>
+          </div>
         </div>
       </header>
 
