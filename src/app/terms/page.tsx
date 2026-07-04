@@ -160,9 +160,12 @@ export default function TermsOfService() {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-gray-900 mb-4">8. Privacidade e Proteção de Dados</h2>
             <p className="text-gray-600 mb-4">
-              O tratamento de seus dados pessoais é regido pela nossa Política de Privacidade.
-              Ao utilizar os Serviços, você concorda com a coleta e uso de dados conforme descrito
-              na Política de Privacidade.
+              O tratamento de seus dados pessoais é regido pela nossa{' '}
+              <Link href="/privacidade" className="text-blue-600 hover:underline">
+                Política de Privacidade
+              </Link>
+              . Ao utilizar os Serviços, você concorda com a coleta e uso de dados conforme
+              descrito na Política de Privacidade.
             </p>
             <p className="text-gray-600">
               A Fluxomind está comprometida com a conformidade com a Lei Geral de Proteção de Dados (LGPD)

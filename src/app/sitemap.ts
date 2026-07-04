@@ -15,5 +15,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE_URL}/precos`, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${BASE_URL}/seguranca`, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${BASE_URL}/terms`, changeFrequency: 'yearly', priority: 0.3 },
+    { url: `${BASE_URL}/privacidade`, changeFrequency: 'yearly', priority: 0.3 },
   ];
 }
