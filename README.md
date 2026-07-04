@@ -1,48 +1,67 @@
-# Fluxomind - Plataforma IA-First
+# Fluxomind — site institucional
 
-Este repositório contém o código-fonte da homepage institucional da **Fluxomind**, uma startup brasileira em fase de incubação que está desenvolvendo uma plataforma IA-First, no-code e baseada em metadados para democratizar o uso da inteligência artificial em empresas de qualquer porte.
+Código-fonte do site **www.fluxomind.com** — a apresentação pública da
+Fluxomind, startup brasileira que está desenvolvendo uma plataforma IA-First,
+no-code e baseada em metadados para democratizar o uso da inteligência
+artificial em empresas de qualquer porte.
 
-## 📦 Stack Tecnológica
+## 📦 Stack
 
-- [Next.js 15 (App Router)](https://nextjs.org)
-- [TypeScript](https://www.typescriptlang.org/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [Vercel](https://vercel.com) (deploy automático via GitHub)
-- [Cloudflare](https://cloudflare.com) (gerenciamento de domínio e DNS)
-- [GitHub](https://github.com/fluxomind/fluxomind-site) (controle de versão)
+- [Next.js 15 (App Router)](https://nextjs.org) + TypeScript + [Tailwind CSS](https://tailwindcss.com/)
+- [Vercel](https://vercel.com) — hosting e deploy automático via GitHub
+- [Cloudflare](https://cloudflare.com) — domínio e DNS
 
-## 🚀 Desenvolvimento Local
+O porquê das escolhas está nos [ADRs](docs/adr/README.md); a visão de
+componentes em [docs/arquitetura.md](docs/arquitetura.md).
+
+## 🚀 Desenvolvimento local
 
 ```bash
 npm install
-npm run dev
+npm run dev    # http://localhost:3000
+npm run lint
+npm run build
 ```
 
-Abra [http://localhost:3000](http://localhost:3000) no navegador para visualizar o projeto localmente.
+### Estrutura
 
-### Estrutura básica
+- `src/app/` → páginas (App Router): home, `/demo`, `/plataforma`, `/precos`, `/terms`, `/privacidade`…
+- `src/app/api/` → captura de leads (`/api/beta`) e analytics first-party (`/api/event`)
+- `src/components/` → componentes (demo interativa, form do beta, header/footer…)
+- `public/` → imagens e logos
 
-- `app/page.tsx` → Página principal
-- `public/` → Contém imagens SVG e PNG usadas nas seções (ex: hero, about, tech...)
-- `src/components/` → Componentes visuais (opcional/futuro)
-- `vercel.json` → Ignored Build Step configurado para só realizar deploy automático na branch `main`
+## 🔒 Fluxo de mudança e deploy
 
-## 🔒 Deploy controlado via branch
+Toda mudança entra por **feature branch + PR** — nunca commit direto na `main`.
+Merge na `main` = deploy automático em produção na Vercel. Fluxo completo em
+[CONTRIBUTING.md](CONTRIBUTING.md).
 
-- `main`: Branch de produção — qualquer push gera deploy automático na Vercel
-- `dev`: Branch de desenvolvimento — deploy automático **desativado** via Ignored Build Step personalizado
+## 📚 Documentação
+
+| Doc | O que cobre |
+|---|---|
+| [CONTRIBUTING.md](CONTRIBUTING.md) | Fluxo de branch/PR, checks e o que atualizar junto com o código |
+| [SECURITY.md](SECURITY.md) | Como reportar vulnerabilidades |
+| [docs/arquitetura.md](docs/arquitetura.md) | Diagrama e componentes do site |
+| [docs/adr/](docs/adr/README.md) | Decisões de arquitetura (por quê) |
+| [docs/runbooks.md](docs/runbooks.md) | Operação: deploy, incidentes, procedimentos |
+| [docs/historico-implantacao.md](docs/historico-implantacao.md) | Infra externa e histórico de decisões de implantação |
+| [docs/leads-analytics.md](docs/leads-analytics.md) | Captura de leads, taxonomia de eventos, envs |
+| [docs/message-house-cliente-final.md](docs/message-house-cliente-final.md) | Lei de copy do site |
 
 ## 🌐 Links úteis
 
-- [Homepage publicada](https://www.fluxomind.com)
+- [Site publicado](https://www.fluxomind.com)
 - [Vercel Dashboard](https://vercel.com/dashboard)
 - [GitHub Repo](https://github.com/fluxomind/fluxomind-site)
 - [Cloudflare Dashboard](https://dash.cloudflare.com)
 
 ## ✨ Missão da Fluxomind
 
-Democratizar a construção de software com IA para empresas de qualquer tamanho, utilizando tecnologia no-code, metadados e uma arquitetura escalável, segura e eficiente.
+Democratizar a construção de software com IA para empresas de qualquer tamanho,
+utilizando tecnologia no-code, metadados e uma arquitetura escalável, segura e
+eficiente.
 
-## 📄 License
+## 📄 Licença
 
 Este projeto está sob domínio da Fluxomind. Todos os direitos reservados ©.

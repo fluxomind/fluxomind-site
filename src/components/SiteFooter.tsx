@@ -24,6 +24,7 @@ export default function SiteFooter({ tagline }: { tagline: string }) {
           <Link href="/por-que">Por quê</Link>
           <Link href="/precos">Preços</Link>
           <Link href="/terms">Termos de Uso</Link>
+          <Link href="/privacidade">Privacidade</Link>
         </div>
         <div className="footmeta">
           <div>{tagline}</div>

@@ -133,8 +133,9 @@ export default function BetaForm() {
       </button>
 
       <p className="bf-legal">
-        Ao enviar, você concorda com os <a href="/terms">Termos de Uso</a> e em ser
-        contatado sobre o beta. Nada de spam.
+        Ao enviar, você concorda com os <a href="/terms">Termos de Uso</a> e a{' '}
+        <a href="/privacidade">Política de Privacidade</a>, e em ser contatado sobre o
+        beta. Nada de spam.
       </p>
     </form>
   );

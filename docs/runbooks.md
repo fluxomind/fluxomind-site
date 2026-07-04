@@ -102,7 +102,29 @@ O mesmo procedimento vale para eventos (`EVENTS_WEBHOOK_URL`, tag
 3. Deploy quebrado → rollback (runbook 6) e corrija na branch com calma.
 4. Vercel fora do ar (raro): status.vercel.com; só aguardar.
 
-## 9. Editar a demo (/demo)
+## 9. Incidente: dados pessoais expostos (LGPD)
+
+Vale para qualquer exposição de dados de leads (planilha compartilhada errado,
+webhook vazado, `ADMIN_TOKEN` comprometido, acesso indevido ao Drive).
+
+1. **Contenha**: revogue o acesso (permissão da planilha / rotacione
+   `LEAD_WEBHOOK_URL` no Apps Script / troque `ADMIN_TOKEN` — runbooks 5 e 6).
+2. **Avalie o risco**: quais titulares, quais dados (nome, e-mail, empresa,
+   processo), houve acesso real ou só exposição potencial?
+3. **Prazos** (Res. CD/ANPD nº 15/2024; dobrados para agente de pequeno porte,
+   Res. CD/ANPD nº 2/2022): incidente com **risco ou dano relevante** aos
+   titulares → comunicar **ANPD e titulares em até 6 dias úteis** do
+   conhecimento. Comunicação à ANPD pelo formulário no site da ANPD
+   (Comunicado de Incidente de Segurança — CIS); aos titulares, pelo e-mail do
+   lead.
+4. **Registre sempre**: todo incidente — comunicado ou não — fica registrado
+   por **no mínimo 5 anos** (data, o que aconteceu, dados afetados, avaliação
+   de risco, decisão de comunicar ou não e por quê). Registro no Drive
+   (*Marketing and Customer*), fora do repo.
+5. Dúvidas de titulares chegam por **privacidade@fluxomind.com** — responder
+   acesso/confirmação em até 15 dias (art. 19, LGPD).
+
+## 10. Editar a demo (/demo)
 
 Tudo vive em `src/components/JourneyDemo.tsx` (arquivo grande — leia por
 seções). Anatomia:
@@ -118,7 +140,7 @@ seções). Anatomia:
 - Teste manual mínimo após mexer: os 3 cenários ponta a ponta via ▶, um ◀,
   um ↺ Recomeçar, e mobile 390 px sem overflow horizontal.
 
-## 10. SEO
+## 11. SEO
 
 - Rota nova no site → adicionar em `src/app/sitemap.ts` (e conferir se não é
   privada; privadas ficam fora e bloqueadas no `robots.ts`).
