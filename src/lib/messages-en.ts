@@ -47,6 +47,6 @@ export const PHASE_EN = {
 
 export const CTA_EN = {
   demo: 'Create an app by talking',
-  demoNote: 'Live interactive demo (in Portuguese)',
+  demoNote: 'Live interactive demo — no sign-up needed',
   contact: 'Talk to the team',
 } as const;

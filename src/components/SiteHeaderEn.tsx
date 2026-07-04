@@ -41,7 +41,7 @@ export default function SiteHeaderEn({ ptHref }: { ptHref: string }) {
         </div>
         <div className="navright">
           <LangSwitch href={ptHref} target="PT" />
-          <Link className="btn btn-primary nav-cta" href="/demo">
+          <Link className="btn btn-primary nav-cta" href="/en/demo">
             {CTA_EN.demo}
           </Link>
           <MobileNav

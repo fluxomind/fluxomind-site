@@ -92,7 +92,7 @@ export default function SelfOperatingApp() {
           <h1 style={{ maxWidth: '22ch' }}>What is a self-operating app?</h1>
           <p className="hsub">{DEFINITION_EN}</p>
           <div className="herocta">
-            <Link className="btn btn-primary" href="/demo" data-track="en-soa-demo-cta">
+            <Link className="btn btn-primary" href="/en/demo" data-track="en-soa-demo-cta">
               {CTA_EN.demo}
             </Link>
             <a className="btn btn-ghost" href={PLATFORM_CONTACT_EN} data-track="en-soa-contact-cta">

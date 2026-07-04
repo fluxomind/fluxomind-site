@@ -51,7 +51,7 @@ export default function HomeEn() {
             and to change it, you just talk.
           </p>
           <div className="herocta" style={{ justifyContent: 'center' }}>
-            <Link className="btn btn-primary btn-lg" href="/demo" data-track="en-home-demo-cta">
+            <Link className="btn btn-primary btn-lg" href="/en/demo" data-track="en-home-demo-cta">
               {CTA_EN.demo}
             </Link>
             <a className="btn btn-ghost btn-lg" href={PLATFORM_CONTACT_EN} data-track="en-home-contact-cta">
@@ -164,7 +164,7 @@ export default function HomeEn() {
               {CTA_EN.demoNote}.
             </p>
             <div className="ctab">
-              <Link className="btn btn-primary" href="/demo" data-track="en-home-demo-cta">
+              <Link className="btn btn-primary" href="/en/demo" data-track="en-home-demo-cta">
                 {CTA_EN.demo}
               </Link>
               <a className="btn btn-ghost" href={PLATFORM_CONTACT_EN} data-track="en-home-contact-cta">

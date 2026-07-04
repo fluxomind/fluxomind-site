@@ -102,7 +102,9 @@ português": `caso-<slug>-pedido-demo-cta`. Páginas EN: `en-home-demo-cta`,
 
 **Deep-link da demo**: `/demo?cenario=leads|caixa|atendimento` inicia a jornada
 automaticamente naquele cenário com `entry: link` — é como as páginas de caso
-de uso alimentam a demo, e o que separa esse tráfego no funil.
+de uso alimentam a demo, e o que separa esse tráfego no funil. A demo EN
+(`/en/demo`, mesmo deep-link) usa os **mesmos nomes de evento**; o idioma se
+distingue pelo `path` do payload.
 
 **O funil dos casos de uso** (SEO/GEO → demo → lead):
 `pageview(/casos-de-uso/<slug>)` → `caso-<slug>-demo-cta` →

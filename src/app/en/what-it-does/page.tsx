@@ -107,7 +107,7 @@ export default function WhatItDoesEn() {
               whole app — which doesn&apos;t sit still: <strong>it starts running the day-to-day</strong>.
             </p>
             <div className="herocta" style={{ justifyContent: 'center', marginTop: 26 }}>
-              <Link className="btn btn-primary" href="/demo" data-track="en-wid-demo-cta">
+              <Link className="btn btn-primary" href="/en/demo" data-track="en-wid-demo-cta">
                 {CTA_EN.demo}
               </Link>
               <a className="btn btn-ghost" href="#questions">
@@ -209,7 +209,7 @@ export default function WhatItDoesEn() {
             the team.
           </p>
           <div className="offerbtns">
-            <Link className="btn btn-primary btn-lg" href="/demo" data-track="en-wid-demo-cta">
+            <Link className="btn btn-primary btn-lg" href="/en/demo" data-track="en-wid-demo-cta">
               {CTA_EN.demo}
             </Link>
             <a className="btn btn-ghost btn-lg" href={PLATFORM_CONTACT_EN} data-track="en-wid-contact-cta">

@@ -8,6 +8,10 @@ export const metadata: Metadata = {
   title: 'Experimente — crie um app conversando',
   description:
     'Crie um app na sua frente: entregue uma planilha (ou descreva o problema), veja o rascunho vivo nascer, opere o pipeline e aprove o que vê. Demonstração interativa da jornada Fluxomind.',
+  alternates: {
+    canonical: '/demo',
+    languages: { 'pt-BR': '/demo', en: '/en/demo' },
+  },
 };
 
 // A demo assume a tela inteira como um sistema (decisão do fundador

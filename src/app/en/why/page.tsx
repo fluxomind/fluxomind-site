@@ -136,7 +136,7 @@ export default function WhyEn() {
             {PURPOSE_LINE_EN}
           </p>
           <div className="offerbtns">
-            <Link className="btn btn-primary btn-lg" href="/demo" data-track="en-why-demo-cta">
+            <Link className="btn btn-primary btn-lg" href="/en/demo" data-track="en-why-demo-cta">
               {CTA_EN.demo}
             </Link>
             <a className="btn btn-ghost btn-lg" href={PLATFORM_CONTACT_EN} data-track="en-why-contact-cta">

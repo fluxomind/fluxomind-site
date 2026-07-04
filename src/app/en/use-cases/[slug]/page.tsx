@@ -84,7 +84,7 @@ export default async function UseCasePageEn({
           <div className="herocta">
             <Link
               className="btn btn-primary"
-              href={`/demo?cenario=${caso.cenario}`}
+              href={`/en/demo?cenario=${caso.cenario}`}
               data-track={`en-case-${caso.slug}-demo-cta`}
             >
               See this case live — {CTA_EN.demo.toLowerCase()}
@@ -146,7 +146,7 @@ export default async function UseCasePageEn({
           </blockquote>
           <p style={{ textAlign: 'center', marginTop: 18 }}>
             <Link
-              href={`/demo?cenario=${caso.cenario}`}
+              href={`/en/demo?cenario=${caso.cenario}`}
               data-track={`en-case-${caso.slug}-request-demo-cta`}
               style={{ textDecoration: 'underline' }}
             >
@@ -209,7 +209,7 @@ export default async function UseCasePageEn({
       <section style={{ paddingTop: 0 }}>
         <div className="wrap">
           <div className="honest">
-            <b>Transparency.</b> The demo of this case uses sample data and runs in Portuguese —
+            <b>Transparency.</b> The demo of this case uses sample data —
             the real app is born inside the platform, with your data. {PHASE_EN.exists} We are
             in beta: we guide adoption closely, in weeks — not a
             months-long project.
@@ -234,7 +234,7 @@ export default async function UseCasePageEn({
             <div className="ctab">
               <Link
                 className="btn btn-primary"
-                href={`/demo?cenario=${caso.cenario}`}
+                href={`/en/demo?cenario=${caso.cenario}`}
                 data-track={`en-case-${caso.slug}-demo-cta`}
               >
                 {CTA_EN.demo}
