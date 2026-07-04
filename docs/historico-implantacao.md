@@ -80,6 +80,13 @@ registra **decisões e infraestrutura externa** que o git não mostra.
   Sitemap: 29 rotas públicas (15 pt + 14 en), hreflang em todos os pares.
   Única superfície só-pt restante: a demo interativa (decisão de escopo
   pendente — 1 cenário EN vs. todos).
+- **#46-#49** — Inglês nativo e demo bilíngue: revisão de copy EN por 2
+  revisores independentes (~60 correções de calque; 1 crítica de significado
+  na carta do fundador — "calls you on"); demo interativa em inglês
+  (/en/demo, #48) e unificação i18n (#49): JourneyDemo único + dicionários
+  demo-copy-pt/en (exceção registrada no ADR-0006 — componente interativo
+  usa dicionário por locale; ES na demo = +1 dicionário). Site 100%%
+  bilíngue: 30 rotas públicas, zero superfície só-pt.
 
 ## Infraestrutura externa (não versionada)
 
