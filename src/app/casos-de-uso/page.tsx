@@ -55,7 +55,9 @@ export default function CasosDeUso() {
                 </div>
                 <div className="tagm" style={{ marginTop: 10 }}>{c.area}</div>
                 <h3 style={{ marginTop: 8 }}>{c.h1}</h3>
-                <p>{c.hoje.itens[0]} O caso completo — e a demonstração ao vivo — aqui →</p>
+                <p>
+                  “{c.dorHook}” O caso completo — e a demonstração ao vivo — aqui →
+                </p>
               </Link>
             ))}
           </div>
