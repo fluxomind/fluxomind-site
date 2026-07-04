@@ -352,7 +352,21 @@ export default function Home() {
                 <span key={n}>{n}</span>
               ))}
             </div>
-            <p className="is">{NEGATION.is}</p>
+            {/* 1ª menção do termo na página linka a definição canônica
+                (/app-operante) — acoplado ao prefixo de NEGATION.is */}
+            <p className="is">
+              {NEGATION.is.startsWith('É um app operante') ? (
+                <>
+                  É um{' '}
+                  <Link href="/app-operante" style={{ textDecoration: 'underline' }}>
+                    app operante
+                  </Link>
+                  {NEGATION.is.slice('É um app operante'.length)}
+                </>
+              ) : (
+                NEGATION.is
+              )}
+            </p>
           </div>
         </div>
       </section>
