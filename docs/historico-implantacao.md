@@ -72,6 +72,14 @@ registra **decisões e infraestrutura externa** que o git não mostra.
   /en/self-operating-app (categoria, FAQPage + DefinedTerm) e /en/pricing;
   chrome EN (SiteHeaderEn/SiteFooterEn), hreflang em todos os pares,
   sitemap 18 rotas. Demo segue pt com moldura "in Portuguese".
+- **#41-#43** — Multi-idioma completo (ADR-0006): árvore EN espelhando todas
+  as páginas pt — institucionais (#41: security, what-it-does, accelerate;
+  #42: platform + hambúrguer EN + mailto EN), e a onda final (#43: why
+  [carta traduzida, aguarda reescrita do fundador], use-cases com slugs
+  localizados via casos-en.ts, terms e privacy com nota de precedência pt).
+  Sitemap: 29 rotas públicas (15 pt + 14 en), hreflang em todos os pares.
+  Única superfície só-pt restante: a demo interativa (decisão de escopo
+  pendente — 1 cenário EN vs. todos).
 
 ## Infraestrutura externa (não versionada)
 
