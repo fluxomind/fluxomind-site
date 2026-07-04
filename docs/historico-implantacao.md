@@ -41,6 +41,18 @@ registra **decisões e infraestrutura externa** que o git não mostra.
   dispensa p/ pequeno porte, Res. CD/ANPD 2/2022), cláusulas-padrão da ANPD na
   transferência internacional, sede São Paulo/SP, runbook de incidente de
   dados pessoais (prazos da Res. 15/2024).
+- **#30** — Registro dos PRs #28-#29 no histórico; pendência do Log Drain
+  (Marco Civil art. 15) documentada; leads-analytics alinhado à página de
+  privacidade.
+- **#31** — Deep-link da demo: `/demo?cenario=leads|caixa|atendimento` inicia
+  a jornada naquele cenário (`jornada_start` com `entry: link`).
+- **#32** — Casos de uso (estratégia SEO/GEO): hub `/casos-de-uso` + 3 páginas
+  por processo (cobrança-hero, leads, atendimento) em formato GEO
+  (h1-pergunta, abertura definicional, FAQ + FAQPage JSON-LD); nav
+  "O que resolvo" reapontado ao hub; cards da home §usos viram links;
+  vínculos cruzados site↔plataforma (`docs/fontes-upstream.md`, `ucIds` no
+  `casos.ts`, ADR-0005) — catálogo de UCs da plataforma é a fonte; hero
+  comercial = Recuperar Receita (matrix, anexo).
 
 ## Infraestrutura externa (não versionada)
 
