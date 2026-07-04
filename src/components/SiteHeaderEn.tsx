@@ -1,7 +1,11 @@
+import Image from 'next/image';
 import Link from 'next/link';
+import { CTA_EN } from '@/lib/messages-en';
 
-// Chrome EN — espelho mínimo do SiteHeader pt (ADR-0006: árvores paralelas).
-// O nav cresce conforme as páginas EN entram (ordem do roadmap do ADR).
+// Chrome EN — mesmo padrão visual do SiteHeader pt (nav escura sticky do
+// globals.css). O nav cresce conforme as páginas EN entram (roadmap do
+// ADR-0006). Sem MobileNav por ora: ≤1040px os links colapsam via CSS e o
+// CTA permanece; menu hambúrguer EN entra quando o nav tiver mais itens.
 const NAV_EN = [
   { href: '/en/self-operating-app', label: 'What it is' },
   { href: '/en/pricing', label: 'Pricing' },
@@ -9,25 +13,34 @@ const NAV_EN = [
 
 export default function SiteHeaderEn({ ptHref }: { ptHref: string }) {
   return (
-    <header className="bg-white" style={{ borderBottom: '1px solid var(--line)' }}>
-      <div
-        className="wrap"
-        style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 24px' }}
-      >
-        <Link href="/en" aria-label="Fluxomind — English home">
-          <img src="/logoSVG/logo-light.svg" alt="Fluxomind" style={{ height: 30 }} />
+    <nav>
+      <div className="wrap">
+        <Link href="/en" className="brand" aria-label="Fluxomind — English home">
+          <Image
+            src="/logoSVG/logo-dark.svg"
+            alt="Fluxomind"
+            width={292}
+            height={49}
+            className="brandlogo"
+            priority
+          />
         </Link>
-        <nav style={{ display: 'flex', gap: 18, alignItems: 'center', fontSize: 14.5 }}>
+        <div className="navlinks">
           {NAV_EN.map((l) => (
             <Link key={l.href} href={l.href}>
               {l.label}
             </Link>
           ))}
           <Link href={ptHref} lang="pt-BR">
-            Português →
+            Português
           </Link>
-        </nav>
+        </div>
+        <div className="navright">
+          <Link className="btn btn-primary nav-cta" href="/demo">
+            {CTA_EN.demo}
+          </Link>
+        </div>
       </div>
-    </header>
+    </nav>
   );
 }
