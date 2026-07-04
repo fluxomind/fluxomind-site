@@ -46,7 +46,7 @@ export default function TermsOfService() {
             </p>
             <p className="text-gray-600">
               Estes Termos constituem um acordo legal entre você e a FLUXOMIND LTDA, inscrita no
-              CNPJ sob o nº 60.162.547/0001-15, com sede no Brasil (&quot;Fluxomind&quot;, &quot;nós&quot;, &quot;nosso&quot; ou &quot;nossa&quot;).
+              CNPJ sob o nº 60.162.547/0001-15, com sede em São Paulo/SP, Brasil (&quot;Fluxomind&quot;, &quot;nós&quot;, &quot;nosso&quot; ou &quot;nossa&quot;).
             </p>
           </section>
 
@@ -276,6 +276,7 @@ export default function TermsOfService() {
             <div className="bg-gray-50 p-6 rounded-lg">
               <p className="text-gray-700 font-semibold">FLUXOMIND LTDA</p>
               <p className="text-gray-600">CNPJ: 60.162.547/0001-15</p>
+              <p className="text-gray-600">São Paulo/SP — Brasil</p>
               <p className="text-gray-600">E-mail: contato@fluxomind.com</p>
             </div>
           </section>

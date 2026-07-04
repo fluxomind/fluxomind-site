@@ -40,7 +40,7 @@ export default function PrivacyPolicy() {
             <h2 className="text-2xl font-semibold text-gray-900 mb-4">1. Quem somos</h2>
             <p className="text-gray-600 mb-4">
               Esta Política de Privacidade descreve como a FLUXOMIND LTDA, inscrita no CNPJ sob o
-              nº 60.162.547/0001-15, com sede no Brasil (&quot;Fluxomind&quot;, &quot;nós&quot;), trata os dados
+              nº 60.162.547/0001-15, com sede em São Paulo/SP, Brasil (&quot;Fluxomind&quot;, &quot;nós&quot;), trata os dados
               pessoais coletados através do site www.fluxomind.com (&quot;Site&quot;), na condição de
               controladora, em conformidade com a Lei Geral de Proteção de Dados Pessoais
               (Lei nº 13.709/2018 — &quot;LGPD&quot;) e o Marco Civil da Internet (Lei nº 12.965/2014).
@@ -130,9 +130,11 @@ export default function PrivacyPolicy() {
             </ul>
             <p className="text-gray-600">
               Esses provedores podem processar dados fora do Brasil. Nesses casos, a transferência
-              internacional ocorre conforme os arts. 33 e seguintes da LGPD, com base nas garantias
-              contratuais oferecidas por cada provedor. Também poderemos compartilhar dados quando
-              exigido por lei ou ordem de autoridade competente.
+              internacional ocorre conforme os arts. 33 e seguintes da LGPD e o Regulamento de
+              Transferência Internacional de Dados da ANPD (Resolução CD/ANPD nº 19/2024), com base
+              em cláusulas-padrão contratuais ou outra salvaguarda admitida pela regulamentação.
+              Também poderemos compartilhar dados quando exigido por lei ou ordem de autoridade
+              competente.
             </p>
           </section>
 
@@ -170,8 +172,8 @@ export default function PrivacyPolicy() {
             </ul>
             <p className="text-gray-600">
               Para exercer qualquer desses direitos, escreva para{' '}
-              <a href="mailto:contato@fluxomind.com" className="text-blue-600 hover:underline">
-                contato@fluxomind.com
+              <a href="mailto:privacidade@fluxomind.com" className="text-blue-600 hover:underline">
+                privacidade@fluxomind.com
               </a>
               . Responderemos nos prazos previstos na legislação. Você também pode apresentar
               reclamação à Autoridade Nacional de Proteção de Dados (ANPD).
@@ -210,13 +212,14 @@ export default function PrivacyPolicy() {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-gray-900 mb-4">11. Contato</h2>
             <p className="text-gray-600 mb-4">
-              Para dúvidas sobre esta Política ou sobre o tratamento dos seus dados pessoais
-              (encarregado de dados):
+              Para dúvidas sobre esta Política ou para exercer seus direitos, use nosso canal
+              dedicado de comunicação sobre dados pessoais:
             </p>
             <div className="bg-gray-50 p-6 rounded-lg">
               <p className="text-gray-700 font-semibold">FLUXOMIND LTDA</p>
               <p className="text-gray-600">CNPJ: 60.162.547/0001-15</p>
-              <p className="text-gray-600">E-mail: contato@fluxomind.com</p>
+              <p className="text-gray-600">São Paulo/SP — Brasil</p>
+              <p className="text-gray-600">E-mail: privacidade@fluxomind.com</p>
             </div>
             <p className="text-gray-600 mt-4">
               Veja também os nossos{' '}
