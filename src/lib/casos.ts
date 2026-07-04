@@ -4,6 +4,9 @@
 // definicional, FAQ real por caso (vira FAQPage JSON-LD na página).
 // Regra de crescimento: um caso novo só entra aqui quando a demo ganhar o
 // cenário correspondente (cada caso linka /demo?cenario=<cenario>).
+// Ordem do array = ordem de exibição no hub. Cobrança primeiro: o hero
+// comercial é Recuperar Receita (matrix.md do catálogo de UCs, anexo —
+// decisão do founder, 2026-07-04).
 
 export type CasoDeUso = {
   slug: string;
@@ -22,57 +25,6 @@ export type CasoDeUso = {
 };
 
 export const CASOS: CasoDeUso[] = [
-  {
-    slug: 'gestao-de-leads',
-    cenario: 'leads',
-    area: 'Vendas · leads e contratos',
-    emoji: '📊',
-    titleSeO: 'Gestão de leads sem planilha — app operante de funil de vendas',
-    descriptionSeO:
-      'Como tirar leads e contratos da planilha: um app operante registra cada lead, move o funil, cobra follow-up e avisa quando a proposta para — e escala para você nos casos que exigem decisão.',
-    h1: 'Como parar de gerenciar leads e contratos na planilha?',
-    definicao:
-      'Um app operante de gestão de leads é um app que se constrói a partir do seu funil de vendas — a sua planilha entra de verdade, sem redigitar — e passa a operar o dia a dia: registra o lead que chega, move as etapas, cobra o follow-up e avisa quando uma proposta para.',
-    hoje: {
-      titulo: 'Hoje: o funil vive na planilha — e na sua cabeça',
-      itens: [
-        'Leads chegam por WhatsApp, e-mail e indicação — e nem todos são registrados.',
-        'A planilha desatualiza no dia seguinte; ninguém confia 100% nela.',
-        'Follow-up depende de alguém lembrar. Proposta parada ninguém percebe.',
-        'No fim do mês, montar o retrato do funil é trabalho manual de horas.',
-      ],
-    },
-    comApp: {
-      titulo: 'Com um app operante: o funil roda — e você decide',
-      itens: [
-        { face: 'Domínio', texto: 'Sua planilha de leads e contratos entra de verdade: colunas viram campos, cada linha vira um registro vivo.' },
-        { face: 'Processo', texto: 'O follow-up é agendado e cobrado sozinho; proposta parada gera aviso antes de esfriar.' },
-        { face: 'Inteligência', texto: 'Pergunte "quais oportunidades pararam?" e receba a resposta com os próximos passos propostos.' },
-        { face: 'Confiança', texto: 'Cada conclusão chega com a prova do que foi feito — nada crítico sai sem o seu OK.' },
-      ],
-    },
-    humano:
-      'Desconto fora da alçada, negociação sensível, cliente estratégico: o app prepara o contexto e escala para uma pessoa do seu time — a IA propõe, quem manda decide.',
-    faq: [
-      {
-        q: 'Preciso trocar meu CRM ou minha planilha?',
-        a: 'Não. O app nasce da sua planilha (ela entra de verdade, sem redigitar) e convive com o que você já usa — a operação integra por e-mail, WhatsApp e API.',
-      },
-      {
-        q: 'Preciso saber programar?',
-        a: 'Não. Você descreve o problema em português; o app se constrói e, para mudar, você conversa.',
-      },
-      {
-        q: 'O app mexe no funil sozinho?',
-        a: 'O dia a dia — registrar, mover etapa, cobrar follow-up — roda sozinho. Ações sensíveis passam por você: o app propõe, mostra o preview e executa só com o seu OK.',
-      },
-      {
-        q: 'Em quanto tempo isso roda na minha empresa?',
-        a: 'Em semanas, não num projeto de meses. No beta, o time da Fluxomind acompanha do desenho à primeira conclusão real.',
-      },
-    ],
-    atualizado: 'julho de 2026',
-  },
   {
     slug: 'cobranca-e-contas-a-receber',
     cenario: 'caixa',
@@ -120,6 +72,57 @@ export const CASOS: CasoDeUso[] = [
       {
         q: 'Quanto tempo até a régua rodar de verdade?',
         a: 'Em semanas, não num projeto de meses. No beta, o time acompanha do desenho à primeira cobrança aprovada por você.',
+      },
+    ],
+    atualizado: 'julho de 2026',
+  },
+  {
+    slug: 'gestao-de-leads',
+    cenario: 'leads',
+    area: 'Vendas · leads e contratos',
+    emoji: '📊',
+    titleSeO: 'Gestão de leads sem planilha — app operante de funil de vendas',
+    descriptionSeO:
+      'Como tirar leads e contratos da planilha: um app operante registra cada lead, move o funil, cobra follow-up e avisa quando a proposta para — e escala para você nos casos que exigem decisão.',
+    h1: 'Como parar de gerenciar leads e contratos na planilha?',
+    definicao:
+      'Um app operante de gestão de leads é um app que se constrói a partir do seu funil de vendas — a sua planilha entra de verdade, sem redigitar — e passa a operar o dia a dia: registra o lead que chega, move as etapas, cobra o follow-up e avisa quando uma proposta para.',
+    hoje: {
+      titulo: 'Hoje: o funil vive na planilha — e na sua cabeça',
+      itens: [
+        'Leads chegam por WhatsApp, e-mail e indicação — e nem todos são registrados.',
+        'A planilha desatualiza no dia seguinte; ninguém confia 100% nela.',
+        'Follow-up depende de alguém lembrar. Proposta parada ninguém percebe.',
+        'No fim do mês, montar o retrato do funil é trabalho manual de horas.',
+      ],
+    },
+    comApp: {
+      titulo: 'Com um app operante: o funil roda — e você decide',
+      itens: [
+        { face: 'Domínio', texto: 'Sua planilha de leads e contratos entra de verdade: colunas viram campos, cada linha vira um registro vivo.' },
+        { face: 'Processo', texto: 'O follow-up é agendado e cobrado sozinho; proposta parada gera aviso antes de esfriar.' },
+        { face: 'Inteligência', texto: 'Pergunte "quais oportunidades pararam?" e receba a resposta com os próximos passos propostos.' },
+        { face: 'Confiança', texto: 'Cada conclusão chega com a prova do que foi feito — nada crítico sai sem o seu OK.' },
+      ],
+    },
+    humano:
+      'Desconto fora da alçada, negociação sensível, cliente estratégico: o app prepara o contexto e escala para uma pessoa do seu time — a IA propõe, quem manda decide.',
+    faq: [
+      {
+        q: 'Preciso trocar meu CRM ou minha planilha?',
+        a: 'Não. O app nasce da sua planilha (ela entra de verdade, sem redigitar) e convive com o que você já usa — a operação integra por e-mail, WhatsApp e API.',
+      },
+      {
+        q: 'Preciso saber programar?',
+        a: 'Não. Você descreve o problema em português; o app se constrói e, para mudar, você conversa.',
+      },
+      {
+        q: 'O app mexe no funil sozinho?',
+        a: 'O dia a dia — registrar, mover etapa, cobrar follow-up — roda sozinho. Ações sensíveis passam por você: o app propõe, mostra o preview e executa só com o seu OK.',
+      },
+      {
+        q: 'Em quanto tempo isso roda na minha empresa?',
+        a: 'Em semanas, não num projeto de meses. No beta, o time da Fluxomind acompanha do desenho à primeira conclusão real.',
       },
     ],
     atualizado: 'julho de 2026',
