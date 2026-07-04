@@ -73,6 +73,12 @@ registra **decisões e infraestrutura externa** que o git não mostra.
 - **Google Search Console** (2026-07-03/04): domínio `fluxomind.com`
   verificado; sitemap `https://www.fluxomind.com/sitemap.xml` submetido —
   status **Processado**, 9 páginas encontradas.
+- **Bing Webmaster Tools** (2026-07-04): `fluxomind.com` verificado via
+  importação do Search Console (conta Google fluxomind.com); sitemap
+  submetido e URLs de /casos-de-uso enviadas para indexação. Motivo: o
+  índice do Bing alimenta o ChatGPT Search (estratégia GEO). Painel
+  **AI Performance** (beta) mostra impressões em respostas de IA —
+  acompanhar mensalmente.
 - **Vercel CLI** logado na máquina do fundador (conta ralfonunes-5159); a
   worktree do site está linkada ao projeto (`.vercel/`, git-ignorado), então
   `vercel env ls/add` e `vercel redeploy` funcionam direto do terminal.
