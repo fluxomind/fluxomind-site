@@ -21,6 +21,10 @@ export const metadata: Metadata = {
   title: { absolute: 'Fluxomind — delegue a tarefa, receba a conclusão com a prova' },
   description:
     'Um app que resolve o seu problema e se opera sozinho — integrado ao que você já tem, governado, em semanas. Veja a demonstração: o app se constrói na sua frente e opera o dia a dia, com humano nos casos sensíveis.',
+  alternates: {
+    canonical: '/',
+    languages: { 'pt-BR': '/', en: '/en' },
+  },
 };
 
 // Assinatura canônica (messages.ts), com destaque visual na segunda frase.

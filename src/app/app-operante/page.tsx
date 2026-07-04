@@ -8,6 +8,10 @@ export const metadata: Metadata = {
   title: 'O que é um app operante? — a categoria explicada',
   description:
     'App operante é um app que se constrói a partir do seu problema, opera o dia a dia do processo — e escala para um humano quando o caso exige. Entenda a categoria: as 6 perguntas, as 5 regras da confiança e a diferença para chatbots e builders.',
+  alternates: {
+    canonical: '/app-operante',
+    languages: { 'pt-BR': '/app-operante', en: '/en/self-operating-app' },
+  },
 };
 
 // Página da categoria — o ativo GEO central: a definição canônica de
