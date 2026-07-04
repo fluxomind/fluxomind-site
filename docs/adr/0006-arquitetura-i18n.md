@@ -40,6 +40,18 @@ da categoria por idioma, dores/buscas por mercado).
 6. **Demo EN por último** — maior volume (~2.300 linhas de diálogo) e maior
    risco de quebra de encantamento; projeto próprio, gateado por decisão.
 
+### Exceção deliberada: a demo interativa (2026-07-04)
+
+A demo (`JourneyDemo`) NÃO segue árvores paralelas: é um componente onde a
+lógica domina (autopilot, travas, timing) e é idêntica entre idiomas — só
+strings/dados divergem. Duplicar duplicaria a lógica mais iterada do site.
+Padrão adotado (decisão do fundador): **componente único + dicionários de
+copy por locale** (`src/lib/demo-copy.ts` tipo; `demo-copy-pt.ts` /
+`demo-copy-en.ts`; wrappers client `DemoPt`/`DemoEn` por causa da fronteira
+RSC — o dicionário contém funções). Idioma novo na demo = +1 dicionário.
+Regra prática: página nova → árvore paralela; componente interativo
+compartilhado → dicionário por locale.
+
 ## Consequências
 
 - Duplicação estrutural entre árvores (aceita conscientemente): mudança de
