@@ -187,8 +187,8 @@ export default function TermsEn() {
             <ul className="list-disc pl-6 text-gray-600 space-y-2">
               <li>Provide accurate and up-to-date payment information</li>
               <li>Pay all applicable fees when due</li>
-              <li>Automatic renewal of subscriptions unless cancelled in advance</li>
-              <li>Price changes upon 30 days&apos; prior notice</li>
+              <li>Accept automatic renewal of subscriptions unless cancelled in advance</li>
+              <li>Accept price changes upon 30 days&apos; prior notice</li>
             </ul>
           </section>
 

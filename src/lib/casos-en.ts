@@ -32,7 +32,7 @@ export const CASOS_EN: CasoDeUsoEn[] = [
     dorHook: 'The due date passes and nobody notices in time.',
     pedido: `I run a B2B services company with about 60 active customers. Invoices live in a spreadsheet (columns: customer, tax ID, amount, due date, status) and collection is by hand: when I remember, I send WhatsApp messages one by one. A customer falls behind and nobody notices in time; renegotiations have no history.
 
-I want to stop losing money to forgetfulness. I need my invoice and customer spreadsheet to really come in (no retyping) and the system to track due dates on its own. When a due date approaches or passes, I want it to compose the right message in the right tone for the stage (friendly reminder before → collection when late → renegotiation proposal if it drags) and show me the preview before sending — nothing goes out without my OK.
+I want to stop losing money to forgetfulness. I need my invoice and customer spreadsheet to come in as-is (no retyping) and the system to track due dates on its own. When a due date approaches or passes, I want it to compose the right message in the right tone for the stage (friendly reminder before → collection when late → renegotiation proposal if it drags) and show me the preview before sending — nothing goes out without my OK.
 
 Delicate cases — high amounts, strategic customers, discount or renegotiation requests — I don't want the system to resolve: I want it to prepare the case with the history ready and hand it to me to decide. And since it's money and my customer's tax ID, I want sensitive data protected and every action recorded, in a way I can undo if I make a mistake.`,
     emoji: '💰',
@@ -41,14 +41,14 @@ Delicate cases — high amounts, strategic customers, discount or renegotiation 
       'How to automate your collections cadence without an IT project: a self-operating app tracks due dates, composes the message in the right tone, shows the preview and sends only with your OK — with proof of every action.',
     h1: 'How do you automate collections without losing control of what is sent?',
     definicao:
-      'A self-operating collections app is an app that builds itself from your invoices and customers — the spreadsheet really comes in, with tax IDs protected — and starts running the collections cadence: it tracks due dates, composes the message in the right tone, shows the preview and sends only with your OK.',
+      'A self-operating collections app is an app that builds itself from your invoices and customers — the spreadsheet imports as-is, with tax IDs protected — and starts running the collections cadence: it tracks due dates, composes the message in the right tone, shows the preview and sends only with your OK.',
     hoje: {
       titulo: 'Today: collecting depends on remembering — and on courage',
       itens: [
         'Invoices live in a spreadsheet; the due date passes and nobody notices in time.',
         'Collecting means composing the right message, in the right tone, customer by customer.',
         'The cadence (reminder, collection, renegotiation) exists — in theory. In practice, it is manual.',
-        'Without an organized history, every collection starts from zero.',
+        'Without an organized history, every collection starts from scratch.',
       ],
     },
     comApp: {
@@ -73,7 +73,7 @@ Delicate cases — high amounts, strategic customers, discount or renegotiation 
       },
       {
         q: 'Does it reconcile payments? Does it work with my ERP?',
-        a: 'The app is born from your invoice spreadsheet and collects via WhatsApp and e-mail, coexisting with what you already use. In this version, payment reconciliation is yours; automatic reconciliation with bank or ERP is a planned evolution.',
+        a: 'The app is born from your invoice spreadsheet and collects via WhatsApp and e-mail, coexisting with what you already use. In this version, payment reconciliation is yours; automatic reconciliation with your bank or ERP is on the roadmap.',
       },
       {
         q: 'What about my customers’ data?',
@@ -81,7 +81,7 @@ Delicate cases — high amounts, strategic customers, discount or renegotiation 
       },
       {
         q: 'How long until the cadence really runs?',
-        a: 'Weeks, not a months-long project. In the beta, the team accompanies you from design to the first collection you approve.',
+        a: 'Weeks, not a months-long project. In the beta, the team works with you from design to the first collection you approve.',
       },
     ],
     atualizado: 'July 2026',
@@ -97,21 +97,21 @@ Delicate cases — high amounts, strategic customers, discount or renegotiation 
 
 I want a system that manages my funnel end to end: every prospect becomes a living record, the funnel has clear stages (new → qualified → in conversation → proposal → closed) and I see on a board where each one is, with the history of every conversation kept.
 
-What kills me is the follow-through: I want the system to chase the follow-up of whoever went quiet on its own, warn me when a proposal has been stalled too long, and when I ask "which deals have stalled?" answer with the list and the suggested next step for each. Every message that goes out in my name I want to see and approve first — nothing fires on its own. Decision cases (out-of-policy discounts, strategic customers) should come to me with the history ready.`,
+What kills me is the follow-through: I want the system to chase follow-ups on its own for whoever went quiet, warn me when a proposal has been stalled too long, and when I ask "which deals have stalled?" answer with the list and the suggested next step for each. Every message that goes out in my name I want to see and approve first — nothing fires on its own. Decision cases (out-of-policy discounts, strategic customers) should come to me with the history ready.`,
     emoji: '📊',
     titleSeO: 'Lead management without spreadsheets — a self-operating sales funnel app',
     descriptionSeO:
       'How to get leads and contracts out of the spreadsheet: a self-operating app records every lead, moves the funnel, chases follow-ups and warns when a proposal stalls — and hands you the cases that require a decision.',
     h1: 'How do you stop managing leads and contracts in a spreadsheet?',
     definicao:
-      'A self-operating lead management app is an app that builds itself from your sales funnel — your spreadsheet really comes in, no retyping — and starts running the day-to-day: it records the lead that arrives, moves the stages, chases the follow-up and warns when a proposal stalls.',
+      'A self-operating lead management app is an app that builds itself from your sales funnel — your spreadsheet imports as-is, no retyping — and starts running the day-to-day: it records the lead that arrives, moves the stages, chases the follow-up and warns when a proposal stalls.',
     hoje: {
       titulo: 'Today: the funnel lives in a spreadsheet — and in your head',
       itens: [
         'Leads arrive via WhatsApp, e-mail and referrals — and not all get recorded.',
         'The spreadsheet is stale by the next day; nobody fully trusts it.',
         'Follow-up depends on someone remembering. Stalled proposals go unnoticed.',
-        'At month’s end, assembling the funnel picture is hours of manual work.',
+        'At month’s end, putting together the funnel snapshot is hours of manual work.',
       ],
     },
     comApp: {
@@ -120,7 +120,7 @@ What kills me is the follow-through: I want the system to chase the follow-up of
         { face: 'Domain', texto: 'Your lead and contract spreadsheet really comes in: columns become fields, every row becomes a living record.' },
         { face: 'Process', texto: 'Follow-ups are scheduled and chased on their own; a stalled proposal raises a warning before it goes cold.' },
         { face: 'Intelligence', texto: 'Ask "which deals have stalled?" and get the answer with proposed next steps.' },
-        { face: 'Trust', texto: 'Every conclusion arrives with the proof of what was done — nothing critical goes out without your OK.' },
+        { face: 'Trust', texto: 'Every conclusion arrives with proof of what was done — nothing critical goes out without your OK.' },
       ],
     },
     humano:
@@ -132,7 +132,7 @@ What kills me is the follow-through: I want the system to chase the follow-up of
       },
       {
         q: 'Do I need to know how to code?',
-        a: 'No. You describe the problem in plain language; the app builds itself and, to change it, you talk.',
+        a: 'No. You describe the problem in plain language; the app builds itself and, to change it, you just talk.',
       },
       {
         q: 'Does the app touch the funnel on its own?',
@@ -144,7 +144,7 @@ What kills me is the follow-through: I want the system to chase the follow-up of
       },
       {
         q: 'How long until this runs in my company?',
-        a: 'Weeks, not a months-long project. In the beta, the Fluxomind team accompanies you from design to the first real conclusion.',
+        a: 'Weeks, not a months-long project. In the beta, the Fluxomind team works with you from design to the first real conclusion.',
       },
     ],
     atualizado: 'July 2026',
@@ -156,24 +156,24 @@ What kills me is the follow-through: I want the system to chase the follow-up of
     cenario: 'atendimento',
     area: 'Support · WhatsApp',
     dorHook: 'My customers ask for everything on WhatsApp — booking, rescheduling, confirming — and one person answers it all day long.',
-    pedido: `My customers reach me on WhatsApp all the time for day-to-day things: booking a slot, rescheduling, confirming they will show up, or asking about the status of their order. Today a person on my team answers all of it by hand, which eats the day and still leaves people without a reply outside business hours.
+    pedido: `My customers reach me on WhatsApp all the time for day-to-day things: booking a slot, rescheduling, confirming they will show up, or asking about the status of their order. Today a person on my team answers all of it by hand, which eats up the day and still leaves people without a reply outside business hours.
 
-I want WhatsApp support to resolve these requests on its own, in the conversation, without the customer installing an app or creating a login. When someone writes "I'd like to book for Thursday", it should understand, check availability, offer slots and confirm — and the same for rescheduling and cancelling. Before appointments, I want it to send the attendance confirmation on its own and update the calendar according to the reply.
+I want WhatsApp support to resolve these requests on its own, in the conversation, without the customer installing an app or creating a login. When someone writes "I'd like to book for Thursday", it should understand, check availability, offer slots and confirm — and the same for rescheduling and cancelling. Before appointments, I want it to send the appointment confirmation on its own and update the calendar according to the reply.
 
-On my side (internal), I want the calendar and records organized — each customer with their history, personal data protected, and a record of what was done in each conversation. When a customer complains, has an urgency or asks for something out of the ordinary, the support doesn't improvise: it hands the conversation to a person on my team with the full history, so the customer never has to repeat themselves.`,
+On my side (internal), I want the calendar and records organized — each customer with their history, personal data protected, and a record of what was done in each conversation. When a customer complains, has an urgent issue or asks for something out of the ordinary, support doesn't improvise: it hands the conversation to a person on my team with the full history, so the customer never has to repeat themselves.`,
     emoji: '📅',
     titleSeO: 'WhatsApp support that resolves — books, reschedules and confirms',
     descriptionSeO:
-      'How to handle WhatsApp support without a person answering all day: a self-operating app understands the request and resolves it — books, reschedules, confirms attendance — and hands the conversation to your team in the sensitive cases.',
+      'How to handle WhatsApp support without a person answering all day: a self-operating app understands the request and resolves it — books, reschedules, confirms attendance — and hands the conversation to your team in sensitive cases.',
     h1: 'How do you handle WhatsApp without someone answering messages all day?',
     definicao:
-      'A self-operating support app is an app that answers on your WhatsApp and resolves the request — books, reschedules, confirms attendance, updates the record — instead of just replying. Not a chatbot that just replies: it is the support process running, with a person taking over when the case demands.',
+      'A self-operating support app is an app that answers on your WhatsApp and resolves the request — books, reschedules, confirms attendance, updates the record — instead of just replying. Not a chatbot that just replies: it is the support process running, with a person taking over when a case calls for it.',
     hoje: {
       titulo: 'Today: the calendar lives buried in messages',
       itens: [
         'One person answers everything — booking, rescheduling, confirmation — all day long.',
         'Outside business hours, customers get no reply; by morning, the queue has piled up.',
-        'Reschedules get lost between conversations; no-shows go unprevented.',
+        'Reschedules get lost between conversations; nothing prevents no-shows.',
         'The customer’s history is scattered across WhatsApp threads.',
       ],
     },
@@ -183,11 +183,11 @@ On my side (internal), I want the calendar and records organized — each custom
         { face: 'Connections', texto: 'The app answers on the WhatsApp you already use — the customer changes nothing on their side.' },
         { face: 'Process', texto: 'Booking, rescheduling and confirming attendance happen on their own, in the conversation, with the calendar always up to date.' },
         { face: 'Domain', texto: 'Records and calendar come in from your spreadsheet; personal data is detected and protected.' },
-        { face: 'Trust', texto: 'Every interaction is recorded — who asked, what was done, when. Conclusion with the proof.' },
+        { face: 'Trust', texto: 'Every interaction is recorded — who asked, what was done, when. Every conclusion comes with proof.' },
       ],
     },
     humano:
-      'Complaint, urgency, delicate case: the app notices and hands the conversation to a person on your team — with the full context on screen, without the customer repeating the story.',
+      'Complaint, urgent issue, delicate case: the app notices and hands the conversation to a person on your team — with the full context on screen, without the customer repeating the story.',
     faq: [
       {
         q: 'Is this a chatbot?',
@@ -203,7 +203,7 @@ On my side (internal), I want the calendar and records organized — each custom
       },
       {
         q: 'What if the customer asks for something out of the ordinary?',
-        a: 'The app doesn’t improvise: cases outside the process escalate to your team, with the full conversation history. In the sensitive cases, a person decides.',
+        a: 'The app doesn’t improvise: cases outside the process escalate to your team, with the full conversation history. In sensitive cases, a person decides.',
       },
       {
         q: 'Is my customers’ data safe?',

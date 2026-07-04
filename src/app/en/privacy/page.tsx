@@ -50,7 +50,7 @@ export default function PrivacyEn() {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-gray-900 mb-4">1. Who we are</h2>
             <p className="text-gray-600 mb-4">
-              This Privacy Policy describes how FLUXOMIND LTDA, enrolled with the CNPJ under No.
+              This Privacy Policy describes how FLUXOMIND LTDA, enrolled with the Brazilian corporate taxpayer registry (CNPJ) under No.
               60.162.547/0001-15, headquartered in São Paulo/SP, Brazil (&quot;Fluxomind&quot;,
               &quot;we&quot;), processes personal data collected through the website
               www.fluxomind.com (&quot;Site&quot;), as controller, in compliance with the
@@ -137,8 +137,7 @@ export default function PrivacyEn() {
               These providers may process data outside Brazil. In such cases, the international
               transfer takes place in accordance with articles 33 et seq. of the LGPD and the
               ANPD&apos;s International Data Transfer Regulation (Resolution CD/ANPD No.
-              19/2024), based on standard contractual clauses or another safeguard admitted by
-              the regulation. We may also share data when required by law or by order of a
+              19/2024), based on standard contractual clauses or another safeguard permitted under the regulation. We may also share data when required by law or by order of a
               competent authority.
             </p>
           </section>

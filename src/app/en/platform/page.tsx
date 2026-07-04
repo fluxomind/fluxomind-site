@@ -62,16 +62,16 @@ export default function PlatformEn() {
             <span className="pill">For technical teams · CTO, Head of Platform, Security</span>
           </div>
           <h1>
-            What the home page demonstrates, <span className="g">engineering sustains.</span>
+            What the home page demonstrates, <span className="g">engineering delivers.</span>
           </h1>
           <p className="hsub">
             Proof of execution, not promise: the multi-tenant platform is built — 39 engines in
-            10 layers, governed and <strong>verifiable by evidence</strong>, not by slide. This
+            10 layers, governed and <strong>verifiable by evidence</strong>, not by slides. This
             page is for those who will pop the hood: architecture, performance, quality,
             governance and security, with the real status of each.
           </p>
           <p className="hsub" style={{ marginTop: 14, fontSize: '16px' }}>
-            <strong>The honest frontier:</strong> {PHASE_EN.next}
+            <strong>Where we honestly stand:</strong> {PHASE_EN.next}
           </p>
           <div className="herocta">
             <a className="btn btn-primary" href={PLATFORM_CONTACT_EN} data-track="en-platform-contact-cta">
@@ -110,7 +110,7 @@ export default function PlatformEn() {
               <div className="flow">
                 <div className="fbox">Code defines the fixed path</div>
                 <div className="farr">↓</div>
-                <div className="fbox">Calls the LLM as an “accessory”</div>
+                <div className="fbox">Calls the LLM as an add-on</div>
                 <div className="farr">↓</div>
                 <div className="fbox">Response returns to the code</div>
               </div>
@@ -178,8 +178,7 @@ export default function PlatformEn() {
             <h2>Gets smarter the more it is used</h2>
             <p className="lead" style={{ marginTop: 14 }}>
               The platform doesn&apos;t deliver value once — it spins. Two coupled loops over{' '}
-              <strong>a single semantic brain</strong>: intent becomes app, the app generates
-              operation, the operation returns the next action, and each turn starts from a
+              <strong>a single semantic brain</strong>: intent becomes an app, the app generates activity, the activity returns the next action, and each turn starts from a
               higher point.
             </p>
           </div>
@@ -199,9 +198,7 @@ export default function PlatformEn() {
               <div>
                 <h4>Insight loop</h4>
                 <p>
-                  Operating generates real data; the platform reads the operation and returns the
-                  next action — more precise than the last. <em>Maturity: the full turn is proven
-                  with the dogfood — next chapter.</em>
+                  Operating generates real data; the platform reads that activity and returns the next action — more precise than the last. <em>Maturity: the full turn is proven by dogfooding — next chapter.</em>
                 </p>
               </div>
             </div>
@@ -221,7 +218,7 @@ export default function PlatformEn() {
             The thesis: the more you use it, the more Atlas knows — and the cheaper it gets to
             deliver the next thing. That is what separates a flywheel product from a tool: the
             tool delivers the same on the thousandth run; the flywheel delivers more, for less.
-            The full turn is what the dogfood will prove.
+            The full turn is what dogfooding will prove.
           </p>
         </div>
       </section>
@@ -233,11 +230,9 @@ export default function PlatformEn() {
             <h2>Modular engines, with machine-enforced boundaries</h2>
             <p className="lead" style={{ marginTop: 14 }}>
               39 engines organized in 10 layers (verifiable in{' '}
-              <span className="mono">src/engine/</span>) — below, the layers with representative
-              engines of each. Every engine is an isolated module with strict boundaries — an
+              <span className="mono">src/engine/</span>) — below, the layers with representative engines from each. Every engine is an isolated module with strict boundaries — an
               improper import between internals <strong>is blocked by the boundary
-              verifier</strong>, which runs in the deploy pipeline. Evolution by layer, without
-              rupture.
+              verifier</strong>, which runs in the deploy pipeline. Evolution by layer, without breaking changes.
             </p>
           </div>
           <div className="layers">
@@ -334,8 +329,7 @@ export default function PlatformEn() {
               </div>
               <div className="honest">
                 <b>Honesty:</b> “self-healing” and DR are design capabilities — still{' '}
-                <strong>without measured scale numbers</strong>, because production is a new
-                platform. Load benchmarks come with the first pilots.
+                <strong>without measured scale numbers</strong>, because we&apos;re a new platform in production. Load benchmarks come with the first pilots.
               </div>
             </div>
           </div>

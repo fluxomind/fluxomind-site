@@ -180,7 +180,7 @@ export default async function UseCasePageEn({
               Where a human takes over
             </div>
             <h2 style={{ color: '#fff', maxWidth: '26ch' }}>
-              The app runs the day-to-day. In the sensitive cases, a person decides.
+              The app runs the day-to-day. In sensitive cases, a person decides.
             </h2>
             <p style={{ marginTop: 18, fontSize: 17, color: '#A9AEB8', maxWidth: '62ch', lineHeight: 1.6 }}>
               {caso.humano}
@@ -211,7 +211,7 @@ export default async function UseCasePageEn({
           <div className="honest">
             <b>Transparency.</b> The demo of this case uses sample data and runs in Portuguese —
             the real app is born inside the platform, with your data. {PHASE_EN.exists} We are
-            in beta: adoption happens closely accompanied by our team, in weeks — not a
+            in beta: we guide adoption closely, in weeks — not a
             months-long project.
           </div>
           <p style={{ textAlign: 'center', marginTop: 14, fontSize: 13.5, color: 'var(--slate)' }}>
@@ -224,7 +224,7 @@ export default async function UseCasePageEn({
         <div className="wrap">
           <div className="cta-card">
             <div className="kick" style={{ color: 'var(--sky)' }}>
-              Live this case now
+              Try this case live now
             </div>
             <h2>Watch the app be born from a spreadsheet — and operate it yourself</h2>
             <p className="lead">

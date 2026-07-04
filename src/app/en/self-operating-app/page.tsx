@@ -17,7 +17,7 @@ import SiteFooterEn from '@/components/SiteFooterEn';
 export const metadata: Metadata = {
   title: 'What is a self-operating app? — the category, explained',
   description:
-    'A self-operating app builds itself from your business problem, runs the day-to-day of the process — and escalates to a human when the case demands it. The definition, the 6 questions, the 5 trust rules, and how it differs from chatbots and builders.',
+    'A self-operating app builds itself from your business problem, runs the process day-to-day — and escalates to a human when a case calls for it. The definition, the 6 questions, the 5 trust rules, and how it differs from chatbots and builders.',
   alternates: {
     canonical: '/en/self-operating-app',
     languages: { 'pt-BR': '/app-operante', en: '/en/self-operating-app' },
@@ -39,15 +39,15 @@ const FAQ_EN = [
   },
   {
     q: 'Do I need to know how to code?',
-    a: 'No. You describe the problem in plain language; the app builds itself — and to change it, you talk.',
+    a: 'No. You describe the problem in plain language; the app builds itself — and to change it, you just talk.',
   },
   {
     q: 'What does "runs itself" mean?',
-    a: 'The day-to-day of the process — tracking, preparing, executing the routine — runs without anyone having to remember it. Nothing critical goes out without your OK, and every conclusion arrives with the proof of what was done.',
+    a: 'The process day-to-day — tracking, preparing, running the routine — happens without anyone having to remember it. Nothing critical goes out without your OK, and every conclusion arrives with the proof of what was done.',
   },
   {
     q: 'Is this real today, or a vision?',
-    a: 'The platform is real — 39 engines that materialize and operate real apps, multi-tenant, governed. We are in beta: adoption happens closely accompanied by our team, live in weeks, not a months-long project.',
+    a: 'The platform is real — 39 engines that materialize and operate real apps, multi-tenant, governed. We are in beta: we guide adoption closely — live in weeks, not a months-long project.',
   },
 ];
 

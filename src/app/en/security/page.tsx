@@ -38,7 +38,7 @@ const GUARANTEES = [
     ),
     area: 'Isolation',
     title: 'Your data stays yours only',
-    desc: 'Each company has a dedicated space. One customer never reaches another’s data — not by accident, not on purpose.',
+    desc: 'Each company has a dedicated space. No customer ever sees another’s data — not by accident, not on purpose.',
     how: 'Dedicated schema per customer + RLS as backstop. The tenantId derives from the request context, never from the payload.',
     trail: 'securityEngine · dataEngine',
   },
@@ -51,7 +51,7 @@ const GUARANTEES = [
     ),
     area: 'BYOK',
     title: 'The key is yours — and so is the lock',
-    desc: 'Those who require it can bring their own encryption key. Revoked it? The data becomes unreadable immediately — with or without us in the middle.',
+    desc: 'Customers who require it can bring their own encryption key. Revoke it and the data becomes unreadable immediately — with or without us in the loop.',
     how: 'BYOK with KMS (AWS/GCP/Azure) and crypto-shredding: revocation cuts access to the data, independently of the platform.',
     trail: 'securityEngine · spec-byok',
   },
@@ -64,7 +64,7 @@ const GUARANTEES = [
       </svg>
     ),
     area: 'Privacy',
-    title: 'What is sensitive never reaches the model raw',
+    title: 'What is sensitive never reaches the model in raw form',
     desc: 'Personal data is masked before any AI processes it — and there are guards against attempts to manipulate the model.',
     how: 'PII masking (4 strategies) before the LLM + content safety against prompt-injection and jailbreak.',
     trail: 'securityEngine · spec-content-safety',
@@ -78,7 +78,7 @@ const GUARANTEES = [
     ),
     area: 'Audit',
     title: 'Every action recorded, tamper-evident',
-    desc: 'Who did what, when — in a trail that cannot be edited without leaving a mark. Verifiable by you, not on our word.',
+    desc: 'Who did what, when — in a trail that cannot be edited without leaving a mark. Verifiable by you, not just on our word.',
     how: 'Dual-token authentication + RBAC; SHA-256 append-only trail — tampering is cryptographically detectable and verifiable per tenant.',
     trail: 'securityEngine · auditTrailEngine · spec-hash-chain',
   },
@@ -119,7 +119,7 @@ export default function SecurityEn() {
             </h1>
             <p className="hsub" style={{ margin: '18px auto 0', maxWidth: '62ch' }}>
               Finance, health, legal: the processes most worth delegating are the scariest ones.
-              That is why security here is not a compliance annex — it is{' '}
+              That is why security here is not a compliance afterthought — it is{' '}
               <strong>five rules in the path of every action</strong> your app executes. This
               page shows what backs each one, and is honest about what is not ready yet.
             </p>
@@ -177,7 +177,7 @@ export default function SecurityEn() {
             <h2>You watch the app being born — and check before you trust</h2>
             <p className="lead" style={{ marginTop: 14, maxWidth: '62ch' }}>
               Your app doesn&apos;t arrive in a black box. It builds itself from your problem, in
-              front of you — and every conclusion arrives with the proof. Wrong framing shows up
+              front of you — and every conclusion arrives with proof. Wrong framing shows up
               on the first screen, not months into a project.
             </p>
           </div>
@@ -187,7 +187,7 @@ export default function SecurityEn() {
               <div>
                 <h4>Solves the right problem</h4>
                 <p>
-                  Construction starts from the description of your problem, and you follow every
+                  Building starts from the description of your problem, and you follow every
                   step on screen. What doesn&apos;t make sense for your business, you adjust by
                   talking — no tickets, no waiting for a sprint.
                 </p>
@@ -198,7 +198,7 @@ export default function SecurityEn() {
               <div>
                 <h4>Makes sense, end to end</h4>
                 <p>
-                  Not a slice that pushes the rest for later: the solution is born whole and
+                  Not a slice that pushes the rest off to later: the solution is born whole and
                   coherent, and the conclusion of each stage comes with the evidence for you to
                   check.
                 </p>
@@ -221,7 +221,7 @@ export default function SecurityEn() {
             <p className="lead" style={{ marginTop: 14, maxWidth: '62ch' }}>
               The difference between an AI that helps and one that scares is who decides. Here,
               governance is not a separate dashboard: it sits in the path of every action your
-              app executes — so that mistakes don&apos;t hurt and, in the sensitive cases, a
+              app executes — so that mistakes don&apos;t hurt and, in sensitive cases, a
               person decides.
             </p>
           </div>
@@ -252,7 +252,7 @@ export default function SecurityEn() {
             </div>
             <h2 style={{ color: '#fff' }}>What protects your data — and how to prove it</h2>
             <p className="lead" style={{ color: '#A9AEB8', marginTop: 14 }}>
-              Four foundation protections, active from day one — each with the engineering trail
+              Four foundational protections, active from day one — each with the engineering trail
               that backs it.
             </p>
           </div>
@@ -306,8 +306,7 @@ export default function SecurityEn() {
               (Art. 17/20/30/32) — verification by code, not a manual checklist; today they run
               on demand, and scheduled continuous execution is on the roadmap.{' '}
               <strong>
-                We do not yet have a formal third-party SOC2 certification nor a completed
-                external pen-test
+                We do not yet have a formal third-party SOC2 certification or a completed external pen-test
               </strong>{' '}
               — they are the next step, not a promise fulfilled. What we claim above is what can
               be verified in the architecture today.

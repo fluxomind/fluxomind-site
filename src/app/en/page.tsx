@@ -144,7 +144,7 @@ export default function HomeEn() {
           </div>
           <div className="honest" style={{ marginTop: 28 }}>
             <b>Transparency.</b> {PHASE_EN.exists} {PHASE_EN.next} {PHASE_EN.vision} We are in
-            beta: adoption happens closely accompanied by our team — live in weeks, not a
+            beta: adoption happens closely guided by our team — live in weeks, not a
             months-long project.
           </div>
         </div>

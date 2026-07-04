@@ -35,7 +35,7 @@ const WALLS = [
       </svg>
     ),
     title: 'The prototype lives alone',
-    desc: 'Your operation lives in the ERP, the CRM, e-mail and WhatsApp. A pilot that doesn’t talk to them never enters anyone’s routine — no matter how good the demo was.',
+    desc: 'Your operation lives in the ERP, the CRM, e-mail and WhatsApp. A pilot that doesn’t talk to them never makes it into anyone’s routine — no matter how good the demo was.',
   },
   {
     icon: (
@@ -55,7 +55,7 @@ const WALLS = [
       </svg>
     ),
     title: 'Nobody owns Monday morning',
-    desc: 'The model answers well — but who runs the process every week, handles the exceptions and never drops the ball? Without an owner of the operation, the pilot becomes one more open tab.',
+    desc: 'The model answers well — but who runs the process every week, handles the exceptions and never drops the ball? Without someone owning the operation, the pilot becomes one more open tab.',
   },
 ];
 
@@ -69,7 +69,7 @@ const OPERATED = [
     ),
     tag: 'Process',
     title: 'The agent runs the day-to-day',
-    desc: 'Collections that track the delay, follow-ups that never forget, approvals that keep moving. The process happens without depending on someone remembering it.',
+    desc: 'Collections that chase overdue invoices, follow-ups that never forget, approvals that keep moving. The process happens without depending on someone remembering it.',
   },
   {
     icon: (
@@ -81,7 +81,7 @@ const OPERATED = [
     ),
     tag: 'Handoff',
     title: 'A human decides the sensitive cases',
-    desc: 'When the case demands it — a discount beyond the limit, a delicate customer, a high amount — the app escalates to a person on your team. The AI proposes; whoever is in charge decides.',
+    desc: 'When the case demands it — an out-of-policy discount, a sensitive customer, a high-value deal — the app escalates to a person on your team. The AI proposes; whoever is in charge decides.',
   },
   {
     icon: (
@@ -106,7 +106,7 @@ const OPERATED = [
       </svg>
     ),
     tag: 'Integration',
-    title: 'Sits around what you already have',
+    title: 'Wraps around what you already have',
     desc: 'SAP, Salesforce and TOTVS stay exactly where they are — the app operates around them, integrating via API, e-mail and WhatsApp, with no replacement project.',
   },
 ];
@@ -214,8 +214,7 @@ export default function AccelerateEn() {
             <div className="kick">Delivered operated</div>
             <h2>What arrives at your company arrives running</h2>
             <p className="lead" style={{ marginTop: 14 }}>
-              You don&apos;t receive a tool for the team to learn. You receive the process in
-              operation — and this is how it runs.
+              You don&apos;t receive a tool for the team to learn. You get the process already operating — and this is how it runs.
             </p>
           </div>
           <div className="ways">
@@ -245,10 +244,10 @@ export default function AccelerateEn() {
           <div className="timeline">
             <div className="tl">
               <div className="num">1</div>
-              <h4>One process, accompanied</h4>
+              <h4>One process, hands-on</h4>
               <p>
                 Together we pick a process that hurts — collections, support, approvals. Our team
-                accompanies you from design to the first real conclusion.
+                works with you from design to the first real conclusion.
               </p>
             </div>
             <div className="tl">
@@ -269,8 +268,8 @@ export default function AccelerateEn() {
             </div>
           </div>
           <div className="honest">
-            <b>Transparency.</b> {PHASE_EN.exists} We are in beta — adoption happens closely
-            accompanied by our team; formal SLAs and certifications are on the roadmap.{' '}
+            <b>Transparency.</b> {PHASE_EN.exists} We are in beta — we guide adoption
+            closely; formal SLAs and certifications are on the roadmap.{' '}
             {PHASE_EN.vision}
           </div>
         </div>
@@ -285,7 +284,7 @@ export default function AccelerateEn() {
             <h2>Bring the pilot that died. Leave with a process operating.</h2>
             <p className="lead">
               Tell us which process you want to delegate. We design your company&apos;s first
-              self-operating app with your team — and you follow every conclusion, with the proof.
+              self-operating app with your team — and you follow every conclusion, with proof.
             </p>
             <div className="ctab">
               <a className="btn btn-primary" href={PLATFORM_CONTACT_EN} data-track="en-accelerate-contact-cta">

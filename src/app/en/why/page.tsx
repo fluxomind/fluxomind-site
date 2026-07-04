@@ -42,19 +42,18 @@ export default function WhyEn() {
           <div className="kick">Act 1 · The old way</div>
           <h2>Who has never bent a process to fit a system?</h2>
           <p>
-            There were always two paths. You buy a ready-made system and start working its way —
+            There were always two paths. You buy a ready-made system and start working on its terms —
             the fields it has, the screens it chose, the report it gives. Or you pay for a
             project to bend it to your process: months of implementation, a consulting budget —
             and, every time the business changes, all of it again.
           </p>
           <p>
             On both paths, the result is the same: <strong>the software stands still</strong>.
-            The one chasing — typing, cross-checking spreadsheets, collecting, verifying,
-            remembering — is you and your team. The tool stores the data; the work is still
+            The ones chasing — typing, cross-checking spreadsheets, collecting, verifying, remembering — are you and your team. The tool stores the data; the work is still
             yours.
           </p>
           <blockquote className="pq-pull">
-            Tailor-made technology always existed. But it was a privilege: a project, an
+            Tailor-made technology has always existed. But it was a privilege: a project, an
             integrator, an IT team. Whoever couldn&apos;t pay made do with spreadsheets.
           </blockquote>
         </div>
@@ -72,8 +71,7 @@ export default function WhyEn() {
             AI crossed two thresholds that change this story. It started to{' '}
             <strong>understand context</strong> — what used to require a project to adapt now
             happens from what you describe. And it started to <strong>execute</strong> — what
-            was always a person chasing, an agent now does, shows the proof, and calls you on
-            what is sensitive.
+            was always a person chasing, an agent now does, shows the proof, and brings you in on what&apos;s sensitive.
           </p>
           <p>
             That creates a new category. Not a system you operate: an app that builds itself
@@ -102,14 +100,14 @@ export default function WhyEn() {
           <h2>Where we believe this is going</h2>
           <p>
             The knowledge of how to solve a problem — the method an expert spent years honing —
-            is today trapped in one person&apos;s calendar. It serves one client at a time, and
+            is trapped today in one person&apos;s calendar. It serves one client at a time, and
             never reaches everyone who needs it.
           </p>
           <p>
             Our bet, declared as a bet: that knowledge will become a{' '}
             <strong>living software business</strong> — created by whoever masters the problem,
-            adopted already operated by whoever needs the solution. The next generation of
-            systems won&apos;t be bought off the shelf nor cost a project: it will be born from
+            adopted, already operating, by whoever needs the solution. The next generation of
+            systems won&apos;t be bought off the shelf or cost a whole project: it will be born from
             those who know the subject, and work inside the business of those who adopt it.
           </p>
           <p>
