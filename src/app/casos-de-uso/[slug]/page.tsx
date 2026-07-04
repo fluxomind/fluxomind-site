@@ -60,7 +60,21 @@ export default async function CasoDeUsoPage({
           </div>
           <div className="kick" style={{ marginTop: 18 }}>{SIGNATURE}</div>
           <h1 style={{ maxWidth: '26ch' }}>{caso.h1}</h1>
-          <p className="hsub">{caso.definicao}</p>
+          {/* 1ª menção do termo linka a definição canônica (/app-operante) —
+              acoplado ao prefixo padrão das definições em casos.ts */}
+          <p className="hsub">
+            {caso.definicao.startsWith('Um app operante') ? (
+              <>
+                Um{' '}
+                <Link href="/app-operante" style={{ textDecoration: 'underline' }}>
+                  app operante
+                </Link>
+                {caso.definicao.slice('Um app operante'.length)}
+              </>
+            ) : (
+              caso.definicao
+            )}
+          </p>
           <div className="herocta">
             <Link
               className="btn btn-primary"
