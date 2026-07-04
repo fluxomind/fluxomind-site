@@ -11,6 +11,10 @@ export const metadata: Metadata = {
   title: 'O que faz',
   description:
     'Todo app da Fluxomind responde seis perguntas do seu negócio — dados, telas, decisões, o dia a dia, integrações e permissões — e passa a operar assim que existe. Em semanas, não meses.',
+  alternates: {
+    canonical: '/o-que-tem',
+    languages: { 'pt-BR': '/o-que-tem', en: '/en/what-it-does' },
+  },
 };
 
 // As 6 perguntas do seu app: redação canônica em src/lib/messages.ts (FACES).

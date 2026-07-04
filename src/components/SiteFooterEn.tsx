@@ -15,6 +15,9 @@ export default function SiteFooterEn() {
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, fontSize: 14 }}>
           <Link href="/en">English home</Link>
           <Link href="/en/self-operating-app">Self-operating app</Link>
+          <Link href="/en/what-it-does">What it does</Link>
+          <Link href="/en/security">Security</Link>
+          <Link href="/en/accelerate">Accelerate</Link>
           <Link href="/en/pricing">Pricing</Link>
           <Link href="/terms" lang="pt-BR">Termos de Uso</Link>
           <Link href="/privacidade" lang="pt-BR">Privacidade</Link>

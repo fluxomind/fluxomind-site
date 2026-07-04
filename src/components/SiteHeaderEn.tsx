@@ -8,6 +8,9 @@ import { CTA_EN } from '@/lib/messages-en';
 // CTA permanece; menu hambúrguer EN entra quando o nav tiver mais itens.
 const NAV_EN = [
   { href: '/en/self-operating-app', label: 'What it is' },
+  { href: '/en/what-it-does', label: 'What it does' },
+  { href: '/en/security', label: 'Security' },
+  { href: '/en/accelerate', label: 'Accelerate' },
   { href: '/en/pricing', label: 'Pricing' },
 ] as const;
 

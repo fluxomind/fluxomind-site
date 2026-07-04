@@ -9,6 +9,10 @@ export const metadata: Metadata = {
   title: 'Segurança & Governança',
   description:
     'Por que delegar sem medo: as 5 regras da confiança — enquadramento, coerência, correção, humano no circuito e dados isolados — e o que sustenta cada uma na plataforma hoje, com honestidade sobre o que falta.',
+  alternates: {
+    canonical: '/seguranca',
+    languages: { 'pt-BR': '/seguranca', en: '/en/security' },
+  },
 };
 
 const ICON_PROPS = {
