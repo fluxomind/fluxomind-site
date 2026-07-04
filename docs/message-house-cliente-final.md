@@ -5,6 +5,8 @@
 
 Este documento governa toda a copy do site. Strings compartilhadas entre páginas vivem em `src/lib/messages.ts` — importe de lá, não duplique.
 
+**Vínculos upstream/downstream:** o contrato de sincronização com as fontes (BCM-07, catálogo de use cases `8-journeys/use-cases/`, product-plan) vive em [`docs/fontes-upstream.md`](./fontes-upstream.md) — mudou upstream, atualiza cá; nasceu cá, propõe upstream primeiro.
+
 ---
 
 ## 1. Hierarquia de mensagem

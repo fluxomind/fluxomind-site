@@ -35,6 +35,7 @@ automaticamente — o fluxo existe para nenhuma mudança chegar lá sem revisão
 
 | Se a mudança… | Atualize |
 |---|---|
+| Cria/edita caso de uso (`src/lib/casos.ts`) | Siga o contrato [docs/fontes-upstream.md](docs/fontes-upstream.md) (catálogo de UCs da plataforma é a fonte) e as regras do [ADR-0005](docs/adr/0005-catalogo-casos-de-uso-fonte-e-regras.md); anote `site_ref` no lado da plataforma |
 | Cria/remove evento de analytics ou muda o form de leads | [docs/leads-analytics.md](docs/leads-analytics.md) e, se coletar dado novo, a página `/privacidade` |
 | Toma uma decisão de arquitetura/engenharia | Novo ADR em [docs/adr/](docs/adr/README.md) |
 | Mexe em infraestrutura externa (Vercel, DNS, planilhas, envs) | [docs/historico-implantacao.md](docs/historico-implantacao.md) |

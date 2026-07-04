@@ -3,13 +3,19 @@
 // de fase §5). Formato GEO: h1 como pergunta na dor, primeira frase
 // definicional, FAQ real por caso (vira FAQPage JSON-LD na página).
 // Regra de crescimento: um caso novo só entra aqui quando a demo ganhar o
-// cenário correspondente (cada caso linka /demo?cenario=<cenario>).
+// cenário correspondente (cada caso linka /demo?cenario=<cenario>) E o UC
+// existir no catálogo upstream (contrato: docs/fontes-upstream.md).
 // Ordem do array = ordem de exibição no hub. Cobrança primeiro: o hero
 // comercial é Recuperar Receita (matrix.md do catálogo de UCs, anexo —
 // decisão do founder, 2026-07-04).
 
 export type CasoDeUso = {
   slug: string;
+  // Rastreabilidade upstream: IDs do catálogo L0 de use cases da plataforma
+  // (fluxomind-platform → fmd-docs/8-journeys/use-cases/catalog.md), conforme
+  // o crosswalk de docs/fontes-upstream.md. O catálogo é a fonte; o site é
+  // superfície. Ver ADR-0005.
+  ucIds: string[];
   cenario: 'leads' | 'caixa' | 'atendimento';
   area: string; // rótulo curto (cards e pill do hero)
   emoji: string;
@@ -27,6 +33,7 @@ export type CasoDeUso = {
 export const CASOS: CasoDeUso[] = [
   {
     slug: 'cobranca-e-contas-a-receber',
+    ucIds: ['UC-007', 'UC-022', 'UC-023'],
     cenario: 'caixa',
     area: 'Financeiro · cobrança',
     emoji: '💰',
@@ -78,6 +85,7 @@ export const CASOS: CasoDeUso[] = [
   },
   {
     slug: 'gestao-de-leads',
+    ucIds: ['UC-001', 'UC-002', 'UC-003'],
     cenario: 'leads',
     area: 'Vendas · leads e contratos',
     emoji: '📊',
@@ -129,6 +137,7 @@ export const CASOS: CasoDeUso[] = [
   },
   {
     slug: 'atendimento-whatsapp',
+    ucIds: ['UC-006', 'UC-027'],
     cenario: 'atendimento',
     area: 'Atendimento · WhatsApp',
     emoji: '📅',
