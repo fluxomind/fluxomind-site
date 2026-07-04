@@ -72,8 +72,9 @@ export default function HomeEn() {
         </div>
       </header>
 
-      {/* NEGATION */}
-      <section style={{ paddingTop: 0 }}>
+      {/* NEGATION — primeira seção após o hero: mantém o respiro padrão
+          (sem paddingTop: 0, que colava o card no bloco escuro do hero) */}
+      <section>
         <div className="wrap">
           <div className="fit">
             <div className="kick" style={{ color: 'var(--sky)' }}>
