@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import SiteHeaderEn from '@/components/SiteHeaderEn';
 import SiteFooterEn from '@/components/SiteFooterEn';
 import { TRUST_RULES_EN, CTA_EN } from '@/lib/messages-en';
-import { PLATFORM_CONTACT } from '@/lib/platform';
+import { PLATFORM_CONTACT_EN } from '@/lib/platform';
 
 export const metadata: Metadata = {
   title: 'Security & Governance',
@@ -127,7 +127,7 @@ export default function SecurityEn() {
               <a className="btn btn-primary" href="#rules">
                 See the five rules
               </a>
-              <a className="btn btn-ghost" href={PLATFORM_CONTACT} data-track="en-security-contact-cta">
+              <a className="btn btn-ghost" href={PLATFORM_CONTACT_EN} data-track="en-security-contact-cta">
                 {CTA_EN.contact}
               </a>
             </div>
@@ -364,7 +364,7 @@ export default function SecurityEn() {
             above is demonstrated, not asserted.
           </p>
           <div className="offerbtns">
-            <a className="btn btn-primary btn-lg" href={PLATFORM_CONTACT} data-track="en-security-contact-cta">
+            <a className="btn btn-primary btn-lg" href={PLATFORM_CONTACT_EN} data-track="en-security-contact-cta">
               {CTA_EN.contact}
             </a>
             <Link className="btn btn-ghost btn-lg" href="/en/what-it-does">

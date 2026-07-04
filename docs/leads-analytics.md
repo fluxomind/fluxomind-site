@@ -86,7 +86,8 @@ Casos de uso: `casos-hub-<slug>` (card do hub), `casos-hub-demo-cta`,
 português": `caso-<slug>-pedido-demo-cta`. Páginas EN: `en-home-demo-cta`,
 `en-home-contact-cta`, `en-soa-demo-cta`, `en-soa-contact-cta`,
 `en-pricing-demo-cta`, `en-pricing-contact-cta`, `en-wid-demo-cta`,
-`en-wid-contact-cta`, `en-security-contact-cta`, `en-accelerate-contact-cta`.
+`en-wid-contact-cta`, `en-security-contact-cta`, `en-accelerate-contact-cta`,
+`en-platform-contact-cta`.
 
 **O funil que importa** (BCM: instrumentar tudo):
 `pageview(/)` → `demo_run` → `demo_built` → `demo_ops_run` → `demo_ops_done` →

@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import SiteHeaderEn from '@/components/SiteHeaderEn';
 import SiteFooterEn from '@/components/SiteFooterEn';
 import { SIGNATURE_EN, NEGATION_EN, PHASE_EN, CTA_EN } from '@/lib/messages-en';
-import { PLATFORM_CONTACT } from '@/lib/platform';
+import { PLATFORM_CONTACT_EN } from '@/lib/platform';
 
 export const metadata: Metadata = {
   title: 'Accelerate — from pilot to production',
@@ -132,7 +132,7 @@ export default function AccelerateEn() {
             delivers.</strong>
           </p>
           <div className="herocta">
-            <a className="btn btn-primary" href={PLATFORM_CONTACT} data-track="en-accelerate-contact-cta">
+            <a className="btn btn-primary" href={PLATFORM_CONTACT_EN} data-track="en-accelerate-contact-cta">
               {CTA_EN.contact}
             </a>
             <a className="btn btn-ghost" href="#operated">
@@ -288,7 +288,7 @@ export default function AccelerateEn() {
               self-operating app with your team — and you follow every conclusion, with the proof.
             </p>
             <div className="ctab">
-              <a className="btn btn-primary" href={PLATFORM_CONTACT} data-track="en-accelerate-contact-cta">
+              <a className="btn btn-primary" href={PLATFORM_CONTACT_EN} data-track="en-accelerate-contact-cta">
                 {CTA_EN.contact}
               </a>
               <Link className="btn btn-ghost" href="/en/security">

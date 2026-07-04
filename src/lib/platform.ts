@@ -33,3 +33,9 @@ export const PLATFORM_CONTACT =
   `mailto:${CONTACT_EMAIL}` +
   '?subject=' +
   encodeURIComponent('Falar com o time da Fluxomind');
+
+// Variante EN do contato (páginas /en/* — ADR-0006).
+export const PLATFORM_CONTACT_EN =
+  `mailto:${CONTACT_EMAIL}` +
+  '?subject=' +
+  encodeURIComponent('Talk to the Fluxomind team');

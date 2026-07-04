@@ -10,7 +10,7 @@ import {
   CTA_EN,
 } from '@/lib/messages-en';
 import { DEFINITION_EN } from '@/lib/messages-en';
-import { PLATFORM_CONTACT } from '@/lib/platform';
+import { PLATFORM_CONTACT_EN } from '@/lib/platform';
 import SiteHeaderEn from '@/components/SiteHeaderEn';
 import SiteFooterEn from '@/components/SiteFooterEn';
 
@@ -95,7 +95,7 @@ export default function SelfOperatingApp() {
             <Link className="btn btn-primary" href="/demo" data-track="en-soa-demo-cta">
               {CTA_EN.demo}
             </Link>
-            <a className="btn btn-ghost" href={PLATFORM_CONTACT} data-track="en-soa-contact-cta">
+            <a className="btn btn-ghost" href={PLATFORM_CONTACT_EN} data-track="en-soa-contact-cta">
               {CTA_EN.contact}
             </a>
           </div>

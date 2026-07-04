@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 import SiteHeaderEn from '@/components/SiteHeaderEn';
 import SiteFooterEn from '@/components/SiteFooterEn';
 import { FACES_EN, CTA_EN } from '@/lib/messages-en';
-import { PLATFORM_CONTACT } from '@/lib/platform';
+import { PLATFORM_CONTACT_EN } from '@/lib/platform';
 
 export const metadata: Metadata = {
   title: 'What it does',
@@ -212,7 +212,7 @@ export default function WhatItDoesEn() {
             <Link className="btn btn-primary btn-lg" href="/demo" data-track="en-wid-demo-cta">
               {CTA_EN.demo}
             </Link>
-            <a className="btn btn-ghost btn-lg" href={PLATFORM_CONTACT} data-track="en-wid-contact-cta">
+            <a className="btn btn-ghost btn-lg" href={PLATFORM_CONTACT_EN} data-track="en-wid-contact-cta">
               {CTA_EN.contact}
             </a>
           </div>
