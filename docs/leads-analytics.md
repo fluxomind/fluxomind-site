@@ -118,5 +118,7 @@ padrão `<projeto>/data/leads.ndjson`).
 
 Sem cookies. Identificador de sessão anônimo em `sessionStorage` (morre com a aba).
 Eventos não carregam PII; o lead carrega os dados que a pessoa digitou, com
-consentimento declarado no form (link para /terms). Se um dia entrar vendor com
-cookies, aí sim revisar consentimento.
+consentimento declarado no form (links para /terms e /privacidade). As práticas
+descritas aqui estão espelhadas na política de privacidade pública
+(`/privacidade`) — **mudou a coleta? Atualize a política junto.** Se um dia
+entrar vendor com cookies, aí sim revisar consentimento.

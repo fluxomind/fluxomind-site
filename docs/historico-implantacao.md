@@ -33,6 +33,14 @@ registra **decisões e infraestrutura externa** que o git não mostra.
   pgTAP…), 6 correções de exagero/erro (mapa de camadas, compliance e CI).
 - **#27** — Ally como persona pública da jornada; botões passo a passo com
   destaque (◀ vermelho, ▶ azul).
+- **#28** — Este histórico e os runbooks de operação (`docs/runbooks.md`).
+- **#29** — Página `/privacidade` (LGPD) linkada no footer, form do beta,
+  Termos §8 e sitemap; documentação essencial do repo (ADRs em `docs/adr/`,
+  `docs/arquitetura.md`, `CONTRIBUTING.md`, `SECURITY.md`); ajustes da revisão
+  jurídica: canal privacidade@fluxomind.com (sem título "encarregado" —
+  dispensa p/ pequeno porte, Res. CD/ANPD 2/2022), cláusulas-padrão da ANPD na
+  transferência internacional, sede São Paulo/SP, runbook de incidente de
+  dados pessoais (prazos da Res. 15/2024).
 
 ## Infraestrutura externa (não versionada)
 
@@ -66,3 +74,4 @@ registra **decisões e infraestrutura externa** que o git não mostra.
 | `/admin/leads` vazio em produção | Limitação serverless documentada; a planilha é a fonte oficial |
 | Rate-limit em memória por instância | Migrar p/ KV/Redis se o tráfego crescer |
 | Fecho da demo no "home do workspace" com os 3 apps lado a lado | Ideia de backlog, sem urgência |
+| Guarda de logs de acesso por 6 meses (Marco Civil, art. 15) — logs Vercel expiram em ~1h–1d | Decisão de custo/risco (Log Drain). Se ativar: IP retido vira PII → atualizar `/privacidade` e registrar ADR |
