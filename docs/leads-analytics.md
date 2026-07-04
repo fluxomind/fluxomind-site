@@ -78,7 +78,10 @@ Se o webhook falhar, a API devolve 502 e o form oferece o fallback por e-mail
 Casos de uso: `casos-hub-<slug>` (card do hub), `casos-hub-demo-cta`,
 `casos-hub-beta-cta`, `caso-<slug>-demo-cta`, `caso-<slug>-beta-cta`
 (slugs: `gestao-de-leads` | `cobranca-e-contas-a-receber` |
-`atendimento-whatsapp`).
+`atendimento-whatsapp`). Home §usos: `home-uso-cobranca` | `home-uso-leads` |
+`home-uso-atendimento` (→ página do caso), `home-uso-onboarding` |
+`home-uso-aprovacoes` | `home-uso-paineis` (→ hub, sem página própria ainda),
+`home-usos-todos` (link "todos os casos").
 
 **O funil que importa** (BCM: instrumentar tudo):
 `pageview(/)` → `demo_run` → `demo_built` → `demo_ops_run` → `demo_ops_done` →
