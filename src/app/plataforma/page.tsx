@@ -50,7 +50,7 @@ export default function Plataforma() {
   return (
     <div className="page-tech">
       {/* NAV */}
-      <SiteHeader cta={{ label: CTA.demo, href: '/demo' }} />
+      <SiteHeader cta={{ label: CTA.demo, href: '/demo' }} enHref="/en/platform" />
 
       {/* HERO — prova de execução */}
       <header className="hero">

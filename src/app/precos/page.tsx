@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 export default function Precos() {
   return (
     <div className="page-pricing">
-      <SiteHeader cta={{ label: CTA.demo, href: '/demo' }} />
+      <SiteHeader cta={{ label: CTA.demo, href: '/demo' }} enHref="/en/pricing" />
 
       {/* HERO */}
       <header className="hero">

@@ -79,7 +79,7 @@ export default function AppOperante() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(TERM_JSONLD) }}
       />
-      <SiteHeader cta={{ label: CTA.demo, href: '/demo' }} />
+      <SiteHeader cta={{ label: CTA.demo, href: '/demo' }} enHref="/en/self-operating-app" />
 
       {/* HERO — definição na primeira frase (GEO) */}
       <header className="hero">

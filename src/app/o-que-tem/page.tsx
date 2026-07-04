@@ -91,7 +91,7 @@ const CARDS = FACES.map((f) => ({ ...f, ...FACE_DETAILS[f.key] }));
 export default function OQueTem() {
   return (
     <div className="page-feats">
-      <SiteHeader cta={{ label: CTA.demo, href: '/demo' }} />
+      <SiteHeader cta={{ label: CTA.demo, href: '/demo' }} enHref="/en/what-it-does" />
 
       {/* HERO */}
       <header className="hero">

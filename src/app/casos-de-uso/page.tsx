@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 export default function CasosDeUso() {
   return (
     <div className="page-ent">
-      <SiteHeader cta={{ label: CTA.demo, href: '/demo' }} />
+      <SiteHeader cta={{ label: CTA.demo, href: '/demo' }} enHref="/en/use-cases" />
 
       <header className="hero">
         <div className="wrap">

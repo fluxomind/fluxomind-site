@@ -105,7 +105,7 @@ const GOVERNANCE = [
 export default function Seguranca() {
   return (
     <div className="page-feats">
-      <SiteHeader cta={{ label: CTA.demo, href: '/demo' }} />
+      <SiteHeader cta={{ label: CTA.demo, href: '/demo' }} enHref="/en/security" />
 
       {/* HERO — governança como recurso, não compliance */}
       <header className="hero">

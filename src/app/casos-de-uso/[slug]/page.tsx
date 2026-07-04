@@ -61,7 +61,14 @@ export default async function CasoDeUsoPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
-      <SiteHeader cta={{ label: CTA.demo, href: `/demo?cenario=${caso.cenario}` }} />
+      <SiteHeader
+        cta={{ label: CTA.demo, href: `/demo?cenario=${caso.cenario}` }}
+        enHref={
+          CASO_EN_SLUG_BY_PT[caso.slug]
+            ? `/en/use-cases/${CASO_EN_SLUG_BY_PT[caso.slug]}`
+            : '/en/use-cases'
+        }
+      />
 
       <header className="hero">
         <div className="wrap">
