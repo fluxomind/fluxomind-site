@@ -659,6 +659,17 @@ export default function JourneyDemo() {
       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   }, []);
 
+  // Deep-link: /demo?cenario=leads|caixa|atendimento inicia a jornada direto
+  // naquele cenário (entrada das páginas de caso de uso). Lido do window no
+  // cliente — useSearchParams exigiria Suspense sem ganho aqui, pois o valor
+  // só importa uma vez, no mount. Parâmetro inválido/ausente = entrada normal
+  // (pills). beginOnce torna o re-run do StrictMode inócuo.
+  useEffect(() => {
+    const q = new URLSearchParams(window.location.search).get('cenario');
+    if (q === 'leads' || q === 'caixa' || q === 'atendimento') startPlanilha(q, 'link');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   useEffect(() => {
     const n = scrollRef.current;
     if (n) n.scrollTop = n.scrollHeight;
@@ -804,13 +815,13 @@ export default function JourneyDemo() {
     setStagesK(CENARIOS[id].columns);
   };
 
-  async function startPlanilha(id?: CenarioId) {
+  async function startPlanilha(id?: CenarioId, entry: 'planilha' | 'link' = 'planilha') {
     if (!beginOnce()) return;
     const gen = genRef.current;
     const cid = id ?? cenarioRef.current; // replay usa o cenário preservado
     if (id) aplicarCenario(id);
     const c = CENARIOS[cid];
-    track('jornada_start', { entry: 'planilha', cenario: cid });
+    track('jornada_start', { entry, cenario: cid });
     await typeThenPush(`📎 ${c.xlsx}`);
     if (genRef.current !== gen) return;
     await ally(c.planilhaRead, 900);

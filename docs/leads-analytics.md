@@ -61,7 +61,7 @@ Se o webhook falhar, a API devolve 502 e o form oferece o fallback por e-mail
 | `demo_ops_run` | Visitante iniciou o Ato 2 (operar) | `scenario` |
 | `demo_ops_done` | Ato 2 concluído — o momento de convicção | `scenario` |
 | `demo_beta_click` / `demo_contact_click` | CTA ao fim da demo | — |
-| `jornada_start` | Iniciou a jornada interativa (/demo) | `entry` (planilha \| prosa-livre), `cenario` (leads \| caixa \| atendimento) |
+| `jornada_start` | Iniciou a jornada interativa (/demo) | `entry` (planilha \| prosa-livre \| link), `cenario` (leads \| caixa \| atendimento) |
 | `jornada_stage` | Avançou de etapa na jornada | `stage` (0-7), `label`, `cenario` (leads \| caixa \| atendimento) |
 | `jornada_touch` | Operou o rascunho vivo (1ª interação no app) | — |
 | `jornada_keep` | "Ficar com ele" — aprovou vendo (convicção) | — |
@@ -84,6 +84,10 @@ Se o webhook falhar, a API devolve 502 e o form oferece o fallback por e-mail
 `pageview(/demo)` → `jornada_start` → `jornada_touch` → `jornada_keep` →
 `jornada_hitl_ok` → `jornada_publish` → `jornada_done` → `jornada_beta_click` →
 `beta_form_submitted`.
+
+**Deep-link da demo**: `/demo?cenario=leads|caixa|atendimento` inicia a jornada
+automaticamente naquele cenário com `entry: link` — é como as páginas de caso
+de uso alimentam a demo, e o que separa esse tráfego no funil.
 
 ## Ver os leads
 
