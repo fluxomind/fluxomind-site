@@ -25,6 +25,8 @@
 | `/precos` | BCM-07 `final/product-packaging.md` §0 (price list App-Store) + `pricing-launch-strategy.md` | Preço/âncora só muda upstream primeiro. |
 | Demos (JourneyDemo/DemoBuilder) — o quê demonstrar | `matrix.md` Ranking B + Anexo (auditoria do lighthouse) | O roteiro canônico das demos do site É o cenário no código + o caso em `casos.ts` — **não** duplicar demo-spec na plataforma; a matrix referencia os cenários daqui. |
 
+| `src/lib/messages-en.ts` + páginas `/en/*` | `docs/message-house-en.md` ← `docs/message-house-cliente-final.md` ← BCM-07 | A lei EN é derivada 1:1 da lei pt — mudou a pt, revisar a EN. Termo da categoria em inglês: **um só, sempre** ("self-operating app", proposta aguardando martelo). Escopo atual: credibilidade (landing + categoria); aquisição EN é projeto futuro gateado. |
+
 ## Crosswalk cenário ↔ use case (estado 2026-07-04)
 
 | Cenário (site) | UCs (catálogo) | App correspondente | Papel |

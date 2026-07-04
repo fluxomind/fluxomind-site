@@ -83,7 +83,9 @@ Casos de uso: `casos-hub-<slug>` (card do hub), `casos-hub-demo-cta`,
 `home-uso-aprovacoes` | `home-uso-paineis` (→ hub, sem página própria ainda),
 `home-usos-todos` (link "todos os casos"). Página da categoria:
 `app-operante-demo-cta`, `app-operante-beta-cta`. Bloco "O pedido, em
-português": `caso-<slug>-pedido-demo-cta`.
+português": `caso-<slug>-pedido-demo-cta`. Páginas EN: `en-home-demo-cta`,
+`en-home-contact-cta`, `en-soa-demo-cta`, `en-soa-contact-cta`,
+`en-pricing-demo-cta`, `en-pricing-contact-cta`.
 
 **O funil que importa** (BCM: instrumentar tudo):
 `pageview(/)` → `demo_run` → `demo_built` → `demo_ops_run` → `demo_ops_done` →

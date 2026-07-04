@@ -27,6 +27,7 @@ export default function SiteFooter({ tagline }: { tagline: string }) {
           <Link href="/app-operante">O que é um app operante</Link>
           <Link href="/terms">Termos de Uso</Link>
           <Link href="/privacidade">Privacidade</Link>
+          <Link href="/en" lang="en">English</Link>
         </div>
         <div className="footmeta">
           <div>{tagline}</div>

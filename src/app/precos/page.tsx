@@ -9,6 +9,10 @@ export const metadata: Metadata = {
   title: 'Preços',
   description:
     'Durante o beta, o acesso é acompanhado e sem cartão — você entra pela lista do beta. Depois, assinatura + uso com os modelos de fronteira inclusos: uma fatura, em reais, sem gerir contas e chaves de IA.',
+  alternates: {
+    canonical: '/precos',
+    languages: { 'pt-BR': '/precos', en: '/en/pricing' },
+  },
 };
 
 export default function Precos() {

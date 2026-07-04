@@ -25,5 +25,6 @@ decisão não viva só na cabeça de quem decidiu.
 | [0003](0003-dominio-canonico-www-fluxomind-com.md) | Domínio canônico único: www.fluxomind.com | Aceito |
 | [0004](0004-fluxo-branch-pr-deploy-main.md) | Fluxo de mudança: branch + PR; deploy automático só na main | Aceito |
 | [0005](0005-catalogo-casos-de-uso-fonte-e-regras.md) | Catálogo de casos de uso: fonte upstream (plataforma), escopo e regras | Aceito |
+| [0006](0006-arquitetura-i18n.md) | Multi-idioma: árvores paralelas por locale (pt raiz, /en, /es futuro) | Aceito |
 
 Referência sobre o formato: [adr.github.io](https://adr.github.io/).
