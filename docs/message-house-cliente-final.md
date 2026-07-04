@@ -97,5 +97,5 @@ A conversão principal do site é **viver a demonstração** — o encantamento 
 | `/seguranca` | As 5 regras da confiança + governança | Sóbrio, verificável |
 | `/precos` | Beta honesto: acompanhado, sem cartão; sem números inventados | Direto, sem fricção |
 | `/por-que` | O propósito, na palavra do fundador (3 atos, assinada e datada) | Pessoal, primeira pessoa, sem hipérbole |
-| `/demo` | Jornada interativa dirigida pelo visitante (espelho → aprova-o-que-vê → operar → evoluir) | Encantamento com moldura de fase ("o produto que estamos construindo"); persona = "assistente" (Ally é interno até decisão do fundador) |
+| `/demo` | Jornada interativa dirigida pelo visitante (espelho → aprova-o-que-vê → operar → evoluir) | Encantamento com moldura de fase ("o produto que estamos construindo"); **persona pública = Ally** (voz da criação/operação com o criador — decisão do fundador, 2026-07-03; antes era interna). O agente **dentro do app do cliente** (thread do WhatsApp, execução de cobrança, etc.) permanece **"o assistente" genérico** — o cliente final não conhece a Ally. Gênero: "a Ally". |
 | `/terms` | Legal | Inalterado em conteúdo; marca "Fluxomind" |

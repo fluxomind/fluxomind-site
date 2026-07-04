@@ -107,7 +107,7 @@ const INITIAL_ITEMS: Item[] = [
   {
     kind: 'msg',
     who: 'ally',
-    text: 'Oi! 👋 Escolha um exemplo aqui embaixo — ou me conta um problema do seu negócio com as suas palavras, que eu leio como você trabalha hoje. Os dois caminhos valem.',
+    text: 'Oi! Eu sou a Ally 👋 Escolha um exemplo aqui embaixo — ou me conta um problema do seu negócio com as suas palavras, que eu leio como você trabalha hoje. Os dois caminhos valem.',
   },
 ];
 
@@ -157,7 +157,7 @@ type Cenario = {
   tema: string; // roteiro do texto livre
   // entrada
   xlsx: string; // "contas-a-receber.xlsx (2 abas · 22 linhas)"
-  planilhaRead: string; // fala do assistente ao ler a planilha
+  planilhaRead: string; // fala da Ally ao ler a planilha
   espelhoChips: string[];
   // enquadrar
   premissas: Premissa[];
@@ -925,7 +925,7 @@ export default function JourneyDemo() {
     setDraft('kept');
     track('jornada_keep');
     goStage(5);
-    await ally('Agora o assistente assume o dia a dia — e te pergunta antes do que importa. Olha ele trabalhando:', 700);
+    await ally('Agora a Ally assume o dia a dia — e te pergunta antes do que importa. Olha ela trabalhando:', 700);
     if (genRef.current !== gen) return;
     const am = c.autoMove;
     setRecords((p) =>
@@ -1379,7 +1379,7 @@ export default function JourneyDemo() {
       case 'hitl':
         return (
           <div className={'jd-card jd-gate' + (done ? ' jd-off' : '')}>
-            <div className="jd-kick jd-kick-amber">Decisão sua — o assistente espera</div>
+            <div className="jd-kick jd-kick-amber">Decisão sua — a Ally espera</div>
             <p className="jd-p">{boldify(cen.hitl.text)}</p>
             {foot ?? (
               <div className="jd-btns">
@@ -1667,10 +1667,11 @@ export default function JourneyDemo() {
           fluxomind
         </Link>
         <span className="jd-top-crumb">
-          sua-empresa <i>/</i> Assistente — <b>Jornada de criação</b>
+          sua-empresa <i>/</i> Ally — <b>Jornada de criação</b>
         </span>
         <div className="jd-top-nav" role="group" aria-label="Navegar pela jornada passo a passo">
           <button
+            className="jd-nav-back"
             onClick={voltarPasso}
             aria-label="Voltar um passo"
             title="Voltar um passo"
@@ -1679,7 +1680,12 @@ export default function JourneyDemo() {
             ◀
           </button>
           <span className="jd-top-nav-lbl">passo a passo</span>
-          <button onClick={avancarPasso} aria-label="Avançar um passo" title="Avançar um passo">
+          <button
+            className="jd-nav-fwd"
+            onClick={avancarPasso}
+            aria-label="Avançar um passo"
+            title="Avançar um passo"
+          >
             ▶
           </button>
         </div>
@@ -1718,7 +1724,7 @@ export default function JourneyDemo() {
               if (it.kind === 'msg')
                 return (
                   <div key={i} className={'jd-msg ' + it.who}>
-                    <span className="jd-who">{it.who === 'ally' ? 'AI' : 'VC'}</span>
+                    <span className="jd-who">{it.who === 'ally' ? 'Ally' : 'VC'}</span>
                     <span className="jd-bubble">{it.text}</span>
                   </div>
                 );
@@ -1740,7 +1746,7 @@ export default function JourneyDemo() {
             })}
             {typing && (
               <div className="jd-msg ally">
-                <span className="jd-who">AI</span>
+                <span className="jd-who">Ally</span>
                 <span className="jd-bubble jd-typing"><i /><i /><i /></span>
               </div>
             )}
@@ -1775,7 +1781,7 @@ export default function JourneyDemo() {
                     ? 'Escreva aqui — ex.: adiciona uma etapa no funil…'
                     : phText || 'Ou escreva com as suas palavras o problema do seu negócio…'
                 }
-                aria-label="Mensagem para o assistente"
+                aria-label="Mensagem para a Ally"
               />
               {emulating && (
                 <div className="jd-ghost" aria-hidden="true">
@@ -2021,9 +2027,12 @@ const JD_CSS = `
 .jd-top-crumb i { font-style:normal; opacity:.5; margin:0 2px; }
 .jd-top-crumb b { color:var(--jd-tx); font-weight:600; }
 .jd-top-nav { margin-left:auto; display:flex; align-items:center; gap:2px; border:1px solid var(--jd-line); border-radius:999px; padding:2px 4px; }
-.jd-top-nav button { border:none; background:none; color:var(--jd-tx); font-size:12px; width:26px; height:24px; border-radius:99px; cursor:pointer; }
-.jd-top-nav button:hover:not(:disabled) { background:rgba(255,255,255,.08); }
-.jd-top-nav button:disabled { color:var(--jd-mut); opacity:.4; cursor:default; }
+.jd-top-nav button { border:none; font-size:12px; width:26px; height:24px; border-radius:99px; cursor:pointer; color:#fff; }
+.jd-top-nav button.jd-nav-fwd { background:#2B66DD; }
+.jd-top-nav button.jd-nav-fwd:hover:not(:disabled) { background:#3d76ec; }
+.jd-top-nav button.jd-nav-back { background:#b83a3a; }
+.jd-top-nav button.jd-nav-back:hover:not(:disabled) { background:#cc4a4a; }
+.jd-top-nav button:disabled { background:rgba(255,255,255,.06); color:var(--jd-mut); opacity:.4; cursor:default; }
 .jd-top-nav-lbl { font-size:10.5px; color:var(--jd-mut); letter-spacing:.04em; padding:0 2px; }
 @media (max-width:560px){ .jd-top-nav-lbl{ display:none; } }
 .jd-top-restart { display:flex; align-items:center; gap:4px; border:1px solid var(--jd-line); background:none; color:var(--jd-tx); font:inherit; font-size:12px; font-weight:600; border-radius:999px; padding:5px 11px; cursor:pointer; white-space:nowrap; }
@@ -2085,6 +2094,7 @@ const JD_CSS = `
 .jd-msg { display:flex; gap:8px; max-width:94%; }
 .jd-msg.user { align-self:flex-end; flex-direction:row-reverse; }
 .jd-who { width:26px;height:26px;min-width:26px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;background:rgba(77,171,247,.15);color:var(--jd-blue); }
+.jd-msg.ally .jd-who { font-size:8.5px; letter-spacing:-.02em; } /* "Ally" (4 letras) cabe no círculo */
 .jd-msg.user .jd-who { background:rgba(167,139,250,.15); color:#A78BFA; }
 .jd-bubble { background:var(--jd-panel); border:1px solid var(--jd-line); border-radius:12px; padding:9px 13px; line-height:1.5; }
 .jd-msg.user .jd-bubble { background:rgba(77,171,247,.1); border-color:rgba(77,171,247,.25); }
