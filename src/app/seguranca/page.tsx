@@ -301,8 +301,9 @@ export default function Seguranca() {
             <div className="kick">Compliance, com honestidade</div>
             <h2>O que já está pronto — e o que ainda não está</h2>
             <p className="lead" style={{ marginTop: 14, maxWidth: '64ch' }}>
-              A plataforma escaneia controles SOC2 (CC6/CC7/CC8) e GDPR (Art. 17/20/30/32)
-              continuamente — verificação automática a cada mudança, não checklist manual.{' '}
+              A plataforma tem scanners automatizados de controles SOC2 (CC6/CC7/CC8) e GDPR
+              (Art. 17/20/30/32) — verificação por código, não checklist manual; hoje rodam sob
+              demanda, e a execução contínua agendada está no roadmap.{' '}
               <strong>
                 Ainda não temos certificação SOC2 formal de terceiro nem pen-test externo concluído
               </strong>{' '}
@@ -348,13 +349,13 @@ export default function Seguranca() {
                 <td>
                   <b>Compliance</b>
                 </td>
-                <td>Mapeamento SOC2/GDPR escaneado continuamente</td>
+                <td>Scanners SOC2/GDPR automatizados (sob demanda)</td>
                 <td>
                   <span className="badge b-parc">
                     <span className="d" /> Parcial
                   </span>
                 </td>
-                <td className="next">Certificação SOC2 Type II (auditoria externa)</td>
+                <td className="next">Execução contínua + certificação SOC2 Type II (auditoria externa)</td>
               </tr>
             </tbody>
           </table>

@@ -234,8 +234,8 @@ export default function Plataforma() {
               39 engines organizadas em 10 camadas (verificável em{' '}
               <span className="mono">src/engine/</span>) — abaixo, as camadas com engines
               representativas de cada uma. Cada engine é um módulo isolado com boundaries estritos —
-              import indevido entre internals <strong>não passa no CI</strong>. Evolução por camada,
-              sem ruptura.
+              import indevido entre internals <strong>é bloqueado pelo verificador de
+              boundaries</strong>, que roda no pipeline de deploy. Evolução por camada, sem ruptura.
             </p>
           </div>
           <div className="layers">
@@ -247,16 +247,16 @@ export default function Plataforma() {
               <b>Tooling</b> · <span className="mono">tool · mcp</span>
             </div>
             <div className="lchip">
-              <b>Experience</b> · <span className="mono">app · dataView · speech</span>
+              <b>Experience</b> · <span className="mono">app · appStore · dataView · speech</span>
             </div>
             <div className="lchip">
-              <b>Automation</b> · <span className="mono">process · code</span>
+              <b>Automation</b> · <span className="mono">workflow · code</span>
             </div>
             <div className="lchip">
               <b>Governance</b> · <span className="mono">security · policy · quota · auditTrail</span>
             </div>
             <div className="lchip">
-              <b>Data</b> · <span className="mono">data · metadata · cache · queue · file</span>
+              <b>Data</b> · <span className="mono">atlas · data · metadata · cache · queue · file</span>
             </div>
             <div className="lchip">
               <b>Monitoring</b> · <span className="mono">monitoring</span>
@@ -265,7 +265,7 @@ export default function Plataforma() {
               <b>CI/CD AIOps</b> · <span className="mono">deployment · operations · validation</span>
             </div>
             <div className="lchip">
-              <b>Ecosystem</b> · <span className="mono">api · plugin · appStore</span>
+              <b>Ecosystem</b> · <span className="mono">api · plugin</span>
             </div>
             <div className="lchip">
               <b>Learning</b> · <span className="mono">feedback · fineTune · eval · evolution</span>
@@ -350,8 +350,8 @@ export default function Plataforma() {
               <div className="kick">④ Qualidade &amp; correção</div>
               <h3>Correção verificada por máquina, não por confiança</h3>
               <p style={{ color: 'var(--slate)', fontSize: '14.5px', marginTop: 10 }}>
-                O princípio é “confiança conquistada por evidência”: a plataforma se autoverifica a
-                cada mudança.
+                O princípio é “confiança conquistada por evidência”: a plataforma se verifica por
+                código — suítes que provam isolamento, integridade e contratos, não checklist.
               </p>
               <span className="badge b-impl" style={{ marginTop: 14 }}>
                 <span className="d" /> Implementado
@@ -361,10 +361,12 @@ export default function Plataforma() {
               <div className="feat">
                 <span className="ck">✓</span>
                 <div>
-                  <h4>Invariantes de qualidade, verificados no CI</h4>
+                  <h4>Invariantes de qualidade, verificados por máquina</h4>
                   <p>
                     Isolamento (probes cross-tenant + RLS via pgTAP), integridade, contratos,
-                    resiliência, compliance e evolvability — rodando como gate no CI.
+                    resiliência, compliance e evolvability. Boundaries, testes e gate de eval
+                    rodam sob demanda e no pipeline de deploy; a suíte de isolamento, em
+                    workflow dedicado.
                   </p>
                   <div className="src">
                     trilha: <code>validationEngine</code>
@@ -544,8 +546,9 @@ export default function Plataforma() {
             <div className="kick">⑦ Maturidade &amp; compliance</div>
             <h2>O que está pronto, com honestidade</h2>
             <p className="lead" style={{ marginTop: 14 }}>
-              A plataforma escaneia controles SOC2 (CC6/CC7/CC8) e GDPR (Art. 17/20/30/32)
-              continuamente — verificação automática a cada mudança, não checklist manual.
+              A plataforma tem scanners automatizados de controles SOC2 (CC6/CC7/CC8) e GDPR
+              (Art. 17/20/30/32) — verificação por código, não checklist manual. Hoje rodam sob
+              demanda; a execução contínua agendada está no roadmap.
             </p>
           </div>
           <table>
@@ -627,14 +630,14 @@ export default function Plataforma() {
                 <td>
                   <b>Compliance</b>
                 </td>
-                <td>Scanners SOC2/GDPR contínuos</td>
+                <td>Scanners SOC2/GDPR automatizados (sob demanda)</td>
                 <td>
                   <span className="badge b-parc">
                     <span className="d" />
                     Parcial
                   </span>
                 </td>
-                <td className="next">Certificação SOC2 Type II (auditoria externa)</td>
+                <td className="next">Execução contínua + certificação SOC2 Type II (auditoria externa)</td>
               </tr>
             </tbody>
           </table>
