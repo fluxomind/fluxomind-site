@@ -11,6 +11,8 @@ import {
 } from '@/lib/messages-en';
 import { DEFINITION_EN } from '@/lib/messages-en';
 import { PLATFORM_CONTACT } from '@/lib/platform';
+import SiteHeaderEn from '@/components/SiteHeaderEn';
+import SiteFooterEn from '@/components/SiteFooterEn';
 
 export const metadata: Metadata = {
   title: 'What is a self-operating app? — the category, explained',
@@ -79,18 +81,7 @@ export default function SelfOperatingApp() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(TERM_JSONLD) }}
       />
 
-      <header className="bg-white" style={{ borderBottom: '1px solid var(--line)' }}>
-        <div className="wrap" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 24px' }}>
-          <Link href="/en" aria-label="Fluxomind — English home">
-            <img src="/logoSVG/logo-light.svg" alt="Fluxomind" style={{ height: 30 }} />
-          </Link>
-          <div style={{ display: 'flex', gap: 18, alignItems: 'center' }}>
-            <Link href="/app-operante" lang="pt-BR">
-              Português →
-            </Link>
-          </div>
-        </div>
-      </header>
+      <SiteHeaderEn ptHref="/app-operante" />
 
       <header className="hero">
         <div className="wrap">
@@ -212,18 +203,7 @@ export default function SelfOperatingApp() {
         </div>
       </section>
 
-      <footer style={{ borderTop: '1px solid var(--line)', padding: '28px 0', marginTop: 20 }}>
-        <div className="wrap" style={{ display: 'flex', flexWrap: 'wrap', gap: 16, justifyContent: 'space-between', alignItems: 'center' }}>
-          <div style={{ color: 'var(--slate)', fontSize: 14 }}>
-            © 2026 Fluxomind · FLUXOMIND LTDA — CNPJ: 60.162.547/0001-15 · São Paulo, Brazil
-          </div>
-          <div style={{ display: 'flex', gap: 16, fontSize: 14 }}>
-            <Link href="/en">English home</Link>
-            <Link href="/terms" lang="pt-BR">Termos de Uso</Link>
-            <Link href="/privacidade" lang="pt-BR">Privacidade</Link>
-          </div>
-        </div>
-      </footer>
+      <SiteFooterEn />
     </div>
   );
 }

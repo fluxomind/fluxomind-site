@@ -21,6 +21,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE_URL}/seguranca`, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${BASE_URL}/en`, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${BASE_URL}/en/self-operating-app`, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${BASE_URL}/en/pricing`, changeFrequency: 'monthly', priority: 0.5 },
     { url: `${BASE_URL}/terms`, changeFrequency: 'yearly', priority: 0.3 },
     { url: `${BASE_URL}/privacidade`, changeFrequency: 'yearly', priority: 0.3 },
   ];
