@@ -53,6 +53,11 @@ registra **decisões e infraestrutura externa** que o git não mostra.
   vínculos cruzados site↔plataforma (`docs/fontes-upstream.md`, `ucIds` no
   `casos.ts`, ADR-0005) — catálogo de UCs da plataforma é a fonte; hero
   comercial = Recuperar Receita (matrix, anexo).
+- **#34** — Página da categoria `/app-operante` ("O que é um app operante?"):
+  definição canônica do termo, negação tripla, 6 perguntas, 5 regras, FAQ +
+  FAQPage e DefinedTerm JSON-LD; copy 100% derivada de `messages.ts`;
+  linkada no footer e no hub de casos; 15ª rota do sitemap. Ativo GEO
+  central: a fonte a ser citada quando IAs definirem o termo.
 
 ## Infraestrutura externa (não versionada)
 
