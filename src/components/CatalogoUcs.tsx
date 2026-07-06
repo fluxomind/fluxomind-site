@@ -2,8 +2,17 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import { UC_INDEX, type UcIndex } from '@/lib/catalogo-ucs-index';
+import { UC_INDEX as UC_INDEX_RAW, type UcIndex } from '@/lib/catalogo-ucs-index';
+import { TITULOS_CMO } from '@/lib/catalogo-titulos';
 import { track } from '@/lib/analytics';
+
+// Camada de copy curada: título de marketing na tela; o título técnico
+// upstream permanece pesquisável (a busca casa com os dois).
+const UC_INDEX: (UcIndex & { tituloTec: string })[] = UC_INDEX_RAW.map((u) => ({
+  ...u,
+  tituloTec: u.titulo,
+  titulo: TITULOS_CMO[u.id] ?? u.titulo,
+}));
 
 // Catálogo inspiracional dos 67 UCs (decisão do fundador 2026-07-06 —
 // emenda ao ADR-0005): página ÚNICA com navegação por hash (#UC-007), sem
@@ -128,7 +137,7 @@ export default function CatalogoUcs() {
     return UC_INDEX.filter((u) => {
       if (fam && u.fam !== fam) return false;
       if (!ql) return true;
-      return (u.id + ' ' + u.titulo + ' ' + u.dorHook).toLowerCase().includes(ql);
+      return (u.id + ' ' + u.titulo + ' ' + u.tituloTec + ' ' + u.dorHook).toLowerCase().includes(ql);
     });
   }, [fam, q]);
 
