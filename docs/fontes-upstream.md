@@ -29,6 +29,8 @@
 
 | Catálogo de UCs no site (`/casos-de-uso`, 67 UCs) | `catalog.md` + `_backlog/UC-*/package.md` | Regenerar com `scripts/gera-catalogo-ucs.py` (sanitiza jargão interno; gera índice SSR + lâminas JSON). Mudou package upstream → rodar o script e commitar. |
 
+| Catálogo EN (`/en/use-cases`) | mesma fonte, via tradução no site | Lâminas EN (`catalogo-laminas-en.json`) e hooks (`catalogo-hooks-en.ts`) são TRADUÇÃO do site (consolidada por `scripts/merge-laminas-en.py`), não fonte. UC alterado upstream → retraduzir aquele UC. Quando a skill emitir campos EN nos packages, esta camada é substituída pela fonte. |
+
 ## Crosswalk cenário ↔ use case (estado 2026-07-04)
 
 | Cenário (site) | UCs (catálogo) | App correspondente | Papel |
