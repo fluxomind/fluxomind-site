@@ -25,6 +25,20 @@ def limpa(txt):
     frases = re.split(r'(?<=[.!?])\s+', txt or '')
     return ' '.join(f for f in frases if not INTERNO.search(f)).strip()
 
+# parênteses com referência interna somem sem derrubar a célula toda
+PAREN_INTERNO = re.compile(
+    r'\s*\((?:[^()]*(?:DP0\d\d|Fase \d|trilho|marketplace|UC-\d{3} cobre)[^()]*)\)')
+
+def scrub(txt):
+    return PAREN_INTERNO.sub('', txt or '').strip()
+
+def kpi_cliente(txt):
+    """Meta-linguagem de pipeline vira benefício na língua do cliente."""
+    t = limpa(txt)
+    t = re.sub(r'^KPI\s+primário:\s*', '', t)
+    t = re.sub(r'Meta\s+de\s+reconhecimento[^:"]*:', 'No fim, você vai dizer:', t)
+    return t.strip()
+
 # ---- catálogo L0 ----
 cat = open(f'{BASE}/catalog.md').read()
 cur_fam, ucs = None, {}
@@ -63,16 +77,16 @@ for d in sorted(glob.glob(f'{BASE}/_backlog/UC-*/package.md')):
             if len(cells) >= 3:
                 for k, v in zip(('dentro', 'fora', 'evol'), cells[:3]):
                     if v:
-                        esc[k].append(v)
+                        esc[k].append(scrub(v))
     p['escopo'] = esc
     m = re.search(r'## 4\..*?\n\|[-| ]+\|?\n(.*?)(?=\n\n|\n## )', s, re.S)
     p['dims'] = [{'d': c[0], 't': c[1]} for c in
                  ([x.strip() for x in r.strip('|').split('|')] for r in
                   (m.group(1).strip().splitlines() if m else [])) if len(c) >= 2]
     m = re.search(r'## 5\..*?\n\n(.*?)(?=\n## )', s, re.S)
-    p['kpi'] = limpa(re.sub(r'\*\*', '', m.group(1).strip())) if m else ''
+    p['kpi'] = kpi_cliente(re.sub(r'\*\*', '', m.group(1).strip())) if m else ''
     m = re.search(r'## 9\..*?\n\|[-| ]+\|?\n(.*?)(?=\n\n---|\n---|\n## |\Z)', s, re.S)
-    p['objecoes'] = [{'q': c[0].strip('"'), 'a': c[1].strip('"')} for c in
+    p['objecoes'] = [{'q': scrub(c[0].strip('"')), 'a': scrub(c[1].strip('"'))} for c in
                      ([x.strip() for x in r.strip('|').split('|')] for r in
                       (m.group(1).strip().splitlines() if m else [])) if len(c) >= 2 and c[0]]
     ucs[uid]['pack'] = p

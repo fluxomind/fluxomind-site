@@ -1,0 +1,82 @@
+// Títulos de marketing do catálogo de UCs — copy CURADA (CMO), na língua do
+// cliente: dor/resultado, sem siglas nem taxonomia interna. O título técnico
+// segue vivo na fonte upstream (catalog.md); esta camada é só apresentação.
+// Regras: sem "CRM" para o UC-001 (decisão matrix), sem nome de concorrente
+// (UC-061), sem jargão de fase/pipeline. Léxico do message house.
+
+export const TITULOS_CMO: Record<string, string> = {
+  // A — Operações do dia a dia
+  'UC-001': 'Do lead ao contrato, sem perder ninguém no caminho',
+  'UC-002': 'Leads qualificados sozinhos, follow-up que não esquece',
+  'UC-003': 'Contratos com alçadas, vencimentos e renovações em dia',
+  'UC-004': 'Cliente novo recebido do jeito certo, sem passo esquecido',
+  'UC-005': 'Saiba quem vai cancelar — antes de cancelar',
+  'UC-006': 'Atendimento que resolve, e chama seu time na hora certa',
+  'UC-007': 'Cobrança que não deixa vencimento passar',
+  'UC-008': 'Compras com pedido, alçada e recebimento sem papelada',
+  'UC-009': 'Reembolsos aprovados com prova, sem caça a notas',
+  'UC-010': 'Projetos e entregas com o cliente vendo o andamento',
+  'UC-011': 'Triagem de currículos e entrevistas andando sozinhas',
+  'UC-012': 'Funcionário entra (e sai) com tudo pronto no dia certo',
+  'UC-013': 'Ordens de serviço do despacho ao fechamento, com evidência',
+  'UC-014': 'Estoque que avisa antes de acabar',
+  'UC-015': 'Cadastros limpos, sem duplicados e sem retrabalho',
+  'UC-016': 'Pergunte aos seus dados — e receba o relatório pronto',
+  'UC-017': 'Fornecedores homologados, com documentos e avaliações em dia',
+  'UC-018': 'Políticas internas com aceite e trilha, sem planilha de controle',
+  // B — Agentes 24/7
+  'UC-019': 'Métrica saiu da faixa? A ação corretiva já começou',
+  'UC-020': 'Nutrição de meses que nunca cai no esquecimento',
+  'UC-021': 'Milhares de registros processados sem perder um',
+  'UC-022': 'Follow-up incansável de propostas e pendências',
+  'UC-023': 'Renovações antecipadas — desconto só com o seu OK',
+  'UC-024': 'Conciliações conferidas linha a linha, sem sustos',
+  'UC-025': 'Cliente sumido? A reativação começa sozinha',
+  'UC-026': 'Fechamento do mês no trilho, sem correria',
+  // C — Seus clientes, atendidos
+  'UC-027': 'Seu cliente resolve tudo pelo WhatsApp, sem baixar nada',
+  'UC-028': 'Página de agendamento aberta 24 horas',
+  'UC-029': 'Pedidos e orçamentos entrando direto do seu site',
+  'UC-030': '“Onde está meu pedido?” — respondido sem o seu time',
+  'UC-031': 'Portal do cliente: documentos, histórico e 2ª via no autoatendimento',
+  'UC-032': 'Cliente insatisfeito detectado — e recuperado a tempo',
+  'UC-033': 'Avisos automáticos no canal que o cliente prefere',
+  'UC-034': 'Todo lead do site cai direto no seu funil',
+  // D — Por setor
+  'UC-035': 'Clínica com agenda cheia e recepção desafogada',
+  'UC-036': 'Escritório de advocacia com prazos que não estouram',
+  'UC-037': 'Contabilidade com a coleta mensal de documentos no automático',
+  'UC-038': 'Imobiliária do anúncio à assinatura, sem fio solto',
+  'UC-039': 'Agência do briefing à aprovação do cliente, sem retrabalho',
+  'UC-040': 'Escola e cursos com matrícula e secretaria rodando sozinhas',
+  'UC-041': 'Esteira de crédito com análise e alçadas sob controle',
+  'UC-042': 'Pós-venda do e-commerce: trocas e devoluções sem fila',
+  'UC-043': 'Serviços recorrentes com contratos, escalas e ordens em dia',
+  'UC-044': 'Eventos da inscrição ao pós-evento, sem planilha de última hora',
+  'UC-045': 'Condomínios com chamados e inadimplência sob controle',
+  'UC-046': 'Academia com matrículas, renovações e retenção no automático',
+  'UC-047': 'Oficina com orçamento aprovado por link e status do reparo',
+  'UC-048': 'Exames ocupacionais convocados, agendados e com laudos em dia',
+  // E — Multi-cliente (BPO)
+  'UC-049': 'Um processo financeiro padrão para todos os seus clientes',
+  'UC-050': 'Uma secretaria remota para N clínicas',
+  'UC-051': 'Atendimento em escala: o app resolve o volume, seu time a exceção',
+  'UC-052': 'Sua metodologia replicada em cada cliente novo',
+  'UC-053': 'Os indicadores de todos os clientes numa visão só — com consentimento',
+  'UC-054': 'Carteiras de clientes com visão agregada e consentida',
+  // F — Visão (aposta declarada)
+  'UC-055': 'Aceleradores prontos para instalar',
+  'UC-056': 'Especialistas publicando soluções do seu setor',
+  'UC-057': 'Sua consultoria empacotada como produto',
+  'UC-058': 'Do serviço ao software: seu BPO como produto',
+  'UC-059': 'Compliance pronto por setor, instalável',
+  'UC-060': 'Integrações prontas para o que sua empresa já usa',
+  'UC-061': 'Trouxe um protótipo de outra ferramenta? Aqui ele vira app operante',
+  'UC-062': 'Referências do seu setor, agregadas com consentimento',
+  // G — Garantias de fábrica
+  'UC-063': 'Dados pessoais sensíveis protegidos de fábrica',
+  'UC-064': 'Aprovações com prova e desfazer — não print de tela',
+  'UC-065': 'Adeus planilhas paralelas: apps governados para cada área',
+  'UC-066': 'Trilha de auditoria pronta para o auditor externo',
+  'UC-067': 'Operações críticas com dupla verificação e registro imutável',
+};
