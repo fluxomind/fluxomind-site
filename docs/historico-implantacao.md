@@ -87,6 +87,12 @@ registra **decisões e infraestrutura externa** que o git não mostra.
   demo-copy-pt/en (exceção registrada no ADR-0006 — componente interativo
   usa dicionário por locale; ES na demo = +1 dicionário). Site 100%%
   bilíngue: 30 rotas públicas, zero superfície só-pt.
+- **#51** — Catálogo completo de 67 UCs em /casos-de-uso (protótipo
+  aprovado pelo fundador em Artifact; emenda ao ADR-0005): página única
+  com navegação por hash, demos em destaque, lâmina em página cheia
+  (problema, pedido, escopo, 6 perguntas, objeções), pipeline
+  scripts/gera-catalogo-ucs.py da fonte upstream com sanitização; evento
+  catalogo_uc mede demanda por UC (input do Ranking A2).
 
 ## Infraestrutura externa (não versionada)
 
