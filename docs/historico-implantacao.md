@@ -93,6 +93,15 @@ registra **decisões e infraestrutura externa** que o git não mostra.
   (problema, pedido, escopo, 6 perguntas, objeções), pipeline
   scripts/gera-catalogo-ucs.py da fonte upstream com sanitização; evento
   catalogo_uc mede demanda por UC (input do Ranking A2).
+- **#53-#54** — Revisão CMO + catálogo bilíngue: 67 títulos de marketing
+  na língua do cliente (pt e EN curados; corrigidas 2 violações em prod:
+  concorrente nomeado no UC-061 e "CRM" no UC-001); jargão de engine →
+  língua de cliente e roadmap interno eliminado nos geradores (valem a
+  cada regeneração); /en/use-cases vira o catálogo completo com 67
+  lâminas em inglês nativo (4 revisores independentes + validação
+  automática de paridade). EN é camada de tradução do site até a fonte
+  upstream emitir campos EN (ADR-0005/fontes-upstream). Site segue 100%
+  bilíngue, agora sem exceção.
 
 ## Infraestrutura externa (não versionada)
 
