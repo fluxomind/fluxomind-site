@@ -4,23 +4,19 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { UC_INDEX as UC_INDEX_RAW, type UcIndex } from '@/lib/catalogo-ucs-index';
 import { TITULOS_CMO } from '@/lib/catalogo-titulos';
+import { TITULOS_CMO_EN } from '@/lib/catalogo-titulos-en';
+import { DOR_HOOK_EN } from '@/lib/catalogo-hooks-en';
 import { track } from '@/lib/analytics';
 
-// Camada de copy curada: título de marketing na tela; o título técnico
-// upstream permanece pesquisável (a busca casa com os dois).
-const UC_INDEX: (UcIndex & { tituloTec: string })[] = UC_INDEX_RAW.map((u) => ({
-  ...u,
-  tituloTec: u.titulo,
-  titulo: TITULOS_CMO[u.id] ?? u.titulo,
-}));
+// Catálogo inspiracional dos 67 UCs — bilíngue (prop `lang`), decisões do
+// fundador 2026-07-06 (emenda ao ADR-0005): página única com navegação por
+// hash, sem rotas estáticas novas. Lâminas por idioma em
+// /catalogo-laminas[-en].json (sob demanda). Copy EN: títulos curados
+// (catalogo-titulos-en.ts) + lâminas traduzidas (camada do site até a fonte
+// upstream emitir EN). Pipelines: scripts/gera-catalogo-ucs.py e
+// scripts/merge-laminas-en.py.
 
-// Catálogo inspiracional dos 67 UCs (decisão do fundador 2026-07-06 —
-// emenda ao ADR-0005): página ÚNICA com navegação por hash (#UC-007), sem
-// rotas estáticas novas (anti conteúdo-programático). As lâminas completas
-// vivem em /catalogo-laminas.json (288 KB) e carregam sob demanda; o grid é
-// server-renderizado a partir do índice leve. Fonte e regeneração:
-// scripts/gera-catalogo-ucs.py (contrato em docs/fontes-upstream.md).
-
+type Lang = 'pt' | 'en';
 type Lamina = {
   dor_hook: string;
   problema: string;
@@ -31,57 +27,154 @@ type Lamina = {
   objecoes: { q: string; a: string }[];
 };
 
-const FAM: Record<string, { nome: string; desc: string }> = {
-  A: { nome: 'Operações do dia a dia', desc: 'O back-office que consome as suas horas — CRM, cobrança, compras, RH — rodando sozinho.' },
-  B: { nome: 'Agentes 24/7', desc: 'Operações que não podem cair: monitorar, agir e escalar — por semanas, sem ninguém lembrar.' },
-  C: { nome: 'Seus clientes, atendidos', desc: 'O seu cliente final resolvendo tudo sozinho — WhatsApp, páginas públicas e portais.' },
-  D: { nome: 'Por setor', desc: 'O dia a dia de clínicas, escritórios, agências, imobiliárias e mais — coberto de ponta a ponta.' },
-  E: { nome: 'Multi-cliente (BPO)', desc: 'Para quem opera N clientes com o mesmo processo: padronize uma vez, replique para todos.' },
-  F: { nome: 'Para onde isso vai — a visão', desc: 'Declarado como visão, não como fato: o catálogo de apps criados por especialistas.' },
-  G: { nome: 'Garantias de fábrica', desc: 'Não são casos — são o que todo app herda: aprovações, trilha auditável, dados protegidos.' },
+const FAM: Record<Lang, Record<string, { nome: string; desc: string }>> = {
+  pt: {
+    A: { nome: 'Operações do dia a dia', desc: 'O back-office que consome as suas horas — CRM, cobrança, compras, RH — rodando sozinho.' },
+    B: { nome: 'Agentes 24/7', desc: 'Operações que não podem cair: monitorar, agir e escalar — por semanas, sem ninguém lembrar.' },
+    C: { nome: 'Seus clientes, atendidos', desc: 'O seu cliente final resolvendo tudo sozinho — WhatsApp, páginas públicas e portais.' },
+    D: { nome: 'Por setor', desc: 'O dia a dia de clínicas, escritórios, agências, imobiliárias e mais — coberto de ponta a ponta.' },
+    E: { nome: 'Multi-cliente (BPO)', desc: 'Para quem opera N clientes com o mesmo processo: padronize uma vez, replique para todos.' },
+    F: { nome: 'Para onde isso vai — a visão', desc: 'Declarado como visão, não como fato: o catálogo de apps criados por especialistas.' },
+    G: { nome: 'Garantias de fábrica', desc: 'Não são casos — são o que todo app herda: aprovações, trilha auditável, dados protegidos.' },
+  },
+  en: {
+    A: { nome: 'Day-to-day operations', desc: 'The back office that eats your hours — sales, collections, purchasing, HR — running on its own.' },
+    B: { nome: '24/7 agents', desc: 'Operations that cannot drop: monitor, act and escalate — for weeks, with no one having to remember.' },
+    C: { nome: 'Your customers, served', desc: 'Your end customer resolving everything on their own — WhatsApp, public pages and portals.' },
+    D: { nome: 'By industry', desc: 'The day-to-day of clinics, law firms, agencies, real estate and more — covered end to end.' },
+    E: { nome: 'Multi-client (BPO)', desc: 'For those who run N clients on the same process: standardize once, replicate for all.' },
+    F: { nome: 'Where this is going — the vision', desc: 'Declared as vision, not fact: a catalog of apps created by experts.' },
+    G: { nome: 'Built-in guarantees', desc: 'Not use cases — what every app inherits: approvals, an auditable trail, protected data.' },
+  },
 };
-const SEG: Record<string, string> = { pme: 'PME', bpo: 'BPO / Operadores', agenda: 'Serviços com agenda', vsaas: 'vSaaS', todos: 'Todos' };
-const CAP: Record<string, string> = {
-  hitl: 'aprovação humana', 'workflow-duravel': 'rotinas duráveis', 'agente-operador': 'agente operador',
-  'comm-whatsapp': 'WhatsApp', 'comm-email': 'E-mail', 'comm-sms': 'SMS', 'comm-voz': 'Voz',
-  'bi-conversacional': 'BI conversacional', 'audit-trail': 'trilha de auditoria', 'pii-fail-closed': 'PII protegida',
-  'face-web': 'página pública', 'portal-logado': 'portal do cliente', create_connector: 'conector a sistemas',
-  instantiate_template: 'template instalável', marketplace: 'loja', payout: 'repasse ao criador',
-  'canal-dados-consentido': 'dados consentidos', 'billing-creditos': 'créditos', 'evolucao-producao': 'evolui rodando',
+const SEG: Record<Lang, Record<string, string>> = {
+  pt: { pme: 'PME', bpo: 'BPO / Operadores', agenda: 'Serviços com agenda', vsaas: 'vSaaS', todos: 'Todos' },
+  en: { pme: 'SMB', bpo: 'BPO / Operators', agenda: 'Appointment-based services', vsaas: 'vSaaS', todos: 'All' },
 };
-const DEMOS = [
-  { cen: 'caixa', slug: 'cobranca-e-contas-a-receber', titulo: 'Cobrança e contas a receber', ucs: ['UC-007', 'UC-022', 'UC-023'],
-    hook: 'O vencimento passa e ninguém percebe na hora.',
-    desc: 'A régua de cobrança rodando sozinha — lembrete, cobrança e renegociação no tom certo, e nada dispara sem o seu OK.' },
-  { cen: 'leads', slug: 'gestao-de-leads', titulo: 'Leads e contratos', ucs: ['UC-001', 'UC-002', 'UC-003'],
-    hook: 'Meu funil vive numa planilha e na minha cabeça — e proposta parada esfria sem ninguém perceber.',
-    desc: 'O funil de ponta a ponta: cada lead vira registro vivo, o follow-up é cobrado sozinho e os contratos não se perdem.' },
-  { cen: 'atendimento', slug: 'atendimento-whatsapp', titulo: 'Atendimento no WhatsApp', ucs: ['UC-006', 'UC-027'],
-    hook: 'Meus clientes pedem tudo pelo WhatsApp — e uma pessoa responde isso o dia inteiro.',
-    desc: 'O atendimento que resolve: agenda, remarca, confirma presença — e passa para o seu time quando o caso é sensível.' },
-];
-const DEMO_BY_UC: Record<string, (typeof DEMOS)[number]> = {};
-DEMOS.forEach((d) => d.ucs.forEach((u) => (DEMO_BY_UC[u] = d)));
+const CAP: Record<Lang, Record<string, string>> = {
+  pt: {
+    hitl: 'aprovação humana', 'workflow-duravel': 'rotinas duráveis', 'agente-operador': 'agente operador',
+    'comm-whatsapp': 'WhatsApp', 'comm-email': 'E-mail', 'comm-sms': 'SMS', 'comm-voz': 'Voz',
+    'bi-conversacional': 'BI conversacional', 'audit-trail': 'trilha de auditoria', 'pii-fail-closed': 'PII protegida',
+    'face-web': 'página pública', 'portal-logado': 'portal do cliente', create_connector: 'conector a sistemas',
+    instantiate_template: 'template instalável', marketplace: 'loja', payout: 'repasse ao criador',
+    'canal-dados-consentido': 'dados consentidos', 'billing-creditos': 'créditos', 'evolucao-producao': 'evolui rodando',
+  },
+  en: {
+    hitl: 'human approval', 'workflow-duravel': 'durable routines', 'agente-operador': 'operating agent',
+    'comm-whatsapp': 'WhatsApp', 'comm-email': 'Email', 'comm-sms': 'SMS', 'comm-voz': 'Voice',
+    'bi-conversacional': 'conversational BI', 'audit-trail': 'audit trail', 'pii-fail-closed': 'PII protected',
+    'face-web': 'public page', 'portal-logado': 'client portal', create_connector: 'system connectors',
+    instantiate_template: 'installable template', marketplace: 'store', payout: 'creator payout',
+    'canal-dados-consentido': 'consented data', 'billing-creditos': 'credits', 'evolucao-producao': 'evolves while running',
+  },
+};
+const DEMOS: Record<Lang, { cen: string; slug: string; titulo: string; ucs: string[]; hook: string; desc: string }[]> = {
+  pt: [
+    { cen: 'caixa', slug: 'cobranca-e-contas-a-receber', titulo: 'Cobrança e contas a receber', ucs: ['UC-007', 'UC-022', 'UC-023'],
+      hook: 'O vencimento passa e ninguém percebe na hora.',
+      desc: 'A régua de cobrança rodando sozinha — lembrete, cobrança e renegociação no tom certo, e nada dispara sem o seu OK.' },
+    { cen: 'leads', slug: 'gestao-de-leads', titulo: 'Leads e contratos', ucs: ['UC-001', 'UC-002', 'UC-003'],
+      hook: 'Meu funil vive numa planilha e na minha cabeça — e proposta parada esfria sem ninguém perceber.',
+      desc: 'O funil de ponta a ponta: cada lead vira registro vivo, o follow-up é cobrado sozinho e os contratos não se perdem.' },
+    { cen: 'atendimento', slug: 'atendimento-whatsapp', titulo: 'Atendimento no WhatsApp', ucs: ['UC-006', 'UC-027'],
+      hook: 'Meus clientes pedem tudo pelo WhatsApp — e uma pessoa responde isso o dia inteiro.',
+      desc: 'O atendimento que resolve: agenda, remarca, confirma presença — e passa para o seu time quando o caso é sensível.' },
+  ],
+  en: [
+    { cen: 'caixa', slug: 'collections-and-accounts-receivable', titulo: 'Collections and accounts receivable', ucs: ['UC-007', 'UC-022', 'UC-023'],
+      hook: 'The due date passes and nobody notices in time.',
+      desc: 'The collections cadence running on its own — reminder, collection and renegotiation in the right tone, and nothing goes out without your OK.' },
+    { cen: 'leads', slug: 'lead-management', titulo: 'Leads and contracts', ucs: ['UC-001', 'UC-002', 'UC-003'],
+      hook: 'My sales funnel lives in a spreadsheet and in my head — and stalled deals go cold with nobody noticing.',
+      desc: 'The funnel end to end: every lead becomes a living record, follow-ups are chased on their own and contracts never get lost.' },
+    { cen: 'atendimento', slug: 'whatsapp-support', titulo: 'WhatsApp support', ucs: ['UC-006', 'UC-027'],
+      hook: 'My customers ask for everything on WhatsApp — and one person answers it all day long.',
+      desc: 'Support that resolves: books, reschedules, confirms attendance — and hands off to your team when the case is sensitive.' },
+  ],
+};
+const UI: Record<Lang, Record<string, string>> = {
+  pt: {
+    buscar: 'Busque uma dor — ex.: cobrança, estoque, agenda…', buscarAria: 'Buscar casos de uso',
+    de: 'de', casos: 'casos', todasAreas: 'Todas as áreas', apostas: 'apostas',
+    liveKick: 'Veja ao vivo agora', liveTitle: 'Três casos com demonstração interativa',
+    liveNote: 'O app se constrói na sua frente e você opera o processo — direto no navegador, sem cadastro.',
+    demoBadge: '▶ demo ao vivo', viver: 'Viver este caso na demo →',
+    vazio: 'Nenhum caso bate com essa busca — tente outra palavra (ex.: “cobrança”, “agenda”, “estoque”).',
+    visNote: '⚠ Honestidade de fase: esta seção é aposta declarada — ainda não existe no produto.',
+    voltar: '← Todos os casos', anterior: '← anterior', proximo: 'próximo →',
+    visaoPill: 'visão · não existe ainda', comDemoPill: '▶ com demo ao vivo',
+    carregando: 'Carregando a lâmina…',
+    hProblema: 'O problema — na voz de quem vive', hPedido: 'O pedido, em português — é assim que o app nasce',
+    hEscopo: 'Escopo da primeira versão', rodaV1: 'Roda na v1', foraV1: 'Fora da v1', evolucao: 'Evolução',
+    hDims: 'As seis perguntas que o app responde', hObjecoes: 'O que costumam perguntar',
+    hProva: 'A prova de valor', hParaQuem: 'Para quem', hCaps: 'Capacidades da plataforma', hMesmaDemo: 'Na mesma demo',
+    demoAside: 'Este caso faz parte da demonstração', demoAside2: '— o app se constrói na sua frente e você opera o processo.',
+    abrirDemo: 'Abrir a demo →', lerPagina: 'Ler a página completa deste caso →',
+  },
+  en: {
+    buscar: 'Search a pain — e.g. collections, inventory, bookings…', buscarAria: 'Search use cases',
+    de: 'of', casos: 'cases', todasAreas: 'All areas', apostas: 'bets',
+    liveKick: 'See it live now', liveTitle: 'Three cases with an interactive demo',
+    liveNote: 'The app builds itself in front of you and you operate the process — right in the browser, no sign-up.',
+    demoBadge: '▶ live demo', viver: 'Live this case in the demo →',
+    vazio: 'No case matches that search — try another word (e.g. “collections”, “bookings”, “inventory”).',
+    visNote: '⚠ Phase honesty: this section is a declared bet — it does not exist in the product yet.',
+    voltar: '← All cases', anterior: '← previous', proximo: 'next →',
+    visaoPill: 'vision · not built yet', comDemoPill: '▶ with live demo',
+    carregando: 'Loading the case…',
+    hProblema: 'The problem — in the owner’s words', hPedido: 'The request, in plain words — this is how the app is born',
+    hEscopo: 'Scope of the first version', rodaV1: 'Runs in v1', foraV1: 'Not in v1', evolucao: 'Evolution',
+    hDims: 'The six questions the app answers', hObjecoes: 'What people usually ask',
+    hProva: 'The proof of value', hParaQuem: 'Who it is for', hCaps: 'Platform capabilities', hMesmaDemo: 'In the same demo',
+    demoAside: 'This case is part of the', demoAside2: 'demo — the app builds itself in front of you and you operate the process.',
+    abrirDemo: 'Open the demo →', lerPagina: 'Read the full page for this case →',
+  },
+};
 
-const BY_ID: Record<string, UcIndex> = Object.fromEntries(UC_INDEX.map((u) => [u.id, u]));
-// ordem de "folhear": demos primeiro, depois A→G por id
-const ORDER = UC_INDEX.slice()
-  .sort((a, b) => (DEMO_BY_UC[b.id] ? 1 : 0) - (DEMO_BY_UC[a.id] ? 1 : 0) || a.fam.localeCompare(b.fam) || a.id.localeCompare(b.id))
-  .map((u) => u.id);
+const DEMO_HREF: Record<Lang, string> = { pt: '/demo', en: '/en/demo' };
+const CASE_BASE: Record<Lang, string> = { pt: '/casos-de-uso', en: '/en/use-cases' };
 
-const capName = (c: string) => CAP[c] || c;
-const segName = (s: string) => SEG[s] || s;
+function buildList(lang: Lang): (UcIndex & { tituloTec: string })[] {
+  const tit = lang === 'en' ? TITULOS_CMO_EN : TITULOS_CMO;
+  return UC_INDEX_RAW.map((u) => ({
+    ...u,
+    tituloTec: u.titulo,
+    titulo: tit[u.id] ?? u.titulo,
+    dorHook: lang === 'en' ? DOR_HOOK_EN[u.id] ?? '' : u.dorHook,
+  }));
+}
+const LISTS: Record<Lang, (UcIndex & { tituloTec: string })[]> = { pt: buildList('pt'), en: buildList('en') };
 const strip = (s: string) => (s || '').replace(/\*\*|\*|`/g, '').replace(/\[(.+?)\]\(.*?\)/g, '$1');
 
-let laminasCache: Record<string, Lamina> | null = null;
+const laminasCache: Partial<Record<Lang, Record<string, Lamina>>> = {};
 
-export default function CatalogoUcs() {
+export default function CatalogoUcs({ lang = 'pt' }: { lang?: Lang }) {
+  const L = UI[lang];
+  const FAM_L = FAM[lang];
+  const LIST = LISTS[lang];
+  const BY_ID: Record<string, (typeof LIST)[number]> = useMemo(
+    () => Object.fromEntries(LIST.map((u) => [u.id, u])),
+    [LIST],
+  );
+  const DEMO_BY_UC: Record<string, (typeof DEMOS)[Lang][number]> = useMemo(() => {
+    const m: Record<string, (typeof DEMOS)[Lang][number]> = {};
+    DEMOS[lang].forEach((d) => d.ucs.forEach((u) => (m[u] = d)));
+    return m;
+  }, [lang]);
+  const ORDER = useMemo(
+    () =>
+      LIST.slice()
+        .sort((a, b) => (DEMO_BY_UC[b.id] ? 1 : 0) - (DEMO_BY_UC[a.id] ? 1 : 0) || a.fam.localeCompare(b.fam) || a.id.localeCompare(b.id))
+        .map((u) => u.id),
+    [LIST, DEMO_BY_UC],
+  );
+
   const [fam, setFam] = useState<string | null>(null);
   const [q, setQ] = useState('');
   const [ucAberto, setUcAberto] = useState<string | null>(null);
-  const [laminas, setLaminas] = useState<Record<string, Lamina> | null>(laminasCache);
+  const [laminas, setLaminas] = useState<Record<string, Lamina> | null>(laminasCache[lang] ?? null);
 
-  // roteamento por hash — voltar do navegador funciona
   useEffect(() => {
     const route = () => {
       const id = window.location.hash.replace('#', '');
@@ -94,27 +187,25 @@ export default function CatalogoUcs() {
     route();
     window.addEventListener('hashchange', route);
     return () => window.removeEventListener('hashchange', route);
-  }, []);
+  }, [BY_ID]);
 
-  // com UC aberto, o hero do catálogo sai de cena (tela inteira p/ o conteúdo)
+  // com UC aberto, o hero da página sai de cena (tela inteira p/ o conteúdo)
   useEffect(() => {
     document.body.classList.toggle('cuc-uc-open', Boolean(ucAberto));
     return () => document.body.classList.remove('cuc-uc-open');
   }, [ucAberto]);
 
-  // lâminas sob demanda (uma vez)
   useEffect(() => {
-    if (!ucAberto || laminasCache) return;
-    fetch('/catalogo-laminas.json')
+    if (!ucAberto || laminasCache[lang]) return;
+    fetch(lang === 'en' ? '/catalogo-laminas-en.json' : '/catalogo-laminas.json')
       .then((r) => r.json())
       .then((j) => {
-        laminasCache = j;
+        laminasCache[lang] = j;
         setLaminas(j);
       })
       .catch(() => {});
-  }, [ucAberto]);
+  }, [ucAberto, lang]);
 
-  // setas ← → folheiam quando um UC está aberto
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (!ucAberto) return;
@@ -125,7 +216,8 @@ export default function CatalogoUcs() {
     };
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
-  }, [ucAberto]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ucAberto, ORDER]);
 
   const fechaUc = useCallback(() => {
     history.pushState(null, '', window.location.pathname);
@@ -134,26 +226,34 @@ export default function CatalogoUcs() {
 
   const filtrado = useMemo(() => {
     const ql = q.toLowerCase();
-    return UC_INDEX.filter((u) => {
+    return LIST.filter((u) => {
       if (fam && u.fam !== fam) return false;
       if (!ql) return true;
       return (u.id + ' ' + u.titulo + ' ' + u.tituloTec + ' ' + u.dorHook).toLowerCase().includes(ql);
     });
-  }, [fam, q]);
+  }, [LIST, fam, q]);
 
   const filtrando = Boolean(fam || q);
 
   if (ucAberto) {
     return (
-      <div className="cuc">
+      <div className="cuc" lang={lang === 'en' ? 'en' : undefined}>
         <style>{CSS}</style>
-        <UcView id={ucAberto} lamina={laminas?.[ucAberto]} onVoltar={fechaUc} />
+        <UcView
+          id={ucAberto}
+          lang={lang}
+          u={BY_ID[ucAberto]}
+          demo={DEMO_BY_UC[ucAberto]}
+          order={ORDER}
+          lamina={laminas?.[ucAberto]}
+          onVoltar={fechaUc}
+        />
       </div>
     );
   }
 
   return (
-    <div className="cuc">
+    <div className="cuc" lang={lang === 'en' ? 'en' : undefined}>
       <style>{CSS}</style>
 
       <div className="cuc-tools">
@@ -162,24 +262,20 @@ export default function CatalogoUcs() {
             <circle cx="11" cy="11" r="7" />
             <path d="M20 20l-3.5-3.5" />
           </svg>
-          <input
-            type="search"
-            placeholder="Busque uma dor — ex.: cobrança, estoque, agenda…"
-            aria-label="Buscar casos de uso"
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-          />
+          <input type="search" placeholder={L.buscar} aria-label={L.buscarAria} value={q} onChange={(e) => setQ(e.target.value)} />
         </label>
-        <span className="cuc-count">{filtrando ? `${filtrado.length} de ${UC_INDEX.length} casos` : `${UC_INDEX.length} casos`}</span>
+        <span className="cuc-count">
+          {filtrando ? `${filtrado.length} ${L.de} ${LIST.length} ${L.casos}` : `${LIST.length} ${L.casos}`}
+        </span>
       </div>
 
-      <div className="cuc-filters" role="group" aria-label="Filtrar por área">
+      <div className="cuc-filters" role="group" aria-label={L.buscarAria}>
         <button className={`cuc-fchip${fam === null ? ' on' : ''}`} onClick={() => setFam(null)}>
-          Todas as áreas
+          {L.todasAreas}
         </button>
         {(['A', 'B', 'C', 'D', 'E'] as const).map((f) => (
           <button key={f} className={`cuc-fchip${fam === f ? ' on' : ''}`} onClick={() => setFam(f)}>
-            {FAM[f].nome}
+            {FAM_L[f].nome}
           </button>
         ))}
       </div>
@@ -187,14 +283,14 @@ export default function CatalogoUcs() {
       {!filtrando && (
         <section className="cuc-live">
           <div className="cuc-kick">
-            <span className="dot" /> Veja ao vivo agora
+            <span className="dot" /> {L.liveKick}
           </div>
-          <h2>Três casos com demonstração interativa</h2>
-          <p className="note">O app se constrói na sua frente e você opera o processo — direto no navegador, sem cadastro.</p>
+          <h2>{L.liveTitle}</h2>
+          <p className="note">{L.liveNote}</p>
           <div className="cuc-lgrid">
-            {DEMOS.map((d) => (
+            {DEMOS[lang].map((d) => (
               <div className="cuc-lcard" key={d.cen}>
-                <span className="lbadge">▶ demo ao vivo</span>
+                <span className="lbadge">{L.demoBadge}</span>
                 <h3>{d.titulo}</h3>
                 <p className="hook">“{d.hook}”</p>
                 <p className="desc">{d.desc}</p>
@@ -205,8 +301,8 @@ export default function CatalogoUcs() {
                     </a>
                   ))}
                 </div>
-                <Link className="go" href={`/demo?cenario=${d.cen}`} data-track={`catalogo-demo-${d.cen}`}>
-                  Viver este caso na demo →
+                <Link className="go" href={`${DEMO_HREF[lang]}?cenario=${d.cen}`} data-track={`catalogo-demo-${d.cen}`}>
+                  {L.viver}
                 </Link>
               </div>
             ))}
@@ -222,23 +318,25 @@ export default function CatalogoUcs() {
         return (
           <section className="cuc-fam" key={f}>
             <div className="fh">
-              <h2>{FAM[f].nome}</h2>
-              <span className="n">{list.length} casos</span>
+              <h2>{FAM_L[f].nome}</h2>
+              <span className="n">
+                {list.length} {L.casos}
+              </span>
             </div>
-            <p className="fd">{FAM[f].desc}</p>
+            <p className="fd">{FAM_L[f].desc}</p>
             <div className="cuc-grid">
               {list.map((u) => (
                 <a className="cuc-card" key={u.id} href={`#${u.id}`}>
                   <span className="cid">
                     <span className="mono">{u.id}</span>
-                    {DEMO_BY_UC[u.id] && <span className="demo">▶ demo</span>}
+                    {DEMO_BY_UC[u.id] && <span className="demo">{L.demoBadge.replace(' ao vivo', '').replace(' live', '')}</span>}
                   </span>
                   <h4>{u.titulo}</h4>
                   {u.dorHook && <p className="hook">“{u.dorHook}”</p>}
                   <span className="meta">
                     {u.seg.map((s) => (
                       <span className="tag" key={s}>
-                        {segName(s)}
+                        {SEG[lang][s] || s}
                       </span>
                     ))}
                   </span>
@@ -249,34 +347,34 @@ export default function CatalogoUcs() {
         );
       })}
 
-      {filtrando && filtrado.length === 0 && (
-        <p className="cuc-empty">Nenhum caso bate com essa busca — tente outra palavra (ex.: “cobrança”, “agenda”, “estoque”).</p>
-      )}
+      {filtrando && filtrado.length === 0 && <p className="cuc-empty">{L.vazio}</p>}
 
       {!filtrando && (
         <>
           <section className="cuc-fam">
             <div className="fh">
-              <h2>{FAM.G.nome}</h2>
+              <h2>{FAM_L.G.nome}</h2>
             </div>
-            <p className="fd">{FAM.G.desc}</p>
+            <p className="fd">{FAM_L.G.desc}</p>
             <div className="cuc-gstrip">
-              {UC_INDEX.filter((u) => u.fam === 'G').map((u) => (
+              {LIST.filter((u) => u.fam === 'G').map((u) => (
                 <a className="cuc-gchip" key={u.id} href={`#${u.id}`}>
                   <b>✓</b>
-                  {u.titulo.split('(')[0].trim()}
+                  {u.titulo}
                 </a>
               ))}
             </div>
           </section>
           <section className="cuc-fam vis">
             <div className="fh">
-              <h2>{FAM.F.nome}</h2>
-              <span className="n">{UC_INDEX.filter((u) => u.fam === 'F').length} apostas</span>
+              <h2>{FAM_L.F.nome}</h2>
+              <span className="n">
+                {LIST.filter((u) => u.fam === 'F').length} {L.apostas}
+              </span>
             </div>
-            <p className="fd">{FAM.F.desc}</p>
+            <p className="fd">{FAM_L.F.desc}</p>
             <div className="cuc-grid">
-              {UC_INDEX.filter((u) => u.fam === 'F').map((u) => (
+              {LIST.filter((u) => u.fam === 'F').map((u) => (
                 <a className="cuc-card" key={u.id} href={`#${u.id}`}>
                   <span className="cid">
                     <span className="mono">{u.id}</span>
@@ -286,7 +384,7 @@ export default function CatalogoUcs() {
                 </a>
               ))}
             </div>
-            <p className="vis-note">⚠ Honestidade de fase: esta seção é aposta declarada — ainda não existe no produto.</p>
+            <p className="vis-note">{L.visNote}</p>
           </section>
         </>
       )}
@@ -294,29 +392,46 @@ export default function CatalogoUcs() {
   );
 }
 
-function UcView({ id, lamina, onVoltar }: { id: string; lamina?: Lamina; onVoltar: () => void }) {
-  const u = BY_ID[id];
-  const demo = DEMO_BY_UC[id];
-  const i = ORDER.indexOf(id);
-  const prev = ORDER[i - 1];
-  const next = ORDER[i + 1];
+function UcView({
+  id,
+  lang,
+  u,
+  demo,
+  order,
+  lamina,
+  onVoltar,
+}: {
+  id: string;
+  lang: Lang;
+  u: UcIndex & { tituloTec: string };
+  demo?: { cen: string; slug: string; titulo: string; ucs: string[] };
+  order: string[];
+  lamina?: Lamina;
+  onVoltar: () => void;
+}) {
+  const L = UI[lang];
+  const i = order.indexOf(id);
+  const prev = order[i - 1];
+  const next = order[i + 1];
   const p = lamina;
   const rel = demo ? demo.ucs.filter((x) => x !== id) : [];
+  const LIST = LISTS[lang];
+  const byId: Record<string, (typeof LIST)[number]> = Object.fromEntries(LIST.map((x) => [x.id, x]));
 
   return (
     <div className="cuc-uc">
       <div className="crumbs">
         <button className="back" onClick={onVoltar}>
-          ← Todos os casos
+          {L.voltar}
         </button>
         <span className="sep">/</span>
-        <span className="here">{FAM[u.fam].nome}</span>
+        <span className="here">{FAM[lang][u.fam].nome}</span>
         <div className="pnav">
           <button disabled={!prev} onClick={() => prev && (window.location.hash = prev)}>
-            ← anterior
+            {L.anterior}
           </button>
           <button disabled={!next} onClick={() => next && (window.location.hash = next)}>
-            próximo →
+            {L.proximo}
           </button>
         </div>
       </div>
@@ -324,45 +439,45 @@ function UcView({ id, lamina, onVoltar }: { id: string; lamina?: Lamina; onVolta
       <header className="uhead">
         <div className="row">
           <span className="uid mono">{id}</span>
-          <span className="fpill">{FAM[u.fam].nome}</span>
-          {u.fam === 'F' && <span className="fpill warn">visão · não existe ainda</span>}
-          {demo && <span className="fpill live">▶ com demo ao vivo</span>}
+          <span className="fpill">{FAM[lang][u.fam].nome}</span>
+          {u.fam === 'F' && <span className="fpill warn">{L.visaoPill}</span>}
+          {demo && <span className="fpill live">{L.comDemoPill}</span>}
         </div>
         <h2>{u.titulo}</h2>
         {p?.dor_hook && <p className="hook">“{p.dor_hook}”</p>}
       </header>
 
       {!p ? (
-        <p className="cuc-loading">Carregando a lâmina…</p>
+        <p className="cuc-loading">{L.carregando}</p>
       ) : (
         <div className="ubody">
           <div className="umain">
             {p.problema && (
               <div className="blk">
-                <h5>O problema — na voz de quem vive</h5>
+                <h5>{L.hProblema}</h5>
                 <p>{strip(p.problema)}</p>
               </div>
             )}
             {p.pedido && (
               <div className="blk">
-                <h5>O pedido, em português — é assim que o app nasce</h5>
+                <h5>{L.hPedido}</h5>
                 <div className="pedido">{p.pedido}</div>
               </div>
             )}
             {p.escopo?.dentro.length > 0 && (
               <div className="blk">
-                <h5>Escopo da primeira versão</h5>
+                <h5>{L.hEscopo}</h5>
                 <div className="esc">
                   <div className="in">
-                    <h6>Roda na v1</h6>
+                    <h6>{L.rodaV1}</h6>
                     <ul>{p.escopo.dentro.map((x) => <li key={x}>{strip(x)}</li>)}</ul>
                   </div>
                   <div className="out">
-                    <h6>Fora da v1</h6>
+                    <h6>{L.foraV1}</h6>
                     <ul>{p.escopo.fora.map((x) => <li key={x}>{strip(x)}</li>)}</ul>
                   </div>
                   <div className="ev">
-                    <h6>Evolução</h6>
+                    <h6>{L.evolucao}</h6>
                     <ul>{p.escopo.evol.map((x) => <li key={x}>{strip(x)}</li>)}</ul>
                   </div>
                 </div>
@@ -370,7 +485,7 @@ function UcView({ id, lamina, onVoltar }: { id: string; lamina?: Lamina; onVolta
             )}
             {p.dims.length > 0 && (
               <div className="blk">
-                <h5>As seis perguntas que o app responde</h5>
+                <h5>{L.hDims}</h5>
                 <div className="dims">
                   <table>
                     <tbody>
@@ -387,7 +502,7 @@ function UcView({ id, lamina, onVoltar }: { id: string; lamina?: Lamina; onVolta
             )}
             {p.objecoes.length > 0 && (
               <div className="blk">
-                <h5>O que costumam perguntar</h5>
+                <h5>{L.hObjecoes}</h5>
                 {p.objecoes.map((o) => (
                   <div className="qa" key={o.q}>
                     <b>{strip(o.q)}</b>
@@ -401,50 +516,50 @@ function UcView({ id, lamina, onVoltar }: { id: string; lamina?: Lamina; onVolta
           <aside className="uaside">
             {demo && (
               <div className="acard ademo">
-                <span className="lb">▶ demo ao vivo</span>
+                <span className="lb">{L.demoBadge}</span>
                 <p>
-                  Este caso faz parte da demonstração <b>{demo.titulo}</b> — o app se constrói na sua frente e você opera o processo.
+                  {L.demoAside} <b>{demo.titulo}</b> {L.demoAside2}
                 </p>
-                <Link className="go" href={`/demo?cenario=${demo.cen}`} data-track={`catalogo-uc-demo-${demo.cen}`}>
-                  Abrir a demo →
+                <Link className="go" href={`${DEMO_HREF[lang]}?cenario=${demo.cen}`} data-track={`catalogo-uc-demo-${demo.cen}`}>
+                  {L.abrirDemo}
                 </Link>
-                <Link className="mais" href={`/casos-de-uso/${demo.slug}`}>
-                  Ler a página completa deste caso →
+                <Link className="mais" href={`${CASE_BASE[lang]}/${demo.slug}`}>
+                  {L.lerPagina}
                 </Link>
               </div>
             )}
             {p?.kpi && (
               <div className="acard">
-                <h5>A prova de valor</h5>
+                <h5>{L.hProva}</h5>
                 <p>{strip(p.kpi)}</p>
               </div>
             )}
             <div className="acard">
-              <h5>Para quem</h5>
+              <h5>{L.hParaQuem}</h5>
               <div className="chips">
                 {u.seg.map((s) => (
                   <span className="tag" key={s}>
-                    {segName(s)}
+                    {SEG[lang][s] || s}
                   </span>
                 ))}
               </div>
             </div>
             <div className="acard">
-              <h5>Capacidades da plataforma</h5>
+              <h5>{L.hCaps}</h5>
               <div className="chips">
                 {u.caps.map((c) => (
                   <span className="tag" key={c}>
-                    {capName(c)}
+                    {CAP[lang][c] || c}
                   </span>
                 ))}
               </div>
             </div>
             {rel.length > 0 && (
               <div className="acard rel">
-                <h5>Na mesma demo</h5>
+                <h5>{L.hMesmaDemo}</h5>
                 {rel.map((r) => (
                   <a key={r} href={`#${r}`}>
-                    <span className="mono">{r}</span> {BY_ID[r].titulo.split('(')[0].trim()}
+                    <span className="mono">{r}</span> {byId[r]?.titulo}
                   </a>
                 ))}
               </div>
@@ -510,7 +625,6 @@ body.cuc-uc-open .hero{display:none}
 .cuc-gchip b{color:var(--ok)}
 .cuc-empty{margin:30px 0;color:var(--mute);font-size:14px}
 .cuc-loading{margin:40px 0;color:var(--mute)}
-/* página do UC */
 .crumbs{display:flex;align-items:center;gap:10px;padding:24px 0 0;flex-wrap:wrap}
 .back{display:inline-flex;gap:7px;background:none;border:1px solid var(--line);border-radius:9px;padding:8px 13px;font-size:13px;color:var(--slate);cursor:pointer;font-family:inherit;transition:.15s}
 .back:hover{color:inherit;border-color:var(--sky)}

@@ -56,6 +56,12 @@ estáticas novas, o que preserva a proteção anti-conteúdo-programático. Isso
   (`public/catalogo-laminas.json`, sob demanda) a partir da fonte upstream,
   com sanitização de jargão interno. Evento `catalogo_uc` mede navegação por
   UC — input de demanda para o Ranking A2.
+- **Inglês (2026-07-06 — "tudo em EN e PT sem exceção")**: o catálogo é
+  bilíngue. Títulos EN curados em `catalogo-titulos-en.ts`; lâminas EN em
+  `public/catalogo-laminas-en.json` — **camada de tradução do site** (nativa,
+  revisada), consolidada por `scripts/merge-laminas-en.py`, até a fonte
+  upstream emitir campos EN nos packages. Ao regenerar o pt de upstream,
+  reconciliar o EN (retraduzir os UCs alterados).
 
 ## Consequências
 

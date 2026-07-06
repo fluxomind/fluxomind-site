@@ -23,7 +23,10 @@ INTERNO = re.compile(
 
 def limpa(txt):
     frases = re.split(r'(?<=[.!?])\s+', txt or '')
-    return ' '.join(f for f in frases if not INTERNO.search(f)).strip()
+    frases = [f for f in frases if not INTERNO.search(f)]
+    # cortar frases pode deixar fragmento com ')' órfão — fora também
+    frases = [f for f in frases if f.count(')') <= f.count('(')]
+    return ' '.join(frases).strip()
 
 # parênteses com referência interna somem sem derrubar a célula toda
 PAREN_INTERNO = re.compile(
@@ -38,6 +41,51 @@ def kpi_cliente(txt):
     t = re.sub(r'^KPI\s+primário:\s*', '', t)
     t = re.sub(r'Meta\s+de\s+reconhecimento[^:"]*:', 'No fim, você vai dizer:', t)
     return t.strip()
+
+# jargão de engine → língua do cliente; status de roadmap some (ordem importa:
+# pares antes de tokens soltos)
+CLIENTE_SUBS = [
+    (r'\((?:via |e-mail via )?commEngine,?\s*BIND\)', '(canal conectado)'),
+    (r'\bvia commEngine,?\s*BIND\b', 'pelo canal conectado'),
+    (r'\bcommEngine,?\s*BIND\b', 'canal conectado'),
+    (r'\bcommEngine\b', 'motor de comunicação'),
+    (r'planilha\s*→\s*SoR', 'planilha importada de verdade'),
+    (r'\bSoR externo\b', 'sistema de origem externo'),
+    (r'\bSoR\b', 'sistema de origem'),
+    (r'\bBIND\b', 'conexão viva de dados'),
+    (r'\(ENUM( de status por etapa)?\)', '(status padronizado)'),
+    (r'\bENUM de ', 'lista padronizada de '),
+    (r'\bENUM\b', 'status padronizado'),
+    (r'\bHITL:\s*', 'Aprovação humana: '),
+    (r'\bHITL\b', 'aprovação humana'),
+    (r'\bRBAC\b', 'permissões por papel'),
+    (r'`?create_connector`?', 'conector a sistemas'),
+    (r'`?instantiate_template`?', 'template instalável'),
+    (r'`?face-web`?', 'página pública'),
+    (r'`?portal-logado`?', 'portal do cliente'),
+    (r'`?marketplace`?', 'loja de apps'),
+    (r'`?payout`?', 'repasse ao criador'),
+    (r'\bread-back\b', 'releitura de conferência'),
+    (r'`?canal-dados-consentido`?', 'canal de dados consentido'),
+    (r'`?billing-creditos`?', 'créditos'),
+    # roadmap interno some
+    (r'\bquando houver wave dona\b', 'no roadmap'),
+    (r'[,;]?\s*[—–-]?\s*\*{0,2}sem wave dona\*{0,2}', ''),
+    (r'[,;]?\s*F2 bloqueada( por fase)?', ''),
+    (r'\(DP092 W\d,?\s*PLANEJAD[OA]\)', '(planejado)'),
+    (r'\s*[—–-]\s*Fase \d', ''),
+    (r'\bcenário-núcleo\b', 'cenário principal'),
+    (r'[,;]?\s*[—–-]?\s*\*{0,2}núcleo\*{0,2}(?=[\s).,;*]|$)', ''),
+    (r'\bo cenário principal depende disto;?\s*', ''),
+    (r'\(\s*[;,]?\s*\)', ''),  # parênteses que ficaram vazios
+    (r'  +', ' '),
+]
+
+def cliente(txt):
+    t = txt or ''
+    for pat, rep in CLIENTE_SUBS:
+        t = re.sub(pat, rep, t, flags=re.I)
+    return t.strip(' ;,')
 
 # ---- catálogo L0 ----
 cat = open(f'{BASE}/catalog.md').read()
@@ -89,6 +137,15 @@ for d in sorted(glob.glob(f'{BASE}/_backlog/UC-*/package.md')):
     p['objecoes'] = [{'q': scrub(c[0].strip('"')), 'a': scrub(c[1].strip('"'))} for c in
                      ([x.strip() for x in r.strip('|').split('|')] for r in
                       (m.group(1).strip().splitlines() if m else [])) if len(c) >= 2 and c[0]]
+    # passada final: tudo que o cliente lê passa pelo vocabulário de cliente
+    p['problema'] = cliente(p['problema'])
+    p['pedido'] = cliente(p['pedido'])
+    p['kpi'] = cliente(p['kpi'])
+    p['escopo'] = {k: [cliente(x) for x in v] for k, v in p['escopo'].items()}
+    p['dims'] = [{'d': d['d'], 't': cliente(d['t'])} for d in p['dims']]
+    # placeholders de tabela interna (q="—" / a="F1") não são conteúdo
+    p['objecoes'] = [{'q': cliente(o['q']), 'a': cliente(o['a'])} for o in p['objecoes']
+                     if o['q'].strip('—- ') and not re.fullmatch(r'F\d|—|-', o['a'].strip())]
     ucs[uid]['pack'] = p
 
 assert len(ucs) >= 67, f'esperava ≥67 UCs, achei {len(ucs)}'
