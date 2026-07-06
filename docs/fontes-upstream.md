@@ -27,6 +27,8 @@
 
 | `src/lib/messages-en.ts` + páginas `/en/*` | `docs/message-house-en.md` ← `docs/message-house-cliente-final.md` ← BCM-07 | A lei EN é derivada 1:1 da lei pt — mudou a pt, revisar a EN. Termo da categoria em inglês: **um só, sempre** ("self-operating app", proposta aguardando martelo). Escopo atual: credibilidade (landing + categoria); aquisição EN é projeto futuro gateado. |
 
+| Catálogo de UCs no site (`/casos-de-uso`, 67 UCs) | `catalog.md` + `_backlog/UC-*/package.md` | Regenerar com `scripts/gera-catalogo-ucs.py` (sanitiza jargão interno; gera índice SSR + lâminas JSON). Mudou package upstream → rodar o script e commitar. |
+
 ## Crosswalk cenário ↔ use case (estado 2026-07-04)
 
 | Cenário (site) | UCs (catálogo) | App correspondente | Papel |

@@ -2,23 +2,23 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
-import { SIGNATURE, PHASE, CTA } from '@/lib/messages';
-import { CASOS } from '@/lib/casos';
+import CatalogoUcs from '@/components/CatalogoUcs';
+import { SIGNATURE, CTA } from '@/lib/messages';
 
 export const metadata: Metadata = {
-  title: 'Casos de uso — o que um app operante resolve no seu negócio',
+  title: 'Casos de uso — 67 processos que um app operante resolve',
   description:
-    'Casos de uso da Fluxomind por processo de negócio: gestão de leads, cobrança e contas a receber, atendimento no WhatsApp. Cada caso mostra o que roda sozinho, onde um humano decide — e você pode viver o caso na demonstração interativa.',
+    'O catálogo completo do que a Fluxomind cobre: 67 casos de uso, de cobrança e funil de vendas ao fechamento do mês — três você vive agora na demonstração interativa. Cada caso com a dor, o pedido em português e o que roda sozinho.',
   alternates: {
     canonical: '/casos-de-uso',
     languages: { 'pt-BR': '/casos-de-uso', en: '/en/use-cases' },
   },
 };
 
-// Hub dos casos de uso. Formato GEO: abertura definicional, cards por dor,
-// cada card leva à página do caso (SEO) e a página leva à demo daquele
-// cenário (/demo?cenario=X). Crescimento: novo caso = entrada em
-// src/lib/casos.ts + cenário correspondente na demo — nunca só a página.
+// Catálogo inspiracional completo (decisão do fundador 2026-07-06, emenda ao
+// ADR-0005): página única com os 67 UCs navegáveis por hash — as páginas GEO
+// estáticas continuam nascendo por lotes (matrix). O grid é SSR (conteúdo no
+// HTML); as lâminas carregam sob demanda de /catalogo-laminas.json.
 export default function CasosDeUso() {
   return (
     <div className="page-ent">
@@ -27,7 +27,7 @@ export default function CasosDeUso() {
       <header className="hero">
         <div className="wrap">
           <div>
-            <span className="pill">Casos de uso · por processo de negócio</span>
+            <span className="pill">Catálogo · 67 casos de uso por processo e setor</span>
           </div>
           <div className="kick" style={{ marginTop: 18 }}>{SIGNATURE}</div>
           <h1 style={{ maxWidth: '24ch' }}>
@@ -35,47 +35,17 @@ export default function CasosDeUso() {
           </h1>
           <p className="hsub">
             Um <Link href="/app-operante" style={{ textDecoration: 'underline' }}>app operante</Link>{' '}
-            se constrói a partir do seu problema — a sua planilha entra de verdade — e passa a
-            operar o dia a dia daquele processo, escalando para uma pessoa nos casos que exigem
-            decisão. Estes são os casos que você pode{' '}
-            <strong>viver agora na demonstração</strong>, com dados de exemplo:
+            se constrói a partir do seu problema e passa a operar o dia a dia daquele processo.
+            Este é o mapa completo do que a plataforma cobre — <strong>três casos você vive
+            agora na demonstração</strong>; os outros mostram até onde dá para ir. Clique em
+            qualquer card para abrir o caso inteiro.
           </p>
         </div>
       </header>
 
-      <section id="casos" style={{ paddingTop: 0 }}>
-        <div className="wrap">
-          <div className="prob">
-            {CASOS.map((c) => (
-              <Link
-                key={c.slug}
-                href={`/casos-de-uso/${c.slug}`}
-                className="pcard"
-                data-track={`casos-hub-${c.slug}`}
-                style={{ display: 'block' }}
-              >
-                <div className="pi" aria-hidden="true" style={{ fontSize: 26, lineHeight: 1 }}>
-                  {c.emoji}
-                </div>
-                <div className="tagm" style={{ marginTop: 10 }}>{c.area}</div>
-                <h3 style={{ marginTop: 8 }}>{c.h1}</h3>
-                <p>
-                  “{c.dorHook}” O caso completo — e a demonstração ao vivo — aqui →
-                </p>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
       <section style={{ paddingTop: 0 }}>
         <div className="wrap">
-          <div className="honest">
-            <b>Transparência.</b> Os três casos acima são os que a demonstração interativa cobre
-            hoje, com dados de exemplo. {PHASE.exists.title}: {PHASE.exists.desc} O seu processo
-            não está na lista? Conte qual é — no beta, o primeiro app operante nasce do{' '}
-            <em>seu</em> problema, acompanhado pelo nosso time.
-          </div>
+          <CatalogoUcs />
         </div>
       </section>
 
@@ -85,16 +55,16 @@ export default function CasosDeUso() {
             <div className="kick" style={{ color: 'var(--sky)' }}>
               Comece por uma dor
             </div>
-            <h2>Escolha um caso — ou traga o seu</h2>
+            <h2>Achou o seu caso — ou tem um que não está aqui?</h2>
             <p className="lead">
-              Cada caso acima termina na demonstração interativa: você vê o app nascer da
-              planilha, opera o processo e aprova o que vê.
+              No beta, o primeiro app operante nasce do <em>seu</em> problema, acompanhado pelo
+              nosso time — esteja ele no catálogo ou não.
             </p>
             <div className="ctab">
-              <Link className="btn btn-primary" href="/demo" data-track="casos-hub-demo-cta">
+              <Link className="btn btn-primary" href="/demo" data-track="catalogo-demo-cta">
                 {CTA.demo}
               </Link>
-              <Link className="btn btn-ghost" href="/#comecar" data-track="casos-hub-beta-cta">
+              <Link className="btn btn-ghost" href="/#comecar" data-track="catalogo-beta-cta">
                 {CTA.beta}
               </Link>
             </div>

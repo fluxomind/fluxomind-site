@@ -37,6 +37,26 @@ regras de publicação que decorrem dele:
    `fase_minima` compatível com a fase atual (product-plan); ao escalar o
    catálogo, isso vira validação de build.
 
+### Emenda (2026-07-06 — decisão do fundador)
+
+O **catálogo inspiracional completo (67 UCs) entra no site** em `/casos-de-uso`
+como **página única** com navegação por hash (`#UC-007`) — sem criar rotas
+estáticas novas, o que preserva a proteção anti-conteúdo-programático. Isso
+**amende** os itens 2 e 3 acima:
+
+- O gate "caso só com demo" passa a valer para **páginas GEO estáticas**
+  (que seguem nascendo por lotes via matrix); no catálogo, todos os UCs são
+  navegáveis, com os cobertos por demo em destaque.
+- Famílias **D** (verticais) aparecem no catálogo como *cobertura/inspiração*
+  — não como produto vertical first-party (a decisão travada do BCM-07 segue
+  valendo para produto/branding). **F** aparece como visão com moldura de
+  honestidade explícita; **G** como faixa de garantias, não como casos.
+- Dados: `scripts/gera-catalogo-ucs.py` regenera índice
+  (`src/lib/catalogo-ucs-index.ts`, SSR) e lâminas
+  (`public/catalogo-laminas.json`, sob demanda) a partir da fonte upstream,
+  com sanitização de jargão interno. Evento `catalogo_uc` mede navegação por
+  UC — input de demanda para o Ranking A2.
+
 ## Consequências
 
 - Mudança no catálogo/matrix → revisar casos publicados (tabela do

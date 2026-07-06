@@ -71,6 +71,7 @@ Se o webhook falhar, a API devolve 502 e o form oferece o fallback por e-mail
 | `jornada_recomecar` | Reiniciou a demo pela topbar (escolher outro exemplo) | `cenario` (o que estava ativo) |
 | `jornada_beta_click` | CTA ao fim da jornada | — |
 | `beta_form_submitted` / `beta_form_error` | Form do beta | — |
+| `catalogo_uc` | Abriu a página de um UC no catálogo (/casos-de-uso#UC-xxx) | `uc` (UC-001…UC-067) — **input de demanda p/ Ranking A2** |
 
 `data-track` em uso: `como-beta-cta`, `home-contact-cta`, `precos-beta-cta`,
 `oquetem-beta-cta`, `porque-beta-cta`, `beta-mailto-fallback`,
@@ -89,7 +90,9 @@ português": `caso-<slug>-pedido-demo-cta`. Páginas EN: `en-home-demo-cta`,
 `en-wid-contact-cta`, `en-security-contact-cta`, `en-accelerate-contact-cta`,
 `en-platform-contact-cta`, `en-why-{demo,contact}-cta`,
 `en-cases-hub-<slug|demo-cta|contact-cta>`,
-`en-case-<slug>-{demo,request-demo,contact}-cta`.
+`en-case-<slug>-{demo,request-demo,contact}-cta`. Catálogo de UCs:
+`catalogo-demo-<cen>`, `catalogo-uc-demo-<cen>`, `catalogo-demo-cta`,
+`catalogo-beta-cta`.
 
 **O funil que importa** (BCM: instrumentar tudo):
 `pageview(/)` → `demo_run` → `demo_built` → `demo_ops_run` → `demo_ops_done` →
