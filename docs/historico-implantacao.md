@@ -15,6 +15,8 @@ registra **decisões e infraestrutura externa** que o git não mostra.
 | Cada cenário da demo gera uma **superfície de app diferente** (kanban / financeiro / chats) — nunca a mesma cara | 2026-07-03 | PR #24; feedback direto do fundador |
 | Léxico vetado na copy pública: nomes de concorrentes, "chatbot" afirmativo, "waitlist", "código morto", "substrato vivo"; "6 dimensões" só em /plataforma | 2026-07-02 | §7 do message house |
 | Copy da /plataforma nunca pode dizer "a cada PR / a cada mudança / continuamente" sobre CI: os workflows automáticos da plataforma estão **pausados desde 2026-04-25** (custo, até o release). O honesto é "sob demanda e no pipeline de deploy" | 2026-07-03 | PR #26 |
+| Estado público = **"beta privado · lançamento aberto em breve"** (nunca "em breve" solto); captura primária = **"lista de lançamento"** (substitui "lista do beta"; avisado no lançamento + primeiros entram já no beta acompanhado) | 2026-07-07 | Emendas §5–§7 do message house (pt/en); PR #57 |
+| Nova assinatura (h1 canônico): **"App que trabalha para o seu negócio — não o contrário."** / EN "The app that works for your business — not the other way around." — substitui "Delegue a tarefa. Receba a conclusão com a prova." | 2026-07-07 | §1 do message house (pt/en); PR #57 |
 
 ## O que foi ao ar (PRs na main)
 
@@ -102,6 +104,18 @@ registra **decisões e infraestrutura externa** que o git não mostra.
   automática de paridade). EN é camada de tradução do site até a fonte
   upstream emitir campos EN (ADR-0005/fontes-upstream). Site segue 100%
   bilíngue, agora sem exceção.
+- **#55-#56** — Registro dos PRs #53-#54 e `docs/pendencias.md`: backlog
+  consolidado de retomada (decisões do fundador pendentes, trabalho
+  gateado, avisos de manutenção do catálogo).
+- **#57** — Estado pré-lançamento + nova assinatura (decisões do fundador
+  2026-07-07): site comunica "beta privado · lançamento aberto em breve"
+  em todas as superfícies (badge do hero, /precos, /demo, FAQs, linhas
+  PHASE) nas duas línguas; BetaForm reposicionado como **lista de
+  lançamento** (aviso no lançamento + primeiros entram no beta
+  acompanhado; privacidade pt/en com a finalidade nova); assinatura
+  "App que trabalha para o seu negócio — não o contrário." substitui
+  "Delegue a tarefa. Receba a conclusão com a prova." em h1, footers,
+  kicks, title e OG.
 
 ## Infraestrutura externa (não versionada)
 
