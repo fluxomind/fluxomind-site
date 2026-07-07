@@ -268,7 +268,7 @@ export default function AccelerateEn() {
             </div>
           </div>
           <div className="honest">
-            <b>Transparency.</b> {PHASE_EN.exists} We are in beta — we guide adoption
+            <b>Transparency.</b> {PHASE_EN.exists} In the beta, we guide adoption
             closely; formal SLAs and certifications are on the roadmap.{' '}
             {PHASE_EN.vision}
           </div>

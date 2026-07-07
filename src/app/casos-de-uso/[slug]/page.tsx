@@ -230,7 +230,7 @@ export default async function CasoDeUsoPage({
           <div className="honest">
             <b>Transparência.</b> A demonstração deste caso usa dados de exemplo — o app real
             nasce dentro da plataforma, com os seus dados. {PHASE.exists.title}:{' '}
-            {PHASE.exists.desc} Estamos em beta: a adoção acontece acompanhada de perto pelo
+            {PHASE.exists.desc} No beta, a adoção acontece acompanhada de perto pelo
             nosso time, em semanas — não num projeto de meses.
           </div>
           <p style={{ textAlign: 'center', marginTop: 14, fontSize: 13.5, color: 'var(--slate)' }}>

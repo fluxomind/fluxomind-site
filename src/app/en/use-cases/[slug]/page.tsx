@@ -210,8 +210,8 @@ export default async function UseCasePageEn({
         <div className="wrap">
           <div className="honest">
             <b>Transparency.</b> The demo of this case uses sample data —
-            the real app is born inside the platform, with your data. {PHASE_EN.exists} We are
-            in beta: we guide adoption closely, in weeks — not a
+            the real app is born inside the platform, with your data. {PHASE_EN.exists} In the
+            beta, we guide adoption closely, in weeks — not a
             months-long project.
           </div>
           <p style={{ textAlign: 'center', marginTop: 14, fontSize: 13.5, color: 'var(--slate)' }}>

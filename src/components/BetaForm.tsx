@@ -5,7 +5,7 @@ import { PLATFORM_BETA } from '@/lib/platform';
 import { CTA } from '@/lib/messages';
 import { track } from '@/lib/analytics';
 
-// Form da lista do beta — a captura primária do site (substitui o mailto;
+// Form da lista de lançamento — a captura primária do site (substitui o mailto;
 // PLATFORM_BETA vira fallback quando a entrega falha). POST em /api/beta.
 // Desenhado para viver dentro da seção .offer (fundo escuro).
 
@@ -55,8 +55,9 @@ export default function BetaForm() {
     return (
       <div className="bf bf-ok" role="status">
         <style>{BF_CSS}</style>
-        <b>Recebido!</b> O time entra em contato para montar o primeiro app operante com
-        você — sem cartão, sem compromisso.
+        <b>Você está na lista de lançamento!</b> Avisamos quando abrir — e, entre os
+        primeiros, o time entra em contato para montar o primeiro app operante com você.
+        Sem cartão, sem compromisso.
       </div>
     );
   }
@@ -135,7 +136,7 @@ export default function BetaForm() {
       <p className="bf-legal">
         Ao enviar, você concorda com os <a href="/terms">Termos de Uso</a> e a{' '}
         <a href="/privacidade">Política de Privacidade</a>, e em ser contatado sobre o
-        beta. Nada de spam.
+        lançamento e o beta. Nada de spam.
       </p>
     </form>
   );

@@ -27,9 +27,9 @@ export const metadata: Metadata = {
 // Landing EN — escopo credibilidade (message-house-en.md, PROPOSTA):
 // condensa a home pt; a demo permanece em português com moldura honesta.
 // Assinatura fatiada como na home pt (head branco, tail azul).
-const SIG_BREAK = SIGNATURE_EN.indexOf('. ') + 1;
-const SIG_HEAD = SIGNATURE_EN.slice(0, SIG_BREAK);
-const SIG_TAIL = SIGNATURE_EN.slice(SIG_BREAK + 1);
+const SIG_BREAK = SIGNATURE_EN.indexOf(' — ');
+const SIG_HEAD = SIGNATURE_EN.slice(0, SIG_BREAK); // "The app that works for your business"
+const SIG_TAIL = SIGNATURE_EN.slice(SIG_BREAK + 1); // "— not the other way around."
 
 export default function HomeEn() {
   return (
@@ -41,7 +41,7 @@ export default function HomeEn() {
       <header className="hero">
         <div className="wrap" style={{ textAlign: 'center', paddingBottom: 48 }}>
           <span className="pill">
-            <span className="lz" /> Platform in beta · self-operating apps
+            <span className="lz" /> Private beta · open launch coming soon
           </span>
           <h1 style={{ maxWidth: '24ch', margin: '0 auto' }}>
             {SIG_HEAD} <span className="g">{SIG_TAIL}</span>
@@ -143,8 +143,8 @@ export default function HomeEn() {
             <h2 style={{ maxWidth: '30ch', margin: '0 auto' }}>{PURPOSE_LINE_EN}</h2>
           </div>
           <div className="honest" style={{ marginTop: 28 }}>
-            <b>Transparency.</b> {PHASE_EN.exists} {PHASE_EN.next} {PHASE_EN.vision} We are in
-            beta: adoption happens closely guided by our team — live in weeks, not a
+            <b>Transparency.</b> {PHASE_EN.exists} {PHASE_EN.next} {PHASE_EN.vision} In the
+            beta, adoption happens closely guided by our team — live in weeks, not a
             months-long project.
           </div>
         </div>

@@ -215,7 +215,7 @@ export default function OQueTem() {
           </div>
           <h2>Quer isso respondendo pelo seu negócio?</h2>
           <p className="lead" style={{ maxWidth: '56ch', margin: '14px auto 0' }}>
-            Entre na lista do beta e conte qual processo você quer delegar — o time monta o app com
+            Entre na lista de lançamento e conte qual processo você quer delegar — o time monta o app com
             você. Ou fale direto com a gente.
           </p>
           <div className="offerbtns">

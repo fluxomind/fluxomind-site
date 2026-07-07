@@ -18,7 +18,7 @@ import {
 import { PLATFORM_CONTACT } from '@/lib/platform';
 
 export const metadata: Metadata = {
-  title: { absolute: 'Fluxomind — delegue a tarefa, receba a conclusão com a prova' },
+  title: { absolute: 'Fluxomind — app que trabalha para o seu negócio, não o contrário' },
   description:
     'Um app que resolve o seu problema e se opera sozinho — integrado ao que você já tem, governado, em semanas. Veja a demonstração: o app se constrói na sua frente e opera o dia a dia, com humano nos casos sensíveis.',
   alternates: {
@@ -28,9 +28,9 @@ export const metadata: Metadata = {
 };
 
 // Assinatura canônica (messages.ts), com destaque visual na segunda frase.
-const SIG_BREAK = SIGNATURE.indexOf('. ') + 1;
-const SIG_HEAD = SIGNATURE.slice(0, SIG_BREAK); // "Delegue a tarefa."
-const SIG_TAIL = SIGNATURE.slice(SIG_BREAK).trim(); // "Receba a conclusão com a prova."
+const SIG_BREAK = SIGNATURE.indexOf(' — ');
+const SIG_HEAD = SIGNATURE.slice(0, SIG_BREAK); // "App que trabalha para o seu negócio"
+const SIG_TAIL = SIGNATURE.slice(SIG_BREAK + 1); // "— não o contrário."
 
 const ICON_PROPS = {
   viewBox: '0 0 24 24',
@@ -114,7 +114,7 @@ const FAQ_JSONLD = {
       name: 'Em quanto tempo estou rodando?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Em semanas, não num projeto de meses. No beta, o time acompanha de perto: o primeiro caso a gente monta com você.',
+        text: 'Em semanas, não num projeto de meses. No beta privado, o time acompanha de perto: o primeiro caso a gente monta com você.',
       },
     },
     {
@@ -122,7 +122,7 @@ const FAQ_JSONLD = {
       name: 'Quanto custa?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Durante o beta, ninguém pede cartão: o acesso é acompanhado e sem custo para começar. Os planos estão na página de Preços.',
+        text: 'A plataforma está em beta privado — o lançamento aberto vem em breve. Durante o beta, ninguém pede cartão: o acesso é acompanhado e sem custo para começar. Os planos estão na página de Preços.',
       },
     },
   ],
@@ -140,7 +140,7 @@ export default function Home() {
       <header className="hero">
         <div className="wrap" style={{ textAlign: 'center', paddingBottom: 48 }}>
           <span className="pill">
-            <span className="lz" /> Plataforma em beta · a demonstração está logo abaixo
+            <span className="lz" /> Beta privado · lançamento aberto em breve
           </span>
           <h1 style={{ maxWidth: '24ch', margin: '0 auto' }}>
             {SIG_HEAD} <span className="g">{SIG_TAIL}</span>
@@ -508,15 +508,16 @@ export default function Home() {
             <div className="qa">
               <h4>Em quanto tempo estou rodando?</h4>
               <p>
-                Em semanas, não num projeto de meses. No beta, o time acompanha de perto: o
-                primeiro caso a gente monta com você.
+                Em semanas, não num projeto de meses. No beta privado, o time acompanha de
+                perto: o primeiro caso a gente monta com você.
               </p>
             </div>
             <div className="qa">
               <h4>Quanto custa?</h4>
               <p>
-                Durante o beta, ninguém pede cartão: o acesso é acompanhado e sem custo para
-                começar. Os planos estão em <Link href="/precos" style={{ color: 'var(--blue)', fontWeight: 600 }}>Preços</Link>.
+                A plataforma está em beta privado — o lançamento aberto vem em breve. Durante
+                o beta, ninguém pede cartão: o acesso é acompanhado e sem custo para começar.
+                Os planos estão em <Link href="/precos" style={{ color: 'var(--blue)', fontWeight: 600 }}>Preços</Link>.
               </p>
             </div>
           </div>
@@ -531,8 +532,10 @@ export default function Home() {
           </div>
           <h2>Delegue a primeira tarefa</h2>
           <p className="lead">
-            Conte qual problema você quer tirar das costas. No beta, montamos o primeiro app
-            operante com você — e você recebe a conclusão com a prova.
+            A plataforma está em beta privado — o lançamento aberto vem em breve. Entre na
+            lista de lançamento contando qual problema você quer tirar das costas: você é
+            avisado quando abrir, e os primeiros da lista entram já no beta, com o time
+            montando o primeiro app operante com você.
           </p>
           <BetaForm />
           <div className="offerbtns" style={{ marginTop: 18 }}>

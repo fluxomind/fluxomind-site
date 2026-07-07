@@ -11,7 +11,7 @@ Este documento governa toda a copy do site. Strings compartilhadas entre página
 
 ## 1. Hierarquia de mensagem
 
-1. **Assinatura (h1 canônico, todo lugar):** *Delegue a tarefa. Receba a conclusão com a prova.*
+1. **Assinatura (h1 canônico, todo lugar):** *App que trabalha para o seu negócio — não o contrário.* (Emenda 2026-07-07, decisão do fundador — substitui "Delegue a tarefa. Receba a conclusão com a prova."; "conclusão com a prova" segue no léxico como argumento de corpo, não mais como assinatura. EN: *An app that works for your business — not the other way around.*)
 2. **Promessa ao cliente final (BCM slide 8):** *Um app que resolve o seu problema e se opera sozinho — integrado ao que você já tem, governado, em semanas (não num projeto de meses).*
 3. **Categoria:** **app operante** / negócio de software vivo. A 3ª categoria, entre o software rígido e a consultoria humana. Por 30 anos a empresa se adaptou ao software; a Fluxomind inverte: **o software se molda à empresa — e opera o processo.**
 4. **Eixo de diferenciação (anti-Lovable, linguagem de cliente):** *Construir ficou fácil — qualquer IA te entrega um protótipo. Operar é o que falta.* A Fluxomind entrega o processo **rodando**: o app se constrói a partir do seu problema, opera o dia a dia e chama um humano nos casos sensíveis.
@@ -67,6 +67,8 @@ Três capítulos — nunca apresentar visão como fato:
 
 A visão de especialistas aparece como **para onde isso vai**, uma banda por página no máximo, sempre em linguagem de visão ("estamos construindo", "o próximo capítulo").
 
+**Estado de acesso (emenda 2026-07-07, decisão do fundador):** a plataforma existe e opera, mas **não está lançada ao público**. O estado público canônico é **"beta privado · lançamento aberto em breve"** — nunca "em breve" solto (sinaliza vaporware e subvende a demo), nunca sugerir acesso self-service aberto. A captura primária passa a ser comunicada como **lista de lançamento**: quem entra é avisado no lançamento e os primeiros entram já no beta acompanhado, com o time montando o primeiro app junto (a limitação vira vantagem legítima, não "deixe seu e-mail" passivo).
+
 ## 6. CTAs (arquitetura de conversão)
 
 A conversão principal do site é **viver a demonstração** — o encantamento vem antes do formulário.
@@ -74,7 +76,7 @@ A conversão principal do site é **viver a demonstração** — o encantamento 
 | Papel | Rótulo canônico | Destino |
 |---|---|---|
 | Primário (nav + hero) | **Crie um app conversando** (= h1 da /demo; verbo de fazer, não de assistir) | `/demo` (a jornada interativa) — exceção: em `/demo` o nav CTA é `CTA.beta → #beta`. A demo curta da home segue em `/#demo`, acessada por rótulo próprio ("Prévia em 1 minuto ↓"). Sem link "Experimente" no nav — o CTA é a entrada única |
-| Pós-demonstração / decisão | **Quero isso no meu negócio** | Form da lista do beta (`BetaForm` em `/#comecar`); todo CTA de beta ancora lá. `PLATFORM_BETA` (mailto) é só fallback de erro do form |
+| Pós-demonstração / decisão | **Quero isso no meu negócio** | Form da **lista de lançamento** (`BetaForm` em `/#comecar`); todo CTA de beta ancora lá. `PLATFORM_BETA` (mailto) é só fallback de erro do form |
 | Humano / escala | **Falar com o time** | `PLATFORM_CONTACT` |
 | Quem já é beta | **Entrar** | `PLATFORM_LOGIN` — **omitido do site enquanto a plataforma não lança** (decisão 2026-07-02); betas recebem a URL do time |
 
@@ -82,9 +84,9 @@ A conversão principal do site é **viver a demonstração** — o encantamento 
 
 ## 7. Léxico
 
-**Usar:** app operante · negócio de software vivo · opera o dia a dia · conclusão com a prova · governado · se molda à empresa · escala para um humano (handoff) · em semanas, não meses · fica mais inteligente quanto mais você usa · uma fatura em reais (managed LLM).
+**Usar:** app operante · negócio de software vivo · opera o dia a dia · conclusão com a prova · governado · se molda à empresa · escala para um humano (handoff) · em semanas, não meses · fica mais inteligente quanto mais você usa · uma fatura em reais (managed LLM) · beta privado · lista de lançamento · lançamento aberto em breve.
 
-**Vetado:** "código morto" (vetado pelo fundador) · "6 dimensões" fora de /plataforma · "substrato vivo" · "waitlist" (dizer "lista do beta") · "data room" em botão · superlativo sem fonte · qualquer claim de catálogo/marketplace/avatar como existente · promessa de resultado financeiro específico · **nomear concorrente na copy do site** (Lovable/v0/Bolt/Palantir etc. — "anti-Lovable" é linguagem interna; no site, comparar com a categoria: "builder de código", "no-code genérico"). SoRs a que a plataforma se integra (SAP/Salesforce/TOTVS) podem ser nomeados — são integração, não comparação.
+**Vetado:** "código morto" (vetado pelo fundador) · "6 dimensões" fora de /plataforma · "substrato vivo" · "waitlist" (dizer "lista de lançamento"; antes de 2026-07-07 era "lista do beta") · "em breve" sem "beta privado" junto (vaporware) · "data room" em botão · superlativo sem fonte · qualquer claim de catálogo/marketplace/avatar como existente · promessa de resultado financeiro específico · **nomear concorrente na copy do site** (Lovable/v0/Bolt/Palantir etc. — "anti-Lovable" é linguagem interna; no site, comparar com a categoria: "builder de código", "no-code genérico"). SoRs a que a plataforma se integra (SAP/Salesforce/TOTVS) podem ser nomeados — são integração, não comparação.
 
 **Números com fonte (usáveis):** 39 engines em 10 camadas (fato — plataforma) · 79% das empresas adotaram agentes, só 11% em produção (o gap que a categoria "operar" fecha) · 45% do código gerado por IA falha em segurança (Veracode) — usar no máximo 1× no site, em /acelere ou home.
 

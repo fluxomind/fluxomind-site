@@ -47,7 +47,7 @@ const FAQ_EN = [
   },
   {
     q: 'Is this real today, or a vision?',
-    a: 'The platform is real — 39 engines that materialize and operate real apps, multi-tenant, governed. We are in beta: we guide adoption closely — live in weeks, not a months-long project.',
+    a: 'The platform is real — 39 engines that materialize and operate real apps, multi-tenant, governed. We are in private beta, with the open launch coming soon: we guide adoption closely — live in weeks, not a months-long project.',
   },
 ];
 

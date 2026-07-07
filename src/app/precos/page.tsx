@@ -8,7 +8,7 @@ import { PLATFORM_CONTACT } from '@/lib/platform';
 export const metadata: Metadata = {
   title: 'Preços',
   description:
-    'Durante o beta, o acesso é acompanhado e sem cartão — você entra pela lista do beta. Depois, assinatura + uso com os modelos de fronteira inclusos: uma fatura, em reais, sem gerir contas e chaves de IA.',
+    'A plataforma está em beta privado — o acesso é acompanhado e sem cartão; você entra pela lista de lançamento. Depois, assinatura + uso com os modelos de fronteira inclusos: uma fatura, em reais, sem gerir contas e chaves de IA.',
   alternates: {
     canonical: '/precos',
     languages: { 'pt-BR': '/precos', en: '/en/pricing' },
@@ -31,9 +31,10 @@ export default function Precos() {
               No beta, sem cartão. <span className="g">Depois, assinatura + uso.</span>
             </h1>
             <p className="hsub" style={{ margin: '18px auto 0', maxWidth: '56ch' }}>
-              Durante o beta, o acesso é acompanhado — o time entra junto, sem cartão e sem
-              cobrança. Depois, o desenho é simples: uma assinatura mais o uso, com os modelos de
-              fronteira já inclusos numa única fatura em reais.
+              A plataforma está em beta privado — o lançamento aberto vem em breve. No beta, o
+              acesso é acompanhado: o time entra junto, sem cartão e sem cobrança. Depois, o
+              desenho é simples: uma assinatura mais o uso, com os modelos de fronteira já
+              inclusos numa única fatura em reais.
             </p>
           </div>
         </div>
@@ -45,7 +46,7 @@ export default function Precos() {
           <div className="plans">
             {/* BETA */}
             <div className="plan">
-              <div className="ptag">Hoje · beta</div>
+              <div className="ptag">Hoje · beta privado</div>
               <h3>Beta acompanhado</h3>
               <div className="price">
                 <b>Sem cartão</b>
@@ -56,7 +57,7 @@ export default function Precos() {
               </p>
               <ul>
                 <li>
-                  <span className="ck">✓</span> Acesso pela lista do beta, acompanhado pelo time
+                  <span className="ck">✓</span> Acesso pela lista de lançamento, acompanhado pelo time
                 </li>
                 <li>
                   <span className="ck">✓</span> Sem cartão e sem cobrança enquanto durar o beta
@@ -155,8 +156,8 @@ export default function Precos() {
             <div className="qa">
               <h4>Preciso de cartão para começar?</h4>
               <p>
-                Não. Durante o beta não existe cobrança nem cartão. Você pede acesso pela lista do
-                beta e entra acompanhado — o time monta com você o primeiro app operante.
+                Não. Durante o beta não existe cobrança nem cartão. Você entra na lista de
+                lançamento e o acesso é acompanhado — o time monta com você o primeiro app operante.
               </p>
             </div>
             <div className="qa">
@@ -206,9 +207,10 @@ export default function Precos() {
           <div className="kick" style={{ color: 'var(--sky)' }}>
             Comece agora
           </div>
-          <h2>Entre pela lista do beta</h2>
+          <h2>Entre na lista de lançamento</h2>
           <p className="lead">
-            Sem cartão, acompanhado pelo time — do problema descrito ao app operante rodando.
+            Você é avisado quando abrir — e os primeiros da lista entram já no beta, sem cartão,
+            acompanhados pelo time: do problema descrito ao app operante rodando.
           </p>
           <div className="offerbtns">
             <Link className="btn btn-primary btn-lg" href="/#comecar" data-track="precos-beta-cta">

@@ -46,7 +46,7 @@ const FAQ = [
   },
   {
     q: 'Isso já existe ou é visão?',
-    a: 'A plataforma já existe — 39 engines que materializam e operam apps de verdade, multi-tenant, governada. Estamos em beta: a adoção acontece acompanhada de perto pelo nosso time, em semanas, não num projeto de meses.',
+    a: 'A plataforma já existe — 39 engines que materializam e operam apps de verdade, multi-tenant, governada. Estamos em beta privado, com o lançamento aberto em breve: a adoção acontece acompanhada de perto pelo nosso time, em semanas, não num projeto de meses.',
   },
 ];
 
