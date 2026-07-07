@@ -12,7 +12,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.fluxomind.com"),
   title: {
-    default: "Fluxomind — delegue a tarefa, receba a conclusão com a prova",
+    default: "Fluxomind — app que trabalha para o seu negócio, não o contrário",
     template: "%s · Fluxomind",
   },
   description:
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "pt_BR",
     siteName: "Fluxomind",
-    title: "Fluxomind — delegue a tarefa, receba a conclusão com a prova",
+    title: "Fluxomind — app que trabalha para o seu negócio, não o contrário",
     description:
       "Um app que resolve o seu problema e se opera sozinho — integrado ao que você já tem, governado, em semanas.",
     images: [

@@ -2,7 +2,7 @@
 // (PROPOSTA — aguardando martelo). One term only for the category:
 // "self-operating app". Do not invent copy outside the EN message house.
 
-export const SIGNATURE_EN = 'Delegate the task. Get the conclusion — with the proof.';
+export const SIGNATURE_EN = 'The app that works for your business — not the other way around.';
 
 export const PROMISE_EN =
   'An app that solves your problem and runs itself — integrated with what you already use, governed, live in weeks (not a months-long project).';
@@ -40,7 +40,7 @@ export const TRUST_RULES_EN = [
 ] as const;
 
 export const PHASE_EN = {
-  exists: 'Already real: the platform — 39 engines that build and operate real apps, multi-tenant, governed.',
+  exists: 'Already real: the platform — 39 engines that build and operate real apps, multi-tenant, governed. In private beta today; open launch coming soon.',
   next: 'Next chapter: dogfooding — Fluxomind running its own sales operation inside the product, the living proof that the agent operates and evolves.',
   vision: 'The vision: a catalog of self-operating apps created by experts — someone who has mastered a problem packages the method; your company installs it and adopts it already running.',
 } as const;

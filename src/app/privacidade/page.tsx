@@ -58,9 +58,9 @@ export default function PrivacyPolicy() {
             </p>
             <ul className="list-disc pl-6 text-gray-600 space-y-2 mb-4">
               <li>
-                <strong>Dados que você nos envia:</strong> ao preencher o formulário de interesse
-                no programa beta, coletamos nome, e-mail, empresa e a descrição do processo que
-                você deseja automatizar.
+                <strong>Dados que você nos envia:</strong> ao preencher o formulário da lista de
+                lançamento (programa beta), coletamos nome, e-mail, empresa e a descrição do
+                processo que você deseja automatizar.
               </li>
               <li>
                 <strong>Dados de navegação (anônimos):</strong> registramos eventos de uso do Site
@@ -81,8 +81,9 @@ export default function PrivacyPolicy() {
             <h2 className="text-2xl font-semibold text-gray-900 mb-4">3. Para que usamos e com qual base legal</h2>
             <ul className="list-disc pl-6 text-gray-600 space-y-2 mb-4">
               <li>
-                <strong>Responder ao seu interesse no beta:</strong> usamos os dados do formulário
-                para entrar em contato sobre o programa beta e avaliar o seu caso de uso. Base
+                <strong>Responder ao seu interesse no beta e no lançamento:</strong> usamos os
+                dados do formulário para avisar sobre o lançamento, entrar em contato sobre o
+                programa beta e avaliar o seu caso de uso. Base
                 legal: consentimento (art. 7º, I, LGPD) e procedimentos preliminares relacionados a
                 contrato (art. 7º, V, LGPD).
               </li>

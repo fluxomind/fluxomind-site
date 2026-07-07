@@ -1,7 +1,7 @@
 // Copy canônica compartilhada do site — fonte única (docs/message-house-cliente-final.md).
 // Strings que aparecem em mais de uma página vivem aqui; não duplicar nas páginas.
 
-export const SIGNATURE = 'Delegue a tarefa. Receba a conclusão com a prova.';
+export const SIGNATURE = 'App que trabalha para o seu negócio — não o contrário.';
 
 // Promessa ao cliente final (BCM-07, proposta de valor do lado empresa).
 export const PROMISE =
@@ -48,7 +48,7 @@ export const TRUST_RULES = [
 export const PHASE = {
   exists: {
     title: 'Já existe',
-    desc: 'A plataforma — 39 engines que materializam e operam apps de verdade, multi-tenant, governada.',
+    desc: 'A plataforma — 39 engines que materializam e operam apps de verdade, multi-tenant, governada. Hoje em beta privado; o lançamento aberto vem em breve.',
   },
   next: {
     title: 'Próximo capítulo',

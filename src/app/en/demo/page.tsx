@@ -38,7 +38,8 @@ export default function DemoPageEn() {
         <div className="wrap">
           <h2>Now with your real data</h2>
           <p className="lead">
-            Tell us which process you want to delegate — the team builds your first
+            The platform is in private beta — open launch coming soon. Tell us which process
+            you want to delegate: early access starts with the team building your first
             self-operating app with you, no card and no commitment.
           </p>
           <div className="offerbtns">

@@ -16,7 +16,7 @@
 
 ## 1. Redações canônicas (espelho do message house pt)
 
-- **Assinatura:** *Delegate the task. Get the conclusion — with the proof.*
+- **Assinatura:** *The app that works for your business — not the other way around.* (emenda 2026-07-07, espelho da lei pt; substitui "Delegate the task. Get the conclusion — with the proof."; "The" em vez de "An" — artigo definido é o padrão assertivo de slogan em inglês)
 - **Promessa:** *An app that solves your problem and runs itself — integrated with what you already use, governed, live in weeks (not a months-long project).*
 - **Propósito:** *For 30 years, companies adapted to their software. We exist to invert that: software that molds itself to your business — and works for it.*
 - **Negação tripla:**
@@ -43,10 +43,12 @@ Trust rules: **Framing** (solves the right problem) · **Coherence** (makes sens
 
 Already real: the platform — 39 engines that materialize and operate real apps, multi-tenant, governed. Next chapter: dogfooding — Fluxomind running its own sales operation inside the product. The vision: a catalog of self-operating apps created by experts — declared as vision, never as fact.
 
+**Estado de acesso (emenda 2026-07-07, espelho da lei pt):** a plataforma **não está lançada** — estado público canônico: **"private beta · open launch coming soon"**; nunca "coming soon" solto. A captura é a **launch list** (espelho de "lista de lançamento"): quem entra é avisado no lançamento e os primeiros entram já no beta acompanhado.
+
 ## 4. Léxico EN
 
-**Usar:** self-operating app · runs the day-to-day · conclusion with the proof · governed · molds itself to the business · hands off to a human · live in weeks, not months.
-**Vetado:** mesmos vetos da lei pt (concorrentes nomeados, superlativo sem fonte, promessa financeira, catálogo como fato, "waitlist") + **não traduzir "app operante" de outra forma** — um termo só, sempre.
+**Usar:** self-operating app · runs the day-to-day · conclusion with the proof · governed · molds itself to the business · hands off to a human · live in weeks, not months · private beta · launch list · open launch coming soon.
+**Vetado:** mesmos vetos da lei pt (concorrentes nomeados, superlativo sem fonte, promessa financeira, catálogo como fato, "waitlist" — dizer "launch list") + **não traduzir "app operante" de outra forma** — um termo só, sempre.
 
 ## 5. Regras desta fase
 

@@ -39,8 +39,10 @@ export default function DemoPage() {
         <div className="wrap">
           <h2>Agora com os seus dados de verdade</h2>
           <p className="lead">
-            Conte qual processo você quer delegar — o time monta o primeiro app operante com
-            você, sem cartão e sem compromisso.
+            A plataforma está em beta privado — o lançamento aberto vem em breve. Entre na
+            lista de lançamento contando qual processo você quer delegar: os primeiros da
+            lista entram já no beta, com o time montando o primeiro app operante com você,
+            sem cartão e sem compromisso.
           </p>
           <BetaForm />
         </div>

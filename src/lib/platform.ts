@@ -2,7 +2,7 @@
 //
 // MOTION (BCM-07 + decisão do fundador 2026-07-02): o site converte pelo
 // ENCANTAMENTO — a demonstração é o funil. CTA primário leva à demo (/#demo);
-// a decisão vira "Quero isso no meu negócio" (PLATFORM_BETA, lista do beta) ou
+// a decisão vira "Quero isso no meu negócio" (PLATFORM_BETA, lista de lançamento) ou
 // "Falar com o time" (PLATFORM_CONTACT). Free self-serve aberto NÃO é CTA
 // primário (BCM-07: free aberto queima inferência; o cliente chega high-intent).
 //

@@ -67,9 +67,9 @@ export default function PrivacyEn() {
             </p>
             <ul className="list-disc pl-6 text-gray-600 space-y-2 mb-4">
               <li>
-                <strong>Data you send us:</strong> when filling in the beta interest form, we
-                collect name, e-mail, company and the description of the process you want to
-                automate.
+                <strong>Data you send us:</strong> when filling in the launch-list (beta
+                program) form, we collect name, e-mail, company and the description of the
+                process you want to automate.
               </li>
               <li>
                 <strong>Browsing data (anonymous):</strong> we record usage events on the Site
@@ -90,8 +90,9 @@ export default function PrivacyEn() {
             <h2 className="text-2xl font-semibold text-gray-900 mb-4">3. Why we use it and on which legal basis</h2>
             <ul className="list-disc pl-6 text-gray-600 space-y-2 mb-4">
               <li>
-                <strong>Responding to your interest in the beta:</strong> we use the form data to
-                contact you about the beta program and evaluate your use case. Legal basis:
+                <strong>Responding to your interest in the beta and the launch:</strong> we use
+                the form data to notify you about the launch, contact you about the beta program
+                and evaluate your use case. Legal basis:
                 consent (LGPD art. 7, I) and preliminary procedures related to a contract (LGPD
                 art. 7, V).
               </li>

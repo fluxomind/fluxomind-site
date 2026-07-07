@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { clientIp, rateLimited } from '@/lib/ratelimit';
 import { appendLead } from '@/lib/leadstore';
 
-// Captura de leads do form da lista do beta (src/components/BetaForm.tsx).
+// Captura de leads do form da lista de lançamento (src/components/BetaForm.tsx).
 // O lead é SEMPRE logado (backup nos logs do host — atenção à retenção curta
 // na Vercel; ver docs/leads-analytics.md § Deploy) e repassado a
 // LEAD_WEBHOOK_URL quando configurada (Sheets via Apps Script, CRM, Slack…).

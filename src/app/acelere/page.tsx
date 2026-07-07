@@ -300,8 +300,8 @@ export default function Acelere() {
             </div>
           </div>
           <div className="honest">
-            <b>Transparência.</b> {PHASE.exists.title}: {PHASE.exists.desc} Estamos em beta — a
-            adoção acontece acompanhada de perto pelo nosso time; SLA formal e certificações estão
+            <b>Transparência.</b> {PHASE.exists.title}: {PHASE.exists.desc} No beta, a adoção
+            acontece acompanhada de perto pelo nosso time; SLA formal e certificações estão
             no roadmap. {PHASE.vision.title}: {PHASE.vision.desc}
           </div>
         </div>
