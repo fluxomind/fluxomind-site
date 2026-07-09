@@ -144,7 +144,10 @@ nav .wrap { display: flex; align-items: center; justify-content: space-between; 
 .step .tx { font-size: 13.5px; color: #E5E7EB; }
 .spin { width: 12px; height: 12px; border: 2px solid rgba(255,255,255,.35); border-top-color: #fff; border-radius: 50%; animation: sp .7s linear infinite; }
 @keyframes sp { to { transform: rotate(360deg); } }
-.preview { margin-top: 12px; background: #16181d; border: 1px solid rgba(255,255,255,.1); border-radius: 12px; overflow: hidden; }
+.preview { margin-top: 12px; background: #16181d; border: 1px solid rgba(255,255,255,.1); border-radius: 12px; overflow: hidden; animation: previewReveal .5s cubic-bezier(.4,0,.2,1) both; }
+/* o app "entra em cena" quando o artefato aparece — mesmo momento do /demo */
+@keyframes previewReveal { from { opacity: 0; transform: translateY(10px) scale(.985); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .preview { animation: none; } }
 .pvbar { display: flex; align-items: center; gap: 7px; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.08); font-size: 12.5px; color: #C7CBD1; }
 .pvbar .d { width: 8px; height: 8px; border-radius: 50%; }
 .pvgrid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; padding: 12px; }

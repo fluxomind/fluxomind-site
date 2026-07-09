@@ -98,6 +98,8 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
   // mobile: um painel por vez (chat ⇄ app), padrão do protótipo DP087
   const [pane, setPane] = useState<'chat' | 'app'>('chat');
   const [touched, setTouched] = useState(false);
+  // v5: reveal transiente quando o app "entra em cena" (draft nasce)
+  const [justRevealed, setJustRevealed] = useState(false);
 
   const clockRef = useRef(31);
   const genRef = useRef(0);
@@ -150,6 +152,14 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
     const n = scrollRef.current;
     if (n) n.scrollTop = n.scrollHeight;
   }, [items, typing]);
+
+  // v5: quando o rascunho nasce (draft) o app assume o palco — dispara o reveal
+  useEffect(() => {
+    if (draft !== 'draft') return;
+    setJustRevealed(true);
+    const t = window.setTimeout(() => setJustRevealed(false), 900);
+    return () => window.clearTimeout(t);
+  }, [draft]);
 
   // placeholder máquina-de-escrever na entrada: cicla os exemplos dos 3 cenários.
   // Roda no idle da tela de entrada; para quando o usuário digita (chatText != '')
@@ -1130,8 +1140,15 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
   const listIcon = cen.surface === 'financeiro' ? '📄' : cen.surface === 'chats' ? '📥' : '▦';
   const recIcon = cen.surface === 'chats' ? '💬' : '👤';
 
+  // v5: a fase da jornada rege o palco — converse (sem app) · app (rascunho/ratificado) · operate (publicado)
+  const phase =
+    draft === 'none' || draft === 'building' ? 'converse' : draft === 'published' ? 'operate' : 'app';
+
   return (
-    <div className={`jd jd-pane-${pane}`} data-demo-jornada>
+    <div
+      className={`jd jd-pane-${pane} jd-phase-${phase}${justRevealed ? ' jd-reveal' : ''}`}
+      data-demo-jornada
+    >
       <style>{JD_CSS}</style>
 
       {/* topbar de sistema — a sensação de estar dentro do produto */}
@@ -1381,7 +1398,9 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
           role="tab"
           aria-selected={pane === 'app'}
           className={pane === 'app' ? 'on' : ''}
+          disabled={phase === 'converse'}
           onClick={() => {
+            if (phase === 'converse') return;
             setPane('app');
             track('jornada_pane', { pane: 'app' });
           }}
@@ -1546,8 +1565,22 @@ const JD_CSS = `
   .jd-cta-s{ display:inline; }
   .jd-top-brand{ font-size:13px; }
 }
-.jd-grid { display:grid; grid-template-columns: minmax(320px,42%) 1fr; flex:1; min-height:0; }
+.jd-grid { display:grid; grid-template-columns: 42% 58%; flex:1; min-height:0; transition: grid-template-columns .55s cubic-bezier(.4,0,.2,1); }
+/* v5 — a fase da jornada rege o palco (o app não ocupa coluna vazia antes de existir) */
+.jd-phase-converse .jd-grid { grid-template-columns: 100% 0%; }
+.jd-phase-app .jd-grid { grid-template-columns: 42% 58%; }
+.jd-phase-operate .jd-grid { grid-template-columns: 38% 62%; }
+.jd-phase-converse .jd-app { min-width:0; overflow:hidden; border-left:none; }
+.jd-phase-converse .jd-empty { display:none; }
+/* converse: coluna de leitura confortável quando a conversa ocupa a tela */
+.jd-phase-converse .jd-scroll,
+.jd-phase-converse .jd-entries,
+.jd-phase-converse .jd-input { padding-left: max(16px, calc((100% - 900px) / 2)); padding-right: max(16px, calc((100% - 900px) / 2)); }
+/* app entra em cena quando o rascunho nasce */
+.jd-reveal .jd-app { animation: jdAppReveal .6s cubic-bezier(.4,0,.2,1); }
+@keyframes jdAppReveal { from { opacity:0; transform: translateY(10px) scale(.985); } to { opacity:1; transform:none; } }
 .jd-panebar { display:none; }
+.jd-panebar button:disabled { opacity:.4; cursor:default; }
 @media (max-width:860px){
   .jd-grid{ display:flex; flex-direction:column; }
   .jd-chat, .jd-app { flex:1; min-height:0; border-right:none; border-top:none; }
