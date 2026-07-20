@@ -155,7 +155,11 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
 
   // v5: quando o rascunho nasce (draft) o app assume o palco — dispara o reveal
   useEffect(() => {
-    if (draft !== 'draft') return;
+    if (draft !== 'draft') {
+      // se o draft avançar antes do timeout, desarma a classe — senão o próximo reveal não anima
+      setJustRevealed(false);
+      return;
+    }
     setJustRevealed(true);
     const t = window.setTimeout(() => setJustRevealed(false), 900);
     return () => window.clearTimeout(t);
