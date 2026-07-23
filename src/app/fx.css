@@ -54,6 +54,9 @@
 .fx .fx-btn-ghost:hover { color: #fff; }
 /* CTA do chrome (SiteHeader/MobileNav usam o botão globals .btn dentro do .fx) */
 .fx a.btn-primary { color: #fff; }
+/* o JourneyDemo (/demo) tem paleta própria; impedir que `.fx a` vaze nos links dele */
+.fx .jd a { color: inherit; text-decoration: none; }
+.fx a.jd-top-cta { color: #fff; }
 .fx-cta-row { display: flex; gap: 13px; flex-wrap: wrap; }
 .fx-tc .fx-cta-row { justify-content: center; }
 

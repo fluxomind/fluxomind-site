@@ -123,19 +123,19 @@ export default function HomeEn() {
               <div className="fx-thread">
                 <div className="fx-bub fx-in">Hi! Do you still have the blue dress in size M? 👗</div>
                 <div className="fx-bub fx-out">
-                  We do, Camila! It&rsquo;s R$189 with free shipping today. Want me to reserve it and send the payment link?
+                  We do, Camila! It&rsquo;s $189 with free shipping today. Want me to reserve it and send the payment link?
                 </div>
                 <div className="fx-bub fx-in">Yes please! 🙌</div>
               </div>
               <div className="fx-run">
                 <div className="fx-r"><span className="fx-st done">Done</span> Replied to customer <time>23:47</time></div>
                 <div className="fx-r"><span className="fx-st done">Done</span> Order logged <time>23:48</time></div>
-                <div className="fx-r"><span className="fx-st pay">Paid</span> Payment confirmed · R$189 <time>23:52</time></div>
+                <div className="fx-r"><span className="fx-st pay">Paid</span> Payment confirmed · $189 <time>23:52</time></div>
               </div>
               <div className="fx-receipt">
                 <div className="fx-rh">This week&rsquo;s briefing</div>
-                <div className="fx-rbig fx-serif">R$12,480 <span>recovered</span></div>
-                <div className="fx-rsub">app cost: R$594 · return: <b>21×</b> · 0 customers left unanswered</div>
+                <div className="fx-rbig fx-serif">$12,480 <span>recovered</span></div>
+                <div className="fx-rsub">app cost: $594 · return: <b>21×</b> · 0 customers left unanswered</div>
               </div>
             </div>
           </div>
@@ -216,9 +216,10 @@ export default function HomeEn() {
             gets copied; an invoice doesn&rsquo;t.
           </p>
           <p className="fx-body">
-            And we start with ourselves. Fluxomind runs its own sales operation inside the
-            product — we are <strong>customer zero</strong>. We operate our business with this
-            before asking you to operate yours.
+            And we start with ourselves. Before we open to the market, Fluxomind will run its own
+            business inside the product — billing, leads and WhatsApp support, all on Fluxomind.
+            That&rsquo;s our launch bar: we won&rsquo;t ask you to run your business on this until we run
+            ours on it. We&rsquo;re <strong>customer zero</strong>.
           </p>
         </div>
       </section>
