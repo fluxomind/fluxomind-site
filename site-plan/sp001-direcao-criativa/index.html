@@ -1,0 +1,532 @@
+<style>
+  /* ============================================================
+     Direção Criativa — o novo fluxomind.com
+     Brief de reposicionamento. Editorial-tech: serif de voz,
+     mono de razão (o ledger), sans de leitura. Fundo escuro por
+     escolha; o mock do WhatsApp é uma tela — dark nos dois temas.
+     ============================================================ */
+
+  :root {
+    --ground:   #F5F6FA;
+    --ground-2: #FFFFFF;
+    --ground-3: #FFFFFF;
+    --ink:      #12151D;
+    --ink-soft: #464D5C;
+    --ink-faint:#79808F;
+    --line:     rgba(18,21,29,.11);
+    --line-2:   rgba(18,21,29,.06);
+    --accent:   #2C60E0;   /* azul de marca, aprofundado */
+    --accent-2: #1E49B8;
+    --gold:     #9C6B18;   /* a prova em R$ — legível no claro */
+    --gold-soft:#8a5f18;
+    --emerald:  #0F8B62;
+    --shadow:   0 24px 60px -34px rgba(20,30,60,.30);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ground:   #0C0E13;
+      --ground-2: #12151C;
+      --ground-3: #171B24;
+      --ink:      #EDF0F6;
+      --ink-soft: #A7AEBD;
+      --ink-faint:#6C7484;
+      --line:     rgba(255,255,255,.10);
+      --line-2:   rgba(255,255,255,.055);
+      --accent:   #5B8CFF;
+      --accent-2: #3E72F0;
+      --gold:     #E6B25E;
+      --gold-soft:#c9974a;
+      --emerald:  #35C08A;
+      --shadow:   0 30px 70px -40px rgba(0,0,0,.75);
+    }
+  }
+  :root[data-theme="light"] {
+    --ground:#F5F6FA; --ground-2:#FFFFFF; --ground-3:#FFFFFF;
+    --ink:#12151D; --ink-soft:#464D5C; --ink-faint:#79808F;
+    --line:rgba(18,21,29,.11); --line-2:rgba(18,21,29,.06);
+    --accent:#2C60E0; --accent-2:#1E49B8; --gold:#9C6B18; --gold-soft:#8a5f18;
+    --emerald:#0F8B62; --shadow:0 24px 60px -34px rgba(20,30,60,.30);
+  }
+  :root[data-theme="dark"] {
+    --ground:#0C0E13; --ground-2:#12151C; --ground-3:#171B24;
+    --ink:#EDF0F6; --ink-soft:#A7AEBD; --ink-faint:#6C7484;
+    --line:rgba(255,255,255,.10); --line-2:rgba(255,255,255,.055);
+    --accent:#5B8CFF; --accent-2:#3E72F0; --gold:#E6B25E; --gold-soft:#c9974a;
+    --emerald:#35C08A; --shadow:0 30px 70px -40px rgba(0,0,0,.75);
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: "Söhne", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 17px;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .serif { font-family: "Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif; }
+  .mono  { font-family: "SF Mono","JetBrains Mono","IBM Plex Mono",ui-monospace,Menlo,monospace; }
+
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 26px; }
+  .wide { max-width: 1120px; margin: 0 auto; padding: 0 26px; }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* eyebrow / labels */
+  .eyebrow {
+    font-family: "SF Mono","JetBrains Mono","IBM Plex Mono",ui-monospace,monospace;
+    font-size: 12px; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600; margin: 0 0 14px;
+  }
+  h1, h2, h3 { font-family: "Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif; text-wrap: balance; }
+
+  /* ---------------- masthead ---------------- */
+  .mast {
+    border-bottom: 1px solid var(--line);
+    background:
+      radial-gradient(120% 90% at 88% -20%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 60%),
+      var(--ground-2);
+  }
+  .mast .wrap { padding-top: 64px; padding-bottom: 46px; }
+  .tag {
+    display: inline-flex; align-items: center; gap: 9px;
+    font-family: "SF Mono",ui-monospace,monospace; font-size: 12.5px; letter-spacing: .04em;
+    color: var(--ink-soft); border: 1px solid var(--line);
+    padding: 6px 13px; border-radius: 999px; margin-bottom: 26px;
+  }
+  .tag .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--emerald); box-shadow: 0 0 0 4px color-mix(in srgb, var(--emerald) 22%, transparent); }
+  .mast h1 { font-size: clamp(32px, 5.2vw, 52px); line-height: 1.08; letter-spacing: -.015em; font-weight: 600; margin: 0 0 22px; }
+  .mast h1 em { font-style: italic; color: var(--accent); }
+  .mast .thesis { font-size: clamp(18px, 2vw, 21px); color: var(--ink-soft); max-width: 40ch; line-height: 1.5; }
+  .meta {
+    display: flex; flex-wrap: wrap; gap: 8px 30px; margin-top: 34px;
+    font-family: "SF Mono",ui-monospace,monospace; font-size: 12.5px; color: var(--ink-faint);
+  }
+  .meta b { color: var(--ink); font-weight: 600; }
+
+  /* ---------------- sections ---------------- */
+  section { padding: 58px 0; border-bottom: 1px solid var(--line-2); }
+  .sec-head h2 { font-size: clamp(25px, 3.2vw, 34px); font-weight: 600; letter-spacing: -.01em; margin: 0 0 14px; line-height: 1.14; }
+  .sec-head p { color: var(--ink-soft); margin: 0 0 6px; max-width: 62ch; }
+  .lead-in { color: var(--ink-soft); max-width: 64ch; }
+
+  /* pivot cards */
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 30px; }
+  @media (max-width: 760px){ .grid3 { grid-template-columns: 1fr; } }
+  .card {
+    background: var(--ground-3); border: 1px solid var(--line);
+    border-radius: 13px; padding: 22px 22px 24px;
+  }
+  .card .k { font-family:"SF Mono",ui-monospace,monospace; font-size: 11.5px; letter-spacing:.12em; text-transform:uppercase; color: var(--ink-faint); }
+  .card h3 { font-size: 19px; font-weight: 600; margin: 9px 0 9px; letter-spacing:-.01em; line-height: 1.2; }
+  .card p { margin: 0; font-size: 15px; color: var(--ink-soft); line-height: 1.55; }
+  .card p .src { color: var(--ink-faint); }
+
+  /* message house */
+  .mh { display: grid; grid-template-columns: 180px 1fr; gap: 0; margin-top: 26px; border: 1px solid var(--line); border-radius: 13px; overflow: hidden; }
+  @media (max-width: 680px){ .mh { grid-template-columns: 1fr; } }
+  .mh .row { display: contents; }
+  .mh .lab, .mh .val { padding: 16px 20px; border-top: 1px solid var(--line-2); }
+  .mh .lab { background: color-mix(in srgb, var(--accent) 7%, var(--ground-3)); font-family:"SF Mono",ui-monospace,monospace; font-size: 12px; text-transform: uppercase; letter-spacing:.1em; color: var(--accent); font-weight:600; }
+  .mh .val { background: var(--ground-3); font-size: 15.5px; color: var(--ink); }
+  .mh .row:first-child .lab, .mh .row:first-child .val { border-top: 0; }
+  .mh .val .n { color: var(--ink-faint); font-size: 13.5px; display:block; margin-top:4px; }
+  @media (max-width: 680px){ .mh .lab { border-top: 1px solid var(--line); } .mh .val { padding-top: 6px; } }
+
+  /* ---------------- phone / feed mock ---------------- */
+  .mock-wrap { margin-top: 30px; display: grid; grid-template-columns: 340px 1fr; gap: 34px; align-items: start; }
+  @media (max-width: 860px){ .mock-wrap { grid-template-columns: 1fr; gap: 24px; } }
+  .phone {
+    background: #0A0C11; border: 1px solid rgba(255,255,255,.11);
+    border-radius: 26px; padding: 12px; box-shadow: 0 40px 80px -50px rgba(0,0,0,.8);
+    color: #E9ECF3; font-size: 14px;
+  }
+  .phone .top { display:flex; align-items:center; gap:10px; padding: 8px 8px 12px; border-bottom: 1px solid rgba(255,255,255,.07); }
+  .phone .av { width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg,#5B8CFF,#3E72F0); flex:0 0 auto; }
+  .phone .who { line-height: 1.2; }
+  .phone .who b { font-size: 14px; }
+  .phone .who span { display:flex; align-items:center; gap:6px; font-size: 11.5px; color:#8b93a3; margin-top: 2px; }
+  .phone .who span i { width:6px;height:6px;border-radius:50%;background:#35C08A; font-style: normal; }
+  .thread { display:flex; flex-direction: column; gap: 8px; padding: 14px 6px 8px; }
+  .bub { max-width: 82%; padding: 9px 12px; border-radius: 13px; font-size: 13.5px; line-height: 1.4; opacity: 0; transform: translateY(6px); animation: pop .5s cubic-bezier(.4,0,.2,1) forwards; }
+  .bub.in  { align-self: flex-start; background:#1B2028; border-bottom-left-radius: 4px; }
+  .bub.out { align-self: flex-end; background:#173a2e; color:#dbf5e8; border-bottom-right-radius: 4px; }
+  .bub:nth-child(1){ animation-delay: .15s; }
+  .bub:nth-child(2){ animation-delay: .7s; }
+  .bub:nth-child(3){ animation-delay: 1.25s; }
+  @keyframes pop { to { opacity:1; transform:none; } }
+  .run { margin: 8px 6px 6px; border-top: 1px solid rgba(255,255,255,.07); padding-top: 10px; display:flex; flex-direction:column; gap:7px; }
+  .run .r { display:flex; align-items:center; gap:9px; font-size: 12px; color:#aab2c2; opacity:0; animation: pop .5s ease forwards; }
+  .run .r:nth-child(1){ animation-delay: 1.7s; }
+  .run .r:nth-child(2){ animation-delay: 2.0s; }
+  .run .r:nth-child(3){ animation-delay: 2.3s; }
+  .run .r .st { font-family:"SF Mono",ui-monospace,monospace; font-size:10px; letter-spacing:.04em; text-transform:uppercase; padding: 2px 7px; border-radius: 999px; white-space:nowrap; }
+  .st.done { color:#35C08A; background: rgba(53,192,138,.13); border:1px solid rgba(53,192,138,.32); }
+  .st.pay  { color:#E6B25E; background: rgba(230,178,94,.12); border:1px solid rgba(230,178,94,.32); }
+  .run .r time { margin-left:auto; font-family:"SF Mono",ui-monospace,monospace; font-size: 10.5px; color:#6c7484; }
+  .receipt { margin: 12px 6px 4px; background: linear-gradient(180deg, rgba(230,178,94,.10), rgba(230,178,94,.03)); border:1px solid rgba(230,178,94,.28); border-radius: 12px; padding: 12px 14px; opacity:0; animation: pop .6s ease forwards; animation-delay: 2.7s; }
+  .receipt .h { font-family:"SF Mono",ui-monospace,monospace; font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:#E6B25E; }
+  .receipt .big { font-family:"Iowan Old Style",Palatino,Georgia,serif; font-size: 25px; margin: 4px 0 2px; color:#fff; letter-spacing:-.01em; }
+  .receipt .big span { color:#E6B25E; }
+  .receipt .sub { font-size: 11.5px; color:#9aa2b2; font-variant-numeric: tabular-nums; }
+  @media (prefers-reduced-motion: reduce){ .bub,.run .r,.receipt { opacity:1 !important; transform:none !important; animation:none !important; } }
+
+  .mock-note h3 { font-size: 20px; font-weight: 600; margin: 2px 0 12px; letter-spacing:-.01em; }
+  .mock-note p { color: var(--ink-soft); font-size: 15.5px; margin: 0 0 14px; max-width: 46ch; }
+  .mock-note .pull { border-left: 2px solid var(--gold); padding-left: 16px; color: var(--ink); font-size: 16px; }
+  .mock-note .pull b { color: var(--gold-soft); }
+
+  /* ---------------- the arc ---------------- */
+  .arc { margin-top: 24px; display: flex; flex-direction: column; }
+  .step { display: grid; grid-template-columns: 60px 1fr; gap: 22px; padding: 24px 0; border-top: 1px solid var(--line); }
+  .step:first-child { border-top: 0; }
+  @media (max-width: 620px){ .step { grid-template-columns: 1fr; gap: 8px; } }
+  .step .num { font-family:"SF Mono",ui-monospace,monospace; font-size: 15px; color: var(--accent); font-weight: 600; padding-top: 2px; }
+  .step h3 { font-size: 20px; font-weight: 600; margin: 0 0 4px; letter-spacing:-.01em; }
+  .step .role { font-family:"SF Mono",ui-monospace,monospace; font-size: 11.5px; letter-spacing:.08em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 12px; }
+  .step p { margin: 0 0 10px; color: var(--ink-soft); font-size: 15.5px; }
+  .step .copy { background: var(--ground-3); border: 1px solid var(--line); border-left: 2px solid var(--accent); border-radius: 8px; padding: 12px 15px; color: var(--ink); font-family:"Iowan Old Style",Palatino,Georgia,serif; font-size: 16.5px; font-style: italic; }
+  .step .foot { display:flex; flex-wrap:wrap; gap: 8px 18px; margin-top: 12px; font-size: 13px; }
+  .step .foot span { color: var(--ink-faint); }
+  .step .foot b { color: var(--emerald); font-weight: 600; font-family:"SF Mono",ui-monospace,monospace; font-size: 11px; letter-spacing:.06em; text-transform:uppercase; }
+  .tagm { display:inline-block; font-family:"SF Mono",ui-monospace,monospace; font-size: 11px; letter-spacing:.05em; padding: 2px 8px; border-radius: 6px; border:1px solid var(--line); color: var(--ink-soft); }
+
+  /* ---------------- visual direction ---------------- */
+  .swatches { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-top: 26px; }
+  @media (max-width: 760px){ .swatches { grid-template-columns: repeat(3, 1fr); } }
+  .sw { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+  .sw .chip { height: 64px; }
+  .sw .cap { padding: 8px 10px; font-family:"SF Mono",ui-monospace,monospace; font-size: 10.5px; color: var(--ink-soft); }
+  .sw .cap b { display:block; color: var(--ink); font-size: 11px; letter-spacing:.02em; }
+
+  .specimen { margin-top: 24px; border: 1px solid var(--line); border-radius: 13px; overflow: hidden; }
+  .specimen > div { padding: 20px 22px; border-top: 1px solid var(--line-2); }
+  .specimen > div:first-child { border-top: 0; }
+  .specimen .lbl { font-family:"SF Mono",ui-monospace,monospace; font-size: 11px; letter-spacing:.1em; text-transform:uppercase; color: var(--ink-faint); margin-bottom: 8px; }
+  .specimen .disp { font-family:"Iowan Old Style",Palatino,Georgia,serif; font-size: 30px; letter-spacing: -.01em; line-height: 1.15; }
+  .specimen .disp em { color: var(--accent); font-style: italic; }
+  .specimen .bod { font-size: 16px; color: var(--ink-soft); max-width: 58ch; }
+  .specimen .dat { font-family:"SF Mono",ui-monospace,monospace; font-variant-numeric: tabular-nums; font-size: 15px; color: var(--gold-soft); }
+
+  ul.clean { list-style: none; margin: 18px 0 0; padding: 0; display:flex; flex-direction: column; gap: 11px; }
+  ul.clean li { padding-left: 26px; position: relative; color: var(--ink-soft); font-size: 15.5px; }
+  ul.clean li::before { content: "→"; position: absolute; left: 0; top: 0; color: var(--accent); font-family:"SF Mono",monospace; }
+  ul.clean li b { color: var(--ink); font-weight: 600; }
+
+  /* reuse table */
+  .reuse { margin-top: 24px; border: 1px solid var(--line); border-radius: 13px; overflow: hidden; }
+  .reuse .rr { display: grid; grid-template-columns: 130px 1fr; border-top: 1px solid var(--line-2); }
+  .reuse .rr:first-child { border-top: 0; }
+  @media (max-width: 620px){ .reuse .rr { grid-template-columns: 1fr; } }
+  .reuse .tag2 { padding: 16px 18px; font-family:"SF Mono",ui-monospace,monospace; font-size: 11.5px; letter-spacing:.08em; text-transform: uppercase; font-weight:600; }
+  .reuse .rr.keep  .tag2 { color: var(--emerald); }
+  .reuse .rr.lift  .tag2 { color: var(--accent); }
+  .reuse .rr.new   .tag2 { color: var(--gold-soft); }
+  .reuse .rr.hold  .tag2 { color: #c0603f; }
+  .reuse .desc { padding: 16px 18px; font-size: 15px; color: var(--ink-soft); border-left: 1px solid var(--line-2); }
+  @media (max-width: 620px){ .reuse .desc { border-left: 0; padding-top: 4px; } .reuse .tag2 { padding-bottom: 4px; } }
+  .reuse .desc b { color: var(--ink); font-weight: 600; }
+
+  /* decisions */
+  .decs { margin-top: 24px; display: flex; flex-direction: column; gap: 12px; }
+  .dec { display: grid; grid-template-columns: 30px 1fr; gap: 14px; background: var(--ground-3); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; }
+  .dec .q { font-family:"SF Mono",ui-monospace,monospace; color: var(--accent); font-weight: 600; }
+  .dec h4 { margin: 0 0 6px; font-size: 16.5px; font-weight: 600; font-family: inherit; letter-spacing:-.005em; }
+  .dec p { margin: 0; font-size: 14.5px; color: var(--ink-soft); }
+  .dec p .rec { color: var(--emerald); font-weight: 600; }
+
+  footer { padding: 40px 0 64px; color: var(--ink-faint); font-size: 13px; }
+  footer .wrap { display:flex; flex-wrap: wrap; gap: 10px 20px; justify-content: space-between; }
+  footer .mono { font-size: 12px; }
+
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+</style>
+
+<header class="mast">
+  <div class="wrap">
+    <span class="tag"><span class="dot"></span> Brief interno · para aprovação</span>
+    <p class="eyebrow">Direção criativa — o novo fluxomind.com</p>
+    <h1 class="serif">Vender o <em>trabalho feito</em>. Não o software.</h1>
+    <p class="thesis">Reposicionar um site já maduro e indexado para a categoria que a Fluxomind está criando — sem perder um grama de SEO. Herói primeiro, plataforma invisível atrás. A loja abre depois.</p>
+    <div class="meta">
+      <span>De: <b>CMO</b></span>
+      <span>Para: <b>Ralfo (founder)</b></span>
+      <span>Base: <b>fmb-strategy · PDR-000</b></span>
+      <span>Pesquisa: <b>18 refs de categoria · 40 de landing</b></span>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">A virada</p>
+      <h2 class="serif">Três decisões antes de tocar em pixel</h2>
+      <p class="lead-in">O que muda em relação ao site de hoje — e por que isto é um reposicionamento, não uma reconstrução.</p>
+    </div>
+    <div class="grid3">
+      <div class="card">
+        <div class="k">01 · Fase</div>
+        <h3 class="serif">Herói-first, não criador-first</h3>
+        <p>A "App Store dos criadores" desce para a Fase 3. O lançamento vende o trabalho feito direto à PME. <span class="src">— PDR-000</span></p>
+      </div>
+      <div class="card">
+        <div class="k">02 · Foco</div>
+        <h3 class="serif">Catálogo vira prova, não porta</h3>
+        <p>Os 67 casos saem da entrada e viram prova de generalidade. A home nomeia 1 herói e o pole. <span class="src">— disciplina iPhone, 05 §4b</span></p>
+      </div>
+      <div class="card">
+        <div class="k">03 · Método</div>
+        <h3 class="serif">Reposicionar in-place</h3>
+        <p>O site é maduro e indexado. Troco narrativa e pele na mesma URL — o Google recrawleia. Quebrar rota é que mata SEO.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Posicionamento</p>
+      <h2 class="serif">A categoria se ganha nomeando o jogo novo</h2>
+      <p class="lead-in">Categoria nova é cara e arriscada — a regra é vender <b>o problema</b> antes da solução, e ancorar em conceitos que a PME já entende. Nunca um neologismo solto, nunca um concorrente nomeado.</p>
+    </div>
+    <div class="mh">
+      <div class="row"><div class="lab">O jogo antigo</div><div class="val">"Você comprou um software — e virou o operador dele." O painel que ninguém abre; a planilha + WhatsApp + ChatGPT colado que viraram realidades paralelas.<span class="n">Descrever com precisão, não com desprezo. O inimigo é o status quo, não um vendor.</span></div></div>
+      <div class="row"><div class="lab">O jogo novo</div><div class="val">O negócio que se opera sozinho. A IA que <b>trabalha</b> — atende, cobra e organiza — enquanto você não está olhando.<span class="n">A categoria, ancorada: "um funcionário que não dorme" · "o seu WhatsApp trabalhando por você".</span></div></div>
+      <div class="row"><div class="lab">A promessa</div><div class="val">Trabalho feito, provado em R$, no seu WhatsApp. Você não dirige nada.<span class="n">Assinatura mantida: "App que trabalha para o seu negócio — não o contrário."</span></div></div>
+      <div class="row"><div class="lab">A âncora de valor</div><div class="val">Contra o custo de <b>gente</b> — não contra uma tabela, nunca contra um concorrente.<span class="n">Uma operação que rende como 3 pessoas, pela fração do custo de uma.</span></div></div>
+      <div class="row"><div class="lab">O tom</div><div class="val">Prova, não promete. Honestidade de estágio como arma — num mar de "10x" que não foi, credibilidade converte.<span class="n">Escada pronto / em construção / no radar. Beta privado = exclusividade.</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">O ato criativo</p>
+      <h2 class="serif">Como se mostra um trabalho que é invisível?</h2>
+      <p class="lead-in">Nosso paradoxo: o sucesso é o cliente <b>não</b> abrir o produto (anti-DAU é critério oficial). Então não mostramos um painel para operar — mostramos o trabalho <b>já feito</b>. Um feed de resultados no WhatsApp, com estados legíveis e a prova em R$.</p>
+    </div>
+    <div class="mock-wrap">
+      <div class="phone" aria-label="Simulação de um feed de resultados no WhatsApp">
+        <div class="top">
+          <div class="av"></div>
+          <div class="who"><b>Loja da Ana</b><span><i></i> Fluxomind operando · agora</span></div>
+        </div>
+        <div class="thread">
+          <div class="bub in">Oi! Ainda tem o vestido azul no tam M? 👗</div>
+          <div class="bub out">Tenho sim, Camila! Fica R$ 189 com frete grátis hoje. Quer que eu já reserve e mande o Pix?</div>
+          <div class="bub in">Quero! 🙌</div>
+        </div>
+        <div class="run" aria-hidden="false">
+          <div class="r"><span class="st done">Feito</span> Respondeu a cliente <time>23:47</time></div>
+          <div class="r"><span class="st done">Feito</span> Pedido registrado <time>23:48</time></div>
+          <div class="r"><span class="st pay">Pago</span> Pix confirmado · R$ 189 <time>23:52</time></div>
+        </div>
+        <div class="receipt">
+          <div class="h">Briefing da semana</div>
+          <div class="big serif">R$ 12.480 <span>recuperados</span></div>
+          <div class="sub">custo do app: R$ 594 &nbsp;·&nbsp; retorno: <b>21×</b> &nbsp;·&nbsp; 0 clientes sem resposta</div>
+        </div>
+      </div>
+      <div class="mock-note">
+        <h3 class="serif">O produto é a demo</h3>
+        <p>O hero não é um dashboard nem uma copy — é o agente <b>operando ao vivo</b>. Ele atende, reserva, cobra e confirma, com carimbo de hora. É o padrão que venceu 2026 (Linear, Decagon, Artisan) e é perfeito para um público que já vive no WhatsApp.</p>
+        <p>Fecha com a peça que ninguém no mapa competitivo mostra sobre si: <b>o briefing com o múltiplo</b> — R$ gerado ÷ custo do app. Feature se copia; fatura não.</p>
+        <p class="pull">O acento de ouro aparece <b>só aqui</b>: na prova em R$. É a cor da confiança que fecha a venda — reservada para o único número que importa.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">O arco da home</p>
+      <h2 class="serif">Oito movimentos, do problema à fila</h2>
+      <p class="lead-in">Persuasão no topo, informação embaixo. Cada seção ganha o próximo scroll — não a venda inteira.</p>
+    </div>
+    <div class="arc">
+
+      <div class="step">
+        <div class="num">01</div>
+        <div>
+          <h3 class="serif">Hero — a promessa, operando</h3>
+          <div class="role">Resultado + demo viva + 1 CTA</div>
+          <p>Verbo de trabalho, não de software. O feed de resultados anima sozinho na primeira dobra. Um só CTA. Pill de janela suave.</p>
+          <div class="copy">"Sua operação de IA. Ela atende, vende e organiza no WhatsApp — 24/7, e te presta contas em reais."</div>
+          <div class="foot"><span><b>Reuso</b> JourneyDemo + painel de demo, elevados a "feed de resultados"</span><span><b>Fonte</b> hero-é-demo (Linear)</span></div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">02</div>
+        <div>
+          <h3 class="serif">O jogo antigo — a dor com nome</h3>
+          <div class="role">Vender o problema primeiro</div>
+          <p>Os 3 surtos condensados: planilha → WhatsApp → ChatGPT colado = caos. O gap que define a tese.</p>
+          <div class="copy">"O mundo todo testou IA. Quase ninguém consegue fazer ela trabalhar. — 62% experimentam agentes; 23% operam."</div>
+          <div class="foot"><span><b>Novo</b></span><span><b>Fonte</b> FROTO / name-the-new-game · McKinsey 62/23</span></div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">03</div>
+        <div>
+          <h3 class="serif">O jogo novo — conhecimento operante</h3>
+          <div class="role">Autonomia, não grid de features</div>
+          <p>Os 3 inegociáveis (delego · roda sozinho e evolui falando · me prova em R$) e a tríade — inbox de 3 interações · rampa de autonomia · trust ledger — mostrados como a IA <em>fazendo</em>, em blocos editoriais grandes.</p>
+          <div class="copy">"Autonomia se conquista, não se configura: ela observa, sugere, age com alçada — como um bom funcionário."</div>
+          <div class="foot"><span><b>Novo</b> capability surfaces</span><span><b>Fonte</b> Ecrin (vender autonomia)</span></div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">04</div>
+        <div>
+          <h3 class="serif">A prova — somos o cliente nº 0</h3>
+          <div class="role">Um case profundo &gt; dez logos</div>
+          <p>O dogfood: a Fluxomind operada pela própria Fluxomind. E a fatura com o múltiplo, em números grandes e tabulares. Sem logo fabricado — a honestidade é o diferencial que não se copia.</p>
+          <div class="copy">"A gente opera o próprio negócio com isso antes de pedir que você opere o seu."</div>
+          <div class="foot"><span><b>Novo</b> seção dogfood</span><span><b>Fonte</b> Devin/Nubank · anti "Mirage PMF"</span></div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">05</div>
+        <div>
+          <h3 class="serif">Por que agora</h3>
+          <div class="role">A maré + o relógio</div>
+          <p>A inferência cai ~10×/ano. O Brasil já vive no WhatsApp (96% das conversas marca-cliente; 25% fora do horário comercial; conversão 7× o e-commerce). A janela da categoria: 9–18 meses.</p>
+          <div class="copy">"Seu cliente te chama às 23h. Hoje ninguém responde. Amanhã, a sua operação responde — e fecha."</div>
+          <div class="foot"><span><b>Reuso</b> números canônicos (tier-filtrados)</span><span><b>Fonte</b> OmniChat · Sebrae · a16z</span></div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">06</div>
+        <div>
+          <h3 class="serif">Por que a gente vence</h3>
+          <div class="role">Founder lineage + execução verificada</div>
+          <p>Onde não há Magic Quadrant, credibilidade vem do fundador e do código: ex-Globant (consultoria Salesforce de 220 pessoas), time enxuto de 6 + harness, governança em produção. <em>Enterprise-grade by design, SMB-first by choice.</em> Escada de honestidade pronto / em construção / no radar.</p>
+          <div class="copy">"Todo negócio merece uma operação de primeira — não só as grandes, com time e sistema caro."</div>
+          <div class="foot"><span><b>Reuso</b> badges de status do design system</span><span><b>Fonte</b> founder lineage (Ecrin)</span></div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">07</div>
+        <div>
+          <h3 class="serif">Manifesto — a alma de vencedora</h3>
+          <div class="role">Página própria /manifesto, linkada do hero</div>
+          <p>O documento que nomeia o inimigo e reivindica o ponto de vista. Alinha o time e é o ativo de pré-lançamento mais compartilhável.</p>
+          <div class="copy">"Somos contra o software que você compra e ainda tem que operar. Contra o painel que ninguém abre."</div>
+          <div class="foot"><span><b>Novo</b> /manifesto</span><span><b>Fonte</b> Superpower (150k) · Category Pirates</span></div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">08</div>
+        <div>
+          <h3 class="serif">A fila — clube de fundadores</h3>
+          <div class="role">Pré-lançamento como exclusividade</div>
+          <p>O form que já temos vira waitlist: um campo, zero navegação, janela suave. A tela de confirmação é o maior ativo de crescimento — posição na fila + indicar por WhatsApp (o canal do público, o mais viral no país).</p>
+          <div class="copy">"Beta privado. Primeiras vagas neste trimestre. Conte a operação que você quer delegar."</div>
+          <div class="foot"><span><b>Reuso</b> BetaForm → /api/beta (produção)</span><span><b>Fonte</b> waitlist mechanics (Dropbox/Superhuman)</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Direção visual</p>
+      <h2 class="serif">Editorial-tech: voz em serifa, razão em mono</h2>
+      <p class="lead-in">Um campo estético, escolhido e comprometido. Fundo escuro; uma serifa de personalidade para a voz; monoespaçada tabular para o ledger (recibos, R$, o múltiplo); o azul de marca aprofundado; e um <b>único</b> acento de ouro, reservado à prova em R$. Fugimos do azul-roxo de gradiente e do Inter — em 2026 isso lê como "gerado por IA".</p>
+    </div>
+
+    <div class="swatches">
+      <div class="sw"><div class="chip" style="background:#0C0E13"></div><div class="cap"><b>Ink</b>#0C0E13 · fundo</div></div>
+      <div class="sw"><div class="chip" style="background:#171B24"></div><div class="cap"><b>Panel</b>#171B24 · cartão</div></div>
+      <div class="sw"><div class="chip" style="background:#5B8CFF"></div><div class="cap"><b>Azul</b>#5B8CFF · marca</div></div>
+      <div class="sw"><div class="chip" style="background:#E6B25E"></div><div class="cap"><b>Ouro</b>#E6B25E · a prova R$</div></div>
+      <div class="sw"><div class="chip" style="background:#35C08A"></div><div class="cap"><b>Verde</b>#35C08A · estado feito</div></div>
+      <div class="sw"><div class="chip" style="background:#A7AEBD"></div><div class="cap"><b>Névoa</b>#A7AEBD · texto 2º</div></div>
+    </div>
+
+    <div class="specimen">
+      <div>
+        <div class="lbl">Display — serifa (voz, headlines)</div>
+        <div class="disp">O negócio que se <em>opera sozinho</em>.</div>
+      </div>
+      <div>
+        <div class="lbl">Body — sans (leitura)</div>
+        <div class="bod">Entrego a tarefa, não configuro ferramenta. Roda sozinho, evolui quando eu falo, e me prova que fez — em reais.</div>
+      </div>
+      <div>
+        <div class="lbl">Data — mono tabular (o ledger)</div>
+        <div class="dat">R$ 12.480 recuperados · custo R$ 594 · retorno 21×</div>
+      </div>
+    </div>
+
+    <ul class="clean">
+      <li><b>Movimento:</b> uma animação-assinatura — o feed operando no hero. O resto quieto. Motion pesado data rápido e cheira a IA.</li>
+      <li><b>Trabalho invisível:</b> "run objects" com estados legíveis (respondendo · pago · concluído) + timestamp real. Mostrar o resultado, nunca a interface de operar.</li>
+      <li><b>Anti-slop:</b> largar o Inter no display; figuras tabulares em todo número; índices em mono; sem os 3 cards + gradiente azul-roxo.</li>
+      <li><b>Marca:</b> o azul #2B66DD tem equity — mantido e aprofundado como estrutura; o ouro é o novo acento emocional. Evolução do design system, não descarte.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Engenharia &amp; SEO</p>
+      <h2 class="serif">O que eu reaproveito — e o que protejo</h2>
+      <p class="lead-in">Li o código. O encanamento é maduro e testado em produção; ele fica. O trabalho novo é narrativa, pele e um punhado de peças.</p>
+    </div>
+    <div class="reuse">
+      <div class="rr keep"><div class="tag2">Manter</div><div class="desc"><b>Pipeline de leads</b> (BetaForm → /api/beta → leadstore + webhook Sheets, com honeypot, rate-limit, a11y) · <b>Analytics</b> · <b>layout + JSON-LD</b> · <b>i18n + hreflang + sitemap</b> · <b>badges de status</b> (a materialização de "prova, não promete").</div></div>
+      <div class="rr lift"><div class="tag2">Elevar</div><div class="desc"><b>JourneyDemo</b> → motor do feed de resultados. <b>Design system</b>: azul + Inter → + serifa display + mono + fundo escuro + ouro. <b>Narrativa</b> da home inteira.</div></div>
+      <div class="rr new"><div class="tag2">Novo</div><div class="desc"><b>/manifesto</b> · o <b>feed de resultados</b> do hero · a seção <b>dogfood/prova</b> · <b>llms.txt</b> + schema (ser citável por IAs — o SEO moderno).</div></div>
+      <div class="rr hold"><div class="tag2">Segurar</div><div class="desc"><b>Preço</b> — não publicar (sua orientação + a lógica de categoria nova). <b>Verticais como identidade</b> — fora. <b>Criador / App Store como manchete</b> — Fase 3.</div></div>
+    </div>
+    <ul class="clean">
+      <li><b>SEO protegido:</b> mesmas URLs; 301 só quando inevitável; hreflang, sitemap e JSON-LD intactos. Trocar conteúdo na mesma rota é seguro — o índice reflui.</li>
+      <li><b>Paridade bilíngue:</b> a nova copy nasce pt, com o espelho EN a produzir (o site é 100% bilíngue hoje; não quebro os pares).</li>
+      <li><b>Stack:</b> Next 15 + Tailwind + a mesma infra. Zero dependência nova para o essencial.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Precisa de você</p>
+      <h2 class="serif">Cinco decisões antes do código</h2>
+      <p class="lead-in">São escolhas suas — cada uma muda o desenho. Trago recomendação em todas.</p>
+    </div>
+    <div class="decs">
+      <div class="dec"><div class="q">A</div><div><h4>Personificar a IA?</h4><p>Dar nome humano e usar "Contrate a [Nome]" é potente (Ava, Alice), mas colide com anti-DAU e com o agente do cliente final ser genérico. <span class="rec">Recomendo: personificar a operação com leveza, sem virar mascote — decidir o nome no discovery.</span></p></div></div>
+      <div class="dec"><div class="q">B</div><div><h4>O nome da categoria em PT</h4><p>Candidatas: "o negócio que se opera sozinho" · "operação de IA" · "funcionário de IA". <span class="rec">Recomendo: liderar com a frase-âncora e deixar o rótulo emergir — evita o imposto de educar um termo vazio.</span></p></div></div>
+      <div class="dec"><div class="q">C</div><div><h4>O herói da home</h4><p>O carro-chefe comercial está em aberto (discovery decide). <span class="rec">Recomendo: liderar com a promessa da plataforma ilustrada pelo trio, vendas (o dogfood) como exemplo-padrão — sem cravar vertical.</span></p></div></div>
+      <div class="dec"><div class="q">D</div><div><h4>A direção estética</h4><p>Editorial-tech: fundo escuro, serifa de voz, mono de ledger, ouro só na prova em R$. <span class="rec">Recomendo aprovar — é distinta, foge do slop e casa com "trabalho provado em reais".</span></p></div></div>
+      <div class="dec"><div class="q">E</div><div><h4>A frase-mestre</h4><p>A memória única que dispara no gatilho (do 04 A1c): "Trabalho parado? A Fluxomind faz." · "Responder não é resolver." · "Ia contratar alguém pra isso? Deixa com a gente." <span class="rec">Sua chamada — informa hero e manifesto.</span></p></div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span class="mono">fluxomind.com · direção criativa v1 · para aprovação</span>
+    <span class="mono">nada é construído até o A–E fechar</span>
+  </div>
+</footer>
