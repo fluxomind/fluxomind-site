@@ -364,184 +364,67 @@ export default function Plataforma() {
         </div>
       </section>
 
-      {/* 07 — QUALIDADE & CORREÇÃO */}
+
+      {/* 07 — FUNDAÇÃO VERIFICADA: governança, segurança e correção num só lugar; detalhe em /seguranca */}
       <section className="fx-sec fx-sec-alt">
         <div className="fx-wrap">
           <div className="fx-narrow">
-            <p className="fx-eyebrow">Qualidade &amp; correção</p>
-            <h2 className="fx-serif fx-h2">Correção verificada por máquina, não por confiança.</h2>
+            <p className="fx-eyebrow">Governança, segurança &amp; correção</p>
+            <h2 className="fx-serif fx-h2">Governança não é feature — é o produto.</h2>
             <p className="fx-body">
-              O princípio é confiança conquistada por evidência: a plataforma se verifica por
-              código — suítes que provam isolamento, integridade e contratos, não checklist.
+              Os limites vivem na arquitetura, não no código de cada app: a plataforma se verifica
+              por máquina, governa por política e protege na fundação — desde o primeiro dia, sem o
+              cliente configurar. É o que deixa um não-técnico delegar sem medo.
             </p>
             <span className="fx-badge b-impl">
-              <span className="fx-d" /> Implementado
+              <span className="fx-d" /> Núcleo já em produção
             </span>
           </div>
           <div className="fx-narrow fx-mt">
             <div className="fx-feat">
               <span className="fx-ck">{ICON_CK}</span>
               <div>
-                <h4>Invariantes de qualidade, verificados por máquina</h4>
+                <h4>Correção verificada por máquina</h4>
                 <p>
-                  Isolamento (probes cross-tenant + RLS via pgTAP), integridade, contratos,
-                  resiliência, compliance e evolvability. Boundaries, testes e gate de eval rodam
-                  sob demanda e no pipeline de deploy; a suíte de isolamento, em workflow dedicado.
+                  Suítes que provam isolamento (cross-tenant + RLS via pgTAP), integridade e
+                  contratos; qualidade de IA como gate (LLM-as-Judge) barra regressão antes de
+                  promover um fluxo.
                 </p>
-                <div className="fx-src">trilha: <code>validationEngine</code></div>
+                <div className="fx-src">trilha: <code>validationEngine</code> · <code>evalEngine</code></div>
               </div>
             </div>
             <div className="fx-feat">
               <span className="fx-ck">{ICON_CK}</span>
               <div>
-                <h4>Qualidade de IA como gate</h4>
+                <h4>Governança por arquitetura</h4>
                 <p>
-                  LLM-as-Judge e testes baseados em propriedade barram regressão antes de promover
-                  um fluxo.
+                  Política declarativa que o runtime aplica em toda a plataforma, com pessoa no
+                  circuito (HITL) nas ações sensíveis; cotas e entitlements por tenant.
                 </p>
-                <div className="fx-src">trilha: <code>evalEngine</code></div>
+                <div className="fx-src">trilha: <code>policyEngine</code> · <code>quotaEngine</code></div>
               </div>
             </div>
             <div className="fx-feat">
               <span className="fx-ck">{ICON_CK}</span>
               <div>
-                <h4>Contratos e testes</h4>
+                <h4>Segurança na fundação</h4>
                 <p>
-                  Contratos de API (OpenAPI) e de eventos (AsyncAPI) verificados; testes
-                  co-localizados ao código.
+                  Isolamento multi-tenant (schema dedicado + RLS), BYOK com crypto-shredding,
+                  masking de PII antes do LLM e trilha de auditoria SHA-256 à prova de adulteração.
                 </p>
-                <div className="fx-src">trilha: <code>validationEngine</code> · co-located tests</div>
+                <div className="fx-src">trilha: <code>securityEngine</code> · <code>auditTrailEngine</code></div>
               </div>
             </div>
           </div>
+          <p className="fx-body fx-narrow fx-mt">
+            O detalhe completo — as <strong>5 regras da confiança</strong> e o status honesto de
+            compliance (SOC2, pen-test externo) — vive em{' '}
+            <Link href="/seguranca">Segurança &amp; Governança →</Link>
+          </p>
         </div>
       </section>
 
-      {/* 08 — GOVERNANÇA */}
-      <section className="fx-sec">
-        <div className="fx-wrap">
-          <div className="fx-narrow">
-            <p className="fx-eyebrow">Governança</p>
-            <h2 className="fx-serif fx-h2">
-              Governança não é feature — é o produto.
-            </h2>
-            <p className="fx-body">
-              Limites na arquitetura, não no código de cada app: política declarativa que o runtime
-              aplica em toda a plataforma, com pessoa no circuito quando importa.
-            </p>
-            <span className="fx-badge b-parc">
-              <span className="fx-d" /> Parcial — núcleo implementado; self-service no roadmap
-            </span>
-          </div>
-          <div className="fx-narrow fx-mt">
-            <div className="fx-feat">
-              <span className="fx-ck">{ICON_CK}</span>
-              <div>
-                <h4>Políticas declarativas + HITL</h4>
-                <p>
-                  Guardrails versionados (checksum), avaliados com cache e explain; aprovação humana
-                  (human-in-the-loop) em ações sensíveis.
-                </p>
-                <div className="fx-src">trilha: <code>policyEngine</code></div>
-              </div>
-            </div>
-            <div className="fx-feat">
-              <span className="fx-ck">{ICON_CK}</span>
-              <div>
-                <h4>Cotas e entitlements</h4>
-                <p>
-                  Rate limiting, usage tracking e enforcement por tenant; reserva atômica e
-                  overrides aprovados.
-                </p>
-                <div className="fx-src">trilha: <code>quotaEngine</code></div>
-              </div>
-            </div>
-            <div className="fx-feat">
-              <span className="fx-ck">{ICON_CK}</span>
-              <div>
-                <h4>Consentimento e auditoria</h4>
-                <p>
-                  Ciclo de consentimento GDPR/LGPD e trilha de auditoria imutável por hash-chain
-                  (ver Segurança).
-                </p>
-                <div className="fx-src">
-                  trilha: <code>securityEngine</code> · <code>auditTrailEngine</code>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 09 — SEGURANÇA */}
-      <section className="fx-sec fx-sec-alt">
-        <div className="fx-wrap">
-          <div className="fx-narrow">
-            <p className="fx-eyebrow">Segurança</p>
-            <h2 className="fx-serif fx-h2">Segurança e privacidade na fundação.</h2>
-            <p className="fx-body">
-              Multi-tenancy forte, criptografia e masking — desde o primeiro dia, sem o cliente
-              configurar. Capacidade de gente grande, entregue a quem não é técnico.
-            </p>
-            <span className="fx-badge b-impl">
-              <span className="fx-d" /> Implementado
-            </span>
-          </div>
-          <div className="fx-narrow fx-mt">
-            <div className="fx-feat">
-              <span className="fx-ck">{ICON_CK}</span>
-              <div>
-                <h4>BYOK — a chave é do cliente</h4>
-                <p>
-                  Traga a própria chave KMS (AWS/GCP/Azure). Crypto-shredding: revogou a chave, os
-                  dados ficam ilegíveis na hora — independente da plataforma.
-                </p>
-                <div className="fx-src">trilha: <code>securityEngine · spec-byok</code></div>
-              </div>
-            </div>
-            <div className="fx-feat">
-              <span className="fx-ck">{ICON_CK}</span>
-              <div>
-                <h4>Isolamento multi-tenant</h4>
-                <p>
-                  Schema dedicado por cliente + RLS como backstop. O{' '}
-                  <span className="fx-mono">tenantId</span> nunca vem do payload — deriva do contexto
-                  da requisição.
-                </p>
-                <div className="fx-src">
-                  trilha: <code>securityEngine</code> · <code>dataEngine</code>
-                </div>
-              </div>
-            </div>
-            <div className="fx-feat">
-              <span className="fx-ck">{ICON_CK}</span>
-              <div>
-                <h4>Masking de PII e content safety</h4>
-                <p>
-                  Dados sensíveis mascarados (4 estratégias) antes de chegar ao LLM; guardas contra
-                  prompt-injection e jailbreak.
-                </p>
-                <div className="fx-src">trilha: <code>securityEngine · spec-content-safety</code></div>
-              </div>
-            </div>
-            <div className="fx-feat">
-              <span className="fx-ck">{ICON_CK}</span>
-              <div>
-                <h4>Auth + audit hash-chain</h4>
-                <p>
-                  Dual token + RBAC; trilha SHA-256 append-only — adulteração é criptograficamente
-                  detectável e verificável por tenant.
-                </p>
-                <div className="fx-src">
-                  trilha: <code>securityEngine</code> · <code>auditTrailEngine · spec-hash-chain</code>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 10 — DISTRIBUIÇÃO & CONEXÕES */}
+      {/* 08 — DISTRIBUIÇÃO & CONEXÕES */}
       <section className="fx-sec">
         <div className="fx-wrap">
           <div className="fx-narrow">
