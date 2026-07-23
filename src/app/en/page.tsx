@@ -216,9 +216,10 @@ export default function HomeEn() {
             gets copied; an invoice doesn&rsquo;t.
           </p>
           <p className="fx-body">
-            And we start with ourselves. Fluxomind runs its own sales operation inside the
-            product — we are <strong>customer zero</strong>. We operate our business with this
-            before asking you to operate yours.
+            And we start with ourselves. Before we open to the market, Fluxomind will run its own
+            business inside the product — billing, leads and WhatsApp support, all on Fluxomind.
+            That&rsquo;s our launch bar: we won&rsquo;t ask you to run your business on this until we run
+            ours on it. We&rsquo;re <strong>customer zero</strong>.
           </p>
         </div>
       </section>

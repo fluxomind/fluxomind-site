@@ -148,7 +148,7 @@ export default function WhatItDoesEn() {
             <div className="fx-ft from">
               <h4>a code project you maintain</h4>
               <ul>
-                <li>Born from scratch &mdash; the code becomes your responsibility forever.</li>
+                <li>Handed to you as raw code &mdash; yours to maintain, forever.</li>
                 <li>Multi-tenant, roles, permissions? You implement them, or go without.</li>
                 <li>Every new request is more glued-on code; drift is a matter of time.</li>
                 <li>One surface only &mdash; a web page doesn&rsquo;t become WhatsApp or voice on its own.</li>

@@ -220,9 +220,10 @@ export default function Home() {
             Funcionalidade se copia; fatura não.
           </p>
           <p className="fx-body">
-            E começamos por nós. A Fluxomind opera o próprio comercial dentro do produto — somos
-            o <strong>cliente nº 0</strong>. A gente opera o nosso negócio com isso antes de
-            pedir que você opere o seu.
+            E vamos começar por nós. Antes de abrir ao mercado, a Fluxomind vai operar o próprio
+            negócio dentro do produto — cobrança, leads e atendimento no WhatsApp, tudo na
+            Fluxomind. É o nosso critério de lançamento: a gente não pede que você opere o seu
+            negócio nisso antes de operar o nosso. O <strong>cliente nº 0</strong> é a gente.
           </p>
         </div>
       </section>
