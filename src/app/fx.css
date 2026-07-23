@@ -48,6 +48,12 @@
 .fx-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 20px 44px -12px rgba(91,140,255,.85); }
 .fx-btn-ghost { background: transparent; color: var(--fx-ink); border-color: var(--fx-line); }
 .fx-btn-ghost:hover { border-color: var(--fx-blue); color: #fff; }
+/* a cor do texto do botão precisa vencer `.fx a` (link) por especificidade */
+.fx .fx-btn-primary { color: #08111f; }
+.fx .fx-btn-ghost { color: var(--fx-ink); }
+.fx .fx-btn-ghost:hover { color: #fff; }
+/* CTA do chrome (SiteHeader/MobileNav usam o botão globals .btn dentro do .fx) */
+.fx a.btn-primary { color: #fff; }
 .fx-cta-row { display: flex; gap: 13px; flex-wrap: wrap; }
 .fx-tc .fx-cta-row { justify-content: center; }
 

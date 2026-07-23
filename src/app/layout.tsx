@@ -12,6 +12,9 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.fluxomind.com"),
+  // iOS Safari auto-formata horas/números (data detectors) e altera o DOM
+  // antes do React hidratar → hydration mismatch. Desligamos o auto-detect.
+  formatDetection: { telephone: false, date: false, address: false, email: false },
   title: {
     default: "Fluxomind — app que trabalha para o seu negócio, não o contrário",
     template: "%s · Fluxomind",
