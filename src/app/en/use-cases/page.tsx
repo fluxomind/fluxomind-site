@@ -3,8 +3,7 @@ import type { Metadata } from 'next';
 import SiteHeaderEn from '@/components/SiteHeaderEn';
 import SiteFooterEn from '@/components/SiteFooterEn';
 import CatalogoUcs from '@/components/CatalogoUcs';
-import { SIGNATURE_EN, CTA_EN } from '@/lib/messages-en';
-import { PLATFORM_CONTACT_EN } from '@/lib/platform';
+import { CTA_EN } from '@/lib/messages-en';
 
 export const metadata: Metadata = {
   title: 'Use cases — 67 processes a self-operating app resolves',
@@ -16,57 +15,51 @@ export const metadata: Metadata = {
   },
 };
 
-// Catálogo EN completo — espelho de /casos-de-uso (ADR-0005 emendado; copy EN
-// via títulos curados + lâminas traduzidas). As 3 páginas GEO EN permanecem.
+// Catálogo EN completo — espelho de /casos-de-uso na identidade fx (ADR-0005
+// emendado; copy EN via títulos curados + lâminas traduzidas). O grid é SSR;
+// as lâminas carregam sob demanda de /catalogo-laminas.json. GEO EN permanece.
 export default function UseCasesEn() {
   return (
-    <div className="page-ent" lang="en">
+    <div className="fx" lang="en">
       <SiteHeaderEn ptHref="/casos-de-uso" />
 
-      <header className="hero">
-        <div className="wrap">
-          <div>
-            <span className="pill">Catalog · 67 use cases by process and industry</span>
-          </div>
-          <div className="kick" style={{ marginTop: 18 }}>{SIGNATURE_EN}</div>
-          <h1 style={{ maxWidth: '24ch' }}>
-            Which process do you want <span className="g">off your back?</span>
+      <header className="fx-hero">
+        <div className="fx-wrap fx-hero-in">
+          <p className="fx-eyebrow">Catalog · 67 use cases by process and industry</p>
+          <h1 className="fx-serif fx-h1">
+            Which process do you want <span className="fx-em">off your plate?</span>
           </h1>
-          <p className="hsub">
-            A <Link href="/en/self-operating-app" style={{ textDecoration: 'underline' }}>self-operating app</Link>{' '}
-            builds itself from your problem and starts running that process day to day.
-            This is the full map of what the platform covers — <strong>three cases you can
-            experience right now in the demo</strong>; the rest show how far it goes. Click
-            any card to open the full case.
+          <p className="fx-lead">
+            A{' '}
+            <Link href="/en/self-operating-app">self-operating app</Link> builds itself from
+            your problem and starts running that process day to day. This is the full map of
+            what the platform covers — <strong>three cases you can experience right now in the
+            demo</strong>; the rest show how far it goes. Click any card to open the full case.
           </p>
         </div>
       </header>
 
-      <section style={{ paddingTop: 0 }}>
-        <div className="wrap">
+      <section className="fx-sec">
+        <div className="fx-wrap">
           <CatalogoUcs lang="en" />
         </div>
       </section>
 
-      <section style={{ paddingTop: 0 }}>
-        <div className="wrap">
-          <div className="cta-card">
-            <div className="kick" style={{ color: 'var(--sky)' }}>
-              Start with a pain
-            </div>
-            <h2>Found your case — or have one that is not here?</h2>
-            <p className="lead">
-              In the beta, the first self-operating app is born from <em>your</em> problem,
-              guided by our team — whether it is in the catalog or not.
-            </p>
-            <div className="ctab">
-              <Link className="btn btn-primary" href="/en/demo" data-track="catalogo-demo-cta">
-                {CTA_EN.demo}
-              </Link>
-              <a className="btn btn-ghost" href={PLATFORM_CONTACT_EN} data-track="catalogo-beta-cta">
-                {CTA_EN.contact}
-              </a>
-            </div>
+      <section className="fx-sec fx-cta-band">
+        <div className="fx-wrap fx-narrow fx-tc">
+          <p className="fx-eyebrow">Start with a pain</p>
+          <h2 className="fx-serif fx-h2">Found your case &mdash; or have one that&rsquo;s not here?</h2>
+          <p className="fx-body" style={{ margin: '0 auto 22px' }}>
+            In the beta, the first self-operating app is born from <em>your</em> problem,
+            guided by our team — whether it&rsquo;s in the catalog or not.
+          </p>
+          <div className="fx-cta-row">
+            <Link className="fx-btn fx-btn-primary" href="/en/demo" data-track="catalogo-demo-cta">
+              {CTA_EN.demo}
+            </Link>
+            <Link className="fx-btn fx-btn-ghost" href="/en#start" data-track="catalogo-beta-cta">
+              {CTA_EN.beta}
+            </Link>
           </div>
         </div>
       </section>

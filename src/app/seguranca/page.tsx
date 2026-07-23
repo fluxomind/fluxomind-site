@@ -1,14 +1,15 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import type { ReactNode } from 'react';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
-import { CTA, TRUST_RULES } from '@/lib/messages';
+import { CTA, TRUST_RULES, SIGNATURE } from '@/lib/messages';
 import { PLATFORM_CONTACT } from '@/lib/platform';
 
 export const metadata: Metadata = {
   title: 'Segurança & Governança',
   description:
-    'Por que delegar sem medo: as 5 regras da confiança — enquadramento, coerência, correção, humano no circuito e dados isolados — e o que sustenta cada uma na plataforma hoje, com honestidade sobre o que falta.',
+    'Governança não é uma feature — é o produto: as 5 regras da confiança e a engenharia de nível enterprise (isolamento, BYOK, masking de PII, trilha à prova de adulteração) que deixam um não-técnico delegar sem medo. Com honestidade sobre o que ainda falta.',
   alternates: {
     canonical: '/seguranca',
     languages: { 'pt-BR': '/seguranca', en: '/en/security' },
@@ -24,17 +25,88 @@ const ICON_PROPS = {
   strokeLinejoin: 'round' as const,
 };
 
-// As 4 garantias — fatos canônicos espelhados de /plataforma#seguranca (pilar ⑥).
-// Promessa de negócio no h4; "como funciona" + trilha de engine no corpo. Sem overclaim.
-const GUARANTEES = [
+// Badge de honestidade — b-impl (produção verificável) · b-parc (amadurecendo).
+function Badge({ kind }: { kind: 'b-impl' | 'b-parc' | 'b-road' }) {
+  const label = kind === 'b-impl' ? 'Implementado' : kind === 'b-parc' ? 'Parcial' : 'Roadmap';
+  return (
+    <span className={`fx-badge ${kind}`}>
+      <span className="fx-d" /> {label}
+    </span>
+  );
+}
+
+const HEAD_ROW: React.CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: 10,
+  flexWrap: 'wrap',
+};
+
+const CHECK = (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round">
+    <path d="M20 6L9 17l-5-5" />
+  </svg>
+);
+
+// As 5 regras da confiança — títulos e glosa canônicos (messages.TRUST_RULES).
+// Aqui vive só o que é desta página: ícone e a expansão de cada regra.
+const RULE_DETAIL: { icon: ReactNode; more: string }[] = [
   {
     icon: (
       <svg {...ICON_PROPS}>
-        <rect x="4" y="4" width="7" height="7" rx="1.4" />
-        <rect x="13" y="13" width="7" height="7" rx="1.4" />
-        <path d="M7.5 11v3.5a2 2 0 0 0 2 2H13" />
+        <circle cx="12" cy="12" r="7.5" />
+        <circle cx="12" cy="12" r="2.5" />
+        <path d="M12 2v3.5M12 18.5V22M2 12h3.5M18.5 12H22" />
       </svg>
     ),
+    more: 'O app se constrói a partir do seu problema, diante de você. Enquadramento errado aparece na primeira tela — não meses depois, num projeto entregue torto.',
+  },
+  {
+    icon: (
+      <svg {...ICON_PROPS}>
+        <path d="M12 3l8 4-8 4-8-4 8-4z" />
+        <path d="M4 12l8 4 8-4" />
+        <path d="M4 16.5l8 4 8-4" />
+      </svg>
+    ),
+    more: 'Nasce inteira, não um recorte que empurra o resto para depois. Cada etapa conclui com a evidência para você conferir antes de confiar.',
+  },
+  {
+    icon: (
+      <svg {...ICON_PROPS}>
+        <path d="M9 13l-4-4 4-4" />
+        <path d="M5 9h8.5a5.5 5.5 0 0 1 0 11H8" />
+      </svg>
+    ),
+    more: 'Ação reversível e registrada. Você corrige conversando, sem abrir chamado — o custo de um erro é desfazê-lo, não conviver com ele.',
+  },
+  {
+    icon: (
+      <svg {...ICON_PROPS}>
+        <circle cx="12" cy="8" r="3.4" />
+        <path d="M5.5 20a6.5 6.5 0 0 1 13 0" />
+      </svg>
+    ),
+    more: 'Nada crítico executa sem o OK de quem manda. A IA propõe e prepara; a decisão que pesa fica com uma pessoa.',
+  },
+  {
+    icon: (
+      <svg {...ICON_PROPS}>
+        <rect x="5" y="10.5" width="14" height="9.5" rx="2" />
+        <path d="M8 10.5V7.5a4 4 0 0 1 8 0v3" />
+        <circle cx="12" cy="15" r="1.2" />
+      </svg>
+    ),
+    more: 'Cada empresa num espaço dedicado, com a chave e a trilha do seu lado. Verificável — não na nossa palavra.',
+  },
+];
+
+const RULES = TRUST_RULES.map((r, i) => ({ ...r, ...RULE_DETAIL[i] }));
+
+// Proteção de dados — fatos verificáveis na arquitetura hoje (regra 5).
+// Promessa no title; "como funciona" + trilha de engine no rodapé mono. Sem overclaim.
+const GUARANTEES = [
+  {
     area: 'Isolamento',
     title: 'Seus dados ficam só seus',
     desc: 'Cada empresa tem um espaço dedicado. Um cliente nunca alcança o dado de outro — nem por engano, nem de propósito.',
@@ -42,12 +114,6 @@ const GUARANTEES = [
     trail: 'securityEngine · dataEngine',
   },
   {
-    icon: (
-      <svg {...ICON_PROPS}>
-        <circle cx="8" cy="8" r="4" />
-        <path d="M11 11l8 8M16 16l2-2M14 18l2-2" />
-      </svg>
-    ),
     area: 'BYOK',
     title: 'A chave é sua — e a tranca também',
     desc: 'Quem exige pode trazer a própria chave de criptografia. Revogou? Os dados ficam ilegíveis na hora — com ou sem a gente no meio.',
@@ -55,13 +121,6 @@ const GUARANTEES = [
     trail: 'securityEngine · spec-byok',
   },
   {
-    icon: (
-      <svg {...ICON_PROPS}>
-        <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z" />
-        <circle cx="12" cy="12" r="2.6" />
-        <path d="M4 4l16 16" />
-      </svg>
-    ),
     area: 'Privacidade',
     title: 'O que é sensível não chega cru ao modelo',
     desc: 'Dados pessoais são mascarados antes de qualquer IA processar — e há guardas contra tentativas de manipular o modelo.',
@@ -69,12 +128,6 @@ const GUARANTEES = [
     trail: 'securityEngine · spec-content-safety',
   },
   {
-    icon: (
-      <svg {...ICON_PROPS}>
-        <path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z" />
-        <path d="M9 12l2 2 4-4" />
-      </svg>
-    ),
     area: 'Auditoria',
     title: 'Toda ação registrada, à prova de adulteração',
     desc: 'Quem fez o quê, quando — numa trilha que não dá pra editar sem deixar rastro. Verificável por você, não na nossa palavra.',
@@ -83,312 +136,288 @@ const GUARANTEES = [
   },
 ];
 
-const GOVERNANCE = [
+// Governança no caminho de cada ação (regras 3 e 4). Status honesto por item.
+const GOVERNANCE: { title: string; desc: string; badge: 'b-impl' | 'b-parc' }[] = [
   {
     title: 'Humano no circuito (HITL)',
     desc: 'Aprovações em níveis: nada crítico executa sem o OK de quem manda. A IA propõe; a decisão que importa fica com você.',
+    badge: 'b-impl',
   },
   {
     title: 'Políticas e papéis',
     desc: 'RBAC e políticas decidem quem pode o quê — aplicadas pela plataforma a cada passo, não confiadas ao código de cada app.',
+    badge: 'b-impl',
   },
   {
     title: 'Cotas e limites de uso',
     desc: 'Uso medido e barrado por tenant, com reserva atômica. Sem estouro silencioso, sem surpresa de consumo.',
+    badge: 'b-impl',
   },
   {
     title: 'Consentimento e privacidade',
-    desc: 'Ciclo de consentimento GDPR/LGPD com trilha — base legal registrada, não presumida.',
+    desc: 'Ciclo de consentimento LGPD/GDPR com trilha — base legal registrada, não presumida.',
+    badge: 'b-parc',
   },
 ];
 
 export default function Seguranca() {
   return (
-    <div className="page-feats">
+    <div className="fx">
       <SiteHeader cta={{ label: CTA.demo, href: '/demo' }} enHref="/en/security" />
 
-      {/* HERO — governança como recurso, não compliance */}
-      <header className="hero">
-        <div className="wrap">
-          <div className="center">
-            <div className="kick" style={{ color: 'var(--sky)' }}>
-              Segurança &amp; Governança
-            </div>
-            <h1>
-              Confiança para delegar — <span className="g">até o que é sensível.</span>
-            </h1>
-            <p className="hsub" style={{ margin: '18px auto 0', maxWidth: '62ch' }}>
-              Financeiro, saúde, jurídico: os processos que mais valem a pena delegar são os que
-              mais assustam. Por isso a segurança aqui não é um anexo de compliance — são{' '}
-              <strong>cinco regras no caminho de cada ação</strong> que o seu app executa. Esta
-              página mostra o que sustenta cada uma, e é honesta sobre o que ainda não está pronto.
-            </p>
-            <div className="herocta" style={{ justifyContent: 'center', marginTop: 26 }}>
-              <a className="btn btn-primary" href="#regras">
-                Ver as cinco regras
-              </a>
-              <a className="btn btn-ghost" href={PLATFORM_CONTACT} data-track="seguranca-contact-cta">
-                {CTA.contact}
-              </a>
-            </div>
+      {/* HERO — governança como o produto, não compliance de rodapé */}
+      <header className="fx-hero">
+        <div className="fx-wrap fx-hero-in">
+          <p className="fx-eyebrow">Confiança &amp; Governança</p>
+          <h1 className="fx-serif fx-h1">
+            Governança não é uma feature. É o <span className="fx-em">produto</span>.
+          </h1>
+          <p className="fx-lead">
+            Os processos que mais valem a pena delegar — cobrança, atendimento, financeiro — são os
+            que mais assustam. O que te deixa entregar sem medo não é uma promessa de segurança no
+            rodapé: são <strong>cinco regras no caminho de cada ação</strong> e uma engenharia que
+            você pode verificar. Esta página mostra o que sustenta cada uma — e é honesta sobre o
+            que ainda falta.
+          </p>
+          <div className="fx-cta-row" style={{ marginTop: 26 }}>
+            <a className="fx-btn fx-btn-primary" href="#regras" data-track="seguranca-regras">
+              Ver as cinco regras
+            </a>
+            <a
+              className="fx-btn fx-btn-ghost"
+              href={PLATFORM_CONTACT}
+              data-track="seguranca-contact-cta"
+            >
+              {CTA.contact}
+            </a>
+          </div>
+          <div className="fx-reassure">
+            <span>De fábrica, em todo app</span>
+            <span>Verificável, não na nossa palavra</span>
+            <span>Honesto sobre o que falta</span>
           </div>
         </div>
       </header>
 
-      {/* AS 5 REGRAS DA CONFIANÇA — o frame da página */}
-      <section className="sec" id="regras">
-        <div className="wrap">
-          <div className="center">
-            <div className="kick" style={{ color: 'var(--sky)' }}>
-              As regras da confiança
-            </div>
-            <h2 style={{ color: '#fff' }}>O que torna a operação confiável — em cinco regras</h2>
-            <p className="lead" style={{ color: '#A9AEB8', marginTop: 14 }}>
-              Não é jargão de auditoria. São as condições para alguém que não é técnico delegar uma
-              operação de verdade — e cada decisão de produto da plataforma responde a elas.
-            </p>
-          </div>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14, marginTop: 34 }}>
-            {TRUST_RULES.map((r, i) => (
-              <div className="secc" key={r.title} style={{ flex: '1 1 176px' }}>
-                <div className="mono" style={{ color: 'var(--sky)', fontWeight: 700 }}>
-                  0{i + 1}
-                </div>
-                <h4>{r.title}</h4>
-                <p>{r.desc}</p>
-              </div>
-            ))}
-          </div>
-          <div className="center" style={{ marginTop: 30 }}>
-            <span className="scar">
-              É o que abre os domínios mais sensíveis — financeiro, saúde, jurídico.
-            </span>
-            <p style={{ color: '#7e8590', fontSize: 14, marginTop: 18, maxWidth: '58ch', marginLeft: 'auto', marginRight: 'auto' }}>
-              Abaixo, o que sustenta cada regra: o jeito de construir (regras 1 e 2), a governança
-              no caminho de cada ação (3 e 4) e a engenharia de isolamento e prova (5).
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* REGRAS 1 e 2 — enquadramento e coerência */}
-      <section id="construcao">
-        <div className="wrap">
-          <div className="secthead">
-            <div className="kick">Regras 1 e 2 · Enquadramento e coerência</div>
-            <h2>Você vê o app nascer — e confere antes de confiar</h2>
-            <p className="lead" style={{ marginTop: 14, maxWidth: '62ch' }}>
-              O seu app não chega numa caixa preta. Ele se constrói a partir do seu problema,
-              diante de você — e cada conclusão chega com a prova. Enquadramento errado aparece na
-              primeira tela, não meses depois de um projeto.
-            </p>
-          </div>
-          <div style={{ marginTop: 24 }}>
-            <div className="feat">
-              <span className="ck">✓</span>
-              <div>
-                <h4>Resolve o problema certo</h4>
-                <p>
-                  A construção parte da descrição do seu problema, e você acompanha cada passo na
-                  tela. O que não faz sentido para o seu negócio, você ajusta conversando — sem
-                  abrir chamado, sem esperar sprint.
-                </p>
-              </div>
-            </div>
-            <div className="feat">
-              <span className="ck">✓</span>
-              <div>
-                <h4>Faz sentido, ponta a ponta</h4>
-                <p>
-                  Não é um recorte que empurra o resto para depois: a solução nasce inteira e
-                  coerente, e a conclusão de cada etapa vem com a evidência para você conferir.
-                </p>
-              </div>
-            </div>
-          </div>
-          <p style={{ marginTop: 18 }}>
-            <Link href="/demo" style={{ color: 'var(--blue)', fontWeight: 600, fontSize: 15 }}>
-              {CTA.demo} →
-            </Link>
+      {/* A TESE — por que a governança é o produto */}
+      <section className="fx-sec">
+        <div className="fx-wrap fx-narrow">
+          <p className="fx-eyebrow">A tese</p>
+          <h2 className="fx-serif fx-h2">
+            Delegar de verdade exige mais do que uma IA <span className="fx-em">esperta</span>.
+          </h2>
+          <p className="fx-body">
+            Um não-técnico só entrega uma operação inteira — o dinheiro, o cliente, a papelada —
+            quando confia que errar não vai machucar e que ele continua no controle. Por isso, aqui,
+            a governança não é um anexo de compliance nem uma tela que ninguém abre:{' '}
+            <strong>ela está no caminho de cada ação</strong> que o seu app executa.
+          </p>
+          <p className="fx-body">
+            Tirar a governança do rodapé e colocá-la no centro é o que transforma “testei uma IA” em
+            “delego e ela opera”. É o que abre os domínios mais sensíveis — financeiro, saúde,
+            jurídico — para quem não tem time de TI.
+          </p>
+          <p className="fx-quote fx-mt-s">
+            A governança não é o rodapé do produto — é o que permite delegar. Por isso ela é o
+            produto.
           </p>
         </div>
       </section>
 
-      {/* REGRAS 3 e 4 — governança no caminho de cada ação */}
-      <section id="governanca" style={{ background: 'var(--panel)' }}>
-        <div className="wrap">
-          <div className="secthead">
-            <div className="kick">Regras 3 e 4 · Errar não machuca, humano assume</div>
-            <h2>A IA executa de verdade — dentro das suas regras</h2>
-            <p className="lead" style={{ marginTop: 14, maxWidth: '62ch' }}>
-              A diferença entre uma IA que ajuda e uma que assusta é quem decide. Aqui a governança
-              não é um painel separado: ela está no caminho de cada ação que o seu app executa —
-              para que errar não machuque e, nos casos sensíveis, uma pessoa decida.
+      {/* AS 5 REGRAS DA CONFIANÇA — o frame da página */}
+      <section className="fx-sec fx-sec-alt" id="regras">
+        <div className="fx-wrap">
+          <div className="fx-sec-head">
+            <p className="fx-eyebrow">As cinco regras da confiança</p>
+            <h2 className="fx-serif fx-h2">
+              O que torna uma operação confiável — em cinco regras
+            </h2>
+            <p className="fx-lead">
+              Não é jargão de auditoria. São as condições para alguém que não é técnico delegar de
+              verdade — e cada decisão de produto da plataforma responde a elas.
             </p>
           </div>
-          <div style={{ marginTop: 24 }}>
-            {GOVERNANCE.map((it) => (
-              <div className="feat" key={it.title}>
-                <span className="ck">✓</span>
+          <div className="fx-grid3 fx-mt">
+            {RULES.map((r, i) => (
+              <div className="fx-card" key={r.title}>
+                <span className="fx-ico">{r.icon}</span>
+                <span className="fx-label">Regra 0{i + 1}</span>
+                <h3>{r.title}</h3>
+                <p>
+                  <strong>{r.desc}.</strong> {r.more}
+                </p>
+              </div>
+            ))}
+          </div>
+          <div className="fx-note fx-mt">
+            As cinco não são um módulo que você ativa. Vêm <strong>de fábrica em todo app</strong> da
+            Fluxomind, desde o primeiro dia — o jeito de construir (regras 1 e 2), a governança no
+            caminho de cada ação (3 e 4) e a engenharia de isolamento e prova (5).
+          </div>
+        </div>
+      </section>
+
+      {/* REGRA 5 — proteção de dados: as 4 garantias verificáveis */}
+      <section className="fx-sec" id="garantias">
+        <div className="fx-wrap">
+          <div className="fx-sec-head">
+            <p className="fx-eyebrow">Nível enterprise · proteção de dados</p>
+            <h2 className="fx-serif fx-h2">O que protege seus dados — e como provar</h2>
+            <p className="fx-lead">
+              Quatro proteções de fundação, ativas desde o primeiro dia. Cada uma com a trilha de
+              engenharia que a sustenta — para você verificar, não acreditar.
+            </p>
+          </div>
+          <div className="fx-mt">
+            {GUARANTEES.map((g) => (
+              <div className="fx-feat" key={g.area}>
+                <span className="fx-ck">{CHECK}</span>
                 <div>
-                  <h4>{it.title}</h4>
+                  <div style={HEAD_ROW}>
+                    <h4>{g.title}</h4>
+                    <Badge kind="b-impl" />
+                  </div>
+                  <p>{g.desc}</p>
+                  <div className="fx-src">
+                    {g.how} · <code>{g.trail}</code>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* REGRAS 3 e 4 — governança no caminho de cada ação */}
+      <section className="fx-sec fx-sec-alt" id="governanca">
+        <div className="fx-wrap">
+          <div className="fx-sec-head">
+            <p className="fx-eyebrow">Nível enterprise · governança</p>
+            <h2 className="fx-serif fx-h2">A IA executa de verdade — dentro das suas regras</h2>
+            <p className="fx-lead">
+              A diferença entre uma IA que ajuda e uma que assusta é quem decide. A governança não é
+              um painel separado: está no caminho de cada ação — para que errar não machuque e, nos
+              casos sensíveis, uma pessoa decida.
+            </p>
+          </div>
+          <div className="fx-mt">
+            {GOVERNANCE.map((it) => (
+              <div className="fx-feat" key={it.title}>
+                <span className="fx-ck">{CHECK}</span>
+                <div>
+                  <div style={HEAD_ROW}>
+                    <h4>{it.title}</h4>
+                    <Badge kind={it.badge} />
+                  </div>
                   <p>{it.desc}</p>
                 </div>
               </div>
             ))}
           </div>
-          <div style={{ marginTop: 18 }}>
-            <span className="badge b-parc">
-              <span className="d" /> Parcial — governança avançada em amadurecimento
-            </span>
+          <div className="fx-note fx-mt">
+            <strong>Marcamos como parcial de propósito:</strong> a governança avançada — fail-closed
+            amplo e mais padrões de autonomia — ainda está amadurecendo. Preferimos te contar o fato,
+            a lacuna e a aposta sem confundir os três.
           </div>
         </div>
       </section>
 
-      {/* REGRA 5 — as 4 garantias de engenharia, bloco escuro "cofre" */}
-      <section className="sec" id="garantias">
-        <div className="wrap">
-          <div className="center">
-            <div className="kick" style={{ color: 'var(--sky)' }}>
-              Regra 5 · Seus dados, só seus
-            </div>
-            <h2 style={{ color: '#fff' }}>O que protege seus dados — e como provar</h2>
-            <p className="lead" style={{ color: '#A9AEB8', marginTop: 14 }}>
-              Quatro proteções de fundação, ativas desde o primeiro dia — cada uma com a trilha de
-              engenharia que a sustenta.
-            </p>
+      {/* COMPLIANCE, COM HONESTIDADE */}
+      <section className="fx-sec" id="compliance">
+        <div className="fx-wrap">
+          <div className="fx-sec-head">
+            <p className="fx-eyebrow">Compliance, com honestidade</p>
+            <h2 className="fx-serif fx-h2">O que já está pronto — e o que ainda não está</h2>
           </div>
-          <div className="secg">
-            {GUARANTEES.map((g) => (
-              <div className="secc" key={g.area}>
-                <div className="si">{g.icon}</div>
-                <div
-                  style={{
-                    color: 'var(--sky)',
-                    fontWeight: 700,
-                    fontSize: 12,
-                    letterSpacing: '.04em',
-                    textTransform: 'uppercase',
-                    marginTop: 12,
-                  }}
-                >
-                  {g.area}
-                </div>
-                <h4>{g.title}</h4>
-                <p>{g.desc}</p>
-                <p style={{ color: '#7e8590', marginTop: 9 }}>{g.how}</p>
-                <div
-                  style={{
-                    fontSize: 11,
-                    color: '#6b7280',
-                    marginTop: 9,
-                    fontFamily: 'ui-monospace, monospace',
-                  }}
-                >
-                  trilha: {g.trail}
-                </div>
-              </div>
-            ))}
+          <div className="fx-note fx-mt" style={{ maxWidth: '68ch' }}>
+            A plataforma tem scanners automatizados de controles SOC2 (CC6/CC7/CC8) e LGPD/GDPR
+            (Art. 17/20/30/32) — verificação por código, não checklist manual; hoje rodam sob
+            demanda, com execução contínua agendada no roadmap.{' '}
+            <strong>
+              Ainda não temos certificação SOC2 formal de terceiro nem pen-test externo concluído
+            </strong>{' '}
+            — são o próximo passo, não promessa cumprida. O que afirmamos acima é o que dá para
+            verificar na arquitetura hoje.
           </div>
-          <div className="center" style={{ marginTop: 30 }}>
-            <span className="badge b-impl">
-              <span className="d" /> Implementado — verificável na arquitetura hoje
-            </span>
+          <div className="fx-tablewrap">
+            <table className="fx-table">
+              <thead>
+                <tr>
+                  <th>Frente</th>
+                  <th>O que já entregamos</th>
+                  <th>Status</th>
+                  <th>Próximo passo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <strong>Proteção de dados</strong>
+                  </td>
+                  <td>Isolamento multi-tenant, BYOK, masking de PII, audit hash-chain</td>
+                  <td>
+                    <Badge kind="b-impl" />
+                  </td>
+                  <td>Pen-test externo</td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong>Governança</strong>
+                  </td>
+                  <td>HITL, políticas/RBAC, cotas/entitlements, consentimento</td>
+                  <td>
+                    <Badge kind="b-parc" />
+                  </td>
+                  <td>Fail-closed amplo + mais padrões de autonomia</td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong>Compliance</strong>
+                  </td>
+                  <td>Scanners SOC2/LGPD automatizados (sob demanda)</td>
+                  <td>
+                    <Badge kind="b-parc" />
+                  </td>
+                  <td>Execução contínua + certificação SOC2 Type II (auditoria externa)</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </section>
 
-      {/* HONESTIDADE / COMPLIANCE */}
-      <section id="compliance">
-        <div className="wrap">
-          <div className="secthead">
-            <div className="kick">Compliance, com honestidade</div>
-            <h2>O que já está pronto — e o que ainda não está</h2>
-            <p className="lead" style={{ marginTop: 14, maxWidth: '64ch' }}>
-              A plataforma tem scanners automatizados de controles SOC2 (CC6/CC7/CC8) e GDPR
-              (Art. 17/20/30/32) — verificação por código, não checklist manual; hoje rodam sob
-              demanda, e a execução contínua agendada está no roadmap.{' '}
-              <strong>
-                Ainda não temos certificação SOC2 formal de terceiro nem pen-test externo concluído
-              </strong>{' '}
-              — são o próximo passo, não promessa cumprida. O que afirmamos acima é o que dá pra
-              verificar na arquitetura hoje.
-            </p>
-          </div>
-          <table style={{ marginTop: 24 }}>
-            <thead>
-              <tr>
-                <th>Frente</th>
-                <th>O que já entregamos</th>
-                <th>Status</th>
-                <th>Próximo passo</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <b>Proteção de dados</b>
-                </td>
-                <td>Isolamento multi-tenant, BYOK, masking de PII, audit hash-chain</td>
-                <td>
-                  <span className="badge b-impl">
-                    <span className="d" /> Implementado
-                  </span>
-                </td>
-                <td className="next">Pen-test externo</td>
-              </tr>
-              <tr>
-                <td>
-                  <b>Governança</b>
-                </td>
-                <td>HITL, políticas/RBAC, cotas/entitlements, consentimento</td>
-                <td>
-                  <span className="badge b-parc">
-                    <span className="d" /> Parcial
-                  </span>
-                </td>
-                <td className="next">Fail-closed amplo + mais padrões de autonomia</td>
-              </tr>
-              <tr>
-                <td>
-                  <b>Compliance</b>
-                </td>
-                <td>Scanners SOC2/GDPR automatizados (sob demanda)</td>
-                <td>
-                  <span className="badge b-parc">
-                    <span className="d" /> Parcial
-                  </span>
-                </td>
-                <td className="next">Execução contínua + certificação SOC2 Type II (auditoria externa)</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      {/* CTA FINAL */}
-      <section className="offer" id="avaliar">
-        <div className="wrap">
-          <div className="kick" style={{ color: 'var(--sky)' }}>
-            Avaliação a fundo
-          </div>
-          <h2>Vai abrir o capô da segurança?</h2>
-          <p className="lead">
-            Para quem precisa avaliar a fundo, damos um ambiente de avaliação isolado e uma sessão
-            de arquitetura com engenharia — onde cada garantia acima é demonstrada, não afirmada.
+      {/* CTA FINAL — para o beta */}
+      <section className="fx-sec fx-offer" id="avaliar">
+        <div className="fx-wrap fx-narrow fx-tc">
+          <p className="fx-eyebrow" style={{ color: 'var(--fx-gold)' }}>
+            O próximo passo
           </p>
-          <div className="offerbtns">
-            <a className="btn btn-primary btn-lg" href={PLATFORM_CONTACT} data-track="seguranca-contact-cta">
+          <h2 className="fx-serif fx-h2">Delegue o que mais importa — com o controle do seu lado.</h2>
+          <p className="fx-body" style={{ margin: '14px auto 0' }}>
+            Entre no beta privado e conte a operação que você quer tirar das costas. Para quem
+            precisa avaliar a fundo, damos um ambiente isolado e uma sessão de arquitetura com
+            engenharia — onde cada garantia acima é demonstrada, não afirmada.
+          </p>
+          <div className="fx-cta-row" style={{ marginTop: 26 }}>
+            <Link className="fx-btn fx-btn-primary" href="/#comecar" data-track="seguranca-beta">
+              Entrar no beta
+            </Link>
+            <a
+              className="fx-btn fx-btn-ghost"
+              href={PLATFORM_CONTACT}
+              data-track="seguranca-contact-cta"
+            >
               {CTA.contact}
             </a>
-            <Link className="btn btn-ghost btn-lg" href="/plataforma#seguranca">
-              Ver a arquitetura por dentro →
-            </Link>
           </div>
+          <div style={{ marginTop: 16 }}>
+            <Link href="/plataforma#seguranca">Ver a arquitetura por dentro →</Link>
+          </div>
+          <div className="fx-scar">Beta acompanhado · sem cartão · avaliação a fundo sob demanda</div>
         </div>
       </section>
 
-      <SiteFooter tagline="Confiança conquistada por evidência." />
+      <SiteFooter tagline={SIGNATURE} />
     </div>
   );
 }

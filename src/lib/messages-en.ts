@@ -49,4 +49,5 @@ export const CTA_EN = {
   demo: 'Create an app by talking',
   demoNote: 'Live interactive demo — no sign-up needed',
   contact: 'Talk to the team',
+  beta: 'I want this for my business',
 } as const;

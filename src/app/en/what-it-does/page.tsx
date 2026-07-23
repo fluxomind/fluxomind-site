@@ -1,9 +1,8 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
-import type { ReactNode } from 'react';
 import SiteHeaderEn from '@/components/SiteHeaderEn';
 import SiteFooterEn from '@/components/SiteFooterEn';
-import { FACES_EN, CTA_EN } from '@/lib/messages-en';
+import { CTA_EN, FACES_EN, NEGATION_EN } from '@/lib/messages-en';
 import { PLATFORM_CONTACT_EN } from '@/lib/platform';
 
 export const metadata: Metadata = {
@@ -16,206 +15,186 @@ export const metadata: Metadata = {
   },
 };
 
-// Espelho EN de /o-que-tem (ADR-0006). O HexAgono360 fica de fora do v1 EN
-// (copy pt embutida no client component — parametrizar é melhoria futura).
-const ICON_PROPS = {
-  viewBox: '0 0 24 24',
-  fill: 'none',
-  stroke: 'currentColor',
-  strokeWidth: 1.8,
-  strokeLinecap: 'round' as const,
-  strokeLinejoin: 'round' as const,
+// Espelho EN de /o-que-tem na identidade dark "editorial-tech" (fx.css).
+// As 6 perguntas: redação canônica em messages-en (FACES_EN). Aqui vive só a
+// glosa em voz de capacidade — o que a face FAZ, não o botão que você aperta.
+const FACE_DOES: Record<string, string> = {
+  Domain:
+    'Your business data and concepts — customers, orders, contracts — modeled from what you describe, without drawing a single table.',
+  Experience:
+    'The screens and the interaction: the same operation becomes a record on desktop, a conversation on WhatsApp, and voice — and it adjusts by talking.',
+  Intelligence:
+    'Decisions and next steps: agents that truly execute — they chase payments, reply, organize — backed by a brain that understands your business.',
+  Process:
+    'The day-to-day that runs without you: automations and rules that fire on events — with approvals at the points that matter.',
+  Connections:
+    'WhatsApp, email, API, your systems: it pulls in what you already use and even becomes a tool inside others. It integrates — it doesn’t force a replacement.',
+  Trust:
+    'Permissions, isolation and proof: roles, genuinely isolated data and an audit trail — and, in the sensitive case, a person decides.',
 };
 
-const FACE_DETAILS: Record<string, { icon: ReactNode; desc: string }> = {
-  Domain: {
-    icon: (
-      <svg {...ICON_PROPS}>
-        <ellipse cx="12" cy="6" rx="7" ry="2.6" />
-        <path d="M5 6v6c0 1.4 3.1 2.6 7 2.6s7-1.2 7-2.6V6" />
-        <path d="M5 12v6c0 1.4 3.1 2.6 7 2.6s7-1.2 7-2.6v-6" />
-      </svg>
-    ),
-    desc: 'Customers, contracts, orders, tickets — the objects of your business, with fields and relationships. You describe them in plain language; Fluxomind creates the data model, without you designing a single table.',
-  },
-  Experience: {
-    icon: (
-      <svg {...ICON_PROPS}>
-        <rect x="3" y="4" width="18" height="13" rx="1.5" />
-        <path d="M3 9h18M8.5 21h7M12 17v4" />
-      </svg>
-    ),
-    desc: 'Lists, forms, records and dashboards — generated for every object and adjusted by talking. The same operation becomes a screen on desktop, a conversation on WhatsApp, and a voice interface.',
-  },
-  Intelligence: {
-    icon: (
-      <svg {...ICON_PROPS}>
-        <path d="M12 3l1.7 4.3L18 9l-4.3 1.7L12 15l-1.7-4.3L6 9l4.3-1.7L12 3z" />
-        <circle cx="18" cy="17.5" r="2" />
-      </svg>
-    ),
-    desc: "Agents that truly execute — collect, reply, organize — backed by a brain that understands your business and searches your knowledge. Not a chatbot that just replies: it's the work, done.",
-  },
-  Process: {
-    icon: (
-      <svg {...ICON_PROPS}>
-        <rect x="3" y="4" width="6" height="5" rx="1" />
-        <rect x="15" y="15" width="6" height="5" rx="1" />
-        <path d="M6 9v4a3 3 0 0 0 3 3h6" />
-      </svg>
-    ),
-    desc: 'The heart of the self-operating app: automations and rules that run on events, data or triggers. The day-to-day happens without you — with approvals at the points that matter.',
-  },
-  Connections: {
-    icon: (
-      <svg {...ICON_PROPS}>
-        <path d="M8.7 15.3l-2 2a3.5 3.5 0 0 1-5-5l2-2M15.3 8.7l2-2a3.5 3.5 0 0 1 5 5l-2 2M9 15l6-6" />
-      </svg>
-    ),
-    desc: 'Connectors, API and MCP: your app pulls data from what you already use and even becomes a tool inside other systems. It integrates — it does not force a replacement.',
-  },
-  Trust: {
-    icon: (
-      <svg {...ICON_PROPS}>
-        <path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z" />
-        <path d="M9 12l2 2 4-4" />
-      </svg>
-    ),
-    desc: 'Roles and permissions, data isolation, masking of what is sensitive and an audit trail — built in, in every app. And in sensitive cases, a person decides: the app hands off to a human.',
-  },
-};
-
-const CARDS = FACES_EN.map((f) => ({ ...f, ...FACE_DETAILS[f.label] }));
+const CARDS = FACES_EN.map((f) => ({ ...f, does: FACE_DOES[f.label] }));
 
 export default function WhatItDoesEn() {
   return (
-    <div className="page-feats" lang="en">
+    <div className="fx" lang="en">
       <SiteHeaderEn ptHref="/o-que-tem" />
 
-      <header className="hero">
-        <div className="wrap">
-          <div className="center">
-            <div className="kick" style={{ color: 'var(--sky)' }}>
-              What it does
-            </div>
-            <h1>
-              One app, <span className="g">six questions about your business.</span>
+      {/* 01 — HERO: what it DOES, not the buttons you press */}
+      <header className="fx-hero fx-hero-in">
+        <div className="fx-wrap">
+          <div className="fx-narrow">
+            <p className="fx-eyebrow">What it does</p>
+            <h1 className="fx-serif fx-h1">
+              What your app <span className="fx-em">does</span> &mdash; not the buttons you press.
             </h1>
-            <p className="hsub" style={{ margin: '18px auto 0', maxWidth: '58ch' }}>
-              Every Fluxomind app is born answering six questions about your operation. You
-              don&apos;t assemble it module by module: you describe the problem and it sculpts the
-              whole app — which doesn&apos;t sit still: <strong>it starts running the day-to-day</strong>.
+            <p className="fx-lead">
+              Real AI-powered software isn&rsquo;t sold by its list of buttons &mdash; it&rsquo;s sold by
+              the work it does on its own. You delegate the task; the app{' '}
+              <strong>answers, chases payments and organizes</strong> on your WhatsApp, 24/7, and acts
+              within the authority you set.
             </p>
-            <div className="herocta" style={{ justifyContent: 'center', marginTop: 26 }}>
-              <Link className="btn btn-primary" href="/en/demo" data-track="en-wid-demo-cta">
+            <div className="fx-cta-row">
+              <Link className="fx-btn fx-btn-primary" href="/en/demo" data-track="en-wid-hero-demo">
                 {CTA_EN.demo}
               </Link>
-              <a className="btn btn-ghost" href="#questions">
-                See the six questions
+              <a className="fx-btn fx-btn-ghost" href="#anatomy">
+                See the anatomy &rarr;
               </a>
             </div>
-            <p style={{ marginTop: 10, fontSize: 13.5, color: 'var(--slate)' }}>{CTA_EN.demoNote}</p>
           </div>
         </div>
       </header>
 
-      <section id="questions">
-        <div className="wrap">
-          <div className="center">
-            <div className="kick">The six questions</div>
-            <h2>What your app answers</h2>
-            <p className="lead" style={{ margin: '14px auto 0', maxWidth: '58ch' }}>
-              Six answers, one single app — data, screens, decisions, the day-to-day,
-              integrations and permissions are born together, from the same conversation.
+      {/* 02 — AUTONOMY, NOT FEATURES: the triple negation */}
+      <section className="fx-sec">
+        <div className="fx-wrap fx-narrow">
+          <p className="fx-eyebrow">Autonomy, not features</p>
+          <h2 className="fx-serif fx-h2">
+            Not one more tool for you to operate. It&rsquo;s the <span className="fx-em">work, done</span>.
+          </h2>
+          <p className="fx-body">
+            Old software hands you a dashboard and a new job title: operator. Your app does the
+            opposite &mdash; it takes the task and reports back. That&rsquo;s why the right question is
+            never what it has, but what it does without you.
+          </p>
+          <ul className="fx-list fx-mt-s">
+            {NEGATION_EN.nots.map((n) => (
+              <li key={n}>{n}</li>
+            ))}
+          </ul>
+          <p className="fx-quote fx-mt">{NEGATION_EN.is}</p>
+        </div>
+      </section>
+
+      {/* 03 — THE ANATOMY: the six questions that make it a whole system */}
+      <section className="fx-sec fx-sec-alt" id="anatomy">
+        <div className="fx-wrap">
+          <div className="fx-narrow">
+            <p className="fx-eyebrow">The anatomy</p>
+            <h2 className="fx-serif fx-h2">
+              Six questions about your business &mdash; answered{' '}
+              <span className="fx-em">all at once</span>.
+            </h2>
+            <p className="fx-body">
+              You don&rsquo;t assemble it module by module. You describe the problem, and Fluxomind
+              sculpts the six answers together, from the same conversation. That&rsquo;s what makes it a
+              whole system &mdash; not a prototype you still have to finish.
             </p>
           </div>
 
-          <div className="feats" style={{ marginTop: 40 }}>
+          <div className="fx-grid3 fx-mt">
             {CARDS.map((f) => (
-              <div className="featx" key={f.label}>
-                <div className="fx">{f.icon}</div>
-                <div className="area">{f.label}</div>
+              <div className="fx-card" key={f.label}>
+                <span className="fx-label">{f.label}</span>
                 <h3>{f.q}</h3>
-                <p>{f.desc}</p>
-                <span className="tag">{f.gloss}</span>
+                <p>{f.does}</p>
               </div>
             ))}
           </div>
 
-          <div className="center" style={{ marginTop: 46 }}>
-            <p className="lead" style={{ maxWidth: '62ch', margin: '0 auto' }}>
-              Two of those questions hold the secret: <strong>Process</strong> makes the
-              day-to-day run without you, and <strong>Trust</strong> guarantees that, in the
-              sensitive case, a person decides. Your app doesn&apos;t just exist —{' '}
-              <strong>it operates</strong>. That is the difference between an app you use and an
-              app that works for you.
+          <div className="fx-narrow fx-mt">
+            <p className="fx-body">
+              Two of those questions hold the secret: <strong>Process</strong> makes the day-to-day
+              run without you, and <strong>Trust</strong> guarantees that, in the sensitive case, a
+              person decides. Your app doesn&rsquo;t just exist &mdash; <strong>it operates</strong>.
             </p>
-            <div style={{ marginTop: 16 }}>
-              <Link href="/en/security" style={{ color: 'var(--blue)', fontWeight: 600 }}>
-                How trust is guaranteed →
+            <p>
+              <Link href="/en/security" data-track="en-wid-security">
+                How trust is guaranteed &rarr;
               </Link>
-            </div>
+            </p>
           </div>
         </div>
       </section>
 
-      <section>
-        <div className="wrap">
-          <div className="center">
-            <div className="kick">Why this is different</div>
-            <h2>Building got easy. Operating is what&apos;s missing.</h2>
-            <p className="lead" style={{ margin: '14px auto 0', maxWidth: '60ch' }}>
-              Any AI today hands you a prototype — and from there, the code is yours to
-              maintain. Fluxomind assembles the six answers{' '}
-              <strong>on top of a platform that&apos;s already in place</strong>, with data, screens,
-              governance and connections ready. The result is a self-operating app —{' '}
-              <strong>in weeks, not months</strong>.
+      {/* 04 — SELF-OPERATING APP VS A CODE PROJECT YOU MAINTAIN */}
+      <section className="fx-sec">
+        <div className="fx-wrap">
+          <div className="fx-narrow">
+            <p className="fx-eyebrow">App vs code project</p>
+            <h2 className="fx-serif fx-h2">
+              Building got easy. What&rsquo;s missing is <span className="fx-em">operating</span>.
+            </h2>
+            <p className="fx-body">
+              Any AI today hands you a prototype &mdash; and from there, the code is yours to maintain.
+              Fluxomind assembles the six answers on top of a platform that&rsquo;s already in place, with
+              data, screens, governance and connections ready. The result is a self-operating app &mdash;
+              in <span className="fx-em">weeks, not months</span>.
             </p>
           </div>
 
-          <div className="appvs">
-            <div className="col bad">
-              <h4>Project generated by a code builder</h4>
+          <div className="fx-fromto fx-mt">
+            <div className="fx-ft from">
+              <h4>a code project you maintain</h4>
               <ul>
-                <li>Built from scratch: code that becomes your responsibility forever.</li>
-                <li>Multi-tenant, roles and permissions? You implement them — or go without.</li>
+                <li>Born from scratch &mdash; the code becomes your responsibility forever.</li>
+                <li>Multi-tenant, roles, permissions? You implement them, or go without.</li>
                 <li>Every new request is more glued-on code; drift is a matter of time.</li>
-                <li>One surface only: what shipped as a web page doesn&apos;t become WhatsApp or voice on its own.</li>
-                <li>Built, not operating: running the day-to-day is still your problem.</li>
+                <li>One surface only &mdash; a web page doesn&rsquo;t become WhatsApp or voice on its own.</li>
+                <li>Built, not operating: running the day-to-day is still on you.</li>
               </ul>
             </div>
-            <div className="col good">
-              <h4>Fluxomind self-operating app</h4>
+            <div className="fx-ftarrow">&rarr;</div>
+            <div className="fx-ft to">
+              <h4>a self-operating app that works</h4>
               <ul>
-                <li>Assembled on a platform that&apos;s already in place: zero code for you to maintain.</li>
-                <li>Multi-tenancy, roles and permissions inherited out of the box, in every app.</li>
-                <li>Changes by talking — one source of truth, no accumulated drift.</li>
+                <li>Assembled on a platform that&rsquo;s already in place &mdash; zero code for you to maintain.</li>
+                <li>Multi-tenancy, roles and permissions inherited out of the box.</li>
+                <li>Changes by talking, over one source of truth &mdash; no drift.</li>
                 <li>The same operation becomes screen, WhatsApp, voice and a tool via MCP.</li>
-                <li>Runs the day-to-day and hands off to a human in sensitive cases.</li>
+                <li>Runs the day-to-day and hands off to a human in the sensitive case.</li>
               </ul>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="offer">
-        <div className="wrap">
-          <div className="kick" style={{ color: 'var(--sky)' }}>
+      {/* 05 — CTA: join the beta */}
+      <section className="fx-sec fx-cta-band">
+        <div className="fx-wrap fx-narrow fx-center fx-tc">
+          <p className="fx-eyebrow" style={{ color: 'var(--fx-gold)' }}>
             The next step
-          </div>
-          <h2>Want this answering for your business?</h2>
-          <p className="lead" style={{ maxWidth: '56ch', margin: '14px auto 0' }}>
-            See a self-operating app being born in the interactive demo — or talk directly to
-            the team.
           </p>
-          <div className="offerbtns">
-            <Link className="btn btn-primary btn-lg" href="/en/demo" data-track="en-wid-demo-cta">
-              {CTA_EN.demo}
+          <h2 className="fx-serif fx-h2">Want this answering for your business?</h2>
+          <p className="fx-body" style={{ margin: '0 auto' }}>
+            Join the private beta and tell us the process you want to delegate &mdash; the team builds
+            the first app with you. Or talk to us directly.
+          </p>
+          <div className="fx-cta-row fx-mt-s">
+            <Link className="fx-btn fx-btn-primary" href="/en#start" data-track="en-wid-beta-cta">
+              {CTA_EN.beta}
             </Link>
-            <a className="btn btn-ghost btn-lg" href={PLATFORM_CONTACT_EN} data-track="en-wid-contact-cta">
+            <a className="fx-btn fx-btn-ghost" href={PLATFORM_CONTACT_EN} data-track="en-wid-contact-cta">
               {CTA_EN.contact}
             </a>
           </div>
+          <div className="fx-mt-s">
+            <Link href="/en/platform" data-track="en-wid-platform">
+              Want to see how all of this is built and proven? Look inside the platform &rarr;
+            </Link>
+          </div>
+          <div className="fx-scar">Guided beta &middot; no credit card &middot; in weeks, not months</div>
         </div>
       </section>
 

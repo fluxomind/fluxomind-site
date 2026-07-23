@@ -23,7 +23,7 @@ export default function SiteFooter({ tagline }: { tagline: string }) {
           <Link href="/acelere">Acelere</Link>
           <Link href="/plataforma">Plataforma</Link>
           <Link href="/por-que">Por quê</Link>
-          <Link href="/precos">Preços</Link>
+          <Link href="/precos">Acesso ao beta</Link>
           <Link href="/app-operante">O que é um app operante</Link>
           <Link href="/terms">Termos de Uso</Link>
           <Link href="/privacidade">Privacidade</Link>

@@ -2,13 +2,13 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
-import { SIGNATURE, NEGATION, PHASE, CTA } from '@/lib/messages';
+import { SIGNATURE, CTA } from '@/lib/messages';
 import { PLATFORM_CONTACT } from '@/lib/platform';
 
 export const metadata: Metadata = {
   title: 'Acelere — do piloto à produção',
   description:
-    'Para a empresa que já tentou IA e viu pilotos morrerem: 79% adotaram agentes (PwC, 2025), só 11% os têm implantados (KPMG, 2025). A Fluxomind entrega o processo operado — o agente roda o dia a dia, um humano decide nos casos sensíveis, integrado ao que você já tem.',
+    'Para a empresa que já tentou IA e viu pilotos morrerem: 62% já experimentam agentes, só 23% conseguem operá-los de verdade (McKinsey, 2025). A Fluxomind entrega o processo operado — o agente roda o dia a dia, um humano decide nos casos sensíveis, integrado ao que você já tem.',
   alternates: {
     canonical: '/acelere',
     languages: { 'pt-BR': '/acelere', en: '/en/accelerate' },
@@ -24,314 +24,271 @@ const ICON_PROPS = {
   strokeLinejoin: 'round' as const,
 };
 
-// Por que os pilotos morrem — as três paredes entre a demo e a produção.
-const WALLS = [
-  {
-    icon: (
-      <svg {...ICON_PROPS} width={26} height={26}>
-        <path d="M7 9h10v3a5 5 0 0 1-10 0V9z" />
-        <path d="M9.5 9V5M14.5 9V5M12 17v4" />
-      </svg>
-    ),
-    title: 'O protótipo vive sozinho',
-    desc: 'A sua operação vive no ERP, no CRM, no e-mail e no WhatsApp. Um piloto que não conversa com eles não entra na rotina de ninguém — por melhor que tenha sido a demo.',
-  },
-  {
-    icon: (
-      <svg {...ICON_PROPS} width={26} height={26}>
-        <path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z" />
-        <path d="M12 8.5v4M12 15.5h.01" />
-      </svg>
-    ),
-    title: 'Segurança barra o que não é governado',
-    desc: 'Sem permissões, limites e trilha de auditoria, o piloto não passa do comitê. E com razão: ninguém entrega um processo real ao que não presta contas.',
-  },
-  {
-    icon: (
-      <svg {...ICON_PROPS} width={26} height={26}>
-        <rect x="4" y="5" width="16" height="15" rx="2" />
-        <path d="M8 3v4M16 3v4M4 10h16" />
-      </svg>
-    ),
-    title: 'Ninguém assume a segunda-feira',
-    desc: 'O modelo responde bem — mas quem roda o processo toda semana, trata as exceções e não deixa a bola cair? Sem um dono da operação, o piloto vira mais uma aba aberta.',
-  },
-];
+// Ícone de check para as feature rows (fx-feat).
+const CHECK = (
+  <svg viewBox="0 0 24 24" width={20} height={20} fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round">
+    <path d="M20 6L9 17l-5-5" />
+  </svg>
+);
 
-// Entregue operado — o que "rodando" significa na prática.
-const OPERATED = [
+// Capacidade de gente grande — governança já em produção (badge b-impl).
+const GOVERNANCE = [
   {
     icon: (
       <svg {...ICON_PROPS}>
-        <path d="M20 12a8 8 0 1 1-2.3-5.7" />
-        <path d="M20 3v4h-4" />
+        <rect x="5" y="11" width="14" height="9" rx="2" />
+        <path d="M8 11V7a4 4 0 0 1 8 0v4" />
       </svg>
     ),
-    tag: 'Processo',
+    title: 'Isolamento por empresa',
+    desc: 'Cada empresa fica isolada de verdade e os dados são criptografados. O que é de uma nunca encosta na outra.',
+  },
+  {
+    icon: (
+      <svg {...ICON_PROPS}>
+        <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" />
+        <path d="M14 3v5h5" />
+        <path d="M9.5 14l1.8 1.8L15 12" />
+      </svg>
+    ),
+    title: 'Trilha à prova de adulteração',
+    desc: 'Cada ação — o que propôs, o que você decidiu e o que aconteceu no mundo — fica registrada e verificável. Auditoria de verdade, não log solto.',
+  },
+  {
+    icon: (
+      <svg {...ICON_PROPS}>
+        <circle cx="8" cy="15" r="4" />
+        <path d="M10.8 12.2L20 3M17 6l2 2M14 9l2 2" />
+      </svg>
+    ),
+    title: 'LGPD, papéis e permissões',
+    desc: 'Controle de acesso por papel, mascaramento do que é sensível e tratamento de dados conforme a LGPD — de fábrica, em todo app.',
+  },
+  {
+    icon: (
+      <svg {...ICON_PROPS}>
+        <path d="M4 18a8 8 0 1 1 16 0" />
+        <path d="M12 18l4.5-4.5" />
+        <circle cx="12" cy="18" r="1.2" />
+      </svg>
+    ),
+    title: 'Controle de custo',
+    desc: 'Limites de uso por processo e visibilidade do gasto de IA — sem surpresa na fatura, sem inferência queimada à toa.',
+  },
+];
+
+// Entregue operado — o que “rodando” significa na prática.
+const OPERATED = [
+  {
     title: 'O agente roda o dia a dia',
     desc: 'Cobrança que acompanha o atraso, follow-up que não esquece, aprovação que anda. O processo acontece sem depender de alguém lembrar dele.',
   },
   {
-    icon: (
-      <svg {...ICON_PROPS}>
-        <circle cx="9" cy="8" r="3.2" />
-        <path d="M3.5 19c.6-3 2.7-4.6 5.5-4.6 1.2 0 2.3.3 3.2.9" />
-        <path d="M14.5 17.5l2 2 4-4" />
-      </svg>
-    ),
-    tag: 'Handoff',
     title: 'Um humano decide nos casos sensíveis',
-    desc: 'Quando o caso exige — desconto fora da alçada, cliente delicado, valor alto — o app escala para uma pessoa do seu time. A IA propõe; quem manda decide.',
+    desc: 'Desconto fora da alçada, valor alto, cliente delicado: o app escala para uma pessoa do seu time. A IA propõe; quem manda decide.',
   },
   {
-    icon: (
-      <svg {...ICON_PROPS}>
-        <path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z" />
-        <path d="M9 12l2 2 4-4" />
-      </svg>
-    ),
-    tag: 'Governança',
-    title: 'Governado, com prova de cada ação',
-    desc: 'Permissões, limites de uso e trilha de auditoria à prova de adulteração em cada passo. Cada conclusão chega com a evidência do que foi feito.',
-  },
-  {
-    icon: (
-      <svg {...ICON_PROPS}>
-        <circle cx="12" cy="12" r="2.5" />
-        <circle cx="4.5" cy="6" r="1.8" />
-        <circle cx="19.5" cy="6" r="1.8" />
-        <circle cx="4.5" cy="18" r="1.8" />
-        <circle cx="19.5" cy="18" r="1.8" />
-        <path d="M10 10.2L6 7.4M14 10.2L18 7.4M10 13.8L6 16.6M14 13.8L18 16.6" />
-      </svg>
-    ),
-    tag: 'Integração',
     title: 'Senta ao redor do que você já tem',
-    desc: 'SAP, Salesforce e TOTVS ficam exatamente onde estão — o app opera ao redor deles, integrando por API, e-mail e WhatsApp, sem projeto de substituição.',
+    desc: 'O ERP, o CRM e o WhatsApp que a sua empresa já usa ficam onde estão. O app integra por API, e-mail e WhatsApp — sem projeto de substituição.',
   },
 ];
 
 export default function Acelere() {
   return (
-    <div className="page-ent">
-      {/* NAV */}
+    <div className="fx">
       <SiteHeader cta={{ label: CTA.demo, href: '/demo' }} enHref="/en/accelerate" />
 
-      {/* HERO — dor primeiro */}
-      <header className="hero">
-        <div className="wrap">
-          <div>
-            <span className="pill">Para empresas · adoção de IA em escala</span>
-          </div>
-          <div className="kick" style={{ marginTop: 18 }}>{SIGNATURE}</div>
-          <h1 style={{ maxWidth: '22ch' }}>
-            O piloto de IA impressionou na demo — <span className="g">e morreu antes da produção.</span>
+      {/* HERO — a capacidade de gente grande, entregue simples */}
+      <header className="fx-hero fx-hero-in">
+        <div className="fx-wrap">
+          <span className="fx-pill">
+            <span className="fx-lz" /> Beta privado · empresa maior, atendida por procura
+          </span>
+          <p className="fx-eyebrow">Adoção em escala</p>
+          <h1 className="fx-serif fx-h1" style={{ maxWidth: '20ch' }}>
+            Capacidade de gente grande. Simplicidade de <span className="fx-em">WhatsApp</span>.
           </h1>
-          <p className="hsub">
-            Se essa história aconteceu na sua empresa, o problema não foi o modelo — construir
-            nunca foi o gargalo. O que mata o piloto é o que vem depois:
-            integrar, governar e operar todo dia. <strong>É exatamente a parte que a Fluxomind
-            entrega.</strong>
+          <p className="fx-lead">
+            <em>Enterprise-grade by design, SMB-first by choice.</em> A governança de uma
+            corporação — isolamento por empresa, auditoria à prova de adulteração, LGPD — já em
+            produção, entregue a quem delega no WhatsApp. Empresa maior que chega por conta própria
+            é atendida com o mesmo produto: <strong>sem RFP, sem projeto de meses</strong>.
           </p>
-          <div className="herocta">
-            <a className="btn btn-primary" href={PLATFORM_CONTACT} data-track="acelere-contact-cta">
+          <div className="fx-cta-row">
+            <a className="fx-btn fx-btn-primary" href={PLATFORM_CONTACT} data-track="acelere-contact-cta">
               {CTA.contact}
             </a>
-            <a className="btn btn-ghost" href="#operado">
-              Ver o que muda
-            </a>
+            <Link className="fx-btn fx-btn-ghost" href="/#comecar" data-track="acelere-beta">
+              Entrar no beta
+            </Link>
           </div>
-          <div className="stat">
-            <div className="s">
-              <b>79%</b>
-              <span>das empresas já adotaram agentes de IA (PwC, mai/2025)</span>
-            </div>
-            <div className="s">
-              <b>11%</b>
-              <span>os têm de fato implantados (KPMG, 2025)</span>
-            </div>
-            <div className="s">
-              <b>construir ≠ operar</b>
-              <span>o gap onde os pilotos morrem</span>
-            </div>
+          <div className="fx-reassure">
+            <span>Mesmo produto para todo porte</span>
+            <span>Governança já em produção</span>
+            <span>Sem projeto de meses</span>
           </div>
         </div>
       </header>
 
-      {/* POR QUE OS PILOTOS MORREM */}
-      <section id="por-que">
-        <div className="wrap">
-          <div className="center">
-            <div className="kick">Por que os pilotos morrem</div>
-            <h2>O piloto prova que a IA funciona. Não prova que ela opera.</h2>
-            <p className="lead" style={{ marginTop: 14 }}>
-              Entre a demo e a produção aparecem três paredes — e nenhuma delas é o modelo.
-            </p>
-          </div>
-          <div className="prob">
-            {WALLS.map((w) => (
-              <div className="pcard" key={w.title}>
-                <div className="pi" aria-hidden="true" style={{ color: 'var(--blue)', lineHeight: 0 }}>
-                  {w.icon}
-                </div>
-                <h3>{w.title}</h3>
-                <p>{w.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* NEGAÇÃO — a diferença de categoria */}
-      <section style={{ paddingTop: 0 }}>
-        <div className="wrap">
-          <div className="fit">
-            <div className="kick" style={{ color: 'var(--sky)' }}>
-              A diferença
+      {/* 01 — A TENSÃO: o caminho caro da empresa maior */}
+      <section className="fx-sec">
+        <div className="fx-wrap fx-narrow">
+          <p className="fx-eyebrow">A tensão</p>
+          <h2 className="fx-serif fx-h2">
+            Empresa maior costuma pagar caro pra chegar até aqui.
+          </h2>
+          <div className="fx-gap">
+            <div className="fx-gapn">
+              <b className="fx-serif">62%</b>
+              <span>já experimentam agentes de IA (McKinsey, 2025)</span>
             </div>
-            <h2 style={{ color: '#fff', maxWidth: '24ch' }}>
-              Não é mais um piloto para testar. É o processo entregue rodando.
+            <div className="fx-gaparrow">→</div>
+            <div className="fx-gapn">
+              <b className="fx-serif">23%</b>
+              <span>conseguem colocá-los para operar de verdade (McKinsey, 2025)</span>
+            </div>
+          </div>
+          <p className="fx-body">
+            O caminho de sempre é longo: RFP, comitê, um projeto de meses e uma integração que
+            substitui na marra o que já funciona — tudo antes do primeiro resultado. E, no fim,
+            muita vez um piloto que impressionou na demo e nunca virou produção. O gargalo nunca
+            foi construir. É <strong>operar, governar e integrar</strong> todo dia — e é
+            exatamente essa parte que a Fluxomind entrega pronta.
+          </p>
+        </div>
+      </section>
+
+      {/* 02 — A CAPACIDADE: governança de corporação, já em produção */}
+      <section className="fx-sec fx-sec-alt">
+        <div className="fx-wrap">
+          <div className="fx-narrow">
+            <p className="fx-eyebrow">A capacidade</p>
+            <h2 className="fx-serif fx-h2">
+              A governança de uma corporação — <span className="fx-em">já em produção</span>.
             </h2>
-            <ul
-              style={{
-                listStyle: 'none',
-                marginTop: 26,
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 10,
-              }}
-            >
-              {NEGATION.nots.map((n) => (
-                <li
-                  key={n}
-                  style={{
-                    display: 'flex',
-                    gap: 10,
-                    alignItems: 'flex-start',
-                    color: '#A9AEB8',
-                    fontSize: 16,
-                  }}
-                >
-                  <span aria-hidden="true" style={{ color: '#e07a5f', fontWeight: 700 }}>
-                    ✕
-                  </span>
-                  {n}
-                </li>
-              ))}
-            </ul>
-            <p
-              style={{
-                marginTop: 22,
-                fontSize: 19,
-                color: '#fff',
-                fontWeight: 600,
-                maxWidth: '58ch',
-                lineHeight: 1.55,
-              }}
-            >
-              {NEGATION.is}
+            <p className="fx-body">
+              Não é promessa de roadmap enterprise. Isolamento por empresa, trilha à prova de
+              adulteração e controle de custo já rodam hoje — a mesma exigência de uma corporação,
+              entregue a quem opera pelo WhatsApp.
             </p>
+          </div>
+          <div className="fx-grid2 fx-mt">
+            {GOVERNANCE.map((g) => (
+              <div className="fx-card" key={g.title}>
+                <span className="fx-ico">{g.icon}</span>
+                <div style={{ marginBottom: 10 }}>
+                  <span className="fx-badge b-impl">
+                    <span className="fx-d" /> Em produção
+                  </span>
+                </div>
+                <h3>{g.title}</h3>
+                <p>{g.desc}</p>
+              </div>
+            ))}
+          </div>
+          <div className="fx-note fx-mt-s">
+            <strong>Honestidade de fase.</strong> Isso está em produção, hoje, no beta privado —
+            acompanhado de perto pelo nosso time. SLA formal e certificações estão no roadmap: a
+            gente não promete o que ainda não entrega.
           </div>
         </div>
       </section>
 
-      {/* ENTREGUE OPERADO */}
-      <section id="operado" style={{ paddingTop: 0 }}>
-        <div className="wrap">
-          <div className="center">
-            <div className="kick">Entregue operado</div>
-            <h2>O que chega na sua empresa já chega rodando</h2>
-            <p className="lead" style={{ marginTop: 14 }}>
-              Você não recebe uma ferramenta para o time aprender a usar. Recebe o processo em
-              operação — e é assim que ele roda.
-            </p>
-          </div>
-          <div className="ways">
+      {/* 03 — ENTREGUE OPERADO: trabalho feito, não software */}
+      <section className="fx-sec">
+        <div className="fx-wrap fx-narrow">
+          <p className="fx-eyebrow">Entregue operado</p>
+          <h2 className="fx-serif fx-h2">
+            Você não recebe uma ferramenta. Recebe o <span className="fx-em">trabalho feito</span>.
+          </h2>
+          <p className="fx-body">
+            Trabalho feito — não mais um software para o time aprender a dirigir. O que chega na sua
+            empresa já chega rodando:
+          </p>
+          <div className="fx-mt">
             {OPERATED.map((o) => (
-              <div className="way" key={o.title}>
-                <div className="wi" aria-hidden="true">
-                  {o.icon}
+              <div className="fx-feat" key={o.title}>
+                <span className="fx-ck" aria-hidden="true">
+                  {CHECK}
+                </span>
+                <div>
+                  <h4>{o.title}</h4>
+                  <p>{o.desc}</p>
                 </div>
-                <h3>{o.title}</h3>
-                <div className="tagm">{o.tag}</div>
-                <p>{o.desc}</p>
               </div>
             ))}
           </div>
-          <div className="fitlink" style={{ textAlign: 'center' }}>
-            <Link href="/seguranca">
-              Como a governança e a segurança funcionam, em detalhe →
+          <p className="fx-mt-s">
+            <Link href="/seguranca">Como a governança e a segurança funcionam, em detalhe →</Link>
+          </p>
+        </div>
+      </section>
+
+      {/* 04 — ADOÇÃO POR PROCURA: mesmo contrato, sem o ritual enterprise */}
+      <section className="fx-sec fx-sec-alt">
+        <div className="fx-wrap">
+          <div className="fx-narrow">
+            <p className="fx-eyebrow">Como você adota</p>
+            <h2 className="fx-serif fx-h2">Atendida por procura. Não por proposta.</h2>
+            <p className="fx-body">
+              Empresa maior que chega por conta própria é atendida seletivamente — o mesmo produto,
+              sem o ritual de venda enterprise. Começa por um processo que dói e cresce a partir da
+              prova, área a área.
+            </p>
+          </div>
+          <div className="fx-fromto fx-mt">
+            <div className="fx-ft from">
+              <h4>O caminho de sempre</h4>
+              <ul>
+                <li>RFP e comitê antes de ver qualquer valor</li>
+                <li>Projeto de meses, com implementação longa</li>
+                <li>Substituição na marra dos sistemas que funcionam</li>
+                <li>Um piloto que impressiona na demo e morre antes da produção</li>
+              </ul>
+            </div>
+            <div className="fx-ftarrow">→</div>
+            <div className="fx-ft to">
+              <h4>Com a Fluxomind</h4>
+              <ul>
+                <li>Você procura; a gente atende seletivamente</li>
+                <li>Um processo primeiro — em semanas, não meses</li>
+                <li>Senta ao redor do que você já tem</li>
+                <li>Opera de verdade, com a prova de cada ação</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 05 — CTA FINAL */}
+      <section className="fx-sec fx-cta-band" id="contato">
+        <div className="fx-wrap fx-narrow fx-tc">
+          <p className="fx-eyebrow" style={{ color: 'var(--fx-gold)' }}>
+            O próximo passo
+          </p>
+          <h2 className="fx-serif fx-h2">
+            Traga a operação que hoje exige um projeto. Saia com um processo rodando.
+          </h2>
+          <p className="fx-body" style={{ margin: '0 auto', maxWidth: '58ch' }}>
+            Conte qual processo você quer delegar. A gente atende quem chega por conta própria —
+            mesmo produto, sem RFP — e desenha com o seu time o primeiro app operante da empresa.
+          </p>
+          <div className="fx-cta-row fx-mt-s">
+            <a className="fx-btn fx-btn-primary" href={PLATFORM_CONTACT} data-track="acelere-contact-cta">
+              {CTA.contact}
+            </a>
+            <Link className="fx-btn fx-btn-ghost" href="/#comecar" data-track="acelere-beta">
+              Entrar no beta
             </Link>
           </div>
+          <p className="fx-mt-s">
+            <Link href="/plataforma">Prefere ir a fundo antes? Veja a avaliação técnica →</Link>
+          </p>
+          <div className="fx-scar">Beta acompanhado · governança em produção · em semanas, não meses</div>
         </div>
       </section>
 
-      {/* MODELO DE ADOÇÃO */}
-      <section id="modelo" style={{ paddingTop: 0 }}>
-        <div className="wrap">
-          <div className="center">
-            <div className="kick">Modelo de adoção</div>
-            <h2>Comece por um processo. Em semanas — não num projeto de meses.</h2>
-          </div>
-          <div className="timeline">
-            <div className="tl">
-              <div className="num">1</div>
-              <h4>Um processo, acompanhado</h4>
-              <p>
-                Escolhemos juntos um processo que dói — cobrança, atendimento, aprovações. Nosso
-                time acompanha do desenho à primeira conclusão real.
-              </p>
-            </div>
-            <div className="tl">
-              <div className="num">2</div>
-              <h4>Prova no dia a dia</h4>
-              <p>
-                O app opera e a sua equipe vê cada conclusão com a prova — no processo de verdade,
-                não em slide. É a evidência que o piloto nunca teve.
-              </p>
-            </div>
-            <div className="tl">
-              <div className="num">3</div>
-              <h4>Expansão área a área</h4>
-              <p>
-                Provado o valor, outros processos entram. A governança segue central; cada área
-                ganha o seu app operante.
-              </p>
-            </div>
-          </div>
-          <div className="honest">
-            <b>Transparência.</b> {PHASE.exists.title}: {PHASE.exists.desc} No beta, a adoção
-            acontece acompanhada de perto pelo nosso time; SLA formal e certificações estão
-            no roadmap. {PHASE.vision.title}: {PHASE.vision.desc}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA FINAL */}
-      <section style={{ paddingTop: 0 }}>
-        <div className="wrap">
-          <div className="cta-card" id="contato">
-            <div className="kick" style={{ color: 'var(--sky)' }}>
-              Vamos conversar
-            </div>
-            <h2>Traga o piloto que morreu. Saia com um processo operando.</h2>
-            <p className="lead">
-              Conte qual processo você quer delegar. Desenhamos com o seu time o primeiro app
-              operante da sua empresa — e você acompanha cada conclusão, com a prova.
-            </p>
-            <div className="ctab">
-              <a className="btn btn-primary" href={PLATFORM_CONTACT} data-track="acelere-contact-cta">
-                {CTA.contact}
-              </a>
-              <Link className="btn btn-ghost" href="/plataforma">
-                Ver a avaliação técnica
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <SiteFooter tagline="O software se molda à empresa — e opera o processo." />
+      <SiteFooter tagline={SIGNATURE} />
     </div>
   );
 }

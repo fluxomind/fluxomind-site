@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import SiteHeaderEn from '@/components/SiteHeaderEn';
+import SiteFooterEn from '@/components/SiteFooterEn';
 
 export const metadata: Metadata = {
   title: 'Privacy Policy',
@@ -14,42 +16,34 @@ export const metadata: Metadata = {
 // Tradução de cortesia de /privacidade (ADR-0006, onda legal). A base legal
 // segue sendo a LGPD (controladora brasileira); a versão pt prevalece.
 export default function PrivacyEn() {
-  const currentYear = new Date().getFullYear();
   const lastUpdated = 'July 4, 2026';
 
   return (
-    <div className="min-h-screen bg-white" lang="en">
-      <header className="bg-white shadow-sm border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <Link href="/en" className="flex items-center">
-              <img src="/logoSVG/logo-light.svg" alt="Fluxomind" className="h-8 w-auto" />
-            </Link>
-            <Link href="/privacidade" className="text-gray-600 hover:text-gray-900 transition-colors" lang="pt-BR">
-              Versão em português →
-            </Link>
-          </div>
+    <div className="fx" lang="en">
+      <SiteHeaderEn ptHref="/privacidade" />
+
+      <header className="fx-hero">
+        <div className="fx-wrap fx-hero-in">
+          <p className="fx-eyebrow">Legal</p>
+          <h1 className="fx-serif fx-h1">Privacy Policy</h1>
+          <p className="fx-fineprint">Last updated: {lastUpdated}</p>
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <article className="prose prose-gray max-w-none">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Privacy Policy</h1>
-          <p className="text-gray-500 mb-4">Last updated: {lastUpdated}</p>
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-8">
-            <p className="text-gray-700 text-sm">
+      <section className="fx-sec">
+        <div className="fx-wrap">
+          <article className="fx-prose">
+            <p className="fx-note">
               This is a courtesy translation. In case of any conflict, the{' '}
-              <Link href="/privacidade" className="text-blue-600 hover:underline">
+              <Link href="/privacidade" lang="pt-BR">
                 Portuguese version (Política de Privacidade)
               </Link>{' '}
               prevails. FLUXOMIND LTDA is a Brazilian company; the applicable law is the
               Brazilian General Data Protection Law (LGPD — Law No. 13,709/2018).
             </p>
-          </div>
 
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">1. Who we are</h2>
-            <p className="text-gray-600 mb-4">
+            <h2>1. Who we are</h2>
+            <p>
               This Privacy Policy describes how FLUXOMIND LTDA, enrolled with the Brazilian corporate taxpayer registry (CNPJ) under No.
               60.162.547/0001-15, headquartered in São Paulo/SP, Brazil (&quot;Fluxomind&quot;,
               &quot;we&quot;), processes personal data collected through the website
@@ -57,15 +51,13 @@ export default function PrivacyEn() {
               Brazilian General Data Protection Law (LGPD) and the Brazilian Internet Civil
               Framework (Law No. 12,965/2014).
             </p>
-          </section>
 
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">2. What data we collect</h2>
-            <p className="text-gray-600 mb-4">
+            <h2>2. What data we collect</h2>
+            <p>
               We collect only the minimum necessary to operate the Site and respond to your
               interest:
             </p>
-            <ul className="list-disc pl-6 text-gray-600 space-y-2 mb-4">
+            <ul>
               <li>
                 <strong>Data you send us:</strong> when filling in the launch-list (beta
                 program) form, we collect name, e-mail, company and the description of the
@@ -84,11 +76,9 @@ export default function PrivacyEn() {
                 technical logs, which are retained for a short period.
               </li>
             </ul>
-          </section>
 
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">3. Why we use it and on which legal basis</h2>
-            <ul className="list-disc pl-6 text-gray-600 space-y-2 mb-4">
+            <h2>3. Why we use it and on which legal basis</h2>
+            <ul>
               <li>
                 <strong>Responding to your interest in the beta and the launch:</strong> we use
                 the form data to notify you about the launch, contact you about the beta program
@@ -107,14 +97,12 @@ export default function PrivacyEn() {
                 IX).
               </li>
             </ul>
-            <p className="text-gray-600">
+            <p>
               We do not sell your personal data nor use it for third-party advertising.
             </p>
-          </section>
 
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">4. Cookies</h2>
-            <p className="text-gray-600 mb-4">
+            <h2>4. Cookies</h2>
+            <p>
               The Site <strong>does not use cookies</strong> — neither first-party nor
               third-party, nor for advertising or tracking. Usage measurement is done with an
               anonymous session identifier in the browser&apos;s sessionStorage, which cannot
@@ -122,30 +110,26 @@ export default function PrivacyEn() {
               cookie consent banner. If this practice changes, this Policy will be updated and
               consent will be requested where required.
             </p>
-          </section>
 
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">5. Who we share it with</h2>
-            <p className="text-gray-600 mb-4">
+            <h2>5. Who we share it with</h2>
+            <p>
               We share data only with processors essential to the Site&apos;s operation:
             </p>
-            <ul className="list-disc pl-6 text-gray-600 space-y-2 mb-4">
+            <ul>
               <li><strong>Vercel</strong> — Site hosting and execution of the capture routes (United States);</li>
               <li><strong>Google</strong> — internal storage of leads and events in corporate spreadsheets with restricted access (Google Workspace);</li>
               <li><strong>Cloudflare</strong> — domain and DNS management.</li>
             </ul>
-            <p className="text-gray-600">
+            <p>
               These providers may process data outside Brazil. In such cases, the international
               transfer takes place in accordance with articles 33 et seq. of the LGPD and the
               ANPD&apos;s International Data Transfer Regulation (Resolution CD/ANPD No.
               19/2024), based on standard contractual clauses or another safeguard permitted under the regulation. We may also share data when required by law or by order of a
               competent authority.
             </p>
-          </section>
 
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">6. How long we keep it</h2>
-            <ul className="list-disc pl-6 text-gray-600 space-y-2">
+            <h2>6. How long we keep it</h2>
+            <ul>
               <li>
                 <strong>Beta leads:</strong> kept for as long as the relationship about the beta
                 program lasts or until you request deletion;
@@ -159,14 +143,12 @@ export default function PrivacyEn() {
                 identifiable person.
               </li>
             </ul>
-          </section>
 
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">7. Your rights (LGPD)</h2>
-            <p className="text-gray-600 mb-4">
+            <h2>7. Your rights (LGPD)</h2>
+            <p>
               Under article 18 of the LGPD, you may request at any time:
             </p>
-            <ul className="list-disc pl-6 text-gray-600 space-y-2 mb-4">
+            <ul>
               <li>Confirmation of processing and access to your data</li>
               <li>Correction of incomplete, inaccurate or outdated data</li>
               <li>Anonymization, blocking or deletion of unnecessary or excessive data</li>
@@ -175,81 +157,58 @@ export default function PrivacyEn() {
               <li>Information about with whom we share your data</li>
               <li>Withdrawal of consent</li>
             </ul>
-            <p className="text-gray-600">
+            <p>
               To exercise any of these rights, write to{' '}
-              <a href="mailto:privacidade@fluxomind.com" className="text-blue-600 hover:underline">
-                privacidade@fluxomind.com
-              </a>
+              <a href="mailto:privacidade@fluxomind.com">privacidade@fluxomind.com</a>
               . We will respond within the timeframes established by law. You may also lodge a
               complaint with the Brazilian National Data Protection Authority (ANPD).
             </p>
-          </section>
 
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">8. Security</h2>
-            <p className="text-gray-600">
+            <h2>8. Security</h2>
+            <p>
               We adopt technical and organizational measures proportional to the risk: encrypted
               traffic (HTTPS), restricted access to lead data, minimal data collection and abuse
               protections on the forms. No system is infallible; in the event of a security
               incident with relevant risk to data subjects, we will notify those affected and
               the ANPD as required by the LGPD.
             </p>
-          </section>
 
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">9. Children and teenagers</h2>
-            <p className="text-gray-600">
+            <h2>9. Children and teenagers</h2>
+            <p>
               The Site is aimed at companies and professionals. We do not knowingly collect data
               from anyone under 18. If you believe a minor has provided us personal data,
               contact us so it can be removed.
             </p>
-          </section>
 
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">10. Changes to this Policy</h2>
-            <p className="text-gray-600">
+            <h2>10. Changes to this Policy</h2>
+            <p>
               We may update this Policy to reflect changes on the Site or in legislation. The
               last-updated date at the top of this page indicates the current version. Relevant
               changes will be highlighted on the Site.
             </p>
-          </section>
 
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">11. Contact</h2>
-            <p className="text-gray-600 mb-4">
+            <h2>11. Contact</h2>
+            <p>
               For questions about this Policy or the processing of your personal data, use our
               dedicated personal-data channel:
             </p>
-            <div className="bg-gray-50 p-6 rounded-lg">
-              <p className="text-gray-700 font-semibold">FLUXOMIND LTDA</p>
-              <p className="text-gray-600">CNPJ: 60.162.547/0001-15</p>
-              <p className="text-gray-600">São Paulo/SP — Brazil</p>
-              <p className="text-gray-600">E-mail: privacidade@fluxomind.com</p>
-            </div>
-            <p className="text-gray-600 mt-4">
-              See also our{' '}
-              <Link href="/en/terms" className="text-blue-600 hover:underline">
-                Terms of Service
-              </Link>
-              .
+            <p>
+              <strong>FLUXOMIND LTDA</strong>
+              <br />
+              CNPJ: 60.162.547/0001-15
+              <br />
+              São Paulo/SP — Brazil
+              <br />
+              E-mail: privacidade@fluxomind.com
             </p>
-          </section>
-        </article>
-      </main>
-
-      <footer className="bg-gray-900 text-white py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <Link href="/en" className="mb-4 md:mb-0">
-              <img src="/logoSVG/logo-dark.svg" alt="Fluxomind" className="h-8 w-auto" />
-            </Link>
-            <div className="text-center md:text-right">
-              <p className="text-gray-400">&copy; {currentYear} Fluxomind &mdash; All rights reserved.</p>
-              <p className="text-gray-500 text-sm mt-2">FLUXOMIND LTDA &mdash; CNPJ: 60.162.547/0001-15</p>
-            </div>
-          </div>
+            <p>
+              See also our <Link href="/en/terms">Terms of Service</Link>.
+            </p>
+          </article>
         </div>
-      </footer>
+      </section>
+
+      <SiteFooterEn />
     </div>
   );
 }

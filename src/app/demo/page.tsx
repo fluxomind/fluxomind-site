@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 // O funil continua: CTA final da jornada rola para #beta logo abaixo.
 export default function DemoPage() {
   return (
-    <div className="page-demo">
+    <div className="fx page-demo">
       <h1
         style={{
           position: 'absolute',
@@ -35,14 +35,17 @@ export default function DemoPage() {
 
       <DemoPt />
 
-      <section className="offer" id="beta">
-        <div className="wrap">
-          <h2>Agora com os seus dados de verdade</h2>
-          <p className="lead">
-            A plataforma está em beta privado — o lançamento aberto vem em breve. Entre na
-            lista de lançamento contando qual processo você quer delegar: os primeiros da
-            lista entram já no beta, com o time montando o primeiro app operante com você,
-            sem cartão e sem compromisso.
+      <section className="fx-sec fx-offer" id="beta">
+        <div className="fx-wrap fx-narrow fx-tc">
+          <p className="fx-eyebrow" style={{ color: 'var(--fx-gold)' }}>
+            O próximo passo
+          </p>
+          <h2 className="fx-serif fx-h2">Agora com os seus dados de verdade</h2>
+          <p className="fx-body" style={{ margin: '0 auto 4px' }}>
+            A plataforma está em beta privado — o lançamento aberto vem em breve. Entre na lista
+            de lançamento contando qual processo você quer delegar: os primeiros da lista entram
+            já no beta, com o time montando o primeiro app operante com você, sem cartão e sem
+            compromisso.
           </p>
           <BetaForm />
         </div>

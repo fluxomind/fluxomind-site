@@ -1,77 +1,25 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
-import DemoBuilder from '@/components/DemoBuilder';
 import BetaForm from '@/components/BetaForm';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
-import HexAgono360 from '@/components/HexAgono360';
-import {
-  SIGNATURE,
-  PROMISE,
-  NEGATION,
-  FACES,
-  TRUST_RULES,
-  PHASE,
-  PURPOSE_LINE,
-  CTA,
-} from '@/lib/messages';
+import { SIGNATURE, PHASE, CTA } from '@/lib/messages';
 import { PLATFORM_CONTACT } from '@/lib/platform';
 
 export const metadata: Metadata = {
   title: { absolute: 'Fluxomind — app que trabalha para o seu negócio, não o contrário' },
   description:
-    'Um app que resolve o seu problema e se opera sozinho — integrado ao que você já tem, governado, em semanas. Veja a demonstração: o app se constrói na sua frente e opera o dia a dia, com humano nos casos sensíveis.',
+    'O negócio que se opera sozinho. Uma IA que atende, cobra e organiza no seu WhatsApp — 24/7 — e te prova o trabalho em reais. Você delega a tarefa, não dirige mais um software. Beta privado.',
   alternates: {
     canonical: '/',
     languages: { 'pt-BR': '/', en: '/en' },
   },
 };
 
-// Assinatura canônica (messages.ts), com destaque visual na segunda frase.
+// Assinatura canônica (messages.ts), com destaque na segunda frase.
 const SIG_BREAK = SIGNATURE.indexOf(' — ');
 const SIG_HEAD = SIGNATURE.slice(0, SIG_BREAK); // "App que trabalha para o seu negócio"
-const SIG_TAIL = SIGNATURE.slice(SIG_BREAK + 1); // "— não o contrário."
-
-const ICON_PROPS = {
-  viewBox: '0 0 24 24',
-  fill: 'none',
-  stroke: 'currentColor',
-  strokeWidth: 1.8,
-  strokeLinecap: 'round' as const,
-  strokeLinejoin: 'round' as const,
-};
-
-// Ícones das 5 regras da confiança (mesma ordem de TRUST_RULES).
-const TRUST_ICONS = [
-  // Enquadramento — alvo
-  <svg key="enquadramento" {...ICON_PROPS}>
-    <circle cx="12" cy="12" r="8" />
-    <circle cx="12" cy="12" r="3.4" />
-    <path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22" />
-  </svg>,
-  // Coerência — pontas conectadas
-  <svg key="coerencia" {...ICON_PROPS}>
-    <circle cx="5" cy="12" r="2.2" />
-    <circle cx="19" cy="12" r="2.2" />
-    <path d="M7.2 12h9.6" />
-    <path d="M12 9.8V7M12 14.2V17" />
-  </svg>,
-  // Correção + desfazer — seta de undo
-  <svg key="correcao" {...ICON_PROPS}>
-    <path d="M9 14l-4-4 4-4" />
-    <path d="M5 10h9a5 5 0 0 1 0 10h-3" />
-  </svg>,
-  // Humano assume — pessoa
-  <svg key="humano" {...ICON_PROPS}>
-    <circle cx="12" cy="8" r="3.2" />
-    <path d="M5.5 20c1-3.8 3.6-5.6 6.5-5.6s5.5 1.8 6.5 5.6" />
-  </svg>,
-  // Seus dados, só seus — cadeado
-  <svg key="dados" {...ICON_PROPS}>
-    <rect x="5" y="11" width="14" height="9" rx="2" />
-    <path d="M8 11V8a4 4 0 0 1 8 0v3" />
-  </svg>,
-];
+const SIG_TAIL = SIGNATURE.slice(SIG_BREAK + 3).replace(/\.$/, ''); // "não o contrário"
 
 const PHASE_CARDS = [
   { badge: 'b-impl', ...PHASE.exists },
@@ -79,18 +27,33 @@ const PHASE_CARDS = [
   { badge: 'b-road', ...PHASE.vision },
 ];
 
-// JSON-LD (schema.org) da seção de FAQ — espelha as perguntas e respostas
-// renderizadas abaixo; ao mudar a copy da seção, atualize aqui também.
+// FAQPage JSON-LD — espelha a seção de FAQ abaixo (sem publicar preço).
 const FAQ_JSONLD = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
   mainEntity: [
     {
       '@type': 'Question',
-      name: 'Preciso saber programar?',
+      name: 'Preciso saber programar ou dirigir um sistema?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Não. Você descreve o problema em português; o app se constrói e, para mudar, você conversa. Sem dev no caminho.',
+        text: 'Não. Você delega a tarefa em português, no WhatsApp. O app opera sozinho e, para mudar algo, você conversa. Sem menus, sem projeto, sem dev.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'A IA vai agir sozinha com os meus clientes?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Só até onde você deixar. A autonomia se conquista: ela observa, sugere, depois age dentro da alçada que você define — e, num incidente, volta sozinha a pedir aprovação. Como um bom funcionário, ninguém dá o talão de cheques no primeiro dia.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Vou ter que largar minha planilha ou meu WhatsApp?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Não. O app absorve o que você já usa — planilhas, WhatsApp, seus sistemas — e devolve uma operação só, governada. Continue trabalhando do seu jeito; agora o seu jeito trabalha sozinho.',
       },
     },
     {
@@ -98,15 +61,7 @@ const FAQ_JSONLD = {
       name: 'Meus dados ficam seguros?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Cada empresa fica isolada de verdade, os dados são criptografados e toda ação fica numa trilha à prova de adulteração. Quem exige pode trazer a própria chave. Os detalhes estão na página de Segurança.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Vou ter que largar minha planilha ou meu CRM?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Não. O app nasce integrado ao que você já tem — WhatsApp, e-mail, API, seus sistemas — e você migra no seu ritmo.',
+        text: 'Cada empresa fica isolada de verdade, os dados são criptografados e toda ação fica numa trilha à prova de adulteração — governança de nível enterprise, já em produção.',
       },
     },
     {
@@ -114,15 +69,7 @@ const FAQ_JSONLD = {
       name: 'Em quanto tempo estou rodando?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Em semanas, não num projeto de meses. No beta privado, o time acompanha de perto: o primeiro caso a gente monta com você.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Quanto custa?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'A plataforma está em beta privado — o lançamento aberto vem em breve. Durante o beta, ninguém pede cartão: o acesso é acompanhado e sem custo para começar. Os planos estão na página de Preços.',
+        text: 'A plataforma está em beta privado. Os primeiros da lista entram com o time acompanhando de perto — o primeiro app a gente monta com você, sem cartão para começar.',
       },
     },
   ],
@@ -130,343 +77,230 @@ const FAQ_JSONLD = {
 
 export default function Home() {
   return (
-    <div className="page-home">
-      <style>{HOME_CSS}</style>
-
-      {/* NAV — CTA primário leva à demonstração (a conversão é viver a demo) */}
+    <div className="fx">
       <SiteHeader cta={{ label: CTA.demo, href: '/demo' }} enHref="/en" />
 
-      {/* HERO */}
-      <header className="hero">
-        <div className="wrap" style={{ textAlign: 'center', paddingBottom: 48 }}>
-          <span className="pill">
-            <span className="lz" /> Beta privado · lançamento aberto em breve
-          </span>
-          <h1 style={{ maxWidth: '24ch', margin: '0 auto' }}>
-            {SIG_HEAD} <span className="g">{SIG_TAIL}</span>
-          </h1>
-          <p className="hsub" style={{ maxWidth: '62ch', margin: '18px auto 0' }}>
-            {PROMISE} Se constrói a partir do que você pede — e fica mais inteligente quanto
-            mais você usa.
-          </p>
-          <div className="herocta" style={{ justifyContent: 'center' }}>
-            <Link className="btn btn-primary btn-lg" href="/demo">
-              {CTA.demo}
-            </Link>
-            <a className="btn btn-ghost btn-lg" href="#demo">
-              Prévia em 1 minuto ↓
-            </a>
+      {/* 01 — HERO: a promessa, operando ao vivo */}
+      <header className="fx-hero">
+        <div className="fx-wrap fx-hero-grid">
+          <div className="fx-hero-copy">
+            <span className="fx-pill">
+              <span className="fx-lz" /> Beta privado · primeiras vagas neste trimestre
+            </span>
+            <p className="fx-eyebrow">O negócio que se opera sozinho</p>
+            <h1 className="fx-serif fx-h1">
+              {SIG_HEAD} — <span className="fx-em">{SIG_TAIL}</span>.
+            </h1>
+            <p className="fx-sub">
+              Você delega a tarefa; a IA <strong>atende, cobra e organiza</strong> no seu
+              WhatsApp — 24/7 — e te presta contas em reais. Sem virar operador de mais um
+              software.
+            </p>
+            <div className="fx-cta-row">
+              <a className="fx-btn fx-btn-primary" href="#comecar" data-track="hero-beta">
+                Entrar no beta
+              </a>
+              <Link className="fx-btn fx-btn-ghost" href="/demo" data-track="hero-demo">
+                Ver operando →
+              </Link>
+            </div>
+            <div className="fx-reassure">
+              <span>Sem cartão para começar</span>
+              <span>A prova na tela, em reais</span>
+              <span>Você aprova o que é sensível</span>
+            </div>
           </div>
-          <div className="reassure" style={{ justifyContent: 'center' }}>
-            <span>
-              <b>✓</b> Assista sem cadastro
-            </span>
-            <span>
-              <b>✓</b> A prova na tela, a cada passo
-            </span>
-            <span>
-              <b>✓</b> Humano assume nos casos sensíveis
-            </span>
+
+          {/* Feed de resultados — o produto é a demo (ilustração animada) */}
+          <div className="fx-feedwrap" aria-hidden="true">
+            <div className="fx-phone">
+              <div className="fx-phone-top">
+                <span className="fx-av" />
+                <span className="fx-who">
+                  <b>Loja da Ana</b>
+                  <span><i /> Fluxomind operando · agora</span>
+                </span>
+                <span className="fx-exlabel">exemplo</span>
+              </div>
+              <div className="fx-thread">
+                <div className="fx-bub fx-in">Oi! Ainda tem o vestido azul no tam M? 👗</div>
+                <div className="fx-bub fx-out">
+                  Tenho sim, Camila! Fica R$ 189 com frete grátis hoje. Reservo e te mando o Pix?
+                </div>
+                <div className="fx-bub fx-in">Quero! 🙌</div>
+              </div>
+              <div className="fx-run">
+                <div className="fx-r"><span className="fx-st done">Feito</span> Respondeu a cliente <time>23:47</time></div>
+                <div className="fx-r"><span className="fx-st done">Feito</span> Pedido registrado <time>23:48</time></div>
+                <div className="fx-r"><span className="fx-st pay">Pago</span> Pix confirmado · R$ 189 <time>23:52</time></div>
+              </div>
+              <div className="fx-receipt">
+                <div className="fx-rh">Briefing da semana</div>
+                <div className="fx-rbig fx-serif">R$ 12.480 <span>recuperados</span></div>
+                <div className="fx-rsub">custo do app: R$ 594 · retorno: <b>21×</b> · 0 clientes sem resposta</div>
+              </div>
+            </div>
           </div>
         </div>
       </header>
 
-      {/* A DEMO — o coração da página: construir e, depois, OPERAR */}
-      <section
-        id="demo"
-        style={{
-          background:
-            'radial-gradient(900px 420px at 50% 0%, rgba(43,102,221,.28), transparent 60%), var(--ink)',
-          color: '#fff',
-        }}
-      >
-        <div className="wrap">
-          <div className="center">
-            <div className="kick" style={{ color: 'var(--sky)' }}>
-              A demonstração
+      {/* 02 — O JOGO ANTIGO: a dor com nome */}
+      <section className="fx-sec">
+        <div className="fx-wrap fx-narrow">
+          <p className="fx-eyebrow">O problema</p>
+          <h2 className="fx-serif fx-h2">
+            O mundo todo testou IA. Quase ninguém conseguiu fazer ela <span className="fx-em">trabalhar</span>.
+          </h2>
+          <div className="fx-gap">
+            <div className="fx-gapn">
+              <b className="fx-serif">62%</b>
+              <span>das empresas já experimentam agentes de IA</span>
             </div>
-            <h2 style={{ color: '#fff' }}>O app se constrói na sua frente. E depois, opera.</h2>
-            <p className="lead" style={{ color: '#CdD3Dc', marginTop: 14 }}>
-              Construir ficou fácil — qualquer IA te entrega um protótipo.{' '}
-              <strong style={{ color: '#fff' }}>Operar é o que falta.</strong> Descreva um
-              problema real e assista aos dois atos: o app nasce diante de você — e, trinta dias
-              depois, está cuidando do dia a dia.
-            </p>
-          </div>
-          <div style={{ maxWidth: 760, margin: '38px auto 0' }}>
-            <DemoBuilder />
-          </div>
-        </div>
-      </section>
-
-      {/* O QUE RESOLVE */}
-      <section id="usos">
-        <div className="wrap">
-          <div className="center">
-            <div className="kick">O que resolve</div>
-            <h2>Planilha, e-mail, dez ferramentas — e alguém reconciliando tudo na mão.</h2>
-            <p className="lead" style={{ marginTop: 14 }}>
-              É aí que a sua operação perde horas e a estratégia para. A Fluxomind tira isso das
-              suas costas — você pede, <strong>ela executa</strong>, com a prova na tela e nada
-              crítico saindo sem o seu OK. Comece por uma dor:
-            </p>
-          </div>
-          <div className="uc">
-            <Link className="ucc" href="/casos-de-uso/cobranca-e-contas-a-receber" data-track="home-uso-cobranca">
-              <div className="ui" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="9" />
-                  <path d="M14.6 9.2c-.6-.7-1.6-1.1-2.6-1.1-1.4 0-2.6.8-2.6 2s1.2 1.7 2.6 2 2.6.8 2.6 2-1.2 2-2.6 2c-1 0-2-.4-2.6-1.1" />
-                  <path d="M12 6.4v11.2" />
-                </svg>
-              </div>
-              <h4>Cobrança e inadimplência</h4>
-              <p>“Cobra os 5 maiores em atraso, tom firme” — ela compõe as mensagens, mostra o preview e dispara só com o seu OK.</p>
-            </Link>
-            <Link className="ucc" href="/casos-de-uso/gestao-de-leads" data-track="home-uso-leads">
-              <div className="ui" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M3 5h18l-7 8.2V20l-4 1.5v-8.3L3 5z" />
-                </svg>
-              </div>
-              <h4>Funil de vendas</h4>
-              <p>“Quais oportunidades pararam há 7 dias?” — ela cruza, te responde e agenda os follow-ups.</p>
-            </Link>
-            <Link className="ucc" href="/casos-de-uso" data-track="home-uso-onboarding">
-              <div className="ui" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="9" cy="8" r="3.3" />
-                  <path d="M3.4 19.2c.7-3 3.1-4.7 5.6-4.7 1 0 2 .2 2.8.7" />
-                  <path d="M14.6 16.4l2 2 3.6-3.9" />
-                </svg>
-              </div>
-              <h4>Onboarding de clientes</h4>
-              <p>“Monta o onboarding do cliente novo” — checklist, prazos e avisos, sem ninguém cair no esquecimento.</p>
-            </Link>
-            <Link className="ucc" href="/casos-de-uso" data-track="home-uso-aprovacoes">
-              <div className="ui" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M7 3.5h7l4 4V20a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4.5a1 1 0 0 1 1-1z" />
-                  <path d="M13.5 3.5V8H18" />
-                  <path d="M9 14l2 2 4-4" />
-                </svg>
-              </div>
-              <h4>Aprovações e contratos</h4>
-              <p>“Aprovação em 2 níveis acima de um limite” — fluxo montado, histórico guardado, nada perdido no e-mail.</p>
-            </Link>
-            <Link className="ucc" href="/casos-de-uso/atendimento-whatsapp" data-track="home-uso-atendimento">
-              <div className="ui" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M21 11.4a8.4 8.4 0 0 1-12.3 7.5L4 20l1.1-4.2A8.4 8.4 0 1 1 21 11.4z" />
-                </svg>
-              </div>
-              <h4>Atendimento no WhatsApp</h4>
-              <p>Atende no WhatsApp e executa de verdade — responde, registra e age sobre os seus dados, não só conversa.</p>
-            </Link>
-            <Link className="ucc" href="/casos-de-uso" data-track="home-uso-paineis">
-              <div className="ui" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M4 4v16h16" />
-                  <path d="M8 17v-4" />
-                  <path d="M13 17V8" />
-                  <path d="M18 17v-6" />
-                </svg>
-              </div>
-              <h4>Painéis e relatórios</h4>
-              <p>“Monta um painel de risco por faixa de atraso” — números ao vivo, sem ninguém montar planilha no fim do mês.</p>
-            </Link>
-          </div>
-          <div className="fitlink" style={{ textAlign: 'center' }}>
-            <Link href="/casos-de-uso" data-track="home-usos-todos">
-              Todos os casos de uso, com demonstração ao vivo →
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* COMO FUNCIONA */}
-      <section id="como" className="why">
-        <div className="wrap">
-          <div className="center">
-            <div className="kick">Como funciona</div>
-            <h2>Do problema ao processo rodando, em 3 passos</h2>
-          </div>
-          <div className="steps3">
-            <div className="s3">
-              <div className="n">1</div>
-              <h4>Descreva o problema</h4>
-              <p>
-                Em português, do seu jeito: “controlar clientes em atraso”, “organizar o
-                onboarding”. Sem menus, sem código, sem projeto.
-              </p>
-            </div>
-            <div className="s3">
-              <div className="n">2</div>
-              <h4>Veja o app se construir</h4>
-              <p>
-                Cadastros, telas, painéis e automações nascem na sua frente — com a prova na
-                tela a cada passo.
-              </p>
-            </div>
-            <div className="s3">
-              <div className="n">3</div>
-              <h4>Adote operado</h4>
-              <p>
-                O agente roda o dia a dia: detecta, prepara, executa com o seu OK — e escala
-                para um humano nos casos sensíveis.
-              </p>
+            <div className="fx-gaparrow">→</div>
+            <div className="fx-gapn">
+              <b className="fx-serif">23%</b>
+              <span>conseguem colocá-los para operar de verdade</span>
             </div>
           </div>
-          <div className="center" style={{ marginTop: 44 }}>
-            <a className="btn btn-primary btn-lg" href="#comecar" data-track="como-beta-cta">
-              {CTA.beta}
-            </a>
-          </div>
+          <p className="fx-body">
+            O resto virou piloto abandonado — mais uma ferramenta que alguém precisa dirigir.
+            Porque o problema nunca foi construir. É <strong>operar</strong>. Você comprou
+            software e virou o operador dele: a planilha, o WhatsApp, o ChatGPT colado — cada um
+            com a sua versão da verdade, e nada rodando sozinho.
+          </p>
         </div>
       </section>
 
-      {/* AS 6 PERGUNTAS + HEXÁGONO */}
-      <section id="solucoes">
-        <div className="wrap">
-          <div className="center">
-            <div className="kick">O que o seu app responde</div>
-            <h2>Seis perguntas que todo negócio faz — o seu app responde às seis</h2>
-            <p className="lead" style={{ marginTop: 14 }}>
-              Qualquer operação cabe nelas. O seu app nasce respondendo às seis — e é isso que
-              faz dele um sistema inteiro, não um protótipo.
+      {/* 03 — O JOGO NOVO: conhecimento operante (a tríade) */}
+      <section className="fx-sec fx-sec-alt">
+        <div className="fx-wrap">
+          <div className="fx-narrow">
+            <p className="fx-eyebrow">A virada</p>
+            <h2 className="fx-serif fx-h2">
+              A gente não te dá outra ferramenta. Entrega o <span className="fx-em">trabalho feito</span>.
+            </h2>
+            <p className="fx-body">
+              Três coisas que nenhum software cumpre — e que fazem você delegar sem medo:
             </p>
           </div>
-          <div className="uc" style={{ marginTop: 38 }}>
-            {FACES.map((f) => (
-              <div className="ucc" key={f.key}>
-                <div className="fmh-facelabel">{f.label}</div>
-                <h4 style={{ marginTop: 6 }}>{f.q}</h4>
-                <p>{f.gloss}</p>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 30 }}>
-            <HexAgono360 />
-          </div>
-
-          {/* Negação tripla */}
-          <div className="fit fmh-neg" style={{ marginTop: 40 }}>
-            <div className="nots">
-              {NEGATION.nots.map((n) => (
-                <span key={n}>{n}</span>
-              ))}
+          <div className="fx-tri">
+            <div className="fx-tricard">
+              <span className="fx-trilabel">Delego, não configuro</span>
+              <h3 className="fx-serif">A vida inteira cabe em 3 mensagens</h3>
+              <p>Briefing, aprovação, exceção — no WhatsApp. Não existe um 4º tipo de interação. Sua atenção é finita, e o sistema respeita isso.</p>
+              <code className="fx-code">briefing · aprovação · exceção</code>
             </div>
-            {/* 1ª menção do termo na página linka a definição canônica
-                (/app-operante) — acoplado ao prefixo de NEGATION.is */}
-            <p className="is">
-              {NEGATION.is.startsWith('É um app operante') ? (
-                <>
-                  É um{' '}
-                  <Link href="/app-operante" style={{ textDecoration: 'underline' }}>
-                    app operante
-                  </Link>
-                  {NEGATION.is.slice('É um app operante'.length)}
-                </>
-              ) : (
-                NEGATION.is
-              )}
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* CONFIANÇA — as 5 regras */}
-      <section className="sec" id="seguranca">
-        <div className="wrap">
-          <div className="center">
-            <div className="kick" style={{ color: 'var(--sky)' }}>
-              As 5 regras da confiança
+            <div className="fx-tricard">
+              <span className="fx-trilabel">Autonomia se conquista</span>
+              <h3 className="fx-serif">Como um bom funcionário</h3>
+              <p>Observa, sugere, age dentro da sua alçada, ganha autonomia. Em linguagem de dono — “desconto até 5% sem me perguntar” — e volta a pedir OK num incidente.</p>
+              <code className="fx-code">observa → sugere → age → autopilot</code>
             </div>
-            <h2 style={{ color: '#fff' }}>Confiar uma operação a um app exige regras. São cinco.</h2>
-            <p className="lead" style={{ color: '#A9AEB8', marginTop: 14 }}>
-              Elas vêm de fábrica, para qualquer app criado na plataforma — e são o que deixa
-              você delegar sem medo.
+            <div className="fx-tricard">
+              <span className="fx-trilabel">Prova em reais</span>
+              <h3 className="fx-serif">Me mostra que fez</h3>
+              <p>Cada ação registrada em três camadas: o que propôs, o que você decidiu e o que aconteceu no mundo. Sem a terceira, mede-se obediência, não trabalho.</p>
+              <code className="fx-code">propôs · você decidiu · aconteceu</code>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 04 — A PROVA: o dogfood + a fatura com o múltiplo */}
+      <section className="fx-sec">
+        <div className="fx-wrap fx-narrow">
+          <p className="fx-eyebrow">A prova</p>
+          <h2 className="fx-serif fx-h2">
+            A prova mora na <span className="fx-gold">fatura</span> — não no slide.
+          </h2>
+          <p className="fx-body">
+            Todo mês, um briefing no seu WhatsApp: o que foi feito e o retorno em reais —
+            <strong> R$ gerado ÷ custo do app</strong>. Nenhum funcionário te manda o relatório
+            do próprio custo-benefício. Nenhum software mede o que você deixou de ganhar.
+            Funcionalidade se copia; fatura não.
+          </p>
+          <p className="fx-body">
+            E começamos por nós. A Fluxomind opera o próprio comercial dentro do produto — somos
+            o <strong>cliente nº 0</strong>. A gente opera o nosso negócio com isso antes de
+            pedir que você opere o seu.
+          </p>
+        </div>
+      </section>
+
+      {/* 05 — POR QUE AGORA */}
+      <section className="fx-sec fx-sec-alt">
+        <div className="fx-wrap">
+          <div className="fx-narrow">
+            <p className="fx-eyebrow">Por que agora</p>
+            <h2 className="fx-serif fx-h2">A janela é agora — e é estreita.</h2>
+          </div>
+          <div className="fx-stats">
+            <div className="fx-stat">
+              <b className="fx-serif">~10×<span>/ano</span></b>
+              <span>a queda no custo da IA que move tudo</span>
+            </div>
+            <div className="fx-stat">
+              <b className="fx-serif">82%</b>
+              <span>das pequenas empresas já vivem no WhatsApp</span>
+            </div>
+            <div className="fx-stat">
+              <b className="fx-serif">9 mi</b>
+              <span>de CNPJs no vermelho — a dor de receber em recorde</span>
+            </div>
+            <div className="fx-stat">
+              <b className="fx-serif">9–18<span> meses</span></b>
+              <span>a janela da categoria antes de alguém fechá-la</span>
+            </div>
+          </div>
+          <p className="fx-body fx-narrow">
+            A tecnologia destravou, a demanda se provou e o seu cliente já está no WhatsApp — a
+            maré está subindo. Quem transformar “testar IA” em “IA operando” ganha a categoria.
+          </p>
+        </div>
+      </section>
+
+      {/* 06 — POR QUE A GENTE */}
+      <section className="fx-sec">
+        <div className="fx-wrap">
+          <div className="fx-narrow">
+            <p className="fx-eyebrow">Por que a gente</p>
+            <h2 className="fx-serif fx-h2">Capacidade de gente grande. Simplicidade de WhatsApp.</h2>
+            <p className="fx-body">
+              <em>Enterprise-grade by design, SMB-first by choice.</em> Isolamento por empresa,
+              trilha à prova de adulteração e controle de custo já em produção — a governança de
+              uma corporação, entregue ao dono de PME que não é técnico. Construída por um time
+              enxuto de 6 + um harness de IA, por quem já fundou, escalou e vendeu uma empresa de
+              tecnologia.
             </p>
           </div>
-          <div className="fmh-trust">
-            {TRUST_RULES.map((r, i) => (
-              <div className="secc" key={r.title}>
-                <div className="si" aria-hidden="true">
-                  {TRUST_ICONS[i]}
-                </div>
-                <h4>{r.title}</h4>
-                <p>{r.desc}</p>
-              </div>
-            ))}
-          </div>
-          <div className="center" style={{ marginTop: 30 }}>
-            <Link
-              className="btn btn-ghost"
-              href="/seguranca"
-              style={{ color: 'var(--sky)', borderColor: 'rgba(77,171,247,.4)' }}
-            >
-              Como cada regra é garantida, em detalhe →
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* POR QUE EXISTIMOS — banda de propósito (message house §1.5) */}
-      <section className="fmh-purpose">
-        <div className="wrap center">
-          <div className="kick">Por que existimos</div>
-          <p className="fmh-purpose-line">{PURPOSE_LINE}</p>
-          <Link href="/por-que" className="fmh-purpose-link">
-            Leia por quê, na palavra de quem fundou →
-          </Link>
-        </div>
-      </section>
-
-      {/* ROTAS — banda discreta por perfil */}
-      <section
-        style={{
-          padding: '30px 0',
-          background: 'var(--panel)',
-          borderTop: '1px solid var(--line)',
-          borderBottom: '1px solid var(--line)',
-        }}
-      >
-        <div className="wrap fmh-routes">
-          <span>
-            Empresa maior? <Link href="/acelere">Adoção em escala →</Link>
-          </span>
-          <span>
-            Time técnico? <Link href="/plataforma">A plataforma por dentro →</Link>
-          </span>
-        </div>
-      </section>
-
-      {/* PARA ONDE ISSO VAI — fato, lacuna e aposta */}
-      <section id="para-onde">
-        <div className="wrap">
-          <div className="center">
-            <div className="kick">Para onde isso vai</div>
-            <h2>O que já existe, o que vem agora — e a visão</h2>
-            <p className="lead" style={{ marginTop: 14 }}>
-              Fato, lacuna e aposta — sem confundir os três. É assim que preferimos te contar.
-            </p>
-          </div>
-          <div className="prob">
+          <div className="fx-phase">
             {PHASE_CARDS.map((c) => (
-              <div className="pcard" key={c.title}>
-                <span className={`badge ${c.badge}`}>
-                  <span className="d" /> {c.title}
+              <div className="fx-pcard" key={c.title}>
+                <span className={`fx-badge ${c.badge}`}>
+                  <span className="fx-d" /> {c.title}
                 </span>
-                <p style={{ color: 'var(--slate)', marginTop: 16, fontSize: 15.5 }}>{c.desc}</p>
+                <p>{c.desc}</p>
               </div>
             ))}
           </div>
-          <p
-            className="center"
-            style={{ marginTop: 28, color: 'var(--mute)', fontSize: 14.5 }}
-          >
-            A visão — especialistas empacotando seus métodos em apps operantes — é o rumo
-            declarado, não o presente. Vamos contando por aqui, capítulo a capítulo.
+          <p className="fx-fineprint fx-narrow">
+            Fato, lacuna e aposta — sem confundir os três. É assim que preferimos te contar.
+          </p>
+        </div>
+      </section>
+
+      {/* 07 — MANIFESTO */}
+      <section className="fx-sec fx-manifesto">
+        <div className="fx-wrap fx-narrow">
+          <p className="fx-eyebrow">Manifesto</p>
+          <p className="fx-serif fx-manifesto-line">
+            Software de verdade não é o que você <span className="fx-strike">compra e ainda tem que operar</span>.
+            É o que <span className="fx-em">trabalha por você</span> — e te presta contas.
+          </p>
+          <p className="fx-body">
+            Somos contra o painel que ninguém abre. Contra o projeto de meses. Contra a IA que
+            responde mas não resolve. Todo negócio merece uma operação de primeira — não só as
+            grandes, com time e sistema caro.
           </p>
         </div>
       </section>
@@ -476,103 +310,55 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_JSONLD) }}
       />
-      <section id="faq" style={{ paddingTop: 0 }}>
-        <div className="wrap">
-          <div className="center">
-            <div className="kick">Dúvidas comuns</div>
-            <h2>O que costumam perguntar</h2>
-          </div>
-          <div className="faq">
-            <div className="qa">
-              <h4>Preciso saber programar?</h4>
-              <p>
-                Não. Você descreve o problema em português; o app se constrói e, para mudar,
-                você conversa. Sem dev no caminho.
-              </p>
+      <section className="fx-sec fx-sec-alt">
+        <div className="fx-wrap fx-narrow">
+          <p className="fx-eyebrow">Dúvidas comuns</p>
+          <h2 className="fx-serif fx-h2">O que costumam perguntar</h2>
+          <div className="fx-faq">
+            <div className="fx-qa">
+              <h4>Preciso saber programar ou dirigir um sistema?</h4>
+              <p>Não. Você delega a tarefa em português, no WhatsApp. O app opera sozinho e, para mudar algo, você conversa. Sem menus, sem projeto, sem dev.</p>
             </div>
-            <div className="qa">
+            <div className="fx-qa">
+              <h4>A IA vai agir sozinha com os meus clientes?</h4>
+              <p>Só até onde você deixar. A autonomia se conquista: ela observa, sugere, depois age dentro da alçada que você define — e, num incidente, volta sozinha a pedir aprovação.</p>
+            </div>
+            <div className="fx-qa">
+              <h4>Vou ter que largar minha planilha ou meu WhatsApp?</h4>
+              <p>Não. O app absorve o que você já usa e devolve uma operação só, governada. Continue trabalhando do seu jeito; agora o seu jeito trabalha sozinho.</p>
+            </div>
+            <div className="fx-qa">
               <h4>Meus dados ficam seguros?</h4>
-              <p>
-                Cada empresa fica isolada de verdade, os dados são criptografados e toda ação
-                fica numa trilha à prova de adulteração. Quem exige pode trazer a própria chave.
-                Os detalhes estão em <Link href="/seguranca" style={{ color: 'var(--blue)', fontWeight: 600 }}>Segurança</Link>.
-              </p>
+              <p>Cada empresa fica isolada de verdade, os dados são criptografados e toda ação fica numa trilha à prova de adulteração — governança de nível enterprise, já em produção.</p>
             </div>
-            <div className="qa">
-              <h4>Vou ter que largar minha planilha ou meu CRM?</h4>
-              <p>
-                Não. O app nasce integrado ao que você já tem — WhatsApp, e-mail, API, seus
-                sistemas — e você migra no seu ritmo.
-              </p>
-            </div>
-            <div className="qa">
+            <div className="fx-qa">
               <h4>Em quanto tempo estou rodando?</h4>
-              <p>
-                Em semanas, não num projeto de meses. No beta privado, o time acompanha de
-                perto: o primeiro caso a gente monta com você.
-              </p>
-            </div>
-            <div className="qa">
-              <h4>Quanto custa?</h4>
-              <p>
-                A plataforma está em beta privado — o lançamento aberto vem em breve. Durante
-                o beta, ninguém pede cartão: o acesso é acompanhado e sem custo para começar.
-                Os planos estão em <Link href="/precos" style={{ color: 'var(--blue)', fontWeight: 600 }}>Preços</Link>.
-              </p>
+              <p>A plataforma está em beta privado. Os primeiros da lista entram com o time acompanhando — o primeiro app a gente monta com você, sem cartão para começar.</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* CTA FINAL — captura primária (BetaForm; mailto vira fallback) */}
-      <section className="offer" id="comecar">
-        <div className="wrap">
-          <div className="kick" style={{ color: 'var(--sky)' }}>
-            O próximo passo
-          </div>
-          <h2>Delegue a primeira tarefa</h2>
-          <p className="lead">
-            A plataforma está em beta privado — o lançamento aberto vem em breve. Entre na
-            lista de lançamento contando qual problema você quer tirar das costas: você é
-            avisado quando abrir, e os primeiros da lista entram já no beta, com o time
-            montando o primeiro app operante com você.
+      {/* 08 — CTA: clube de fundadores (captura primária) */}
+      <section className="fx-sec fx-offer" id="comecar">
+        <div className="fx-wrap fx-narrow" style={{ textAlign: 'center' }}>
+          <p className="fx-eyebrow" style={{ color: 'var(--fx-gold)' }}>O próximo passo</p>
+          <h2 className="fx-serif fx-h2">Entre para o beta privado.</h2>
+          <p className="fx-body" style={{ margin: '14px auto 0', maxWidth: '54ch' }}>
+            Primeiras vagas neste trimestre. Conte a operação que você quer tirar das costas — os
+            primeiros da fila entram já no beta, com o time montando o primeiro app com você.
           </p>
           <BetaForm />
-          <div className="offerbtns" style={{ marginTop: 18 }}>
-            <a
-              className="btn btn-ghost btn-lg"
-              href={PLATFORM_CONTACT}
-              data-track="home-contact-cta"
-            >
+          <div className="fx-offerbtns">
+            <a className="fx-btn fx-btn-ghost" href={PLATFORM_CONTACT} data-track="home-contact">
               Prefere conversar antes? {CTA.contact}
             </a>
           </div>
-          <div className="scar">Beta acompanhado · sem cartão · em semanas, não meses</div>
+          <div className="fx-scar">Beta acompanhado · sem cartão · em semanas, não meses</div>
         </div>
       </section>
 
-      {/* FOOTER */}
       <SiteFooter tagline={SIGNATURE} />
     </div>
   );
 }
-
-// Estilos específicos da home (não tocamos globals.css — compartilhado).
-const HOME_CSS = `
-.fmh-facelabel { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--blue); }
-.fmh-trust { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-top: 34px; }
-@media (max-width: 1024px) { .fmh-trust { grid-template-columns: repeat(3, 1fr); } }
-@media (max-width: 640px) { .fmh-trust { grid-template-columns: 1fr 1fr; } }
-@media (max-width: 440px) { .fmh-trust { grid-template-columns: 1fr; } }
-.fmh-neg { text-align: center; }
-.fmh-neg .nots { display: flex; gap: 10px 28px; justify-content: center; flex-wrap: wrap; color: #A9AEB8; font-size: 15px; }
-.fmh-neg .nots span::before { content: "✕"; margin-right: 8px; color: #e58973; font-weight: 700; }
-.fmh-neg .is { margin: 20px auto 0; color: #fff; font-size: clamp(17px, 2.1vw, 21px); font-weight: 700; line-height: 1.5; max-width: 58ch; }
-.fmh-routes { display: flex; gap: 12px 48px; justify-content: center; flex-wrap: wrap; font-size: 15px; color: var(--slate); }
-.fmh-routes a { color: var(--blue); font-weight: 600; }
-.fmh-routes a:hover { text-decoration: underline; }
-.fmh-purpose { padding: 64px 0; }
-.fmh-purpose-line { margin: 16px auto 0; max-width: 30ch; font-size: clamp(21px, 2.8vw, 30px); font-weight: 750; line-height: 1.35; letter-spacing: -0.01em; }
-.fmh-purpose-link { display: inline-block; margin-top: 18px; color: var(--blue); font-weight: 600; font-size: 15.5px; }
-.fmh-purpose-link:hover { text-decoration: underline; }
-`;

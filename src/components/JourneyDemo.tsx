@@ -1513,8 +1513,8 @@ function NewRecordForm({
 }
 
 const JD_CSS = `
-.jd { --jd-bg:#1A1B1E; --jd-panel:#25262B; --jd-line:#33353B; --jd-tx:#E5E7EB; --jd-mut:#9CA3AF;
-  --jd-blue:#4DABF7; --jd-green:#34D399; --jd-amber:#FBBF24; --jd-red:#F87171; --jd-violet:#A78BFA;
+.jd { --jd-bg:#0C0E13; --jd-panel:#171B24; --jd-line:rgba(255,255,255,.10); --jd-tx:#EDF0F6; --jd-mut:#A7AEBD;
+  --jd-blue:#5B8CFF; --jd-green:#35C08A; --jd-amber:#E6B25E; --jd-red:#E8896F; --jd-violet:#A78BFA;
   background: var(--jd-bg); border: 1px solid var(--jd-line); border-radius: 16px;
   color: var(--jd-tx); overflow: hidden; font-size: 14.5px; }
 .jd * { box-sizing: border-box; }

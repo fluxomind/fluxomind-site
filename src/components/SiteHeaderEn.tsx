@@ -10,12 +10,10 @@ import { CTA_EN } from '@/lib/messages-en';
 // CTA permanece; menu hambúrguer EN entra quando o nav tiver mais itens.
 const NAV_EN = [
   { href: '/en/use-cases', label: 'Use cases' },
-  { href: '/en/self-operating-app', label: 'What it is' },
   { href: '/en/what-it-does', label: 'What it does' },
   { href: '/en/security', label: 'Security' },
-  { href: '/en/accelerate', label: 'Accelerate' },
   { href: '/en/platform', label: 'Platform' },
-  { href: '/en/pricing', label: 'Pricing' },
+  { href: '/en/why', label: 'Why' },
 ] as const;
 
 export default function SiteHeaderEn({ ptHref }: { ptHref: string }) {

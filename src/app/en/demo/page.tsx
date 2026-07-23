@@ -1,8 +1,7 @@
 import type { Metadata } from 'next';
 import SiteFooterEn from '@/components/SiteFooterEn';
+import BetaFormEn from '@/components/BetaFormEn';
 import DemoEn from '@/components/DemoEn';
-import { CTA_EN } from '@/lib/messages-en';
-import { PLATFORM_CONTACT_EN } from '@/lib/platform';
 
 export const metadata: Metadata = {
   title: 'Try it — create an app by talking',
@@ -14,12 +13,13 @@ export const metadata: Metadata = {
   },
 };
 
-// Espelho EN de /demo (ADR-0006): tela cheia como um sistema, sem chrome de
-// marketing — a topbar do JourneyDemo (copy EN) faz o papel de header. O fecho
-// usa o contato EN (o BetaForm é pt; form EN é evolução futura).
+// Espelho EN de /demo (ADR-0006): a demo assume a tela inteira como um sistema
+// — sem chrome de marketing, a topbar do shell (JourneyDemo, copy EN) faz o
+// papel de header, com saída para o site e o selo de fase. O funil continua: o
+// CTA final da jornada rola para #beta logo abaixo, agora com o form EN.
 export default function DemoPageEn() {
   return (
-    <div className="page-demo" lang="en">
+    <div className="fx page-demo" lang="en">
       <h1
         style={{
           position: 'absolute',
@@ -34,23 +34,19 @@ export default function DemoPageEn() {
 
       <DemoEn />
 
-      <section className="offer" id="beta">
-        <div className="wrap">
-          <h2>Now with your real data</h2>
-          <p className="lead">
-            The platform is in private beta — open launch coming soon. Tell us which process
-            you want to delegate: early access starts with the team building your first
-            self-operating app with you, no card and no commitment.
+      <section className="fx-sec fx-offer" id="beta">
+        <div className="fx-wrap fx-narrow fx-tc">
+          <p className="fx-eyebrow" style={{ color: 'var(--fx-gold)' }}>
+            The next step
           </p>
-          <div className="offerbtns">
-            <a
-              className="btn btn-primary btn-lg"
-              href={PLATFORM_CONTACT_EN}
-              data-track="en-demo-contact-cta"
-            >
-              {CTA_EN.contact}
-            </a>
-          </div>
+          <h2 className="fx-serif fx-h2">Now with your real data</h2>
+          <p className="fx-body" style={{ margin: '0 auto 4px' }}>
+            The platform is in private beta &mdash; the open launch is coming soon. Join the
+            launch list and tell us which process you&rsquo;d hand off first: the first in
+            line get early access, with the team building your first self-operating app right
+            alongside you &mdash; no card, no commitment.
+          </p>
+          <BetaFormEn />
         </div>
       </section>
 
