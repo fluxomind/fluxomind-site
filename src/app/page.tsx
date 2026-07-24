@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import BetaForm from '@/components/BetaForm';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
+import { Iphone } from '@/components/ui/iphone';
 import { SIGNATURE, PHASE, CTA } from '@/lib/messages';
 import { PLATFORM_CONTACT } from '@/lib/platform';
 
@@ -113,33 +114,35 @@ export default function Home() {
 
           {/* Feed de resultados — o produto é a demo (ilustração animada) */}
           <div className="fx-feedwrap" aria-hidden="true">
-            <div className="fx-phone">
-              <div className="fx-phone-top">
-                <span className="fx-av" />
-                <span className="fx-who">
-                  <b>Loja da Ana</b>
-                  <span><i /> Fluxomind operando · agora</span>
-                </span>
-                <span className="fx-exlabel">exemplo</span>
-              </div>
-              <div className="fx-thread">
-                <div className="fx-bub fx-in">Oi! Ainda tem o vestido azul no tam M? 👗</div>
-                <div className="fx-bub fx-out">
-                  Tenho sim, Camila! Fica R$ 189 com frete grátis hoje. Reservo e te mando o Pix?
+            <Iphone className="fx-phone">
+              <div className="fx-phone-content">
+                <div className="fx-phone-top">
+                  <span className="fx-av" />
+                  <span className="fx-who">
+                    <b>Loja da Ana</b>
+                    <span><i /> Fluxomind operando · agora</span>
+                  </span>
+                  <span className="fx-exlabel">exemplo</span>
                 </div>
-                <div className="fx-bub fx-in">Quero! 🙌</div>
+                <div className="fx-thread">
+                  <div className="fx-bub fx-in">Oi! Ainda tem o vestido azul no tam M? 👗</div>
+                  <div className="fx-bub fx-out">
+                    Tenho sim, Camila! Fica R$ 189 com frete grátis hoje. Reservo e te mando o Pix?
+                  </div>
+                  <div className="fx-bub fx-in">Quero! 🙌</div>
+                </div>
+                <div className="fx-run">
+                  <div className="fx-r"><span className="fx-st done">Feito</span> Respondeu a cliente <time>23:47</time></div>
+                  <div className="fx-r"><span className="fx-st done">Feito</span> Pedido registrado <time>23:48</time></div>
+                  <div className="fx-r"><span className="fx-st pay">Pago</span> Pix confirmado · R$ 189 <time>23:52</time></div>
+                </div>
+                <div className="fx-receipt">
+                  <div className="fx-rh">Briefing da semana</div>
+                  <div className="fx-rbig fx-serif">R$ 12.480 <span>recuperados</span></div>
+                  <div className="fx-rsub">custo do app: R$ 594 · retorno: <b>21×</b> · 0 clientes sem resposta</div>
+                </div>
               </div>
-              <div className="fx-run">
-                <div className="fx-r"><span className="fx-st done">Feito</span> Respondeu a cliente <time>23:47</time></div>
-                <div className="fx-r"><span className="fx-st done">Feito</span> Pedido registrado <time>23:48</time></div>
-                <div className="fx-r"><span className="fx-st pay">Pago</span> Pix confirmado · R$ 189 <time>23:52</time></div>
-              </div>
-              <div className="fx-receipt">
-                <div className="fx-rh">Briefing da semana</div>
-                <div className="fx-rbig fx-serif">R$ 12.480 <span>recuperados</span></div>
-                <div className="fx-rsub">custo do app: R$ 594 · retorno: <b>21×</b> · 0 clientes sem resposta</div>
-              </div>
-            </div>
+            </Iphone>
           </div>
         </div>
       </header>

@@ -185,7 +185,7 @@
 /* ============================================================
    HOME (/) — componentes específicos do arco da home
    ============================================================ */
-.fx-hero-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 52px; align-items: center; padding: 70px 26px 64px; }
+.fx-hero-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 52px; align-items: start; min-height: calc(100svh - 65px); padding: 70px 26px 64px; }
 @media (max-width: 900px) { .fx-hero-grid { grid-template-columns: 1fr; gap: 40px; padding-top: 52px; } }
 .fx-hero-copy .fx-eyebrow { margin-bottom: 16px; }
 .fx-sub { font-size: clamp(17px, 1.9vw, 20px); color: var(--fx-soft); line-height: 1.5; margin: 0 0 28px; max-width: 46ch; }
@@ -195,7 +195,8 @@
 .fx-reassure span::before { content: "✓"; position: absolute; left: 0; color: var(--fx-green); font-weight: 700; }
 
 .fx-feedwrap { display: flex; justify-content: center; }
-.fx-phone { width: 100%; max-width: 360px; background: #0A0C11; border: 1px solid rgba(255,255,255,.12); border-radius: 24px; padding: 12px; box-shadow: 0 50px 90px -50px rgba(0,0,0,.85); }
+.fx-phone { max-width: 300px; filter: drop-shadow(0 32px 30px rgba(0,0,0,.3)); }
+.fx-phone-content { width: 100%; min-height: 100%; background: #0A0C11; padding: 56px 12px 12px; }
 .fx-phone-top { display: flex; align-items: center; gap: 10px; padding: 8px 8px 12px; border-bottom: 1px solid rgba(255,255,255,.07); }
 .fx-av { width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg,#5B8CFF,#3E72F0); flex: 0 0 auto; }
 .fx-who { line-height: 1.2; }
