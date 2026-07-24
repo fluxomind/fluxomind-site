@@ -23,7 +23,7 @@ export default async function AdminLeads({
   const authorized = required
     ? token === required
     : process.env.NODE_ENV !== 'production';
-  if (!authorized) notFound();
+  if (!authorized) {notFound();}
 
   const leads = (await readLeads()).reverse();
   const reais = leads.filter((l) => !l.hp);
@@ -67,12 +67,12 @@ export default async function AdminLeads({
                         minute: '2-digit',
                       })}
                     </td>
-                    <td style={S.td}>{l.nome || '—'}</td>
+                    <td style={S.td}>{l.nome ?? '—'}</td>
                     <td style={S.td}>
                       {l.email ? <a href={`mailto:${l.email}`} style={S.link}>{l.email}</a> : '—'}
                     </td>
-                    <td style={S.td}>{l.empresa || '—'}</td>
-                    <td style={{ ...S.td, maxWidth: 420 }}>{l.processo || '—'}</td>
+                    <td style={S.td}>{l.empresa ?? '—'}</td>
+                    <td style={{ ...S.td, maxWidth: 420 }}>{l.processo ?? '—'}</td>
                     <td style={S.td}>{l.hp ? <span style={S.hpBadge}>honeypot</span> : null}</td>
                   </tr>
                 ))}

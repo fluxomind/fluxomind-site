@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useEffectEvent, useRef, useState, useSyncExternalStore, type ReactNode } from 'react';
 import Link from 'next/link';
 import { track } from '@/lib/analytics';
 import { isEdit, type CenarioId, type DemoCopy, type LogE, type Registro } from '@/lib/demo-copy';
@@ -53,7 +53,15 @@ function boldify(text: string): ReactNode {
   return text.split(/\*\*(.+?)\*\*/g).map((p, i) => (i % 2 === 1 ? <b key={i}>{p}</b> : p));
 }
 
-const valOf = (r: Registro) => Number((r.meta.valor ?? '0').replace(/[^\d]/g, ''));
+const valOf = (r: Registro) => Number(r.meta.valor.replace(/[^\d]/g, ''));
+const jitter = () => Math.random() * 40 - 20;
+const uniqueId = () => `novo-${Date.now().toString(36)}`;
+const subscribeReducedMotion = (notify: () => void) => {
+  const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+  media.addEventListener('change', notify);
+  return () => { media.removeEventListener('change', notify); };
+};
+const getReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
   // Todo o conteúdo variável (pt/en) vem do dicionário. Aliases locais mantêm
@@ -67,8 +75,8 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
   const INITIAL_ITEMS: Item[] = [{ kind: 'msg', who: 'ally', text: copy.entry.greeting }];
   const routeCenario = (text: string): CenarioId => {
     const t = text.toLowerCase();
-    if (copy.route.caixa.test(t)) return 'caixa';
-    if (copy.route.atendimento.test(t)) return 'atendimento';
+    if (copy.route.caixa.test(t)) {return 'caixa';}
+    if (copy.route.atendimento.test(t)) {return 'atendimento';}
     return 'leads';
   };
 
@@ -106,9 +114,9 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
   const reducedRef = useRef(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const emulatingRef = useRef(false); // trava síncrona da emulação de digitação
-  const skipRef = useRef(false); // clique no input → conclui a emulação na hora
-  const touchedRef = useRef(false);
+  const emulatingRef = useRef<boolean>(false); // trava síncrona da emulação de digitação
+  const skipRef = useRef<boolean>(false); // clique no input → conclui a emulação na hora
+  const skipRequested = () => skipRef.current;
   // cenário ativo, síncrono — sobrevive ao resetAll do replay (voltar re-executa
   // O MESMO cenário). Só muda antes de started (pill) ou via roteamento do texto livre.
   const cenarioRef = useRef<CenarioId>('leads');
@@ -116,7 +124,7 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
   // entrada) não podem disparar jornadas paralelas — estado React é assíncrono
   const startedRef = useRef(false);
   const beginOnce = () => {
-    if (startedRef.current) return false;
+    if (startedRef.current) {return false;}
     startedRef.current = true;
     setStarted(true);
     return true;
@@ -125,17 +133,16 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
   // (clique duplo dispara 2 handlers antes do re-render remover o botão)
   const lockRef = useRef<Set<string>>(new Set());
   const lock = (k: string) => {
-    if (lockRef.current.has(k)) return false;
+    if (lockRef.current.has(k)) {return false;}
     lockRef.current.add(k);
     return true;
   };
   const unlock = (k: string) => lockRef.current.delete(k);
 
+  const reducedMotion = useSyncExternalStore(subscribeReducedMotion, getReducedMotion, () => false);
   useEffect(() => {
-    reducedRef.current =
-      typeof window !== 'undefined' &&
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  }, []);
+    reducedRef.current = reducedMotion;
+  }, [reducedMotion]);
 
   // Deep-link: /demo?cenario=leads|caixa|atendimento inicia a jornada direto
   // naquele cenário (entrada das páginas de caso de uso). Lido do window no
@@ -143,26 +150,23 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
   // só importa uma vez, no mount. Parâmetro inválido/ausente = entrada normal
   // (pills). beginOnce torna o re-run do StrictMode inócuo.
   useEffect(() => {
-    const q = new URLSearchParams(window.location.search).get('cenario');
-    if (q === 'leads' || q === 'caixa' || q === 'atendimento') startPlanilha(q, 'link');
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
     const n = scrollRef.current;
-    if (n) n.scrollTop = n.scrollHeight;
+    if (n) {n.scrollTop = n.scrollHeight;}
   }, [items, typing]);
 
   // v5: quando o rascunho nasce (draft) o app assume o palco — dispara o reveal
   useEffect(() => {
     if (draft !== 'draft') {
       // se o draft avançar antes do timeout, desarma a classe — senão o próximo reveal não anima
-      setJustRevealed(false);
-      return;
+      const frame = requestAnimationFrame(() => { setJustRevealed(false); });
+      return () => { cancelAnimationFrame(frame); };
     }
-    setJustRevealed(true);
-    const t = window.setTimeout(() => setJustRevealed(false), 900);
-    return () => window.clearTimeout(t);
+    const frame = requestAnimationFrame(() => { setJustRevealed(true); });
+    const t = window.setTimeout(() => { setJustRevealed(false); }, 900);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.clearTimeout(t);
+    };
   }, [draft]);
 
   // placeholder máquina-de-escrever na entrada: cicla os exemplos dos 3 cenários.
@@ -179,7 +183,7 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
     let ci = 0; // caractere
     let mode: 'typing' | 'pause' | 'deleting' = 'typing';
     const tick = () => {
-      if (cancelled) return;
+      if (cancelled) {return;}
       const ex = ENTRY_EXAMPLES[ti];
       if (mode === 'typing') {
         ci += 1;
@@ -222,7 +226,7 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
   const delay = (ms: number) =>
     new Promise<void>((r) => setTimeout(r, reducedRef.current ? 0 : ms));
 
-  const push = useCallback((...add: Item[]) => setItems((p) => [...p, ...add]), []);
+  const push = useCallback((...add: Item[]) => { setItems((p) => [...p, ...add]); }, []);
   const resolveCard = useCallback((card: CardId, label: string) => {
     setItems((p) => p.map((i) => (i.kind === 'card' && i.card === card ? { ...i, resolved: label } : i)));
   }, []);
@@ -231,7 +235,7 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
     const gen = genRef.current;
     setTyping(true);
     await delay(ms);
-    if (genRef.current !== gen) return; // recomeçar/rebuild cancelou esta fala
+    if (genRef.current !== gen) {return;} // recomeçar/rebuild cancelou esta fala
     setTyping(false);
     push({ kind: 'msg', who: 'ally', text });
   }
@@ -252,7 +256,7 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
       emulatingRef.current = false;
       setEmulating(false);
       setChatText('');
-      if (send) push({ kind: 'msg', who: 'user', text });
+      if (send) {push({ kind: 'msg', who: 'user', text });}
     };
     skipRef.current = false;
     emulatingRef.current = true;
@@ -262,23 +266,23 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
     const per = chars.length * 35 > 2500 ? Math.max(8, Math.floor(2500 / chars.length)) : 35;
     let acc = '';
     for (const ch of chars) {
-      if (genRef.current !== gen) return finish(false); // recomeçar cancelou
-      if (skipRef.current) break; // clique no input → conclui na hora
+      if (genRef.current !== gen) {finish(false); return;} // recomeçar cancelou
+      if (skipRequested()) {break;} // clique no input → conclui na hora
       acc += ch;
       setChatText(acc);
-      let d = per + (Math.random() * 40 - 20); // jitter ±20ms = irregular, humano
-      if (/[.,!?;:—…]/.test(ch)) d += 90; // pausa um pouco maior na pontuação
+      let d = per + jitter(); // jitter ±20ms = irregular, humano
+      if (/[.,!?;:—…]/.test(ch)) {d += 90;} // pausa um pouco maior na pontuação
       await delay(Math.max(8, d));
     }
-    if (skipRef.current) setChatText(text);
-    if (genRef.current !== gen) return finish(false);
-    await delay(skipRef.current ? 80 : 250);
-    if (genRef.current !== gen) return finish(false);
+    if (skipRequested()) {setChatText(text);}
+    if (genRef.current !== gen) {finish(false); return;}
+    await delay(skipRequested() ? 80 : 250);
+    if (genRef.current !== gen) {finish(false); return;}
     finish(true);
   }
 
   const earn = (i: number) =>
-    setTrust((p) => (p[i] ? p : p.map((v, k) => (k === i ? true : v))));
+    { setTrust((p) => (p[i] ? p : p.map((v, k) => (k === i ? true : v)))); };
 
   const goStage = (n: number) => {
     setStage(n);
@@ -289,12 +293,11 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
     typeof window !== 'undefined' && window.matchMedia('(max-width: 860px)').matches;
 
   const markTouched = () => {
-    if (!touchedRef.current) {
-      touchedRef.current = true;
+    if (!touched) {
       setTouched(true);
       track('jornada_touch');
       // no mobile, a decisão ("é isso?") espera no chat — volta para lá
-      if (isMobile()) window.setTimeout(() => setPane('chat'), 1100);
+      if (isMobile()) {window.setTimeout(() => { setPane('chat'); }, 1100);}
     }
   };
 
@@ -306,21 +309,32 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
   };
 
   async function startPlanilha(id?: CenarioId, entry: 'planilha' | 'link' = 'planilha') {
-    if (!beginOnce()) return;
+    if (!beginOnce()) {return;}
     const gen = genRef.current;
     const cid = id ?? cenarioRef.current; // replay usa o cenário preservado
-    if (id) aplicarCenario(id);
+    if (id) {aplicarCenario(id);}
     const c = CENARIOS[cid];
     track('jornada_start', { entry, cenario: cid });
     await typeThenPush(`📎 ${c.xlsx}`);
-    if (genRef.current !== gen) return;
+    if (genRef.current !== gen) {return;}
     await ally(c.planilhaRead, 900);
-    if (genRef.current !== gen) return;
+    if (genRef.current !== gen) {return;}
     push({ kind: 'card', card: 'espelho' });
   }
 
+  const startDeepLink = useEffectEvent((q: CenarioId) => {
+    void startPlanilha(q, 'link');
+  });
+  useEffect(() => {
+    const q = new URLSearchParams(window.location.search).get('cenario');
+    if (q === 'leads' || q === 'caixa' || q === 'atendimento') {
+      const timer = window.setTimeout(() => { startDeepLink(q); }, 0);
+      return () => { window.clearTimeout(timer); };
+    }
+  }, []);
+
   async function startProsa(texto: string) {
-    if (!beginOnce()) return;
+    if (!beginOnce()) {return;}
     const gen = genRef.current;
     const text = texto.trim();
     const id = routeCenario(text);
@@ -329,26 +343,26 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
     track('jornada_start', { entry: 'prosa-livre', cenario: id });
     push({ kind: 'msg', who: 'user', text });
     await ally(copy.flow.prosaAlly(c.tema), 800);
-    if (genRef.current !== gen) return;
+    if (genRef.current !== gen) {return;}
     push({ kind: 'card', card: 'espelho' });
   }
 
   async function confirmaEspelho() {
-    if (!lock('espelho')) return;
+    if (!lock('espelho')) {return;}
     const gen = genRef.current;
     resolveCard('espelho', copy.flow.resolvedEspelho);
     earn(0); // Enquadramento
     goStage(1);
     await ally(copy.flow.allyConfirmaFunciona, 600);
-    if (genRef.current !== gen) return;
+    if (genRef.current !== gen) {return;}
     push({ kind: 'card', card: 'enquadrar' });
   }
 
   async function corrigirPremissa() {
-    if (!lock('prem')) return;
+    if (!lock('prem')) {return;}
     const c = CENARIOS[cenarioRef.current];
     const ep = c.premissas.find(isEdit);
-    if (!ep) return;
+    if (!ep) {return;}
     setPremEditada(true);
     if (ep.addColuna) {
       const col = ep.addColuna;
@@ -359,20 +373,20 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
   }
 
   async function confirmaEnquadrar() {
-    if (!lock('enquadrar')) return;
+    if (!lock('enquadrar')) {return;}
     const c = CENARIOS[cenarioRef.current];
     const gen = genRef.current;
     resolveCard('enquadrar', premEditada ? c.ajusteLabel : copy.flow.enquadrarAceito);
     goStage(2);
     await ally(copy.flow.allyDesenhei, 650);
-    if (genRef.current !== gen) return;
+    if (genRef.current !== gen) {return;}
     push({ kind: 'card', card: 'desenho' });
     earn(1); // Coerência
   }
 
   // ---------------- E3: rascunho vivo ----------------
   async function montaRascunho() {
-    if (!lock('monta')) return;
+    if (!lock('monta')) {return;}
     const c = CENARIOS[cenarioRef.current];
     resolveCard('desenho', copy.flow.resolvedDesenho);
     goStage(3);
@@ -381,7 +395,7 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
     const gen = ++genRef.current;
     for (let i = 1; i <= c.buildSteps.length; i++) {
       await delay(520);
-      if (genRef.current !== gen) return;
+      if (genRef.current !== gen) {return;}
       setBuildDone(i);
     }
     const arquivo = c.xlsx.split(' ')[0];
@@ -402,18 +416,18 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
     earn(4); // Seus dados, só seus
     goStage(4);
     // no mobile, mostra o app nascendo — o momento-mágico é visual
-    if (isMobile()) setPane('app');
+    if (isMobile()) {setPane('app');}
     await ally(copy.flow.allyAppDePe(c.magic), 700);
-    if (genRef.current !== gen) return;
+    if (genRef.current !== gen) {return;}
     push({ kind: 'card', card: 'gate' });
   }
 
   // ---------------- E4: aprova o que vê ----------------
   async function ficarComEle() {
-    if (!lock('ficar')) return;
+    if (!lock('ficar')) {return;}
     const c = CENARIOS[cenarioRef.current];
     const gen = genRef.current;
-    if (!touchedRef.current) {
+    if (!touched) {
       await ally(copy.flow.allyExperimenta(c.touchHint), 400);
       unlock('ficar');
       return;
@@ -424,7 +438,7 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
     track('jornada_keep');
     goStage(5);
     await ally(copy.flow.allyAssumeDia, 700);
-    if (genRef.current !== gen) return;
+    if (genRef.current !== gen) {return;}
     const am = c.autoMove;
     setRecords((p) =>
       p.map((r) =>
@@ -439,12 +453,12 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
       ),
     );
     await delay(900);
-    if (genRef.current !== gen) return;
+    if (genRef.current !== gen) {return;}
     push({ kind: 'card', card: 'hitl' });
   }
 
   async function ajustar() {
-    if (!lock('ajustar')) return;
+    if (!lock('ajustar')) {return;}
     const c = CENARIOS[cenarioRef.current];
     const alvo = c.columns[2];
     await typeThenPush(copy.flow.ajustarUserMsg(alvo, c.columns[0]));
@@ -462,7 +476,7 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
 
   // ---------------- E5: operar sob aprovação ----------------
   async function aprovaEnvio() {
-    if (!lock('hitl')) return;
+    if (!lock('hitl')) {return;}
     const c = CENARIOS[cenarioRef.current];
     const gen = genRef.current;
     // deixa o momento visível: financeiro volta pra tabela (o stat cai);
@@ -492,25 +506,25 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
     );
     goStage(6);
     await ally(copy.flow.allyAutomacaoSegue(c.hitl.lead), 800);
-    if (genRef.current !== gen) return;
+    if (genRef.current !== gen) {return;}
     push({ kind: 'card', card: 'publicar' });
   }
 
   async function publicar() {
-    if (!lock('pub')) return;
+    if (!lock('pub')) {return;}
     const gen = genRef.current;
     resolveCard('publicar', copy.flow.resolvedPublicar);
     setDraft('published');
     track('jornada_publish');
     goStage(7);
     await ally(copy.flow.allyAppVivo, 600);
-    if (genRef.current !== gen) return;
+    if (genRef.current !== gen) {return;}
     push({ kind: 'card', card: 'evoluir' });
   }
 
   // ---------------- E7: evoluir ----------------
   async function aplicarEvolucao(viaChat?: string) {
-    if (!lock('evo')) return;
+    if (!lock('evo')) {return;}
     const c = CENARIOS[cenarioRef.current];
     const gen = genRef.current;
     const ev = c.evolve;
@@ -522,14 +536,14 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
     } else {
       await typeThenPush(ev.userMsg);
     }
-    if (genRef.current !== gen) return;
+    if (genRef.current !== gen) {return;}
     await delay(450);
-    if (genRef.current !== gen) return;
+    if (genRef.current !== gen) {return;}
     if (ev.col && ev.before) {
       const col = ev.col;
       const before = ev.before;
       setStagesK((p) => {
-        if (p.includes(col)) return p;
+        if (p.includes(col)) {return p;}
         const i = p.indexOf(before);
         const cp = [...p];
         cp.splice(i < 0 ? cp.length : i, 0, col);
@@ -548,7 +562,7 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
     }
     setEvolveState('applied');
     await ally(copy.flow.allyAplicado, 500);
-    if (genRef.current !== gen) return;
+    if (genRef.current !== gen) {return;}
     track('jornada_done');
     push({ kind: 'card', card: 'cta' });
   }
@@ -556,7 +570,7 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
   function desfazer() {
     const c = CENARIOS[cenarioRef.current];
     const ev = c.evolve;
-    if (ev.col) setStagesK((p) => p.filter((s) => s !== ev.col));
+    if (ev.col) {setStagesK((p) => p.filter((s) => s !== ev.col));}
     if (ev.move) {
       const mv = ev.move;
       setRecords((p) => p.map((r) => (r.id === mv.id ? { ...r, stage: mv.from } : r)));
@@ -572,9 +586,9 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
 
   // ---------------- chat livre: você escreve, a demo responde ----------------
   async function enviarChat() {
-    if (emulatingRef.current) return; // digitação emulada em curso — ignora envio real
+    if (emulatingRef.current) {return;} // digitação emulada em curso — ignora envio real
     const text = chatText.trim();
-    if (!text || busyRef.current) return;
+    if (!text || busyRef.current) {return;}
     setChatText('');
     if (!startedRef.current) {
       await startProsa(text);
@@ -595,16 +609,16 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
   // determinístico do MESMO cenário, mesmo padrão do protótipo DP087.
   const busyRef = useRef(false);
 
-  const CHECKPOINTS: Array<() => Promise<void> | void> = [
+  const CHECKPOINTS: (() => Promise<void> | void)[] = [
     () => startPlanilha(),
     () => confirmaEspelho(),
     () => confirmaEnquadrar(),
     () => montaRascunho(),
     async () => {
-      if (!touchedRef.current) {
+      if (!touched) {
         const c = CENARIOS[cenarioRef.current];
-        if (c.surface === 'kanban') moveRecord(c.seed[0].id);
-        else openRecord(c.touchId ?? c.seed[0].id);
+        if (c.surface === 'kanban') {moveRecord(c.seed[0].id);}
+        else {openRecord(c.touchId ?? c.seed[0].id);}
         await delay(650);
       }
       await ficarComEle();
@@ -615,23 +629,23 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
   ];
 
   function proximoPasso(): number | null {
-    if (!startedRef.current) return 0;
-    if (stage === 0) return 1;
-    if (stage === 1) return 2;
-    if (stage === 2) return 3;
-    if (stage === 3) return null; // montando — aguarde a animação
-    if (stage === 4) return 4;
-    if (stage === 5) return 5;
-    if (stage === 6) return 6;
-    if (stage === 7 && evolveState === 'none') return 7;
+    if (!startedRef.current) {return 0;}
+    if (stage === 0) {return 1;}
+    if (stage === 1) {return 2;}
+    if (stage === 2) {return 3;}
+    if (stage === 3) {return null;} // montando — aguarde a animação
+    if (stage === 4) {return 4;}
+    if (stage === 5) {return 5;}
+    if (stage === 6) {return 6;}
+    if (stage === 7 && evolveState === 'none') {return 7;}
     return null; // jornada completa
   }
 
   async function avancarPasso() {
-    if (busyRef.current) return;
+    if (busyRef.current) {return;}
     const i = proximoPasso();
     if (i === null) {
-      if (stage >= 7) ctaClick();
+      if (stage >= 7) {ctaClick();}
       return;
     }
     busyRef.current = true;
@@ -647,7 +661,6 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
     genRef.current += 1; // cancela loops de build e digitação emulada em andamento
     lockRef.current.clear();
     startedRef.current = false;
-    touchedRef.current = false;
     emulatingRef.current = false;
     skipRef.current = false;
     setEmulating(false);
@@ -680,7 +693,7 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
   // como no load inicial) — diferente do replay, que preserva cenarioRef. A guarda
   // de época (genRef) já cancela qualquer fala/card em voo do cenário anterior.
   function recomecar() {
-    if (busyRef.current) return; // não reinicia no meio de um passo do autopilot
+    if (busyRef.current) {return;} // não reinicia no meio de um passo do autopilot
     track('jornada_recomecar', { cenario: cenarioRef.current });
     cenarioRef.current = 'leads';
     setCenarioId('leads');
@@ -688,18 +701,18 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
   }
 
   async function voltarPasso() {
-    if (busyRef.current || !startedRef.current) return;
+    if (busyRef.current || !startedRef.current) {return;}
     const cur = proximoPasso();
-    const fim = stage === 3 ? 4 : cur === null ? CHECKPOINTS.length : cur;
+    const fim = stage === 3 ? 4 : (cur ?? CHECKPOINTS.length);
     const alvo = fim - 1;
-    if (alvo < 0) return;
+    if (alvo < 0) {return;}
     busyRef.current = true;
     track('jornada_nav', { dir: 'voltar', passo: alvo });
     const prevReduced = reducedRef.current;
     reducedRef.current = true;
     resetAll();
     try {
-      for (let i = 0; i < alvo; i++) await CHECKPOINTS[i]();
+      for (let i = 0; i < alvo; i++) {await CHECKPOINTS[i]();}
     } finally {
       reducedRef.current = prevReduced;
       busyRef.current = false;
@@ -715,9 +728,9 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
   function moveRecord(id: string) {
     setRecords((p) =>
       p.map((r) => {
-        if (r.id !== id) return r;
+        if (r.id !== id) {return r;}
         const i = stagesK.indexOf(r.stage);
-        if (i < 0 || i >= stagesK.length - 1) return r;
+        if (i < 0 || i >= stagesK.length - 1) {return r;}
         const next = stagesK[i + 1];
         return { ...r, stage: next, agent: false, log: [...r.log, { who: 'user', text: copy.flow.logVoceMoveu(next), time: now() }] };
       }),
@@ -727,7 +740,7 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
   function createRecord(vals: string[]) {
     const c = CENARIOS[cenarioRef.current];
     const base = c.newForm.build(vals);
-    const id = 'novo-' + Date.now().toString(36);
+    const id = uniqueId();
     const log: LogE[] =
       c.surface === 'chats'
         ? [{ who: 'user', text: base.meta.pedido, time: now() }]
@@ -747,7 +760,7 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
     const c = CENARIOS[cenarioRef.current];
     setRecords((p) =>
       p.map((r) => {
-        if (r.id !== id) return r;
+        if (r.id !== id) {return r;}
         const nba = r.nba ?? c.nbaDefault(r);
         if (nba.kind === 'handoff') {
           return { ...r, nbaDone: true, log: [...r.log, { who: 'system', text: nba.log ?? copy.flow.logEncaminhado, time: now() }] };
@@ -779,7 +792,7 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
     ) : (
       <span className={'jd-spill jd-spill-' + (STATUS_COLOR[s] ?? 'blue')}>{s}</span>
     );
-  const lastMsg = (r: Registro) => r.log[r.log.length - 1];
+  const lastMsg = (r: Registro): LogE | undefined => r.log.at(-1);
 
   function renderCard(item: Extract<Item, { kind: 'card' }>) {
     const done = item.resolved;
@@ -797,7 +810,7 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
             </div>
             {foot ?? (
               <div className="jd-btns">
-                <button className="jd-btn jd-pri" onClick={confirmaEspelho}>{copy.cards.espelhoBtn}</button>
+                <button className="jd-btn jd-pri" onClick={() => { void confirmaEspelho(); }}>{copy.cards.espelhoBtn}</button>
               </div>
             )}
           </div>
@@ -816,7 +829,7 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
                       <>
                         {p.icon} {boldify(p.before)}{' '}
                         {!done && (
-                          <button className="jd-link" onClick={corrigirPremissa}>{copy.cards.corrigir}</button>
+                          <button className="jd-link" onClick={() => { void corrigirPremissa(); }}>{copy.cards.corrigir}</button>
                         )}
                       </>
                     )
@@ -828,7 +841,7 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
             </ul>
             {foot ?? (
               <div className="jd-btns">
-                <button className="jd-btn jd-pri" onClick={confirmaEnquadrar}>{copy.cards.enquadrarBtn}</button>
+                <button className="jd-btn jd-pri" onClick={() => { void confirmaEnquadrar(); }}>{copy.cards.enquadrarBtn}</button>
               </div>
             )}
           </div>
@@ -849,7 +862,7 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
             <div className="jd-verified">{copy.cards.desenhoVerified}</div>
             {foot ?? (
               <div className="jd-btns">
-                <button className="jd-btn jd-pri" onClick={montaRascunho}>{copy.cards.desenhoBtn}</button>
+                <button className="jd-btn jd-pri" onClick={() => { void montaRascunho(); }}>{copy.cards.desenhoBtn}</button>
               </div>
             )}
           </div>
@@ -861,9 +874,9 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
             <p className="jd-p">{boldify(copy.cards.gateP)}</p>
             {foot ?? (
               <div className="jd-btns">
-                <button className="jd-btn jd-ok" onClick={ficarComEle}>{copy.cards.gateKeep}</button>
-                <button className="jd-btn" onClick={ajustar}>{copy.cards.gateAdjust}</button>
-                <button className="jd-btn jd-danger" onClick={descartar}>{copy.cards.gateDiscard}</button>
+                <button className="jd-btn jd-ok" onClick={() => { void ficarComEle(); }}>{copy.cards.gateKeep}</button>
+                <button className="jd-btn" onClick={() => { void ajustar(); }}>{copy.cards.gateAdjust}</button>
+                <button className="jd-btn jd-danger" onClick={() => { void descartar(); }}>{copy.cards.gateDiscard}</button>
               </div>
             )}
           </div>
@@ -875,8 +888,8 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
             <p className="jd-p">{boldify(cen.hitl.text)}</p>
             {foot ?? (
               <div className="jd-btns">
-                <button className="jd-btn jd-ok" onClick={aprovaEnvio}>{cen.hitl.button}</button>
-                <button className="jd-btn" onClick={() => resolveCard('hitl', copy.flow.resolvedHitlLater)}>{copy.cards.hitlLater}</button>
+                <button className="jd-btn jd-ok" onClick={() => { void aprovaEnvio(); }}>{cen.hitl.button}</button>
+                <button className="jd-btn" onClick={() => { resolveCard('hitl', copy.flow.resolvedHitlLater); }}>{copy.cards.hitlLater}</button>
               </div>
             )}
           </div>
@@ -888,7 +901,7 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
             <p className="jd-p">{boldify(copy.cards.publicarP)}</p>
             {foot ?? (
               <div className="jd-btns">
-                <button className="jd-btn jd-pri" onClick={publicar}>{copy.cards.publicarBtn}</button>
+                <button className="jd-btn jd-pri" onClick={() => { void publicar(); }}>{copy.cards.publicarBtn}</button>
               </div>
             )}
           </div>
@@ -899,7 +912,7 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
             <div className="jd-kick">{copy.cards.evoluirKick}</div>
             {evolveState === 'none' ? (
               <div className="jd-btns">
-                <button className="jd-btn" onClick={() => aplicarEvolucao()}>
+                <button className="jd-btn" onClick={() => { void aplicarEvolucao(); }}>
                   “{cen.evolve.userMsg.charAt(0).toLowerCase() + cen.evolve.userMsg.slice(1)}”
                 </button>
               </div>
@@ -942,18 +955,18 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
               <div className="jd-khead">{s}<span>{col.length + extra}</span></div>
               {col.map((l) => (
                 <div key={l.id} className="jd-kcard">
-                  <button className="jd-kname" onClick={() => openRecord(l.id)}>{l.name}</button>
+                  <button className="jd-kname" onClick={() => { openRecord(l.id); }}>{l.name}</button>
                   <div className="jd-ksub">{cen.subtitle(l)}</div>
                   <div className="jd-kfoot">
                     <span className={'jd-ktag' + (l.agent ? ' ag' : '')}>{l.agent ? copy.app.assistenteMoveu : l.origem}</span>
-                    <button className="jd-kmove" onClick={() => moveRecord(l.id)} aria-label={copy.app.moverAria(l.name)}>{copy.app.mover}</button>
+                    <button className="jd-kmove" onClick={() => { moveRecord(l.id); }} aria-label={copy.app.moverAria(l.name)}>{copy.app.mover}</button>
                   </div>
                 </div>
               ))}
               {s === entryCol && (
                 <>
                   {extra > 0 && <div className="jd-kmore">{copy.app.maisDaPlanilha(extra)}</div>}
-                  <button className="jd-kadd" onClick={() => setNewOpen(true)}>{cen.newForm.add}</button>
+                  <button className="jd-kadd" onClick={() => { setNewOpen(true); }}>{cen.newForm.add}</button>
                 </>
               )}
             </div>
@@ -979,17 +992,17 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
     return (
       <div className="jd-fin">
         <div className="jd-stats">
-          <MoneyStat label={copy.app.finEmAberto} value={emAberto} accent="blue" active={statFilter === 'aberto'} reduced={reducedRef.current} fmt={copy.currency} onClick={() => statClick('aberto')} />
-          <MoneyStat label={copy.app.finVencido} value={vencido} accent="red" active={statFilter === 'vencido'} reduced={reducedRef.current} fmt={copy.currency} onClick={() => statClick('vencido')} />
-          <MoneyStat label={copy.app.finEmNegociacao} value={emNeg} accent="amber" active={statFilter === 'neg'} reduced={reducedRef.current} fmt={copy.currency} onClick={() => statClick('neg')} />
+          <MoneyStat label={copy.app.finEmAberto} value={emAberto} accent="blue" active={statFilter === 'aberto'} reduced={reducedMotion} fmt={copy.currency} onClick={() => { statClick('aberto'); }} />
+          <MoneyStat label={copy.app.finVencido} value={vencido} accent="red" active={statFilter === 'vencido'} reduced={reducedMotion} fmt={copy.currency} onClick={() => { statClick('vencido'); }} />
+          <MoneyStat label={copy.app.finEmNegociacao} value={emNeg} accent="amber" active={statFilter === 'neg'} reduced={reducedMotion} fmt={copy.currency} onClick={() => { statClick('neg'); }} />
         </div>
         <div className="jd-fin-tools">
           {statFilter ? (
-            <button className="jd-link" onClick={() => setStatFilter(null)}>{copy.app.limparFiltro}</button>
+            <button className="jd-link" onClick={() => { setStatFilter(null); }}>{copy.app.limparFiltro}</button>
           ) : (
             <span className="jd-mini">{copy.app.finContador(records.length + cen.extraN)}</span>
           )}
-          <button className="jd-finadd" onClick={() => setNewOpen(true)}>{cen.newForm.add}</button>
+          <button className="jd-finadd" onClick={() => { setNewOpen(true); }}>{cen.newForm.add}</button>
         </div>
         <div className="jd-table-wrap">
           <table className="jd-table">
@@ -998,8 +1011,10 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
             </thead>
             <tbody>
               {rows.map((r) => (
-                <tr key={r.id} onClick={() => openRecord(r.id)} tabIndex={0}
-                  onKeyDown={(e) => e.key === 'Enter' && openRecord(r.id)}>
+                <tr key={r.id} onClick={() => { openRecord(r.id); }} tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {openRecord(r.id);}
+                  }}>
                   <td className="jd-tname">{r.name}</td>
                   <td>{r.meta.valor}</td>
                   <td>{r.meta.venc}</td>
@@ -1031,7 +1046,7 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
             const m = lastMsg(r);
             const unread = m?.who === 'user';
             return (
-              <button key={r.id} className="jd-fila-item" onClick={() => openRecord(r.id)}>
+              <button key={r.id} className="jd-fila-item" onClick={() => { openRecord(r.id); }}>
                 <span className="jd-avatar">{r.name.charAt(0)}</span>
                 <span className="jd-fila-main">
                   <span className="jd-fila-top">
@@ -1048,15 +1063,15 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
             );
           })}
           <div className="jd-kmore">{copy.app.maisConversas(cen.extraN)}</div>
-          <button className="jd-finadd jd-fila-add" onClick={() => setNewOpen(true)}>{cen.newForm.add}</button>
+          <button className="jd-finadd jd-fila-add" onClick={() => { setNewOpen(true); }}>{cen.newForm.add}</button>
         </div>
       </div>
     );
   }
 
   function renderThread(rec: Registro) {
-    const nbaVisible = rec.nba && !rec.nbaDone;
-    const handoff = rec.nba?.kind === 'handoff';
+    const nba = rec.nba;
+    const handoff = nba?.kind === 'handoff';
     return (
       <div className="jd-conv">
         <div className="jd-chat-head">
@@ -1075,11 +1090,11 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
               </div>
             ),
           )}
-          {nbaVisible && (
+          {nba && !rec.nbaDone && (
             <div className={'jd-nba jd-nba-inline' + (handoff ? ' jd-nba-hand' : '')}>
               <span className="jd-nba-k">{handoff ? copy.app.humanoAssume : copy.app.sugestaoAssistente}</span>
-              <span>{rec.nba!.text}</span>
-              <button className="jd-btn jd-pri" onClick={() => nbaAction(rec.id)}>{copy.app.fazerIsso}</button>
+              <span>{nba.text}</span>
+              <button className="jd-btn jd-pri" onClick={() => { nbaAction(rec.id); }}>{copy.app.fazerIsso}</button>
             </div>
           )}
         </div>
@@ -1115,7 +1130,7 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
             <div className={'jd-nba' + (nba.kind === 'handoff' ? ' jd-nba-hand' : '')}>
               <span className="jd-nba-k">{nba.kind === 'handoff' ? copy.app.humanoAssume : copy.app.proximoPassoSugerido}</span>
               <span>{nba.text}</span>
-              <button className="jd-btn jd-pri" onClick={() => nbaAction(rec.id)}>{copy.app.fazerIsso}</button>
+              <button className="jd-btn jd-pri" onClick={() => { nbaAction(rec.id); }}>{copy.app.fazerIsso}</button>
             </div>
           )}
         </div>
@@ -1167,7 +1182,7 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
         <div className="jd-top-nav" role="group" aria-label={copy.shell.navAria}>
           <button
             className="jd-nav-back"
-            onClick={voltarPasso}
+            onClick={() => { void voltarPasso(); }}
             aria-label={copy.shell.voltarPasso}
             title={copy.shell.voltarPasso}
             disabled={!started}
@@ -1177,7 +1192,7 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
           <span className="jd-top-nav-lbl">{copy.shell.passoAPasso}</span>
           <button
             className="jd-nav-fwd"
-            onClick={avancarPasso}
+            onClick={() => { void avancarPasso(); }}
             aria-label={copy.shell.avancarPasso}
             title={copy.shell.avancarPasso}
           >
@@ -1217,15 +1232,15 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
           <div className="jd-scroll" ref={scrollRef}>
             {items.map((it, i) => {
               if (it.kind === 'msg')
-                return (
+                {return (
                   <div key={i} className={'jd-msg ' + it.who}>
                     <span className="jd-who">{it.who === 'ally' ? 'Ally' : copy.shell.you}</span>
                     <span className="jd-bubble">{it.text}</span>
                   </div>
-                );
-              if (it.kind === 'note') return <div key={i} className="jd-note">✓ {it.text}</div>;
+                );}
+              if (it.kind === 'note') {return <div key={i} className="jd-note">✓ {it.text}</div>;}
               if (it.kind === 'build')
-                return (
+                {return (
                   <div key={i} className="jd-card">
                     <div className="jd-kick">{copy.cards.buildKick}</div>
                     <ul className="jd-build">
@@ -1236,7 +1251,7 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
                       ))}
                     </ul>
                   </div>
-                );
+                );}
               return <div key={i}>{renderCard(it)}</div>;
             })}
             {typing && (
@@ -1250,7 +1265,7 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
           {!started && (
             <div className="jd-entries">
               {CENARIO_IDS.map((id) => (
-                <button key={id} className="jd-pill jd-pill-imp" onClick={() => startPlanilha(id)}>
+                <button key={id} className="jd-pill jd-pill-imp" onClick={() => { void startPlanilha(id); }}>
                   {CENARIOS[id].pill}
                 </button>
               ))}
@@ -1264,17 +1279,17 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
                 ref={inputRef}
                 value={chatText}
                 readOnly={emulating}
-                onChange={(e) => setChatText(e.target.value)}
+                onChange={(e) => { setChatText(e.target.value); }}
                 onKeyDown={(e) => {
-                  if (e.key === 'Enter') enviarChat();
+                  if (e.key === 'Enter') {void enviarChat();}
                 }}
                 onMouseDown={() => {
-                  if (emulatingRef.current) skipRef.current = true; // clique conclui na hora
+                  if (emulatingRef.current) {skipRef.current = true;} // clique conclui na hora
                 }}
                 placeholder={
                   started
                     ? copy.shell.inputStarted
-                    : phText || copy.shell.inputIdle
+                    : (phText || copy.shell.inputIdle)
                 }
                 aria-label={copy.shell.inputAria}
               />
@@ -1285,7 +1300,7 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
                 </div>
               )}
             </div>
-            <button className="jd-send" onClick={enviarChat} aria-label={copy.shell.enviarAria}>
+            <button className="jd-send" onClick={() => { void enviarChat(); }} aria-label={copy.shell.enviarAria}>
               ➤
             </button>
           </div>
@@ -1307,14 +1322,14 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
                 <div className="jd-views" role="group" aria-label={copy.app.viewModeAria}>
                   {cen.surface === 'kanban' ? (
                     <>
-                      <button className={view === 'kanban' ? 'on' : ''} onClick={() => setView('kanban')}>▦ {cen.boardLabel}</button>
+                      <button className={view === 'kanban' ? 'on' : ''} onClick={() => { setView('kanban'); }}>▦ {cen.boardLabel}</button>
                       <button className={view === 'table' ? 'on' : ''} onClick={() => { setView('table'); markTouched(); }}>☰ {copy.app.tabela}</button>
                     </>
                   ) : (
-                    <button className={view !== 'record' ? 'on' : ''} onClick={() => setView('kanban')}>{listIcon} {cen.boardLabel}</button>
+                    <button className={view !== 'record' ? 'on' : ''} onClick={() => { setView('kanban'); }}>{listIcon} {cen.boardLabel}</button>
                   )}
                   {record && (
-                    <button className={view === 'record' ? 'on' : ''} onClick={() => setView('record')}>{recIcon} {record.name.split(' ')[0]}</button>
+                    <button className={view === 'record' ? 'on' : ''} onClick={() => { setView('record'); }}>{recIcon} {record.name.split(' ')[0]}</button>
                   )}
                 </div>
               </header>
@@ -1328,7 +1343,7 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
                       className="jd-search"
                       placeholder={copy.app.buscarPlaceholder}
                       value={query}
-                      onChange={(e) => setQuery(e.target.value)}
+                      onChange={(e) => { setQuery(e.target.value); }}
                       aria-label={copy.app.buscarAria}
                     />
                     <table className="jd-table">
@@ -1337,8 +1352,10 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
                       </thead>
                       <tbody>
                         {filtered.map((l) => (
-                          <tr key={l.id} onClick={() => openRecord(l.id)} tabIndex={0}
-                            onKeyDown={(e) => e.key === 'Enter' && openRecord(l.id)}>
+                          <tr key={l.id} onClick={() => { openRecord(l.id); }} tabIndex={0}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') {openRecord(l.id);}
+                            }}>
                             {cen.tableCols.map((c) => (
                               <td key={c.header} className={c.primary ? 'jd-tname' : undefined}>
                                 {c.stage ? statusPill(l.stage) : <>{c.get?.(l)}{c.lock && ' 🔒'}</>}
@@ -1364,7 +1381,7 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
                   title={cen.newForm.title}
                   fields={cen.newForm.fields}
                   onCreate={createRecord}
-                  onCancel={() => setNewOpen(false)}
+                  onCancel={() => { setNewOpen(false); }}
                   protectedNote={copy.shell.modalProtegido}
                   createLabel={copy.shell.criar}
                   cancelLabel={copy.shell.cancelar}
@@ -1404,7 +1421,7 @@ export default function JourneyDemo({ copy }: { copy: DemoCopy }) {
           className={pane === 'app' ? 'on' : ''}
           disabled={phase === 'converse'}
           onClick={() => {
-            if (phase === 'converse') return;
+            if (phase === 'converse') {return;}
             setPane('app');
             track('jornada_pane', { pane: 'app' });
           }}
@@ -1443,23 +1460,25 @@ function MoneyStat({
   const rafRef = useRef(0);
   useEffect(() => {
     if (reduced) {
-      setDisp(value);
-      fromRef.current = value;
-      return;
+      const frame = requestAnimationFrame(() => {
+        setDisp(value);
+        fromRef.current = value;
+      });
+      return () => { cancelAnimationFrame(frame); };
     }
     const from = fromRef.current;
     const to = value;
-    if (from === to) return;
+    if (from === to) {return;}
     const start = performance.now();
     const dur = 700;
     const tick = (n: number) => {
       const p = Math.min((n - start) / dur, 1);
       setDisp(Math.round(from + (to - from) * p));
-      if (p < 1) rafRef.current = requestAnimationFrame(tick);
-      else fromRef.current = to;
+      if (p < 1) {rafRef.current = requestAnimationFrame(tick);}
+      else {fromRef.current = to;}
     };
     rafRef.current = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(rafRef.current);
+    return () => { cancelAnimationFrame(rafRef.current); };
   }, [value, reduced]);
   return (
     <button
@@ -1491,7 +1510,7 @@ function NewRecordForm({
   cancelLabel: string;
 }) {
   const [vals, setVals] = useState<string[]>(fields.map((f) => f.def));
-  const setAt = (i: number, v: string) => setVals((p) => p.map((x, k) => (k === i ? v : x)));
+  const setAt = (i: number, v: string) => { setVals((p) => p.map((x, k) => (k === i ? v : x))); };
   return (
     <div className="jd-modal" role="dialog" aria-modal="true" aria-label={title}>
       <div className="jd-modal-card">
@@ -1499,12 +1518,12 @@ function NewRecordForm({
         {fields.map((f, i) => (
           <label key={f.label}>
             {f.label}
-            <input value={vals[i]} onChange={(ev) => setAt(i, ev.target.value)} />
+            <input value={vals[i]} onChange={(ev) => { setAt(i, ev.target.value); }} />
           </label>
         ))}
         <span className="jd-mini">{protectedNote}</span>
         <div className="jd-btns">
-          <button className="jd-btn jd-pri" onClick={() => onCreate(vals)}>{createLabel}</button>
+          <button className="jd-btn jd-pri" onClick={() => { onCreate(vals); }}>{createLabel}</button>
           <button className="jd-btn" onClick={onCancel}>{cancelLabel}</button>
         </div>
       </div>

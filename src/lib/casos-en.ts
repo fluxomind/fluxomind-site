@@ -2,7 +2,7 @@
 // (ADR-0006: árvores paralelas). Slugs localizados para a busca EN.
 // ucIds/cenario idênticos ao pt (mesma fonte upstream: catálogo de UCs).
 
-export type CasoDeUsoEn = {
+export interface CasoDeUsoEn {
   slug: string;
   ptSlug: string; // par pt para hreflang e retorno de idioma
   ucIds: string[];
@@ -20,7 +20,7 @@ export type CasoDeUsoEn = {
   humano: string;
   faq: { q: string; a: string }[];
   atualizado: string;
-};
+}
 
 export const CASOS_EN: CasoDeUsoEn[] = [
   {

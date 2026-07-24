@@ -9,7 +9,7 @@
 // comercial é Recuperar Receita (matrix.md do catálogo de UCs, anexo —
 // decisão do founder, 2026-07-04).
 
-export type CasoDeUso = {
+export interface CasoDeUso {
   slug: string;
   // Rastreabilidade upstream: IDs do catálogo L0 de use cases da plataforma
   // (fluxomind-platform → fmd-docs/8-journeys/use-cases/catalog.md), conforme
@@ -33,7 +33,7 @@ export type CasoDeUso = {
   humano: string; // onde uma pessoa decide (regra da confiança nº 4)
   faq: { q: string; a: string }[];
   atualizado: string; // rótulo visível de frescor, ex.: "julho de 2026"
-};
+}
 
 export const CASOS: CasoDeUso[] = [
   {

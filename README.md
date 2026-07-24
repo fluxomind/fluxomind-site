@@ -7,7 +7,7 @@ artificial em empresas de qualquer porte.
 
 ## 📦 Stack
 
-- [Next.js 15 (App Router)](https://nextjs.org) + TypeScript + [Tailwind CSS](https://tailwindcss.com/)
+- [Next.js 16 (App Router)](https://nextjs.org) + React 19 + TypeScript + [Tailwind CSS 4](https://tailwindcss.com/)
 - [Vercel](https://vercel.com) — hosting e deploy automático via GitHub
 - [Cloudflare](https://cloudflare.com) — domínio e DNS
 
@@ -20,6 +20,7 @@ componentes em [docs/arquitetura.md](docs/arquitetura.md).
 npm install
 npm run dev    # http://localhost:3000
 npm run lint
+npm run typecheck
 npm run build
 ```
 

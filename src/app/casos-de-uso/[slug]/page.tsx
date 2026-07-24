@@ -22,7 +22,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const caso = getCaso((await params).slug);
-  if (!caso) return {};
+  if (!caso) {return {};}
   const enSlug = CASO_EN_SLUG_BY_PT[caso.slug];
   return {
     title: caso.titleSeO,
@@ -43,7 +43,7 @@ export default async function CasoDeUsoPage({
   params: Promise<{ slug: string }>;
 }) {
   const caso = getCaso((await params).slug);
-  if (!caso) notFound();
+  if (!caso) {notFound();}
 
   const faqJsonLd = {
     '@context': 'https://schema.org',

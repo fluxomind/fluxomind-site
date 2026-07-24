@@ -11,11 +11,11 @@
    Implementações concretas: demo-copy-pt.ts · demo-copy-en.ts
    ------------------------------------------------------------------ */
 
-export type LogE = { who: 'user' | 'agent' | 'system'; text: string; time: string };
+export interface LogE { who: 'user' | 'agent' | 'system'; text: string; time: string }
 
-export type NBA = { text: string; kind?: 'advance' | 'handoff' | 'note'; log?: string };
+export interface NBA { text: string; kind?: 'advance' | 'handoff' | 'note'; log?: string }
 
-export type Registro = {
+export interface Registro {
   id: string;
   name: string;
   meta: Record<string, string>;
@@ -25,16 +25,16 @@ export type Registro = {
   log: LogE[];
   nba?: NBA;
   nbaDone?: boolean;
-};
+}
 
-export type Seed = {
+export interface Seed {
   id: string;
   name: string;
   meta: Record<string, string>;
   stage: string;
   nba?: NBA;
   thread?: LogE[];
-};
+}
 
 export type CenarioId = 'leads' | 'caixa' | 'atendimento';
 export type Surface = 'kanban' | 'financeiro' | 'chats';
@@ -52,19 +52,19 @@ export type Premissa =
     };
 
 export const isEdit = (p: Premissa): p is Extract<Premissa, { kind: 'edit' }> =>
-  'kind' in p && p.kind === 'edit';
+  'kind' in p;
 
-export type DesenhoRow = { icon: string; label: string; text: string };
-export type Field = { label: string; value: string; lock?: boolean };
-export type TableCol = {
+export interface DesenhoRow { icon: string; label: string; text: string }
+export interface Field { label: string; value: string; lock?: boolean }
+export interface TableCol {
   header: string;
   get?: (r: Registro) => string;
   lock?: boolean;
   stage?: boolean;
   primary?: boolean;
-};
+}
 
-export type Cenario = {
+export interface Cenario {
   id: CenarioId;
   surface: Surface;
   pill: string;
@@ -123,16 +123,16 @@ export type Cenario = {
     move?: { id: string; from: string; to: string; log: string };
     regra?: string;
   };
-};
+}
 
 // --------- máscaras: e-mail/CPF/CNPJ protegidos por padrão (como no produto) ---------
 export const maskEmail = (email: string) => email.replace(/(.{2}).+(@.+)/, '$1●●●$2');
 export const maskCPF = (cpf: string) => cpf.replace(/^(\d{3})\.(\d{3})/, '●●●.●●●');
 export const maskCNPJ = (cnpj: string) => cnpj.replace(/^(\d{2})\.(\d{3})\.(\d{3})/, '●●.●●●.●●●');
 
-export type TrustRule = { title: string; desc: string };
+export interface TrustRule { title: string; desc: string }
 
-export type DemoCopy = {
+export interface DemoCopy {
   // href da marca na topbar: '/' (pt) · '/en' (en)
   brandHref: string;
   // rail de progresso (8 etapas)
@@ -291,4 +291,4 @@ export type DemoCopy = {
     criar: string;
     cancelar: string;
   };
-};
+}

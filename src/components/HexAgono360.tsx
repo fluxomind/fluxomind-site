@@ -23,7 +23,7 @@ function hexPoint(angleDeg: number, r: number): [number, number] {
   return [CX + r * Math.cos(a), CY + r * Math.sin(a)];
 }
 
-type Face = { key: string; label: string; q: string; badge: string; live: boolean; trust: boolean };
+interface Face { key: string; label: string; q: string; badge: string; live: boolean; trust: boolean }
 
 // Perguntas/rótulos canônicos vêm de src/lib/messages.ts; aqui só o estado
 // ilustrativo da cena (badge de conteúdo, face acesa, Confiança herdada).
@@ -79,9 +79,10 @@ const FACE_GEOM = FACES.map((f, i) => {
 const NODE_GEOM = NODES.map((n) => {
   const p = hexPoint(n.ang, R_NODE);
   const lp = hexPoint(n.ang, R_NODE + 24);
-  const anchor = Math.abs(lp[0] - CX) < 24 ? 'middle' : lp[0] < CX ? 'end' : 'start';
+  const anchor: 'middle' | 'end' | 'start' =
+    Math.abs(lp[0] - CX) < 24 ? 'middle' : lp[0] < CX ? 'end' : 'start';
   const dy = lp[1] < CY - 20 ? -2 : lp[1] > CY + 20 ? 12 : 4;
-  return { n, p, lp, anchor: anchor as 'middle' | 'end' | 'start', dy };
+  return { n, p, lp, anchor, dy };
 });
 
 export default function HexAgono360() {
@@ -95,14 +96,14 @@ export default function HexAgono360() {
         <button
           className="hx-mode-btn"
           aria-pressed={mode === 'destino'}
-          onClick={() => setMode('destino')}
+          onClick={() => { setMode('destino'); }}
         >
           Modo Destino — o app vira tela e conversa
         </button>
         <button
           className="hx-mode-btn"
           aria-pressed={mode === 'capacidade'}
-          onClick={() => setMode('capacidade')}
+          onClick={() => { setMode('capacidade'); }}
         >
           Modo Capacidade — o app vira ferramenta (MCP)
         </button>

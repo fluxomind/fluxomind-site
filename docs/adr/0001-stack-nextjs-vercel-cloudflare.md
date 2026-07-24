@@ -11,7 +11,7 @@ da plataforma. Não há backend próprio dedicado ao site.
 
 ## Decisão
 
-- **Next.js 15 (App Router) + TypeScript + Tailwind CSS** como framework único
+- **Next.js 16 (App Router) + React 19 + TypeScript + Tailwind CSS 4** como framework único
   para páginas e rotas de API.
 - **Vercel** como hosting, com deploy automático a partir do GitHub.
 - **Cloudflare** para gerenciamento de domínio e DNS.

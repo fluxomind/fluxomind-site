@@ -39,7 +39,7 @@ export async function POST(req: Request) {
   }
 
   const event = typeof body.event === 'string' ? body.event.slice(0, 64) : '';
-  if (!event) return NextResponse.json({ ok: false }, { status: 400 });
+  if (!event) {return NextResponse.json({ ok: false }, { status: 400 });}
 
   const entry = {
     event,
@@ -50,7 +50,7 @@ export async function POST(req: Request) {
     ua: (req.headers.get('user-agent') ?? '').slice(0, 160),
   };
 
-  console.log('[fm-event]', JSON.stringify(entry));
+  console.info('[fm-event]', JSON.stringify(entry));
 
   const webhook = process.env.EVENTS_WEBHOOK_URL;
   if (webhook) {

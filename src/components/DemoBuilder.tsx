@@ -22,20 +22,20 @@ import { track } from '@/lib/analytics';
    Demonstração ilustrativa — rótulo honesto no rodapé do painel.
    ------------------------------------------------------------------ */
 
-type Metric = { k: string; format: 'count' | 'money'; target: number };
-type Draft = { tag: string; text: string };
+interface Metric { k: string; format: 'count' | 'money'; target: number }
+interface Draft { tag: string; text: string }
 
 type OpsKind = 'detect' | 'prep' | 'reply' | 'handoff' | 'resume';
-type OpsEvent = { t: string; kind: OpsKind; tag: string; text: string };
-type OpsMetric = {
+interface OpsEvent { t: string; kind: OpsKind; tag: string; text: string }
+interface OpsMetric {
   k: string;
   format: 'count' | 'money';
   from: number;
   target: number;
   note: string;
-};
+}
 
-type Scenario = {
+interface Scenario {
   id: string;
   chip: string;
   steps: string[];
@@ -49,7 +49,7 @@ type Scenario = {
     metrics: OpsMetric[];
     done: string;
   };
-};
+}
 
 const SCENARIOS: Scenario[] = [
   {
@@ -310,9 +310,9 @@ export default function DemoBuilder() {
   const raf = useRef<number>(0);
 
   const clearTimers = useCallback(() => {
-    timers.current.forEach((id) => window.clearTimeout(id));
+    timers.current.forEach((id) => { window.clearTimeout(id); });
     timers.current = [];
-    if (raf.current) cancelAnimationFrame(raf.current);
+    if (raf.current) {cancelAnimationFrame(raf.current);}
   }, []);
 
   useEffect(() => clearTimers, [clearTimers]);
@@ -322,7 +322,7 @@ export default function DemoBuilder() {
     const tick = (now: number) => {
       const p = Math.min((now - start) / COUNT_DURATION, 1);
       setMetricText(sc.metrics.map((m) => formatMetric(m.target * p, m.format)));
-      if (p < 1) raf.current = requestAnimationFrame(tick);
+      if (p < 1) {raf.current = requestAnimationFrame(tick);}
     };
     raf.current = requestAnimationFrame(tick);
   }, []);
@@ -334,7 +334,7 @@ export default function DemoBuilder() {
       setOpsMetricText(
         sc.ops.metrics.map((m) => formatMetric(m.from + (m.target - m.from) * p, m.format)),
       );
-      if (p < 1) raf.current = requestAnimationFrame(tick);
+      if (p < 1) {raf.current = requestAnimationFrame(tick);}
     };
     raf.current = requestAnimationFrame(tick);
   }, []);
@@ -381,10 +381,10 @@ export default function DemoBuilder() {
 
     sc.steps.forEach((_, i) => {
       after(STEP_STAGGER * i, () =>
-        setPhases((prev) => prev.map((p, idx) => (idx === i ? 1 : p))),
+        { setPhases((prev) => prev.map((p, idx) => (idx === i ? 1 : p))); },
       );
       after(STEP_STAGGER * i + STEP_DONE_DELAY, () =>
-        setPhases((prev) => prev.map((p, idx) => (idx === i ? 2 : p))),
+        { setPhases((prev) => prev.map((p, idx) => (idx === i ? 2 : p))); },
       );
     });
 
@@ -401,7 +401,7 @@ export default function DemoBuilder() {
   }, [intent, clearTimers, startCount]);
 
   const runOps = useCallback(() => {
-    if (!scenario) return;
+    if (!scenario) {return;}
     clearTimers();
     const sc = scenario;
 
@@ -428,7 +428,7 @@ export default function DemoBuilder() {
     };
 
     sc.ops.events.forEach((_, i) => {
-      after(OPS_STAGGER * (i + 1), () => setOpsShown(i + 1));
+      after(OPS_STAGGER * (i + 1), () => { setOpsShown(i + 1); });
     });
 
     const total = OPS_STAGGER * (sc.ops.events.length + 1);
@@ -459,9 +459,9 @@ export default function DemoBuilder() {
         <input
           ref={inputRef}
           value={intent}
-          onChange={(e) => setIntent(e.target.value)}
+          onChange={(e) => { setIntent(e.target.value); }}
           onKeyDown={(e) => {
-            if (e.key === 'Enter' && !running) run();
+            if (e.key === 'Enter' && !running) {run();}
           }}
           autoComplete="off"
           placeholder="ex.: controlar meus clientes em atraso"
@@ -478,7 +478,7 @@ export default function DemoBuilder() {
             key={s.id}
             type="button"
             className="chip"
-            onClick={() => pickChip(s.chip)}
+            onClick={() => { pickChip(s.chip); }}
           >
             {s.chip}
           </button>
@@ -554,7 +554,7 @@ export default function DemoBuilder() {
             </div>
           )}
 
-          {opsStarted && scenario && (
+          {opsStarted && (
             <div className="fmd-ops">
               <div className="fmd-divider">
                 <span>Ato 2 · 30 dias depois — o app opera o dia a dia</span>
@@ -598,14 +598,14 @@ export default function DemoBuilder() {
                   <a
                     className="btn btn-primary"
                     href="#comecar"
-                    onClick={() => track('demo_beta_click')}
+                    onClick={() => { track('demo_beta_click'); }}
                   >
                     {CTA.beta} →
                   </a>
                   <a
                     className="btn btn-ghost"
                     href={PLATFORM_CONTACT}
-                    onClick={() => track('demo_contact_click')}
+                    onClick={() => { track('demo_contact_click'); }}
                   >
                     {CTA.contact}
                   </a>

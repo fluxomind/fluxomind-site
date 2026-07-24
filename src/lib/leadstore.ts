@@ -9,7 +9,7 @@ import path from 'path';
 const FILE =
   process.env.LEADS_FILE ?? path.join(process.cwd(), 'data', 'leads.ndjson');
 
-export type StoredLead = {
+export interface StoredLead {
   nome?: string;
   email?: string;
   empresa?: string;
@@ -18,7 +18,7 @@ export type StoredLead = {
   source?: string;
   /** true = capturado pelo honeypot (provável bot; pode ser autofill de humano) */
   hp?: boolean;
-};
+}
 
 export async function appendLead(lead: StoredLead): Promise<void> {
   await mkdir(path.dirname(FILE), { recursive: true });

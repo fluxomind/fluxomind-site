@@ -4,7 +4,7 @@ import MobileNav from '@/components/MobileNav';
 import LangSwitch from '@/components/LangSwitch';
 import { NAV_LINKS } from '@/lib/nav';
 
-type Cta = { label: string; href: string };
+interface Cta { label: string; href: string }
 
 // Cabeçalho global. CTA primário de nav é sempre CTA.demo → /demo
 // (message house §6; exceção: /demo usa CTA.beta → #beta).

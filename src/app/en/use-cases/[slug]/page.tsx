@@ -21,7 +21,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const caso = getCasoEn((await params).slug);
-  if (!caso) return {};
+  if (!caso) {return {};}
   return {
     title: caso.titleSeO,
     description: caso.descriptionSeO,
@@ -41,7 +41,7 @@ export default async function UseCasePageEn({
   params: Promise<{ slug: string }>;
 }) {
   const caso = getCasoEn((await params).slug);
-  if (!caso) notFound();
+  if (!caso) {notFound();}
 
   const faqJsonLd = {
     '@context': 'https://schema.org',

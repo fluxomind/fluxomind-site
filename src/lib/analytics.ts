@@ -22,7 +22,7 @@ export function track(
   event: string,
   props?: Record<string, string | number | boolean>,
 ): void {
-  if (typeof window === 'undefined') return;
+  if (typeof window === 'undefined') {return;}
   try {
     const payload = JSON.stringify({
       event,
@@ -32,7 +32,7 @@ export function track(
       ts: Date.now(),
     });
     const blob = new Blob([payload], { type: 'application/json' });
-    if (navigator.sendBeacon && navigator.sendBeacon('/api/event', blob)) return;
+    if (navigator.sendBeacon('/api/event', blob)) {return;}
     void fetch('/api/event', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },

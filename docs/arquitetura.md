@@ -8,7 +8,7 @@ Visão de componentes do www.fluxomind.com. O *porquê* de cada escolha está no
 ```mermaid
 flowchart LR
   V[Visitante] -->|HTTPS| CF[Cloudflare<br/>DNS www.fluxomind.com]
-  CF --> VC[Vercel<br/>Next.js 15 App Router]
+  CF --> VC[Vercel<br/>Next.js 16 App Router]
 
   subgraph VC_APP [Aplicação]
     P[Páginas estáticas<br/>home, /demo, /plataforma, …]

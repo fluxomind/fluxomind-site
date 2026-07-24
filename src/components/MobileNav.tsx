@@ -8,7 +8,7 @@ import { NAV_LINKS } from '@/lib/nav';
 // Menu mobile do cabeçalho: hambúrguer visível quando .navlinks colapsa
 // (≤1040px). Painel overlay com os mesmos links do nav + o CTA da página.
 // `links`/`labels` opcionais: o chrome EN reusa o componente (ADR-0006).
-type NavLink = { readonly href: string; readonly label: string };
+interface NavLink { readonly href: string; readonly label: string }
 
 export default function MobileNav({
   cta,
@@ -22,9 +22,9 @@ export default function MobileNav({
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    if (!open) return;
+    if (!open) {return;}
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setOpen(false);
+      if (e.key === 'Escape') {setOpen(false);}
     };
     document.addEventListener('keydown', onKey);
     document.body.style.overflow = 'hidden';
@@ -41,7 +41,7 @@ export default function MobileNav({
         className="mnav-btn"
         aria-label={open ? labels.close : labels.open}
         aria-expanded={open}
-        onClick={() => setOpen((v) => !v)}
+        onClick={() => { setOpen((v) => !v); }}
       >
         {open ? '✕' : '☰'}
       </button>
@@ -52,7 +52,7 @@ export default function MobileNav({
         createPortal(
           <div className="mnav-panel" role="dialog" aria-label={labels.dialog}>
             <style>{CSS}</style>
-            <nav className="mnav-links" onClick={() => setOpen(false)}>
+            <nav className="mnav-links" onClick={() => { setOpen(false); }}>
               {links.map((l) => (
                 <Link key={l.href} href={l.href}>
                   {l.label}

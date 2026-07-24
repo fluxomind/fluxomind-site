@@ -1,9 +1,9 @@
 // GERADO por scripts/gera-catalogo-ucs.py — NÃO editar à mão.
 // Fonte upstream: catálogo de UCs da plataforma (docs/fontes-upstream.md).
-export type UcIndex = {
+export interface UcIndex {
   id: string; fam: 'A'|'B'|'C'|'D'|'E'|'F'|'G'; titulo: string;
   seg: string[]; caps: string[]; dorHook: string;
-};
+}
 
 export const UC_INDEX: UcIndex[] = [
  {

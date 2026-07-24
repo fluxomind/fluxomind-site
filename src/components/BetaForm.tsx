@@ -16,9 +16,9 @@ export default function BetaForm() {
   const [status, setStatus] = useState<Status>('idle');
   const [fieldError, setFieldError] = useState<FieldError>(null);
 
-  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function onSubmit(e: React.SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     e.preventDefault();
-    if (status === 'sending') return;
+    if (status === 'sending') {return;}
 
     const form = e.currentTarget;
     const data = Object.fromEntries(new FormData(form).entries());
@@ -63,7 +63,7 @@ export default function BetaForm() {
   }
 
   return (
-    <form className="bf" onSubmit={onSubmit} noValidate>
+    <form className="bf" onSubmit={(event) => { void onSubmit(event); }} noValidate>
       <style>{BF_CSS}</style>
 
       <div className="bf-row">

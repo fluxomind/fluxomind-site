@@ -20,12 +20,12 @@ export function rateLimited(
   // eviction: impede crescimento sem teto em instâncias de vida longa
   if (hits.size > 1000) {
     for (const [k, v] of hits) {
-      if (v.every((t) => now - t >= windowMs)) hits.delete(k);
+      if (v.every((t) => now - t >= windowMs)) {hits.delete(k);}
     }
   }
 
   const recent = (hits.get(key) ?? []).filter((t) => now - t < windowMs);
-  if (recent.length >= max) return true;
+  if (recent.length >= max) {return true;}
   recent.push(now);
   hits.set(key, recent);
   return false;
@@ -35,7 +35,7 @@ export function rateLimited(
 // usa o ÚLTIMO salto (anexado pelo proxy confiável), não o primeiro (spoofável).
 export function clientIp(req: Request): string {
   const real = req.headers.get('x-real-ip');
-  if (real) return real.trim();
+  if (real) {return real.trim();}
   const xff = req.headers.get('x-forwarded-for');
   if (xff) {
     const parts = xff.split(',');

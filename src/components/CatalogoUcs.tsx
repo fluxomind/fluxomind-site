@@ -17,7 +17,7 @@ import { track } from '@/lib/analytics';
 // scripts/merge-laminas-en.py.
 
 type Lang = 'pt' | 'en';
-type Lamina = {
+interface Lamina {
   dor_hook: string;
   problema: string;
   pedido: string;
@@ -25,7 +25,7 @@ type Lamina = {
   dims: { d: string; t: string }[];
   kpi: string;
   objecoes: { q: string; a: string }[];
-};
+}
 
 const FAM: Record<Lang, Record<string, { nome: string; desc: string }>> = {
   pt: {
@@ -47,11 +47,11 @@ const FAM: Record<Lang, Record<string, { nome: string; desc: string }>> = {
     G: { nome: 'Built-in guarantees', desc: 'Not use cases — what every app inherits: approvals, an auditable trail, protected data.' },
   },
 };
-const SEG: Record<Lang, Record<string, string>> = {
+const SEG: Record<Lang, Partial<Record<string, string>>> = {
   pt: { pme: 'PME', bpo: 'BPO / Operadores', agenda: 'Serviços com agenda', vsaas: 'vSaaS', todos: 'Todos' },
   en: { pme: 'SMB', bpo: 'BPO / Operators', agenda: 'Appointment-based services', vsaas: 'vSaaS', todos: 'All' },
 };
-const CAP: Record<Lang, Record<string, string>> = {
+const CAP: Record<Lang, Partial<Record<string, string>>> = {
   pt: {
     hitl: 'aprovação humana', 'workflow-duravel': 'rotinas duráveis', 'agente-operador': 'agente operador',
     'comm-whatsapp': 'WhatsApp', 'comm-email': 'E-mail', 'comm-sms': 'SMS', 'comm-voz': 'Voz',
@@ -145,7 +145,7 @@ function buildList(lang: Lang): (UcIndex & { tituloTec: string })[] {
   }));
 }
 const LISTS: Record<Lang, (UcIndex & { tituloTec: string })[]> = { pt: buildList('pt'), en: buildList('en') };
-const strip = (s: string) => (s || '').replace(/\*\*|\*|`/g, '').replace(/\[(.+?)\]\(.*?\)/g, '$1');
+const strip = (s: string) => s.replace(/\*\*|\*|`/g, '').replace(/\[(.+?)\]\(.*?\)/g, '$1');
 
 const laminasCache: Partial<Record<Lang, Record<string, Lamina>>> = {};
 
@@ -153,13 +153,13 @@ export default function CatalogoUcs({ lang = 'pt' }: { lang?: Lang }) {
   const L = UI[lang];
   const FAM_L = FAM[lang];
   const LIST = LISTS[lang];
-  const BY_ID: Record<string, (typeof LIST)[number]> = useMemo(
+  const BY_ID: Partial<Record<string, (typeof LIST)[number]>> = useMemo(
     () => Object.fromEntries(LIST.map((u) => [u.id, u])),
     [LIST],
   );
-  const DEMO_BY_UC: Record<string, (typeof DEMOS)[Lang][number]> = useMemo(() => {
-    const m: Record<string, (typeof DEMOS)[Lang][number]> = {};
-    DEMOS[lang].forEach((d) => d.ucs.forEach((u) => (m[u] = d)));
+  const DEMO_BY_UC: Partial<Record<string, (typeof DEMOS)[Lang][number]>> = useMemo(() => {
+    const m: Partial<Record<string, (typeof DEMOS)[Lang][number]>> = {};
+    DEMOS[lang].forEach((d) => { d.ucs.forEach((u) => (m[u] = d)); });
     return m;
   }, [lang]);
   const ORDER = useMemo(
@@ -174,75 +174,76 @@ export default function CatalogoUcs({ lang = 'pt' }: { lang?: Lang }) {
   const [q, setQ] = useState('');
   const [ucAberto, setUcAberto] = useState<string | null>(null);
   const [laminas, setLaminas] = useState<Record<string, Lamina> | null>(laminasCache[lang] ?? null);
+  const fechaUc = useCallback(() => {
+    history.pushState(null, '', window.location.pathname);
+    setUcAberto(null);
+  }, []);
 
   useEffect(() => {
     const route = () => {
       const id = window.location.hash.replace('#', '');
-      setUcAberto(id && BY_ID[id] ? id : null);
-      if (id && BY_ID[id]) {
+      const match = BY_ID[id];
+      setUcAberto(match ? id : null);
+      if (match) {
         window.scrollTo(0, 0);
         track('catalogo_uc', { uc: id });
       }
     };
     route();
     window.addEventListener('hashchange', route);
-    return () => window.removeEventListener('hashchange', route);
+    return () => { window.removeEventListener('hashchange', route); };
   }, [BY_ID]);
 
   // com UC aberto, o hero da página sai de cena (tela inteira p/ o conteúdo)
   useEffect(() => {
     document.body.classList.toggle('cuc-uc-open', Boolean(ucAberto));
-    return () => document.body.classList.remove('cuc-uc-open');
+    return () => { document.body.classList.remove('cuc-uc-open'); };
   }, [ucAberto]);
 
   useEffect(() => {
-    if (!ucAberto || laminasCache[lang]) return;
+    if (!ucAberto || laminasCache[lang]) {return;}
     fetch(lang === 'en' ? '/catalogo-laminas-en.json' : '/catalogo-laminas.json')
-      .then((r) => r.json())
-      .then((j) => {
+      .then(async (r) => (await r.json()) as unknown)
+      .then((raw) => {
+        const j = raw as Record<string, Lamina>;
         laminasCache[lang] = j;
         setLaminas(j);
       })
-      .catch(() => {});
+      .catch(() => undefined);
   }, [ucAberto, lang]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (!ucAberto) return;
+      if (!ucAberto) {return;}
       const i = ORDER.indexOf(ucAberto);
-      if (e.key === 'Escape') fechaUc();
-      if (e.key === 'ArrowLeft' && ORDER[i - 1]) window.location.hash = ORDER[i - 1];
-      if (e.key === 'ArrowRight' && ORDER[i + 1]) window.location.hash = ORDER[i + 1];
+      if (e.key === 'Escape') {fechaUc();}
+      if (e.key === 'ArrowLeft' && ORDER[i - 1]) {window.location.hash = ORDER[i - 1];}
+      if (e.key === 'ArrowRight' && ORDER[i + 1]) {window.location.hash = ORDER[i + 1];}
     };
     document.addEventListener('keydown', onKey);
-    return () => document.removeEventListener('keydown', onKey);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ucAberto, ORDER]);
-
-  const fechaUc = useCallback(() => {
-    history.pushState(null, '', window.location.pathname);
-    setUcAberto(null);
-  }, []);
+    return () => { document.removeEventListener('keydown', onKey); };
+  }, [ucAberto, ORDER, fechaUc]);
 
   const filtrado = useMemo(() => {
     const ql = q.toLowerCase();
     return LIST.filter((u) => {
-      if (fam && u.fam !== fam) return false;
-      if (!ql) return true;
+      if (fam && u.fam !== fam) {return false;}
+      if (!ql) {return true;}
       return (u.id + ' ' + u.titulo + ' ' + u.tituloTec + ' ' + u.dorHook).toLowerCase().includes(ql);
     });
   }, [LIST, fam, q]);
 
-  const filtrando = Boolean(fam || q);
+  const filtrando = Boolean(fam ?? q);
 
-  if (ucAberto) {
+  const openedUc = ucAberto ? BY_ID[ucAberto] : undefined;
+  if (ucAberto && openedUc) {
     return (
       <div className="cuc" lang={lang === 'en' ? 'en' : undefined}>
         <style>{CSS}</style>
         <UcView
           id={ucAberto}
           lang={lang}
-          u={BY_ID[ucAberto]}
+          u={openedUc}
           demo={DEMO_BY_UC[ucAberto]}
           order={ORDER}
           lamina={laminas?.[ucAberto]}
@@ -262,7 +263,7 @@ export default function CatalogoUcs({ lang = 'pt' }: { lang?: Lang }) {
             <circle cx="11" cy="11" r="7" />
             <path d="M20 20l-3.5-3.5" />
           </svg>
-          <input type="search" placeholder={L.buscar} aria-label={L.buscarAria} value={q} onChange={(e) => setQ(e.target.value)} />
+          <input type="search" placeholder={L.buscar} aria-label={L.buscarAria} value={q} onChange={(e) => { setQ(e.target.value); }} />
         </label>
         <span className="cuc-count">
           {filtrando ? `${filtrado.length} ${L.de} ${LIST.length} ${L.casos}` : `${LIST.length} ${L.casos}`}
@@ -270,11 +271,11 @@ export default function CatalogoUcs({ lang = 'pt' }: { lang?: Lang }) {
       </div>
 
       <div className="cuc-filters" role="group" aria-label={L.buscarAria}>
-        <button className={`cuc-fchip${fam === null ? ' on' : ''}`} onClick={() => setFam(null)}>
+        <button className={`cuc-fchip${fam === null ? ' on' : ''}`} onClick={() => { setFam(null); }}>
           {L.todasAreas}
         </button>
         {(['A', 'B', 'C', 'D', 'E'] as const).map((f) => (
-          <button key={f} className={`cuc-fchip${fam === f ? ' on' : ''}`} onClick={() => setFam(f)}>
+          <button key={f} className={`cuc-fchip${fam === f ? ' on' : ''}`} onClick={() => { setFam(f); }}>
             {FAM_L[f].nome}
           </button>
         ))}
@@ -314,7 +315,7 @@ export default function CatalogoUcs({ lang = 'pt' }: { lang?: Lang }) {
         const list = filtrado
           .filter((u) => u.fam === f)
           .sort((a, b) => (DEMO_BY_UC[b.id] ? 1 : 0) - (DEMO_BY_UC[a.id] ? 1 : 0) || a.id.localeCompare(b.id));
-        if (!list.length) return null;
+        if (!list.length) {return null;}
         return (
           <section className="cuc-fam" key={f}>
             <div className="fh">
@@ -336,7 +337,7 @@ export default function CatalogoUcs({ lang = 'pt' }: { lang?: Lang }) {
                   <span className="meta">
                     {u.seg.map((s) => (
                       <span className="tag" key={s}>
-                        {SEG[lang][s] || s}
+                        {SEG[lang][s] ?? s}
                       </span>
                     ))}
                   </span>
@@ -464,7 +465,7 @@ function UcView({
                 <div className="pedido">{p.pedido}</div>
               </div>
             )}
-            {p.escopo?.dentro.length > 0 && (
+            {p.escopo.dentro.length > 0 && (
               <div className="blk">
                 <h5>{L.hEscopo}</h5>
                 <div className="esc">
@@ -528,7 +529,7 @@ function UcView({
                 </Link>
               </div>
             )}
-            {p?.kpi && (
+            {p.kpi && (
               <div className="acard">
                 <h5>{L.hProva}</h5>
                 <p>{strip(p.kpi)}</p>
@@ -539,7 +540,7 @@ function UcView({
               <div className="chips">
                 {u.seg.map((s) => (
                   <span className="tag" key={s}>
-                    {SEG[lang][s] || s}
+                    {SEG[lang][s] ?? s}
                   </span>
                 ))}
               </div>
@@ -549,7 +550,7 @@ function UcView({
               <div className="chips">
                 {u.caps.map((c) => (
                   <span className="tag" key={c}>
-                    {CAP[lang][c] || c}
+                    {CAP[lang][c] ?? c}
                   </span>
                 ))}
               </div>
@@ -559,7 +560,7 @@ function UcView({
                 <h5>{L.hMesmaDemo}</h5>
                 {rel.map((r) => (
                   <a key={r} href={`#${r}`}>
-                    <span className="mono">{r}</span> {byId[r]?.titulo}
+                    <span className="mono">{r}</span> {byId[r].titulo}
                   </a>
                 ))}
               </div>

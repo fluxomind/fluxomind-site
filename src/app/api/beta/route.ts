@@ -46,7 +46,7 @@ export async function POST(req: Request) {
       ts: new Date().toISOString(),
       hp: true,
     };
-    console.log('[fm-lead-hp]', JSON.stringify(hpLead));
+    console.info('[fm-lead-hp]', JSON.stringify(hpLead));
     try {
       await appendLead(hpLead);
     } catch {
@@ -81,7 +81,7 @@ export async function POST(req: Request) {
   };
 
   // Backup incondicional nos logs do host + arquivo local (o "banco" do beta).
-  console.log('[fm-lead]', JSON.stringify(lead));
+  console.info('[fm-lead]', JSON.stringify(lead));
   try {
     await appendLead(lead);
   } catch (err) {
@@ -98,7 +98,7 @@ export async function POST(req: Request) {
         body: JSON.stringify(lead),
         signal: AbortSignal.timeout(6_000),
       });
-      if (!res.ok) throw new Error(`webhook ${res.status}`);
+      if (!res.ok) {throw new Error(`webhook ${res.status}`);}
     } catch (err) {
       console.error('[fm-lead] entrega ao webhook falhou:', err);
       // 502 → o form mostra o fallback por e-mail; o lead já está no log.
