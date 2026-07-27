@@ -292,7 +292,11 @@ export default function CatalogoUcs({ lang = 'pt' }: { lang?: Lang }) {
             {DEMOS[lang].map((d) => (
               <div className="cuc-lcard" key={d.cen}>
                 <span className="lbadge">{L.demoBadge}</span>
-                <h3>{d.titulo}</h3>
+                <h3>
+                  {/* o título estende o clique para o card inteiro (::after) — abre o detalhe
+                      da UC principal da demo; chips e botão ficam acima e mantêm seus destinos */}
+                  <a className="ltitle" href={`#${d.ucs[0]}`}>{d.titulo}</a>
+                </h3>
                 <p className="hook">“{d.hook}”</p>
                 <p className="desc">{d.desc}</p>
                 <div className="ids">
@@ -595,16 +599,22 @@ body.cuc-uc-open .hero{display:none}
 .cuc-live h2{margin-top:8px;font-size:22px;font-weight:800;letter-spacing:-.02em}
 .cuc-live .note{color:var(--slate);font-size:14px;margin-top:4px}
 .cuc-lgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:14px;margin-top:18px}
-.cuc-lcard{background:linear-gradient(160deg,rgba(245,184,61,.10),transparent 60%);border:1px solid rgba(245,184,61,.4);border-radius:16px;padding:22px;display:flex;flex-direction:column;gap:10px;transition:.18s}
+.cuc-lcard{position:relative;background:linear-gradient(160deg,rgba(245,184,61,.10),transparent 60%);border:1px solid rgba(245,184,61,.4);border-radius:16px;padding:22px;display:flex;flex-direction:column;gap:10px;transition:.18s}
 .cuc-lcard:hover{transform:translateY(-3px);border-color:var(--amber)}
 .lbadge{align-self:flex-start;font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;background:var(--amber);color:var(--amber-ink);border-radius:999px;padding:4px 10px}
 .cuc-lcard h3{font-size:18px;font-weight:800}
 .cuc-lcard .hook{color:var(--slate);font-size:14px;font-style:italic}
 .cuc-lcard .desc{color:var(--slate);font-size:13.5px}
-.cuc-lcard .ids{display:flex;gap:6px;flex-wrap:wrap}
+.cuc-lcard .ids{display:flex;gap:6px;flex-wrap:wrap;position:relative;z-index:1}
 .cuc-lcard .ids a{font-size:11px;padding:3px 8px;border-radius:6px;border:1px solid var(--line);color:var(--slate)}
 .cuc-lcard .ids a:hover{color:inherit;border-color:var(--sky)}
 .cuc-lcard .go{margin-top:auto;display:inline-flex;background:var(--blue);color:#fff;font-weight:700;font-size:14px;border-radius:10px;padding:10px 16px;width:fit-content}
+/* o hover já elevava o card, mas nada além do botão abria: o título estende o
+   clique para o card todo e leva ao detalhe da UC; chips e botão ficam por cima */
+.cuc-lcard h3 .ltitle{color:inherit}
+.cuc-lcard h3 .ltitle::after{content:'';position:absolute;inset:0;border-radius:16px}
+.cuc-lcard .go{position:relative;z-index:1}
+.cuc-lcard:focus-within{border-color:var(--amber)}
 .cuc-fam{margin-top:44px}
 .cuc-fam .fh{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
 .cuc-fam .fh h2{font-size:19px;font-weight:800}
@@ -643,7 +653,7 @@ body.cuc-uc-open .hero{display:none}
 .uhead h2{margin-top:12px;font-size:clamp(24px,3.4vw,34px);font-weight:800;letter-spacing:-.025em;line-height:1.15;max-width:28ch}
 .uhead .hook{margin:14px 0 22px;font-size:18px;color:var(--slate);font-style:italic;border-left:3px solid var(--blue);padding-left:16px;max-width:64ch}
 .ubody{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:40px;align-items:start;padding-bottom:56px}
-@media (max-width: 900px){.ubody{grid-template-columns:1fr}.uaside{order:-1;position:static}}
+@media (max-width: 900px){.ubody{grid-template-columns:1fr}.uaside{order:-1}}
 .umain{max-width:70ch;display:flex;flex-direction:column;gap:30px}
 .cuc .blk h5{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--sky);margin-bottom:9px}
 .cuc .blk>p{color:var(--slate);font-size:15.5px;line-height:1.7}
@@ -660,7 +670,10 @@ body.cuc-uc-open .hero{display:none}
 .qa{border-top:1px solid var(--line);padding:12px 0}
 .qa b{font-size:14.5px}
 .qa p{font-size:13.8px;color:var(--slate);margin-top:4px;line-height:1.6}
-.uaside{position:sticky;top:84px;display:flex;flex-direction:column;gap:14px}
+/* sticky só no layout de 2 colunas — em 1 coluna o aside grudaria no topo e o
+   conteúdo passaria por trás dele (cards sem fundo), comendo texto e cliques */
+.uaside{display:flex;flex-direction:column;gap:14px}
+@media (min-width: 901px){.uaside{position:sticky;top:84px}}
 .acard{border:1px solid var(--line);border-radius:14px;padding:18px}
 .acard h5{font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--mute);margin-bottom:10px}
 .acard .chips{display:flex;gap:5px;flex-wrap:wrap}
